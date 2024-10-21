@@ -3,4 +3,11 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.mbti.dao.MbtiDAO"></mapper>
+<mapper namespace="com.fitmate.mbti.dao.MbtiDAO">
+<select id="mbtiIdx" resultType="int">
+	SELECT MIN(mbtiq_idx) FROM mbti_q
+</select>
+
+
+
+</mapper>

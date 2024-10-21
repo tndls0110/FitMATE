@@ -9,7 +9,7 @@
 	</div>
 	<ul class="menu noDesc">
 		<li class="active">
-			<a href="">운동 일지</a>
+			<a href="">운동 일지</a> <!-- 운동일지 클릭하면 나오게-->
 		</li>
 		<li>
 			<a href="">크루 검색</a>
