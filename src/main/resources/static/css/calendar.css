@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+:root {
+    --fc-small-font-size: .85em;
+    --fc-page-bg-color: #282b34;
+    --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+    --fc-neutral-text-color: #6c6f76;
+    --fc-border-color: #282b34;
+
+    --fc-daygrid-event-dot-width: 5px;
+
+    --fc-button-text-color: #e9ecef;
+	--fc-button-bg-color: #282b34;
+	--fc-button-border-color: #282b34;
+	--fc-button-hover-bg-color: #282b34;
+	--fc-button-hover-border-color: #282b34;
+	--fc-button-active-bg-color: #282b34;
+	--fc-button-active-border-color: #282b34;
+
+    --fc-event-bg-color: #47C0C6;
+    --fc-event-border-color: #47C0C6;
+    --fc-event-text-color: #e9ecef;
+    --fc-event-selected-overlay-color: #47C0C6;
+  
+    --fc-more-link-bg-color: #282b34;
+    --fc-more-link-text-color: inherit;
+  
+    --fc-bg-event-color: #47C0C6;
+    --fc-bg-event-opacity: 1;
+    --fc-highlight-color: #363940;
+    --fc-today-bg-color: #e9ecef;
+}
+
+.calendar{
+    width: 400px;
+    background-color: #282b34;
+    border-radius: 5px;
+}
+
+.title_calendar{
+    padding: 10px 28px 0;
+    font-size: 12px;
+    border-bottom: 3px solid #363940;
+    position: relative;
+}
+
+#date{
+    margin: 34px 0 16px;
+    font-size: 28px;
+    font-weight: 400;
+}
+
+.writebtn{
+    position: absolute;
+    top: 80px;
+    right: 16px;
+}
+
+#calendar{
+    padding: 16px;
+    font-size: 12px;
+}
+
+.fc .fc-toolbar-title{
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.fc th,
+.fc td{
+    border: 0;
+}
+
+.fc .fc-daygrid-day-frame{
+    position: relative;
+}
+
+.fc .fc-daygrid-day-top {
+    display: block;
+    text-align: center;
+    position: relative;
+    top: 16px;
+}
+
+.fc .fc-daygrid-day-number{
+    font-size: 14px;
+}
+
+.fc .fc-event{
+    width: 6px;
+    height: 6px;
+    position: absolute;
+    top: -13px;
+    left: 22px;
+    border: 0;
+    border-radius: 3px;
+    color: #47C0C6;
+}
+
+.fc .fc-event .fc-event-main{
+    display: none;
+}
+
+.fc .fc-day-today{
+    border-radius: 50%;
+}
+
+.fc .fc-day-today a{
+    color: #282b34;
+    font-weight: 700;
+}
