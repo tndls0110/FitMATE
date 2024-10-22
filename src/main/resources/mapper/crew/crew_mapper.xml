@@ -4,10 +4,6 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewDAO">
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 
 <insert id="crew_create"
 useGeneratedKeys="true"
@@ -52,10 +48,6 @@ useGeneratedKeys="true"
 </update>
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 	<select id="placeFilter" resultType="map"> 
 		SELECT A.region_name, B.regions_idx, B.regions_name 
 		FROM region A INNER JOIN
@@ -66,10 +58,7 @@ useGeneratedKeys="true"
 		FROM mbti_r 
 	</select>
 	<select id="crewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 		SELECT
 			<!-- 크루명 -->
 			A.name AS crew_name,
