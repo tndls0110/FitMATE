@@ -11,16 +11,16 @@
 		<div class="container">
 			<c:import url="layout/leftnav_1.jsp"></c:import>
 			<div class="contents narrow">
-				<h2 class="title">로그인</h2>
-                <form action="member_login.do" method="post">
+				<h2 class="title">회원가입</h2>
+                <form action="member_join.do" method="post">
                     <div class="list">
                         <h3 class="capt">아이디</h3>
-                        <p><input type="text" class="full" name="user_id" value="${msg}" /></p>
+                        <p><input type="text" class="full" name="user_id" /></p>
                         <h3 class="msg caution hide">아이디를 확인하세요.</h3>
                     </div>
                     <div class="list">
                         <h3 class="capt">비밀번호</h3>
-                        <p><input type="password" class="full" name="pw" value="${msg}" /></p>
+                        <p><input type="password" class="full" name="pw" /></p>
                         <h3 class="msg caution hide">비밀번호를 확인하세요.</h3>
                     </div>
 					<div class="list">
