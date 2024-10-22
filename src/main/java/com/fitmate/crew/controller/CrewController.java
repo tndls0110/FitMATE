@@ -66,7 +66,6 @@ public String crew_create_rewrite() {
 
 @PostMapping(value="/crew_create.do" )
 public String crew_create(@RequestParam String crew_id,@RequestParam String name,@RequestParam int regions_idx,@RequestParam String content) {
-<<<<<<< HEAD
    
    //crew_service.crew_create(crew_id,name,regions_idx,content);
    /* 
@@ -76,17 +75,6 @@ public String crew_create(@RequestParam String crew_id,@RequestParam String name
    logger.info("content {}",content);
    */
    return "index";
-=======
-	
-	//crew_service.crew_create(crew_id,name,regions_idx,content);
-	/* 
-	logger.info("crew_id {}",crew_id);
-	logger.info("name {}",name);
-	logger.info("regions_idx {}",regions_idx);
-	logger.info("content {}",content);
-	*/
-	return "index";
->>>>>>> origin/master
 }
 
 // 지역 상위 정보 가져오기
@@ -108,15 +96,9 @@ public Map<String,Object> crew_regions(){
 // 크루 모집글 수정하기
 @PostMapping(value="/crew_create_rewrite.do")
 public String crew_create_rewrite(@RequestParam int regions_idx,@RequestParam String content,@RequestParam int board_idx) {
-<<<<<<< HEAD
     //crew_service.crew_create_rewrite(regions_idx,content,board_idx);
    
    return "index";
-=======
-	 //crew_service.crew_create_rewrite(regions_idx,content,board_idx);
-	
-	return "index";
->>>>>>> origin/master
 }
 
 }
