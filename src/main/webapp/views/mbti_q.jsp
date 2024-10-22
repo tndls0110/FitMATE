@@ -204,7 +204,7 @@ html, body {
 		});
 	}
 	
-	function drawQuestion(){
+	function drawQuestion(questioncontent,questionIdx,option){
 		
 	}
 	
