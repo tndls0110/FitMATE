@@ -3,4 +3,10 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.crew.dao.CrewPageDAO"></mapper>
+<mapper namespace="com.fitmate.crew.dao.CrewPageDAO">
+
+<select id="report_list" resultType="com.fitmate.admin.dto.ReportDTO">
+	select * from report_reason
+</select>
+
+</mapper>
