@@ -71,6 +71,8 @@ public class MbtiService {
 						//typescore, typeScores에 add하기
 							typescores.add(typescore);
 								//List <MBTIQRDTO.TypeScore>를 option에 넣기
+							
+							
 								
 		//option을 options에 넣기
 		
