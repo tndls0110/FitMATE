@@ -9,10 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitmate.crew.dao.CrewDAO;
+<<<<<<< HEAD
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+=======
+import com.fitmate.crew.dto.CrewSearchConditionDTO;
+import com.fitmate.crew.dto.CrewSearchListDTO;
+>>>>>>> origin/master
 
 @Service
 public class CrewService {
@@ -77,6 +82,7 @@ public class CrewService {
 		return crew_dao.mbtiFilter();
 	}
 
+<<<<<<< HEAD
 	public List<Map> crewList(Map<String, String> params) {
 
 		// 1. 받아온 데이터가공.
@@ -85,10 +91,24 @@ public class CrewService {
 		String placeFilter_ = params.get("placeFilter"); // placeFilter [region_idx, regions_idx를 분리]
 		String mbtiFilter_ = params.get("mbtiFilter"); // mbtiFilter [프로필-mbtir_idx]
 
+=======
+
+	public List<CrewSearchListDTO> crewList(Map<String, String> params) {
+		
+		// 1. 받아온 데이터가공.
+		String searchFilter_ = params.get("searchFilter");      // searchFilter [1='크루이름' / 2='크루장닉네임']
+		String searchKeyword = params.get("searchKeyword");    // searchKeyword [검색키워드]
+		String placeFilter_ = params.get("placeFilter");        // placeFilter [regions_idx]
+		String mbtiFilter_ = params.get("mbtiFilter");          // mbtiFilter [프로필-mbtir_idx]
+		
+		
+		CrewSearchConditionDTO searchDTO = new CrewSearchConditionDTO();
+		
+>>>>>>> origin/master
 		int searchFilter = 0;
-		int region_idx = 0;
 		int regions_idx = 0;
 		int mbtiFilter = 0;
+<<<<<<< HEAD
 
 		if (searchFilter_ != null && !searchFilter_.equals("")) {
 			searchFilter = Integer.parseInt(searchFilter_);
@@ -109,5 +129,28 @@ public class CrewService {
 		return crew_dao.crewList(searchFilter, searchKeyword, region_idx, regions_idx, mbtiFilter, limit, offset);
 
 	}
+=======
+		
+		if(searchFilter_ != null && !searchFilter_.equals("")) {
+			searchDTO.setSearchFilter(Integer.parseInt(searchFilter_.trim())); 
+		}
+		if(placeFilter_ != null && !placeFilter_.equals("")) {
+			searchDTO.setRegions_idx(Integer.parseInt(placeFilter_.trim()));
+		}
+		if(mbtiFilter_ != null && !mbtiFilter_.equals("")) {
+			searchDTO.setMbtiFilter(Integer.parseInt(mbtiFilter_.trim()));
+		}
+		
+		// Limit & Offset 세팅
+		int limit = 6;
+		int offset = 0;
+		searchDTO.setLimit(limit);
+		searchDTO.setOffset(offset);
+		
+		
+		return crew_dao.crewList(searchDTO);
+		
+	} 
+>>>>>>> origin/master
 
 }
