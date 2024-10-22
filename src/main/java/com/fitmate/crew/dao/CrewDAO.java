@@ -2,19 +2,12 @@ package com.fitmate.crew.dao;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
-
 import org.apache.ibatis.annotations.Mapper;
-
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
-=======
-import org.apache.ibatis.annotations.Mapper;
-
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
->>>>>>> origin/master
 
 @Mapper
 public interface CrewDAO {
