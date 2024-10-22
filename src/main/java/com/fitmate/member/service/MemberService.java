@@ -1,10 +1,14 @@
 package com.fitmate.member.service;
 
+import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.member.dao.MemberDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MemberService {
@@ -25,6 +29,10 @@ public class MemberService {
 	}
 
 	// 회원 가입
+	public List<RegCountyDTO> getRegion() {
+		return member_dao.getRegion();
+	}
+
 	public boolean checkid(String user_id) {
 		boolean result = false;
 		if (member_dao.checkid(user_id) == 0 && user_id != null) {

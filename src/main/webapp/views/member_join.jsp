@@ -54,7 +54,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" class="full" name="profile" /></p>
+						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
 						<div class="img_preview"></div>
 					</div>
 					<div class="list">
@@ -66,15 +66,13 @@
 						<div class="btn_flex">
 							<div class="width50p">
 								<select class="narrow" name="region1">
-									<option value="서울">서울</option>
+									<c:forEach items="${region}" var="region">
+										<option value="${region.region_idx}" onclick="callRegion2('${region.region_idx}')">${region.region_name}</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="width50p">
-								<select class="narrow" name="region2">
-									<option value="강남구">강남구</option>
-									<option value="강동구">강동구</option>
-									<option value="강서구">강서구</option>
-								</select>
+								<select class="narrow" name="region2"></select>
 							</div>
 						</div>
 					</div>
@@ -89,6 +87,6 @@
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
-	<!--script src="resources/js/common.js"></script-->
+	<script src="resources/js/common.js"></script>
 	<script src="resources/js/member_join.js"></script>
 </html>

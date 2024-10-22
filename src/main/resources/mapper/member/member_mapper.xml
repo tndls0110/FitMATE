@@ -15,6 +15,10 @@
     </select>
 
     <!-- 유저 회원 가입 -->
+    <select id="getRegion" resultType="com.fitmate.admin.dto.RegCountyDTO">
+        SELECT region_idx, region_name FROM region;
+    </select>
+
     <select id="checknick" resultType="int">
         SELECT COUNT(nick) FROM member WHERE nick = #{nick}
     </select>

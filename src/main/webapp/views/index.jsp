@@ -12,7 +12,6 @@
 			<c:import url="layout/leftnav_1.jsp"></c:import> <!-- 운동일지는 nav1로, mbti만 nav5로 -->
 			<div class="contents">
 				<p>Hello, FitMATE!</p>
-				<p>Hello, FitMATE!</p>
 			</div>
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>

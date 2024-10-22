@@ -7,3 +7,7 @@ h3.capt .required{
 .confirm{
     margin-top: -8px;
 }
+
+.img_preview img{
+    height: 80px;
+}

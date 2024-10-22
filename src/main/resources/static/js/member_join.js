@@ -98,7 +98,7 @@ $('input[name="nick"]').keyup(function() {
                 $('.check_nick').addClass('hide');
                 $('.npass_nick').addClass('hide');
                 $('.fill_nick').removeClass('hide');
-                check_id = false;
+                check_nick = false;
             } else if (nick != "" && data.check_nick) {
                 $('input[name="nick"]').removeClass('caution');
                 $('input[name="nick"]').addClass('pass');
@@ -106,7 +106,7 @@ $('input[name="nick"]').keyup(function() {
                 $('.check_nick').addClass('hide');
                 $('.npass_nick').addClass('hide');
                 $('.fill_nick').addClass('hide');
-                check_id = true;
+                check_nick = true;
             } else if (nick != "" && !data.check_nick) {
                 $('input[name="nick"]').removeClass('pass');
                 $('input[name="nick"]').addClass('caution');
@@ -114,46 +114,23 @@ $('input[name="nick"]').keyup(function() {
                 $('.check_nick').removeClass('hide');
                 $('.npass_nick').addClass('hide');
                 $('.fill_nick').addClass('hide');
-                check_id = false;
+                check_nick = false;
             }
         },
         error: function(e) {}
     });
 });
 
-
-
-
-
-// 모달 변경
-var alertCont = document.getElementsByClassName('modal_alert')[0],
-    confirmCont = document.getElementsByClassName('modal_confirm')[0],
-    msgstr = '',
-    locationAddr = '';
-
-const modal = {
-    hide: function() {
-        alertCont.style.display = 'none';
-        confirmCont.style.display = 'none';
-    },
-    show: function(i) {
-        document.getElementsByClassName('modal_body')[i].innerHTML = '<p>' + msgstr + '</p>';
-        document.getElementsByClassName('backdrop')[i].addEventListener('click', modal.hide);
-        document.getElementsByClassName('btn_close')[i].addEventListener('click', modal.hide);
-        document.getElementsByClassName('btn_cancel')[i].addEventListener('click', modal.hide);
-        document.getElementsByClassName('btn_confirm')[0].addEventListener('click', function() {
-            location.href = locationAddr;
-        });
-    },
-    showAlert: function(msg) {
-        msgstr = msg;
-        modal.show(0);
-        alertCont.style.display = 'flex';
-    },
-    showConfirm: function(msg, loc) {
-        msgstr = msg;
-        locationAddr = loc;
-        modal.show(1);
-        confirmCont.style.display = 'flex';
+// 프로필 입력시 미리보기 출력
+function readFile(input){
+    var reader = new FileReader();
+    reader.readAsDataURL(input.files[0]);
+    reader.onload = function(e) {
+        $('.img_preview').html('<img class="preview" src="'+e.target.result+'" />');
     }
+}
+
+// 지역 출력
+function callRegion2(idx){
+    console.log(idx);
 }
