@@ -1,5 +1,6 @@
 package com.fitmate.crew.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
 
 @Controller
@@ -44,16 +46,12 @@ public class CrewController {
 	// 2. 크루 모집글 목록조회
 	@GetMapping(value = "/crew_search.ajax")
 	@ResponseBody 
-	public Map<String, Object> crewSearch2( @RequestParam Map<String, String> params){
+	public List<CrewSearchListDTO> crewSearch2( @RequestParam Map<String, String> params){
 		
 		logger.info("params : " + params);
-	 
-		Map<String, Object> map = new HashMap<String, Object>();
-	 
-		List<Map> recruitList = crew_service.crewList(params);
 		
-		map.put("String", "Hi");
+		List<CrewSearchListDTO> recruitList = crew_service.crewList(params);
 	 
-		return map; 
+		return recruitList; 
 	}	
 }
