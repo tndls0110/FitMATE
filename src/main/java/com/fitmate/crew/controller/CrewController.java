@@ -14,7 +14,7 @@ public class CrewController {
 	
 	@Autowired CrewService crew_service;
 		
-	@RequestMapping(value="crew_create.go")
+	@RequestMapping(value="/crew_create.go")
 	public String crew_create() {
 		
 		return "crew_create";
