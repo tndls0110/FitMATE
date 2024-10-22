@@ -4,41 +4,56 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewDAO">
-	<select id="placeFilter" resultType="map"> SELECT A.region_idx,
-		A.region_name, B.regions_idx, B.regions_name FROM region A INNER JOIN
-		region_sub B ON A.region_idx = B.region_idx </select>
-	<select id="mbtiFilter" resultType="map"> SELECT mbtir_idx, mbtir_name
-		FROM mbti_r </select>
-	<select id="crewList" resultType="map">
+	<select id="placeFilter" resultType="map"> 
+		SELECT A.region_name, B.regions_idx, B.regions_name 
+		FROM region A INNER JOIN
+		region_sub B ON A.region_idx = B.region_idx 
+	</select>
+	<select id="mbtiFilter" resultType="map"> 
+		SELECT mbtir_idx, mbtir_name
+		FROM mbti_r 
+	</select>
+	<select id="crewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
 		SELECT
 			<!-- 크루명 -->
 			A.name AS crew_name,
 			<!-- 크루idx -->
 			A.crew_idx,
-			<!-- 활동지역 시단위 ... 구단위도 가져와야함. -->
-			B.region_name AS crew_region,
+			<!-- 크루소개글 -->
+			(SELECT I.content FROM crew_board I WHERE I.board_idx = (SELECT H.board_idx FROM crew_idx H WHERE H.crew_idx = A.crew_idx)) AS crew_content, 
+			<!-- 활동지역 시단위 -->
+			(SELECT B.region_name FROM region B WHERE B.region_idx = (SELECT region_idx FROM region_sub G WHERE A.regions_idx = G.regions_idx)) AS region_name,
+			<!-- 활동지역 구단위 -->
+			(SELECT G.regions_name FROM region_sub G WHERE A.regions_idx = G.regions_idx) AS regions_name, 
 			<!-- 크루원 수 -->
-			(SELECT COUNT(member_idx) FROM crew_member C WHERE A.crew_idx =
-			C.crew_idx) AS member_count,
+			(SELECT COUNT(member_idx) FROM crew_member C WHERE A.crew_idx = C.crew_idx) AS member_count,
 			<!-- 크루장 이름 -->
 			D.name AS leader_name,
 			<!-- 크루장 프로필사진 -->
 			E.profile AS leader_profile,
 			<!-- 크루장 mbti -->
-			F.mbtir_name AS leader_mbti 
-		FROM crew A INNER JOIN region B ON A.region_idx = B.region_idx
+			F.mbtir_name AS leader_mbti
+		FROM crew A 
 			INNER JOIN member D ON A.crew_id = D.user_id 
 			INNER JOIN profile E ON A.crew_id = E.user_id 
 			INNER JOIN mbti_r F ON E.mbtir_idx = F.mbtir_idx
 		<where>
 			<!-- searchFilter(1='크루이름 검색'/ 2='크루장명 검색') -->
-			<if test="param1 == 1 and param2 != null and !param2.equals('')"> A.name LIKE CONCAT('%', #{param2}, '%') </if>
-			<if test="param1 == 2 and param2 != null and !param2.equals('')"> D.name LIKE CONCAT('%', #{param2}, '%') </if>
-			<!-- placeFilter(활동지역) -> WHERE 크루-운동지역idx -->
-			<if test="param3 != 0"> A.region_idx = #{param3} </if>
+			<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
+				A.name LIKE CONCAT('%', #{searchKeyword}, '%') 
+			</if>
+			<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
+				D.name LIKE CONCAT('%', #{searchKeyword}, '%') 
+			</if>
+			<!-- regions_idx(활동지역) -> WHERE 크루-운동지역idx -->
+			<if test="regions_idx != 0">
+				A.regions_idx = #{regions_idx}
+			</if>
 			<!-- mbtiFilter(운동성향) -> WHERE 프로필-운동성향idx OR MBTI-운동성향idx -->
-			<if test="param5 != 0"> E.mbtir = #{param5} </if>
+			<if test="mbtiFilter != 0">
+				E.mbtir = #{mbtiFilter}
+			</if>
 		</where>
-		LIMIT #{param6} OFFSET #{param7}
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 </mapper>
