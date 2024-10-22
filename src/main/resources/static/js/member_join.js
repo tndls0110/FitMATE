@@ -131,6 +131,26 @@ function readFile(input){
 }
 
 // 지역 출력
-function callRegion2(idx){
-    console.log(idx);
+function onOptionChange(event){
+    var region_idx = event.target.value;
+    $.ajax({
+        type: 'post',
+        url: 'member_callregion.ajax',
+        data: {
+            "region_idx": region_idx
+        },
+        success: function(data) {
+            drawRegion(data.list)
+        },
+        error: function(e) {}
+    });
+}
+
+function drawRegion(list) {
+    $('select[name="region2"]').empty();
+    var tags = '';
+    for (var item of list){
+        tags += '<option value="'+item.regions_idx+'">'+item.regions_name+'</option>';
+    }
+    $('select[name="region2"]').append(tags);
 }

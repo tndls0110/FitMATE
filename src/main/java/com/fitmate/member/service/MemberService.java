@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,11 +42,15 @@ public class MemberService {
 		return result;
 	}
 
-	public Object checknick(String nick) {
+	public boolean checknick(String nick) {
 		boolean result = false;
 		if (member_dao.checknick(nick) == 0 && nick != null) {
 			result = true;
 		}
 		return result;
+	}
+
+	public List<RegCountyDTO> getRegion2(String region_idx) {
+		return member_dao.getRegion2(region_idx);
 	}
 }

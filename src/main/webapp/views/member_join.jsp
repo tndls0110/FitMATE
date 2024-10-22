@@ -65,14 +65,18 @@
 						<h3 class="capt">주로 운동하는 지역</h3>
 						<div class="btn_flex">
 							<div class="width50p">
-								<select class="narrow" name="region1">
+								<select class="narrow" name="region1" onchange="onOptionChange(event)">
 									<c:forEach items="${region}" var="region">
-										<option value="${region.region_idx}" onclick="callRegion2('${region.region_idx}')">${region.region_name}</option>
+										<option value="${region.region_idx}">${region.region_name}</option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="width50p">
-								<select class="narrow" name="region2"></select>
+								<select class="narrow" name="region2">
+									<c:forEach items="${region2}" var="region">
+										<option value="${region.regions_idx}">${region.regions_name}</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -80,7 +84,7 @@
 						<input type="button" class="full mainbtn" value="회원 가입" />
 					</div>
 					<div class="list">
-						<button class="full mainbtn" onclick="/member_login.go">되돌아가기</button>
+						<button onclick="/member_login.go" class="full mainbtn">되돌아가기</button>
 					</div>
 				</form>
 			</div>
