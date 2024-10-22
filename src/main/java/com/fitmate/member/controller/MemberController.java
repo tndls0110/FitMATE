@@ -40,10 +40,14 @@ public class MemberController {
 				page = "/";
 				break;
 			case "invalidID":
-				model.addAttribute("msg", "invalidID");
+				model.addAttribute("state", "invalidID");
+				model.addAttribute("user_id", user_id);
+				model.addAttribute("pw", pw);
 				break;
 			case "invalidPW":
-				model.addAttribute("msg", "invalidPW");
+				model.addAttribute("state", "invalidPW");
+				model.addAttribute("user_id", user_id);
+				model.addAttribute("pw", pw);
 				break;
 		}
 		return page;

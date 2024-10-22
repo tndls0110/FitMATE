@@ -15,13 +15,13 @@
                 <form action="member_login.do" method="post">
                     <div class="list">
                         <h3 class="capt">아이디</h3>
-                        <p><input type="text" class="full" name="user_id" value="${msg}" /></p>
-                        <h3 class="msg caution hide">아이디를 확인하세요.</h3>
+                        <p><input type="text" class="full" name="user_id" value="${user_id}" /></p>
+                        <h3 class="msg caution checkid hide">아이디를 확인하세요.</h3>
                     </div>
                     <div class="list">
                         <h3 class="capt">비밀번호</h3>
-                        <p><input type="password" class="full" name="pw" value="${msg}" /></p>
-                        <h3 class="msg caution hide">비밀번호를 확인하세요.</h3>
+                        <p><input type="password" class="full" name="pw" value="${pw}" /></p>
+                        <h3 class="msg caution checkpw hide">비밀번호를 확인하세요.</h3>
                     </div>
 					<div class="list">
 						<input type="submit" class="full mainbtn" value="로그인" />
@@ -38,4 +38,8 @@
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
+	<script>
+		var state = '${state}';
+	</script>
+	<script src="resources/js/member_login.js"></script>
 </html>
