@@ -32,9 +32,9 @@
 					<div class="list">
 						<h3 class="capt">닉네임 <span class="required">(필수)</span></h3>
 						<p><input type="text" class="full" name="nick" /></p>
-						<h3 class="msg pass pass_nick hide">사용할 수 있는 아이디입니다.</h3>
+						<h3 class="msg pass pass_nick hide">사용할 수 있는 닉네임입니다.</h3>
 						<h3 class="msg caution check_nick hide">이미 사용중인 닉네임입니다. 다른 닉네임을 입력하세요.</h3>
-						<h3 class="msg caution npass_nick hide">아이디 중복체크 통과는 필수 항목입니다.</h3>
+						<h3 class="msg caution npass_nick hide">닉네임 중복체크 통과는 필수 항목입니다.</h3>
 						<h3 class="msg caution fill_nick hide">닉네임은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">

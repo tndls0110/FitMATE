@@ -71,4 +71,12 @@ public class MemberController {
 		return result;
 	}
 
+	@RequestMapping (value = "/member_checknick.ajax")
+	@ResponseBody
+	public Map<String, Object> checknick(String nick) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("check_nick", member_service.checknick(nick));
+		return result;
+	}
+
 }

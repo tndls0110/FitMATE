@@ -14,4 +14,9 @@
         SELECT COUNT(user_id) FROM member WHERE user_id = #{user_id}
     </select>
 
+    <!-- 유저 회원 가입 -->
+    <select id="checknick" resultType="int">
+        SELECT COUNT(nick) FROM member WHERE nick = #{nick}
+    </select>
+
 </mapper>

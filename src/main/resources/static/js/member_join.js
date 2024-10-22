@@ -39,7 +39,87 @@ $('input[name="user_id"]').keyup(function() {
     });
 });
 
-//
+//비밀번호 및 비밀번호 확인값 동일 여부 확인
+var check_pw = false;
+$('input[name="pw"]').focusout(function() {
+    var pw = $('input[name="pw"]').val();
+    var pwconfirm = $('input[name="pwconfirm"]').val();
+    if (pw != "" && pw == pwconfirm){
+        $('input[name="pwconfirm"]').removeClass('caution');
+        $('.check_pw').addClass('hide');
+        check_pw = true;
+    } else if (pw != "" && pw != pwconfirm){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.check_pw').removeClass('hide');
+        $('.fill_pw').addClass('hide');
+        check_pw = false;
+    } else if (pw == ""){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.check_pw').addClass('hide');
+        $('.fill_pw').removeClass('hide');
+        check_pw = false;
+    }
+});
+$('input[name="pwconfirm"]').focusout(function() {
+    var pw = $('input[name="pw"]').val();
+    var pwconfirm = $('input[name="pwconfirm"]').val();
+    if (pw != "" && pw == pwconfirm){
+        $('input[name="pwconfirm"]').removeClass('caution');
+        $('.check_pw').addClass('hide');
+        check_pw = true;
+    } else if (pw != "" && pw != pwconfirm){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.check_pw').removeClass('hide');
+        $('.fill_pw').addClass('hide');
+        check_pw = false;
+    } else if (pw == ""){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.check_pw').addClass('hide');
+        $('.fill_pw').removeClass('hide');
+        check_pw = false;
+    }
+});
+
+// 닉네임 중복 체크
+var check_nick = false;
+$('input[name="nick"]').keyup(function() {
+    var nick = $('input[name="nick"]').val();
+    $.ajax({
+        type: 'post',
+        url: 'member_checknick.ajax',
+        data: {
+            "nick": nick
+        },
+        success: function(data) {
+            if (nick == ""){
+                $('input[name="nick"]').removeClass('pass');
+                $('input[name="nick"]').addClass('caution');
+                $('.pass_nick').addClass('hide');
+                $('.check_nick').addClass('hide');
+                $('.npass_nick').addClass('hide');
+                $('.fill_nick').removeClass('hide');
+                check_id = false;
+            } else if (nick != "" && data.check_nick) {
+                $('input[name="nick"]').removeClass('caution');
+                $('input[name="nick"]').addClass('pass');
+                $('.pass_nick').removeClass('hide');
+                $('.check_nick').addClass('hide');
+                $('.npass_nick').addClass('hide');
+                $('.fill_nick').addClass('hide');
+                check_id = true;
+            } else if (nick != "" && !data.check_nick) {
+                $('input[name="nick"]').removeClass('pass');
+                $('input[name="nick"]').addClass('caution');
+                $('.pass_nick').addClass('hide');
+                $('.check_nick').removeClass('hide');
+                $('.npass_nick').addClass('hide');
+                $('.fill_nick').addClass('hide');
+                check_id = false;
+            }
+        },
+        error: function(e) {}
+    });
+});
 
 
 
