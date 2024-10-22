@@ -1,7 +1,5 @@
 package com.fitmate.crew.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +67,7 @@ public String crew_create_rewrite() {
 @PostMapping(value="/crew_create.do" )
 public String crew_create(@RequestParam String crew_id,@RequestParam String name,@RequestParam int regions_idx,@RequestParam String content) {
 	
-	crew_service.crew_create(crew_id,name,regions_idx,content);
+	//crew_service.crew_create(crew_id,name,regions_idx,content);
 	/* 
 	logger.info("crew_id {}",crew_id);
 	logger.info("name {}",name);
@@ -98,7 +96,7 @@ public Map<String,Object> crew_regions(){
 // 크루 모집글 수정하기
 @PostMapping(value="/crew_create_rewrite.do")
 public String crew_create_rewrite(@RequestParam int regions_idx,@RequestParam String content,@RequestParam int board_idx) {
-	 crew_service.crew_create_rewrite(regions_idx,content,board_idx);
+	 //crew_service.crew_create_rewrite(regions_idx,content,board_idx);
 	
 	return "index";
 }
