@@ -154,3 +154,70 @@ function drawRegion(list) {
     }
     $('select[name="region2"]').append(tags);
 }
+
+function join() {
+    var user_id = $('input[name="user_id"]').val();
+    var pw = $('input[name="pw"]').val();
+    var nick = $('input[name="nick"]').val();
+    var name = $('input[name="name"]').val();
+    var email = $('input[name="email"]').val();
+    var birthday = $('input[name="birthday"]').val();
+    var check_null = false;
+    $('input').removeClass('pass');
+    $('input').removeClass('caution');
+    $('.msg').addClass('hide');
+    if (user_id != '' && pw != '' && nick != '' && name != '' && email != '' && birthday != ''){
+        check_null = true;
+    }
+    if (!check_null){
+        modal.showAlert('필수 항목을 모두 입력하세요.');
+        showNull(user_id, pw, nick, name, email, birthday);
+    } else if (!check_id){
+        modal.showAlert('아이디 중복 여부를 확인하세요.');
+        showNull(user_id, pw, nick, name, email, birthday);
+    } else if (!check_nick){
+        modal.showAlert('닉네임 중복 여부를 확인하세요.');
+        showNull(user_id, pw, nick, name, email, birthday);
+    } else if (!check_pw){
+        modal.showAlert('비밀번호와 비밀번호 확인값은 동일해야 합니다.');
+        showNull(user_id, pw, nick, name, email, birthday);
+    } else {
+        $('form').submit();
+    }
+}
+
+function showNull(user_id, pw, nick, name, email, birthday) {
+    if (user_id == ''){
+        $('input[name="user_id"]').addClass('caution');
+        $('.fill_id').removeClass('hide');
+    } else if (!check_id){
+        $('input[name="user_id"]').addClass('caution');
+        $('.npass_id').removeClass('hide');
+    }
+    if (pw == ''){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.fill_pw').removeClass('hide');
+    } else if (!check_pw){
+        $('input[name="pwconfirm"]').addClass('caution');
+        $('.check_pw').removeClass('hide');
+    }
+    if (nick == ''){
+        $('input[name="nick"]').addClass('caution');
+        $('.fill_nick').removeClass('hide');
+    } else if (!check_nick){
+        $('input[name="nick"]').addClass('caution');
+        $('.npass_nick').removeClass('hide');
+    }
+    if (name == ''){
+        $('input[name="name"]').addClass('caution');
+        $('.fill_name').removeClass('hide');
+    }
+    if (email == ''){
+        $('input[name="email"]').addClass('caution');
+        $('.fill_email').removeClass('hide');
+    }
+    if (birthday == ''){
+        $('input[name="birthday"]').addClass('caution');
+        $('.fill_birth').removeClass('hide');
+    }
+}

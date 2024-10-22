@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fitmate.member.service.MemberService;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -58,6 +59,13 @@ public class MemberController {
 		return page;
 	}
 
+	// 로그아웃
+	@RequestMapping (value = "/member_logout.do")
+	public String logout(HttpSession session) {
+		session.removeAttribute("loginId");
+		return "member_login";
+	}
+
 	// 회원 가입
 	@RequestMapping (value = "/member_join.go")
 	public String join(Model model) {
@@ -90,6 +98,18 @@ public class MemberController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("list", member_service.getRegion2(region_idx));
 		return result;
+	}
+
+	@RequestMapping (value = "/member_join.do")
+	public String join(@RequestParam Map<String, String> params, Model model) {
+		page = "member_login";
+		//if (member_service.join(params)){
+		//	model.addAttribute("msg", params.get("id")+"님, 환영합니다. 로그인하세요.");
+		//	model.addAttribute("id", params.get("user_id"));
+		//} else {
+		//	model.addAttribute("msg", "회원 가입 과정에 문제가 발생했습니다. 다시 시도하세요.");
+		//}
+		return page;
 	}
 
 }
