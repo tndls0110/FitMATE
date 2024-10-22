@@ -68,10 +68,11 @@ public class MbtiService {
 					MbtiQRDTO.TypeScore typescore = new MbtiQRDTO.TypeScore();  
 						typescore.setMbtir_name((String)option.get("운동성향"));
 						typescore.setMbtiscr_scr((int)option.get("추가할점수"));
-						//typescore, typeScores에 add하기
-							typescores.add(typescore);
-								//List <MBTIQRDTO.TypeScore>를 option에 넣기
-							
+						
+							typescores.add(typescore);//typescore, typeScores에 add하기
+							optionDTO.setTypeScores(typescores);//List <MBTIQRDTO.TypeScore> typescores를 optionDTO에 넣기
+				
+							//optionDTO를 options에 저장 -> 하나의 
 							
 								
 		//option을 options에 넣기
