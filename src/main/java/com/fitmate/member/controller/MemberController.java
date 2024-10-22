@@ -8,8 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fitmate.member.service.MemberService;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class MemberController {
@@ -52,5 +56,19 @@ public class MemberController {
 		}
 		return page;
 	}
-	
+
+	// 회원 가입
+	@RequestMapping (value = "/member_join.go")
+	public String join() {
+		return "member_join";
+	}
+
+	@RequestMapping (value = "/member_checkid.ajax")
+	@ResponseBody
+	public Map<String, Object> checkid(String user_id) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("check_id", member_service.checkid(user_id));
+		return result;
+	}
+
 }

@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+h3.capt .required{
+    color: #5bc5bb;
+}
+
+.confirm{
+    margin-top: -8px;
+}
