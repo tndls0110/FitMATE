@@ -204,8 +204,8 @@ html, body {
 			url : 'loadQuestion.ajax',
 			data: {'idx': currentQuestionIdx},
 			dataType : 'JSON',
-			success : function(){
-				
+			success : function(data){ //data로 전달받기
+ 				console.log(data);
 				
 			},
 			error:function(e){
