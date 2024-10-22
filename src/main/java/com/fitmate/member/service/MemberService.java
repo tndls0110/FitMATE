@@ -23,4 +23,13 @@ public class MemberService {
 		}
 		return result;
 	}
+
+	// 회원 가입
+	public boolean checkid(String user_id) {
+		boolean result = false;
+		if (member_dao.checkid(user_id) == 0 && user_id != null) {
+			result = true;
+		}
+		return result;
+	}
 }
