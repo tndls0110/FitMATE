@@ -63,6 +63,8 @@ public class MemberController {
 	public String join(Model model) {
 		List<RegCountyDTO> list = member_service.getRegion();
 		model.addAttribute("region", list);
+		list = member_service.getRegion2("1");
+		model.addAttribute("region2", list);
 		return "member_join";
 	}
 
@@ -79,6 +81,14 @@ public class MemberController {
 	public Map<String, Object> checknick(String nick) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("check_nick", member_service.checknick(nick));
+		return result;
+	}
+
+	@RequestMapping (value = "member_callregion.ajax")
+	@ResponseBody
+	public Map<String, Object> callregion(String region_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", member_service.getRegion2(region_idx));
 		return result;
 	}
 
