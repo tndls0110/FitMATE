@@ -17,7 +17,7 @@ import com.fitmate.mbti.service.MbtiService;
 public class MbtiController {
 	@Autowired MbtiService m_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	@RequestMapping (value = "/")
+	@RequestMapping (value = "/mbti")
 	public String main() {
 		return "redirectTest";
 	}
