@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 <head>
 <meta charset="UTF-8">
 
@@ -18,26 +19,8 @@ html, body {
 	background-color: rgba(40, 43, 52, 1);
 }
 
-#dashboard {
-	margin-top: 25px;
-	display: flex;
-	flex-direction: row;
-	/*display : flex + flex-direction : row = 두 개로 만듬*/
-	color: white;
-	background-color: rgba(54, 57, 64, 1);
-	width: 1870px;
-	height: 922px;
-	border-radius: 5px;
-}
-
-#menubar {
-	width: 300px;
-	height: 1460px;
-	background-color: rgba(40, 43, 52, 1);
-}
-
 .Question_page {
-	margin-left: 478px;
+	margin-left: 226px;
 	margin-top: 103px;
 	width: 500px;
 	height: 510px;
@@ -98,7 +81,7 @@ html, body {
 
 .prev {
 	width: 220px;
-	height: 30px;
+	height: 50px;
 	border-radius: 5px;
 	background-color: rgba(233, 236, 239, 1);
 	padding: 15px 10px 10px 10px;
@@ -109,7 +92,7 @@ html, body {
 
 .next {
 	width: 220px;
-	height: 30px;
+	height: 50px;
 	border-radius: 5px;
 	background-color: rgba(4, 129, 135, 1);
 	padding: 15px 10px 10px 10px;
@@ -122,39 +105,42 @@ html, body {
 </head>
 
 <body>
-	<div id="dashboard">
-		<div id="menubar"></div>
+	<div class="container">
+		<c:import url="layout/leftnav_1.jsp"></c:import>
+		<!-- 운동일지는 nav1로, mbti만 nav5로 -->
+		<div class="contents">
 
-		<div class="Question_page">
-			<div id="title">
-				<div class="b_title">헬스 MBTI</div>
-				&nbsp;&nbsp;
-				<div class="s_title">검사하기</div>
-			</div>
-			<div id="line">
-				<div class="line_fixed"></div>
-				<div class="line_move"></div>
-				<!-- 다음 페이지 버튼 누르면 이동하게 하기-->
-			</div>
-			<div id="Question_div">
-				<div id="main_Question"></div>
-				<div id="main_option">
-					<!--foreach로 분리해서 div 추가하는 로직으로 바꾸기-->
-
+			<div class="Question_page">
+				<div id="title">
+					<div class="b_title">헬스 MBTI</div>
+					&nbsp;&nbsp;
+					<div class="s_title">검사하기</div>
 				</div>
-			</div>
+				<div id="line">
+					<div class="line_fixed"></div>
+					<div class="line_move"></div>
+					<!-- 다음 페이지 버튼 누르면 이동하게 하기-->
+				</div>
+				<div id="Question_div">
+					<div id="main_Question"></div>
+					<div id="main_option">
+						<!--foreach로 분리해서 div 추가하는 로직으로 바꾸기-->
 
-			<div id="prev_next_div">
-				<div class="prev">← 이전 질문</div>
-				<!--이미지로 넣기-->
-				<div class="next">다음 질문 →</div>
-				<!--이미지로 넣기-->
+					</div>
+				</div>
+
+				<div id="prev_next_div">
+					<div class="prev">← 이전 질문</div>
+					<!--이미지로 넣기-->
+					<div class="next">다음 질문 →</div>
+					<!--이미지로 넣기-->
+				</div>
 			</div>
 		</div>
 	</div>
-
+<c:import url="layout/modal.jsp"></c:import>
 </body>
-
+<script src="resources/js/common.js"></script>
 
 <script>
 	let isInitialLoad = true;
@@ -202,7 +188,7 @@ html, body {
 		$.ajax({
 			type : 'GET',
 			url : 'loadQuestion.ajax',
-			data: {'idx': currentQuestionIdx},
+			data: {'Qidx': currentQuestionIdx},
 			dataType : 'JSON',
 			success : function(data){ //data로 전달받기
  				console.log(data);
