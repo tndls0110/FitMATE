@@ -17,13 +17,15 @@ import com.fitmate.mbti.service.MbtiService;
 public class MbtiController {
 	@Autowired MbtiService m_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	@RequestMapping (value = "/")//push하기 전에 /mbti로 수정해두기
+	
+	@RequestMapping (value = "/mbti")//push하기 전에 /mbti로 수정해두기
 	public String main() {
-		return "redirectTest";
+		return "redirect_test";
 	}
+	
 	@RequestMapping (value = "/mbtiQ.go")
 	public String mbtiQ() {
-		return "mbtiQ";
+		return "mbti_q";
 	}
 	
 	@GetMapping (value = "/mbtiIdx.ajax")
@@ -38,10 +40,11 @@ public class MbtiController {
 	
 	@GetMapping (value = "/loadQuestion.ajax")
 	@ResponseBody
-	public Map<String, Object> loadQuestion(){
+	public Map<String, Object> loadQuestion(int Qidx){
 		logger.info("loadQuestion 컨트롤러 도착");
-		Map<String, Object> data = new HashMap<String, Object>();
+		logger.info("컨트롤러에서 전달 받은 idx : " + Qidx);
 		
+		Map<String, Object> data = m_service.loadQuestion(Qidx);
 		
 		return data;
 	}
