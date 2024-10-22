@@ -43,26 +43,38 @@
 	}
 	
 	div.recruitArea{
-		margin-top: 10%;
-	}
-	
-	table{
 		width: 90%;
-		padding: 5px 10px;
+		margin-top: 10%;
 		margin-left: auto;
 		margin-right: auto;
+		
+		display: flex;
+		flex-wrap: wrap;
 	}
 	
-	td{
+	div.recruit{
+		width: 40%;
+		margin: 3% 1%;
 		background-color: #282b34;
+		flex: 1 1 40%;
+		align-content: left; 
+	}
+	
+	div.recruit_odd{
+		width: 48%;
+		margin: 3% 1%;
+		background-color: #282b34;
+		align-content: left; 
+		
 	}
 	
 	h3.capt{
 		position: absolute;
 		width: 50%;
-	    top: -15%;
+	    top: -20%;
     	left: 11.5%;
 	}
+	
 	
 </style>
 </head>
@@ -92,7 +104,7 @@
 					<select name="placeFilter" class="filterSelect">
 						<option value="" selected>시/ 군/ 구</option>
 						<c:forEach var="filter" items="${placeFilter}" varStatus="status">
-							<option value="${filter.region_idx}_${filter.regions_idx}">${filter.region_name} ${filter.regions_name}</option>
+							<option value="${filter.regions_idx}">${filter.region_name} ${filter.regions_name}</option>
 						</c:forEach>
 					</select>
 					
@@ -108,18 +120,7 @@
 			
 			<!-- 크루모집 영역 -->
 			<div class="recruitArea">
-				<table>
-					<!-- 1개의 Row에 2개의 Cell -->
-					<tr class="recruitRow">
-						<td class="recruitCell">Crew1</td>
-						<td class="recruitCell">Crew2</td>
-					</tr>
-					<tr class="recruitRow">
-						<td class="recruitCell">Crew1</td>
-						<td class="recruitCell">Crew2</td>
-					</tr>
-
-				</table>
+				
 			</div>
 			
 			
@@ -204,8 +205,38 @@
 				'mbtiFilter' : mbtiFilter,
 			},
 			dataType : 'JSON',
-			success : function(data) {
-				
+			success : function(list) {
+				$(list).each(function(idx, item) { // 데이터 =item
+					console.log('item : ' + item);
+					console.log('item : ', item);
+					console.log('idx : ', idx);
+					
+					
+					var header = '';
+					var content = '';
+					var info = '';
+					
+					var cnt = idx + 1;
+					// 홀수번째 게시글은 왼쪽정렬
+					if(cnt % 2 == 1){
+						$('div.recruitArea').append('<div class="recruit_odd" id="recruit_odd' +cnt+ '"></div>');
+																		
+			            header += '<div><span>' + item.crew_idx + '</span><span>' + item.crew_name + '</span><span>' +item.leader_mbti + '</span><span>' + item.leader_name + '</span><span>' + item.leader_profile + '</span></div>';
+						content = '<div>' + item.crew_content + '</div>';
+						info = '<div><span>' + item.member_count + '</span><span>' + item.region_name + '</span><span>' + item.regions_name + '</span></div>'
+						
+						$('div#recruit_odd' + cnt).html(header + content + info);
+			            
+					}else{
+						$('div.recruitArea').append('<div class="recruit" id="recruit' +cnt+ '"></div>');
+						
+			            header += '<div><span>' + item.crew_idx + '</span><span>' + item.crew_name + '</span><span>' +item.leader_mbti + '</span><span>' + item.leader_name + '</span><span>' + item.leader_profile + '</span></div>';
+						content = '<div>' + item.crew_content + '</div>';
+						info = '<div><span>' + item.member_count + '</span><span>' + item.region_name + '</span><span> ' + item.regions_name + '</span></div>'
+						
+						$('div#recruit' + cnt).html(header + content + info);
+					}
+				});
 				// 읽어온 데이터가공.
 				/* 
 				1. 데이터개수/2 + 1개만큼 Row생성.   + 나눈 값이 0인경우에는 1개의 Row만 생성.

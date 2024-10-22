@@ -2,12 +2,19 @@ package com.fitmate.crew.dao;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+=======
+import org.apache.ibatis.annotations.Mapper;
+
+import com.fitmate.crew.dto.CrewSearchConditionDTO;
+import com.fitmate.crew.dto.CrewSearchListDTO;
+>>>>>>> origin/master
 
 @Mapper
 public interface CrewDAO {
@@ -29,7 +36,7 @@ public interface CrewDAO {
 
 	List<Map> mbtiFilter();
 
-	List<Map> crewList(int searchFilter, String searchKeyword, int region_idx, int regions_idx, int mbtiFilter,int limit, int offset);
+	List<CrewSearchListDTO> crewList(CrewSearchConditionDTO searchDTO);
 
 
 }	
