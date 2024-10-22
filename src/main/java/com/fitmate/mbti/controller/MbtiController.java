@@ -29,12 +29,23 @@ public class MbtiController {
 	@GetMapping (value = "/mbtiIdx.ajax")
 	@ResponseBody
 	public Map<String, Object> mbtiIdx() {
-		logger.info("controller 도착");
+		logger.info("mbti 컨트롤러 도착");
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("idx",m_service.mbtiIdx());
 		
 		return result;
 	}
+	
+	@GetMapping (value = "/loadQuestion.ajax")
+	@ResponseBody
+	public Map<String, Object> loadQuestion(){
+		logger.info("loadQuestion 컨트롤러 도착");
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		
+		return data;
+	}
+	
 	
 	
 	
