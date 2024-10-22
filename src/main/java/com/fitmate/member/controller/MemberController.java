@@ -1,5 +1,6 @@
 package com.fitmate.member.controller;
 
+import com.fitmate.admin.dto.RegCountyDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fitmate.member.service.MemberService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -59,7 +60,9 @@ public class MemberController {
 
 	// 회원 가입
 	@RequestMapping (value = "/member_join.go")
-	public String join() {
+	public String join(Model model) {
+		List<RegCountyDTO> list = member_service.getRegion();
+		model.addAttribute("region", list);
 		return "member_join";
 	}
 
