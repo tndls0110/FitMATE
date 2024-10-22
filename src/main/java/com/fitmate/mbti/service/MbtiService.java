@@ -59,7 +59,7 @@ public class MbtiService {
 					// 표 상으로는 같은 문항 내용이 여러개 있어도 가져올 때는 자동으로 중복체크를 하기 때문에 그냥 가져와도 됨
 				optionDTO.setMbtisub_idx((int)option.get("문항번호"));
 				optionDTO.setMbtisub_con((String)option.get("문항내용"));
-				
+						
 				
 				//List <MBTIQRDTO.TypeScore> typescores 객체화 -- 한 문항에 여러 개의 성향 저장하기 위함
 				List<MbtiQRDTO.TypeScore> typescores = new ArrayList<MbtiQRDTO.TypeScore>();
@@ -72,19 +72,11 @@ public class MbtiService {
 							typescores.add(typescore);//typescore, typeScores에 add하기
 							optionDTO.setTypeScores(typescores);//List <MBTIQRDTO.TypeScore> typescores를 optionDTO에 넣기
 				
-							//optionDTO를 options에 저장 -> 하나의 
-							
-								
-		//option을 options에 넣기
-		
-		//option을 data에 추가
-		
+							//optionDTO를 options에 저장 (-> 하나의 option 완성 -> options List로 저장)
+								options.add(optionDTO);
+							//완성한 options를 data에 추가
+								data.put("option", options);
 			}
-		
-		
-		
 		return data;
-		
 	}
-
 }
