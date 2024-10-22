@@ -9,5 +9,16 @@
 </select>
 
 
+<select id = "getQuestion" parameterType="int" resultType = "Map"> <!-- idx 기반으로 질문 idx 및 질문 내용 가져와야함 -->
+	SELECT mbtiq_idx,mbtiq_con FROM mbti_q where mbtiq_idx = #{Qidx};
+</select>
+
+<select id = "getOption" parameterType="int" resultType = "Map">  <!-- idx 기반으로 문항별 idx, 문항별 내용, 성향 idx, 성향 이름, 점수 idx, 점수 가져오기 -->
+SELECT s.mbtiq_idx as 질문번호, s.mbtisub_idx as 문항번호, mbtir_name as 운동성향, mbtiscr_scr as 점수
+FROM mbti_q_sub s
+inner join  mbti_q_subscr scr on s.mbtisub_idx = scr.mbtisub_idx
+inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtiq_idx = #{Qidx};
+</select>
+
 
 </mapper>
