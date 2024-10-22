@@ -190,12 +190,15 @@ html, body {
 			url : 'loadQuestion.ajax',
 			data: {'Qidx': currentQuestionIdx},
 			dataType : 'JSON',
-			success : function(data){ //data로 전달받기
- 				console.log(data);
-				
+			success : function(data){ //data 전달받기 
+ 				console.log(data); //data 찍어보기....
+ 				console.log(data.questioncontent);
+ 				console.log(data.questionIdx);
+ 				console.log(data.option);
+				drawQuestion(data.questioncontent,data.questionIdx,data.option);
 			},
 			error:function(e){
-				
+				console.log(e);
 				
 			}		
 		});
