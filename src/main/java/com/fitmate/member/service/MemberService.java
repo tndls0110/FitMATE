@@ -32,4 +32,12 @@ public class MemberService {
 		}
 		return result;
 	}
+
+	public Object checknick(String nick) {
+		boolean result = false;
+		if (member_dao.checknick(nick) == 0 && nick != null) {
+			result = true;
+		}
+		return result;
+	}
 }
