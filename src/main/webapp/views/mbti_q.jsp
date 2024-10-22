@@ -177,7 +177,7 @@ html, body {
 					console.log(e);
 				}
 				else{
-					loadQuestion(currentQuestionIdx);	
+					loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
 				}
 			});
 
@@ -203,6 +203,11 @@ html, body {
 			}		
 		});
 	}
+	
+	function drawQuestion(){
+		
+	}
+	
 	
 	
 	//$('.option').remove(); //이전의 문항 div는 삭제
