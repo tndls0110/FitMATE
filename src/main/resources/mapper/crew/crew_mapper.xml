@@ -3,4 +3,49 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.crew.dao.CrewDAO"></mapper>
+<mapper namespace="com.fitmate.crew.dao.CrewDAO">
+
+<insert id="crew_create"
+useGeneratedKeys="true"
+	keyColumn="crew_idx"
+	keyProperty="crew_idx"
+	 parameterType="com.fitmate.crew.dto.CrewDTO"
+>
+	insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3);
+</insert>
+
+<insert id="crew_post_create"
+useGeneratedKeys="true"
+	keyColumn="board_idx"
+	keyProperty="board_idx"
+	 parameterType="com.fitmate.crew.dto.CrewBoardDTO"
+>
+	insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1);
+</insert>
+
+<insert id="crew_idx">
+	insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
+</insert>
+
+<insert id="crew_leaderjoin">
+	insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id});
+</insert>
+
+<update id="crew_create_rewrite">
+	update crew_board set 
+	content = #{content}
+	where  board_idx = #{board_idx} and category_idx = 1
+</update>
+
+<update id="crew_create_rewrite_region">
+	update crew set
+	regions_idx = #{regions_idx}
+	where crew_idx IN (
+            SELECT crew_idx
+            FROM crew_idx
+            WHERE board_idx = #{board_idx}
+        ) 
+</update>
+
+
+</mapper>

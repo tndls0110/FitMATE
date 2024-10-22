@@ -19,21 +19,16 @@
 				<!-- 크루 생성자 id  value에 로그인 세션값 넣어주기 -->
 				
 				<!-- 제목 -->
-				<h2 class="title">크루 생성<span>크루생성 화면입니다.</span></h2>
+				<h2 class="title" name="name">크루이름<span>정보 수정하기</span></h2>
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
-                <form action="crew_create.do" method="post">
+                <form action="crew_create_rewrite.do" method="post">
            			<input type="hidden" name="crew_id" value="member01">
-                    <!-- 경고 -->                     
-                    <!-- 통과 -->
-                    <div class="list">
-                        <h3 class="capt">크루명 <span class="required">(필수)</span></h3>
-                        <p><input type="text" class="full pass" name="name" /></p>
-                        <h3 class="msg pass">사용할 수 있는 크루명입니다.</h3>
-                    </div>
-                    <!-- //통과 -->
-                    
+           			<!-- board_idx 벨류값 맞춰주기  value="1" >> 테스트용 -->
+           			<input type="hidden" name="board_idx" value="1">
+           		<!-- <input type="hidden" name="name" value="크루이름"> -->
+                
                     <!-- 둘로 나뉜 셀렉트박스 / 버튼 -->
                     <div class="list">
                         <h3 class="capt">주로 운동하는 지역</h3>
@@ -45,13 +40,17 @@
                         	<!-- 너비는 width10p ~ width90p 범위 내에서 적용 가능 -->
                         	<!-- 단위: 10p (예: width20p, width80p 가능) -->
                             <div class="width50p">
-                                <select class="narrow" id="region" name="region_idx">
-                                    
+                                <select class="narrow" name="region_idx">
+                                <!-- 옵션 아작스로 지역상위정보 리스트 가져오기  -->
+                                    <option value="서울">서울</option>
                                 </select>
                             </div>
                             <div class="width50p">
-                                <select class="narrow" id="regions" name="regions_idx">
-                                    
+                                <select class="narrow" name="regions_idx">
+                                <!-- 옵션 아작스로 지역하위정보 리스트 가져오기  -->
+                                    <option value="1">강남구</option>
+                                    <option value="2">강동구</option>
+                                    <option value="3">강서구</option>
                                 </select>
                             </div>
                         </div>
@@ -60,11 +59,8 @@
                     
                     <!-- 버튼이 붙은 입력창 -->
                     <div class="list">
-                        <h3 class="capt">모임취지</h3>
-                        
+                        <h3 class="capt">모임취지</h3>  
                         <!-- flex-narrow 박스 설정 -->
-                       
-                        
                         	<!-- 너비 설정 -->
                           <p> <textarea id="content" maxlength="1000" class="full pass" name="content" /></textarea></p>
                           <div class="character-count" id="charCount">0 / 1000자</div>
@@ -72,7 +68,7 @@
                
                     <!-- 제출 버튼 -->
                     <div class="list">
-                        <input type="submit" class="full mainbtn" value="크루 생성" />
+                        <input type="submit" class="full mainbtn" value="수정하기" />
                     </div>
                     <!-- //제출 버튼 -->
                     
@@ -87,34 +83,5 @@
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
-	<script src="resources/js/common.js">
-		
-	function regionCall(){
-	$.ajax({
-		type:'GET',
-		url:'crew_region.ajax',
-		data:{
-					
-		},
-		datatype:'JSON',
-		success:function(data){
-			console.log(data);
-			drawList(data.regionlist)
-		},
-		error:function(e){
-			console.log(e);
-		}
-	});
-	}
-	 
-	 
-	 function drawList(regionlist) {
-			var content ='';
-			regionlist.forEach(function(region,idx){ 
-				content + =	'<option value='+region_idx+'>'+region_name+'</option>';
-			});
-			$('#region').html(content);
-		}
-	 
-	</script>
+	<script src="resources/js/common.js"></script>
 </html>
