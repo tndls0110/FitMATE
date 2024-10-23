@@ -14,4 +14,6 @@ public interface MbtiDAO {
 
 	List<Map<String, Object>> getOption(int qidx);
 
+	List<Map<String, Object>> getTypeScore(int optionIdx);
+
 }
