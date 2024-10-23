@@ -40,6 +40,7 @@
 	<script src="resources/js/common.js"></script>
 	<script>
 		var state = '${state}';
+		var msg = '${msg}';
 	</script>
 	<script src="resources/js/member_login.js"></script>
 </html>

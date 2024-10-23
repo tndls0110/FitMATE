@@ -49,7 +49,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">생년월일 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="birthday" placeholder="예) 2024-10-19" /></p>
+						<p><input type="date" class="full" name="birthday" /></p>
 						<h3 class="msg caution fill_birth hide">생년월일은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">

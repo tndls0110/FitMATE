@@ -192,6 +192,7 @@ input[type="text"],
 input[type="password"],
 textarea,
 input[type="file"],
+input[type="date"],
 select{
     width: 100%;
     padding: 16px;
@@ -206,6 +207,7 @@ input[type="text"].caution,
 input[type="password"].caution,
 textarea.caution,
 input[type="file"].caution,
+input[type="date"].caution,
 select.caution{
     border-bottom: 3px solid #C52424;
 }
@@ -214,6 +216,7 @@ input[type="text"].pass,
 input[type="password"].pass,
 textarea.pass,
 input[type="file"].pass,
+input[type="date"].pass,
 select.pass{
     border-bottom: 3px solid #048187;
 }
