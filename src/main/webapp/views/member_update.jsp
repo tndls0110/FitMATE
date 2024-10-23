@@ -5,33 +5,35 @@
 		<meta charset="UTF-8">
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
-		<link rel="stylesheet" type="text/css" href="resources/css/join.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/member_profile.css">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
 			<c:import url="layout/leftnav_1.jsp"></c:import>
 			<div class="contents narrow">
-				<h2 class="title">회원가입</h2>
-				<form action="member_join.do" method="post">
+				<h2 class="title">정보 수정하기</h2>
+				<form action="member_update.do" method="post">
 					<div class="list">
-						<h3 class="capt">아이디 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="user_id" /></p>
-						<h3 class="msg pass pass_id hide">사용할 수 있는 아이디입니다.</h3>
-						<h3 class="msg caution check_id hide">이미 사용중인 아이디입니다. 다른 아이디를 입력하세요.</h3>
-						<h3 class="msg caution npass_id hide">아이디 중복체크 통과는 필수 항목입니다.</h3>
-						<h3 class="msg caution fill_id hide">아이디는 필수 항목입니다.</h3>
+						<h3 class="capt">아이디 <span class="required">(변경 불가)</span></h3>
+						<p class="statics">${list.user_id}</p>
 					</div>
 					<div class="list">
 						<h3 class="capt">비밀번호 <span class="required">(필수)</span></h3>
 						<p><input type="password" class="full" name="pw" /></p>
-						<p class="confirm"><input type="password" class="full" name="pwconfirm" /></p>
-						<h3 class="msg caution check_pw hide">비밀번호와 비밀번호 확인 값은 동일해야 합니다.</h3>
-						<h3 class="msg caution fill_pw hide">비밀번호는 필수 항목입니다.</h3>
+						<div class="btn_flex narrow">
+							<div class="width70p">
+								<input type="password" class="full flex_left" name="pw" value="${list.pw}" readonly />
+							</div>
+							<div class="width30p">
+								<button class="mainbtn full flex_right">변경하기</button>
+							</div>
+						</div>
 					</div>
 					<div class="list">
 						<h3 class="capt">닉네임 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="nick" /></p>
+						<p><input type="text" class="full" name="nick" value="${list.nick}" /></p>
 						<h3 class="msg pass pass_nick hide">사용할 수 있는 닉네임입니다.</h3>
 						<h3 class="msg caution check_nick hide">이미 사용중인 닉네임입니다. 다른 닉네임을 입력하세요.</h3>
 						<h3 class="msg caution npass_nick hide">닉네임 중복체크 통과는 필수 항목입니다.</h3>
@@ -39,21 +41,29 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">이름 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="name" /></p>
+						<p><input type="text" class="full" name="name" value="${list.name}" /></p>
 						<h3 class="msg caution fill_name hide">이름은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">이메일 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="email" /></p>
+						<p><input type="text" class="full" name="email" value="${list.email}" /></p>
 						<h3 class="msg caution fill_email hide">이메일은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">생년월일 <span class="required">(필수)</span></h3>
-						<p><input type="date" class="full" name="birthday" /></p>
+						<p><input type="date" class="full" name="birthday" value="${list.birthday}" /></p>
 						<h3 class="msg caution fill_birth hide">생년월일은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
+						<div class="profImg">
+							<c:if test="${list.profile == ''}">
+								<i class="bi bi-person-square"></i>
+							</c:if>
+							<c:if test="${list.profile != ''}">
+								<div style="background-image: url('/photo/${list.profile}');"></div>
+							</c:if>
+						</div>
 						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
 						<div class="img_preview"></div>
 					</div>
@@ -81,16 +91,16 @@
 						</div>
 					</div>
 					<div class="list">
-						<button type="button" class="full mainbtn" onclick="join()">회원 가입</button>
+						<button type="button" class="full mainbtn" onclick="update()">수정하기</button>
 					</div>
 				</form>
 				<div class="list">
-					<button onclick="/member_login.go" class="full subbtn">돌아가기</button>
+					<button onclick="/member_profile.go" class="full subbtn">돌아가기</button>
 				</div>
 			</div>
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
-	<script src="resources/js/member_join.js"></script>
+	<script src="resources/js/member_update.js"></script>
 </html>

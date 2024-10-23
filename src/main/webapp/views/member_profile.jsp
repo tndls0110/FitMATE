@@ -70,7 +70,7 @@
 					</tr>
 				</table>
 				<div class="list">
-					<button type="button" class="full mainbtn">정보 수정하기</button>
+					<button type="button" onclick="location.href='member_update.go'" class="full mainbtn">정보 수정하기</button>
 				</div>
 			</div>
 		</div>
