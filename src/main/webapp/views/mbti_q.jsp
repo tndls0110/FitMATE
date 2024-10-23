@@ -138,7 +138,7 @@ html, body {
 			</div>
 		</div>
 	</div>
-<c:import url="layout/modal.jsp"></c:import>
+	<c:import url="layout/modal.jsp"></c:import>
 </body>
 <script src="resources/js/common.js"></script>
 
@@ -166,7 +166,7 @@ html, body {
 					//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
 					currentQuestionIdx = result.idx;
 					minQuestionIdx = result.idx;
-					console.log(currentQuestIdx);
+					console.log(currentQuestionIdx);
 					console.log(minQuestionIdx);
 					//저장하고 나서
 					isInitialLoad = false;	
@@ -176,11 +176,11 @@ html, body {
 				error : function(e) {
 					console.log(e);
 				}
-				else{
-					loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
-				}
+				
 			});
 
+		}else{
+			loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
 		}
 	}
 
@@ -191,10 +191,10 @@ html, body {
 			data: {'Qidx': currentQuestionIdx},
 			dataType : 'JSON',
 			success : function(data){ //data 전달받기 
- 				console.log(data); //data 찍어보기....
- 				console.log(data.questioncontent);
- 				console.log(data.questionIdx);
- 				console.log(data.option);
+ 				console.log("전체 데이터:", data); 
+ 				console.log("질문 내용:", data.questioncontent);
+ 				console.log("질문 idx:",data.questionIdx);
+ 				console.log("옵션들:", data.option);
 				drawQuestion(data.questioncontent,data.questionIdx,data.option);
 			},
 			error:function(e){
@@ -204,15 +204,34 @@ html, body {
 		});
 	}
 	
-	function drawQuestion(questioncontent,questionIdx,option){
-		
+	function drawQuestion(questioncontent, questionIdx, option) {
+	    var mainQuestioncontent = 'Q' + questionIdx + '. ' + questioncontent;
+	    $('#main_Question').html(mainQuestioncontent);
+
+
+	    console.log('option의 길이:',option.length);
+	    
+	    console.log('제대로 뽑은건가?:',option[0].mbtisub_con);
+	    for (var i = 0; i < option.length; i++) {
+			if(i == 0 || i-1 >= 0&& option[i].mbtisub_con != option[i-1].mbtisub_con){
+				var optioncontent = option[i].mbtisub_con;
+			    	var a = 1;
+					for(var typescore of option[i].typeScores){
+					//console.log("option 0 의 typescore",option[0].typeScores);
+					
+			    	//console.log('i의 typeScores:',String(typescore));
+			    	//console.log('i의 운동성향:',String(typescore.mbtir_name));
+			    	//console.log('i의 점수:',String(typescore.mbtiscr_scr));
+			    	
+			    	console.log('i의 운동성향 및 점수:'+ "type"+a+" = "+ String(typescore.mbtir_name) +", score"+a+" = "+ String(typescore.mbtiscr_scr));
+					a++;
+					} // 해결 : option[i].typeScores에 있는 type들을 하나 하나 빼면서 a++을 증가시키는 형태로 type1, type2... 순차적으로 type들을 저장해줌.
+			}			
+		}
+					 
+	          
+
 	}
-	
-	
-	
-	//$('.option').remove(); //이전의 문항 div는 삭제
-	//메인 질문의 html을 가져온 데이터로 바꿔주기
-	/* main_Question */
 </script>
 
 </html>
