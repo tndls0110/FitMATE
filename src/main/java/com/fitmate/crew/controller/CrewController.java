@@ -75,7 +75,7 @@ public class CrewController {
 	
 	
 	
-	// 1. 크루 모집글페이지
+	// 1. 크루검색
 	@RequestMapping(value = "/crew_search")
 	public String crewSearch(Model model) {
 		// 1-1. 필터 - 지역정보/MBTI정보 가져오기
@@ -91,14 +91,23 @@ public class CrewController {
 	// 2. 크루 모집글 목록조회
 	@GetMapping(value = "/crew_search.ajax")
 	@ResponseBody 
-	public List<CrewSearchListDTO> crewSearch2( @RequestParam Map<String, String> params){
+	public List<CrewSearchListDTO> crewSearchList( @RequestParam Map<String, String> params){
 		
 		logger.info("params : " + params);
 		
 		List<CrewSearchListDTO> recruitList = crew_service.crewList(params);
 	 
 		return recruitList; 
-	}	
+	}
+	
+	// 3. 크루 모집글 상세조회
+	@RequestMapping(value="/crew_recruit_detail.go")
+	public String recruitDetail() {
+		return "crew_recruit_detail";
+	}
+	
+	
+	
 }
 
 

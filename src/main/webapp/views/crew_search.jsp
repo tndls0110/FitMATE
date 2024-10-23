@@ -13,10 +13,13 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-
+	/* /*긴 단어가 영역 넘어가면 줄 바꿈되도록 하기
+	word-wrap: break-word; */
+	
 	div.headerArea{
 		text-align: center;
 		padding: 0 10%;
+		overflow: hidden; /* 스크롤 숨기기 */
 	}
 	
 	div.searchArea{
@@ -43,8 +46,10 @@
 	}
 	
 	div.recruitArea{
+		overflow-y: scroll;
+		overflow-x: hidden;
 		width: 90%;
-		height: 35%;
+		height: 65%;
 		margin-top: 10%;
 		margin-left: auto;
 		margin-right: auto;
@@ -55,9 +60,9 @@
 	
 	div.recruit{
 		width: 40%;
-		height: 50%;
-		margin: 1% 1%;
-		padding: 1% 1%;
+		height: 200px;
+		margin: 3% 1%;
+		padding: 2% 2%;
 		background-color: #282b34;
 		flex: 1 1 40%;
 		/* align-content: left; */ 
@@ -66,32 +71,42 @@
 	
 	div.recruit_odd{
 		width: 48%;
-		height: 50%;
-		margin: 1% 1%;
-		padding: 1% 1%;
+		height: 200px;
+		margin: 3% 1%;
+		padding: 2% 2%;
 		background-color: #282b34;
 		/* align-content: left; */
 		position: relative; 
 		
 	}
 	
-	div.recruit_header{
+	.recruit_left{
 	    /* position: absolute; 
 	    left: 50%; */
 	    width: 15%;
 	    aspect-ratio: 1;
 	    border: 1px solid black;
+	    border-radius: 50%;
 	}
 	
 	div.recruit_right{
 		position: absolute;
-		top: 6%;
-		left: 18%;
+		top: 7%;
+		left: 20%;
+		width: 100%;
 	}
 	
 	div.recruit_content, div.recruit_info{
-		padding: 3% 5%;
+		margin: 2% 0%;
+		padding: 5% 5%;
+        /* 줄바꿈 방지 */
+        white-space: nowrap; 
+        /* 영역을 넘어가는 경우 숨김처리.  */
+		overflow: hidden;
+		/* 숨겨지는 부분에 말줄임표(...)표시 */
+        text-overflow: ellipsis;
 	}
+	
 	
 	div.recruit_info span{
 		margin-right: 15%;
@@ -104,13 +119,31 @@
     	left: 11.5%;
 	}
 	
-	h4.crew_name{
-		display: inline;
+	.text_area{
+		display: inline-block;
+		width: 63%;
+		margin: 0%;
+		
+		/* 영역을 넘어가는 경우 숨김처리.  */
+		overflow: hidden;
+		/* 숨겨지는 부분에 말줄임표(...)표시 */
+        text-overflow: ellipsis;
+        /* 줄바꿈 방지 */
+        white-space: nowrap;
+	}
+	
+	span.idx_hidden{
+		display: inline-block;
+		visibility: hidden;
+		width:0%;
+		margin: 0%;
+		padding: 0%;
 	}
 	
 	button{
 		background-color: #282b34;
 		color: #e9ecef;
+		border:none;
 	}
 	
 	button.add_button{
@@ -119,6 +152,17 @@
 		right: 2%;
 		width: 2%;
 	}
+	
+	a.recruit_detail{
+		display: block;
+		width: 80%;
+	}
+	
+	/* div.recruit_left i.bi bi-person-circle{
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+	} */
 	
 </style>
 </head>
@@ -164,14 +208,13 @@
 			
 			<!-- 크루모집 영역 -->
 			<div class="recruitArea">
-				
 			</div>
 			
 		</div>
 		
 	</div>
 </body>
-
+<c:import url="layout/modal.jsp"></c:import>
 <script src="resources/js/common.js"></script>
 <script>
 	//0. 초기 크루목록 가져오기
@@ -223,7 +266,7 @@
 	function search() {
 		// 검색기준을 선택하지 않은경우 경고창을 띄워줌.
 		if ($('#searchFilter').val() == '') {
-			alert('검색기준을 선택하세요.');
+			modal.showAlert('검색기준을 선택하세요.');
 		} else {
 			// 2-1. 검색관련 변수세팅 
 			searchFilter = $('#searchFilter').val();
@@ -248,10 +291,11 @@
 			},
 			dataType : 'JSON',
 			success : function(list) {
+			
 				// 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
 				var cnt = 1;
 				
-				$('div.recruitArea').html('');
+				$('div.recruitArea').empty();
 				
 				$(list).each(function(idx, item) { // 데이터 =item
 					
@@ -260,26 +304,37 @@
 					var info = '';
 					
 					console.log('cnt : ' + cnt);
-					
-					// Header: 프로필사진, 크루명, 크루장이름, MBTI			
-					header = '<div class="recruit_header">' + item.leader_profile + ' </div><div class="recruit_right"><span>' + item.crew_idx + ' </span><h4 class="crew_name">' + item.crew_name + '</h4><br/><span>' + item.leader_name + '</span><span> (' + item.leader_mbti + ')</span></div>';
-					// Content: 크루 소개글         => 글자수가 긴경우 잘라주어야 함.
+							
+					console.log('profile : ' + item.leader_profile);
+					// 프로필 사진이 없을경우 기본 프로필 적용.
+					if(item.leader_profile == null || item.leader_profile == ''){
+						item.leader_profile = 'cloth_alike_op30.png'; 	
+					}
+					// Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장이름, MBTI
+					header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '" class="recruit_detail"><img class="recruit_left" src="resources/img/' +item.leader_profile+ '"/><div class="recruit_right"><h4 class="text_area">' + item.crew_name + '</h4><br/><span class="text_area"><span>' + item.leader_name + '</span><span> (' + item.leader_mbti + ')</span></span></div></a>';
+					// Content: 크루 소개글         
 					content = '<div class="recruit_content">' + item.crew_content + '</div>';
 					// Info: 크루원 수, 활동지역
 					info = '<div class="recruit_info"><span>🧟' + item.member_count + ' </span><span>🌏' + item.region_name + ' ' + item.regions_name + '</span></div>'
-					// ... 버튼
-					var add_button = '<button type="button" class="add_button">︙</button>';
+
+					// item.leader_id(크루장 id)로 크루장인경우 버튼생성.
+					/* var add_button = '<button type="button" class="add_button">︙</button>'; */
 					
 					// 홀수번째 게시글은 왼쪽정렬
 					if(cnt % 2 == 1){
-						$('div.recruitArea').append('<div class="recruit_odd">' + header + content + info + add_button + '</div>');
+						$('div.recruitArea').append('<div class="recruit_odd">' + header + content + info  + '</div>');
 					}else{
-						$('div.recruitArea').append('<div class="recruit">' + header + content + info + add_button + '</div>');
+						$('div.recruitArea').append('<div class="recruit">' + header + content + info + '</div>');
 					}
 						
 					cnt++;
 					
 				});
+				
+				// 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. 
+				if(list == null || list == ''){
+					modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
+				}
 
 				 /* [...버튼]
 				 크루장인 경우에만 ...버튼을통해 모집글 수정 or 삭제가능..?   삭제는 빼야될듯..? 크루생성과 크루모집글생성을 합쳤기 때문에...
@@ -287,7 +342,7 @@
 			},
 			error : function(e) {
 				console.log(e); // 에러가 보이지 않도록 추후 처리필요?
-				alert('크루 목록가져오기 실패');
+				modal.showAlert('크루 목록가져오기 실패');
 			}
 			// Ajax 요청전 함수.
 			/* ,
