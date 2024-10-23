@@ -24,6 +24,7 @@
 			
 				<!-- 폼 -->
                 <form action="crew_create.do" method="post">
+                <!-- 작성자 id 넣기 = 세션아이디 넣기 -->
            			<input type="hidden" name="crew_id" value="member01">
                     <!-- 경고 -->                     
                     <!-- 통과 -->
