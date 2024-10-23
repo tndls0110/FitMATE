@@ -278,56 +278,84 @@
 			success : function (data){
 				console.log('typeScore 데이터:',data);
 				//typeScore 데이터 가져오기 성공
+				console.log('저장된 값 있어? 1:', selectedScore);
+
+				//질문 1. 저장된 값이 있는가
+				console.log('저장된 값의 길이: ' + Object.keys(selectedScore).length);
 
 
+				if(Object.keys(selectedScore).length != 0){  //selectedScore에 값이 있는 경우, 비교하고 저장
+					//★object에 저장된 값이 있는지 확인하는 것은 selecteScore 그대로 가져와서 하면 안됨..
+					//★Object.keys(selectedScore).length가 0이면 없는 거고.... 그 이상이면 값이 있는 상태
 
-				//1. 질문과 문항 idx 값이 selectedScores에 존재하지 않을 때 ||
-				//2. 존재하지만, 질문과 문항 idx값이 selectedScore의 질문과 문항 idx값과 같지 않을 때 수행
+					//질문 2. 현재 질문 idx 값이 있는가
+						//Yes -> selectedScore에서 질문 idx값 분리해서 비교
+						//selectedScore.
 
-				if(selectedScore != null){ // 만약 값이 없으면 바로 save //만약 값이 존재할 때 비교하고 저장
-					//selectedScore에 값이 있는 경우
+
+							//질문 3. 저장된 옵션 idx가 같은가?
+								//NO -> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
+
+						//else -> save (), addscore()
+
 
 					//selectedScore
-					var optionIdx = selectedScore[questionIdx].map(data => data.optionIdx); //questionIdx 키를 가진 값 중
+					//var saved_optionIdx = selectedScore[questionIdx].map(data => data.optionIdx); //questionIdx 키를 가진 값 중
+					console.log('저장된 값 있어? 2 :', selectedScore);
 
 
 				}else{
-					saveScore(questionIdx,optionidx, data);
+					saveScore(questionIdx,optionidx, data); // 만약 값이 없으면 바로 save
+
+
 				}
 
-
-
 				//클릭했을 때 만약 질문에 대한 문항 idx값이 다를 경우
-				addScore(optionidx, typescore);
+				//addScore(optionidx, typescore);
 
 
 			},
 			error : function(e){
-
+			console.log(e);
 
 			}
 		});
 	}
 
-	function saveScore(){
-		//2.만약 selectedScores에 내용이 있을 때 (조건) 같은 값이 아니면 let에 새로 저장
-		if(selectedScore != null){
+	function saveScore(questionIdx,optionidx, data){
+		// =======================================
+		//저장하는 방법...
+		//1. 직접 데이터 형태를 만들기 (노가다..노가다...)
+		//2. selectedScore에 넣어주기....
+		// =======================================
 
-			//1. selectedScore에서 키(idx)들을 뽑아낸다.
-			//selectedScore의 데이터 내용은 selected = {1:{type : '잔근육 매니아'} , ..}
+		// //1.
+		// selectedScore[questionIdx] = {
+		// 	questionIdx : questionIdx,
+		// 	options : []
+		// }
 
-			var keySet= Object.keys(selectedScore);
-			console.log(keySet);
+		//data (TypeScore 분리하기...)
+		var a = 0;
+		for(var TypeScore of data.typeScore){
+			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
+			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
 
-			//뽑아온 키를 분리
-			for (var key of keySet){
-				console.log(key); //키
-			}
+			a++;
 
-			if(selectedScore[key] != optionidx){
-
-			}
 		}
+
+
+
+		// //selectedScore[questionIdx].options.push({넣을 값 작성});
+
+
+		// selectedScore[questionIdx].options.push({
+		// 	optionidx :
+
+		//});
+
+
 	}
 
 </script>
