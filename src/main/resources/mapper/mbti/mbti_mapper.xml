@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
-   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
->
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+		>
 
 <mapper namespace="com.fitmate.mbti.dao.MbtiDAO">
-<select id="mbtiIdx" resultType="int">
-	SELECT MIN(mbtiq_idx) FROM mbti_q
-</select>
+	<select id="mbtiIdx" resultType="int">
+		SELECT MIN(mbtiq_idx) FROM mbti_q
+	</select>
 
 
-<select id = "getQuestion" parameterType="int" resultType = "Map"> <!-- idx 기반으로 질문 idx 및 질문 내용 가져와야함 -->
-	SELECT mbtiq_idx as 질문번호,mbtiq_con as 질문내용 FROM mbti_q where mbtiq_idx = #{Qidx};
-</select>
+	<select id="getQuestion" parameterType="int" resultType="Map"> <!-- idx 기반으로 질문 idx 및 질문 내용 가져와야함 -->
+		SELECT mbtiq_idx as 질문번호,mbtiq_con as 질문내용 FROM mbti_q where mbtiq_idx
+		= #{Qidx};
+	</select>
 
-<select id = "getOption" parameterType="int" resultType = "Map">  <!-- idx 기반으로 문항별 idx, 문항별 내용, 성향 idx, 성향 이름, 점수 idx, 점수 가져오기 -->
-	SELECT s.mbtiq_idx as 질문번호, s.mbtisub_idx as 문항번호, s.mbtisub_con as 문항내용, mbtir_name as 운동성향, mbtiscr_scr as 추가할점수
-	FROM mbti_q_sub s
-	inner join  mbti_q_subscr scr on s.mbtisub_idx = scr.mbtisub_idx
-	inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtiq_idx = #{Qidx};
-</select>
+	<select id="getOption" parameterType="int" resultType="Map">  <!-- idx 기반으로 문항별 idx, 문항별 내용, 성향 idx, 성향 이름, 점수 idx, 점수 가져오기 -->
+		SELECT distinct s.mbtiq_idx as 질문번호, s.mbtisub_idx as 문항번호, s.mbtisub_con as
+		문항내용
+		FROM mbti_q_sub s where mbtiq_idx= #{Qidx};
+	</select>
+
+	<select id="getTypeScore" parameterType="int" resultType="Map">
+		SELECT mbtisub_idx as 문항번호, mbtir_name as 운동성향, mbtiscr_scr as 추가할점수
+		FROM mbti_q_subscr scr
+				 inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtisub_idx = #{optionIdx};
+
+	</select>
+
 
 
 </mapper>
