@@ -2,12 +2,13 @@ package com.fitmate.member.service;
 
 import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.member.dao.MemberDAO;
+import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,5 +53,18 @@ public class MemberService {
 
 	public List<RegCountyDTO> getRegion2(String region_idx) {
 		return member_dao.getRegion2(region_idx);
+	}
+
+	public boolean join(Map<String, String> params) {
+		boolean result = false;
+		if (member_dao.join(params) == 1 && member_dao.insprof(params)){
+			result = true;
+		}
+		return result;
+	}
+
+	// 내 프로필 조회
+	public MemberDTO profile(String user_id, Model model) {
+		return member_dao.profile(user_id);
 	}
 }

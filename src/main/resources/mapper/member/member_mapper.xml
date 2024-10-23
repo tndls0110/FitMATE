@@ -27,4 +27,23 @@
         SELECT regions_idx, regions_name FROM region_sub WHERE region_idx = #{region_idx} AND regions_show
     </select>
 
+    <insert id="join" parameterType="map">
+        INSERT INTO member(user_id, nick, pw, email, name, birthday)
+            VALUES(#{user_id}, #{nick}, #{pw}, #{email}, #{name}, #{birthday})
+    </insert>
+
+    <insert id="insprof" parameterType="map">
+        INSERT INTO profile(user_id, profile, status, regions_idx)
+            VALUES(#{user_id}, #{profile}, #{status}, #{region2})
+    </insert>
+
+    <!-- 내 프로필 보기 -->
+    <select id="profile" resultType="com.fitmate.member.dto.MemberDTO">
+        SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.status, p.profile,
+               (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = p.regions_idx) AS 'region_name',
+               (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = p.regions_idx) AS 'regions_name',
+               (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx = p.mbtir_idx) AS 'mbtir_name'
+        FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
+    </select>
+
 </mapper>

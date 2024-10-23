@@ -9,10 +9,10 @@
 	</div>
 	<ul class="menu noDesc">
 		<li class="active">
-			<a href="">운동 일지</a> <!-- 운동일지 클릭하면 나오게-->
+			<a href="schedule.go">운동 일지</a> <!-- 운동일지 클릭하면 나오게-->
 		</li>
 		<li>
-			<a href="">크루 검색</a>
+			<a href="crew_search">크루 검색</a>
 		</li>
 		<li>
 			<a href="">내 크루</a>
@@ -21,7 +21,7 @@
 			<a href="">메시지</a>
 		</li>
 		<li>
-			<a href="">마이 페이지</a>
+			<a href="member_profile.go">마이 페이지</a>
 		</li>
 		<li>
 			<a href=""><i class="bi bi-person-walking"></i></a>

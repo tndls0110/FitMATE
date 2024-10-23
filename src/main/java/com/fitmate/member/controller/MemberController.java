@@ -39,7 +39,7 @@ public class MemberController {
 
 	@RequestMapping (value = "/member_login.do")
 	public String login(String user_id, String pw, Model model, HttpSession session) {
-		page = "/member_login";
+		page = "member_login";
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
@@ -102,9 +102,25 @@ public class MemberController {
 
 	@RequestMapping (value = "/member_join.do")
 	public String join(@RequestParam Map<String, String> params, Model model) {
-		page = "member_login";
-
+		page = "member_join";
+		logger.info("params: {}", params);
+		if (member_service.join(params)){
+			model.addAttribute("msg", params.get("nick")+"님, 환영합니다. 로그인하세요.");
+			model.addAttribute("user_id", params.get("user_id"));
+			page = "member_login";
+		} else {
+			model.addAttribute("msg", "회원 가입 과정에 문제가 발생했습니다. 다시 시도하세요.");
+		}
 		return page;
+	}
+
+	// 내 프로필 보기
+	@RequestMapping (value = "/member_profile.go")
+	public String profile(Model model, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		model.addAttribute("list", member_service.profile(user_id, model));
+		return "member_profile";
 	}
 
 }
