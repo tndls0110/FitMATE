@@ -18,7 +18,7 @@
 			<a href="">내 크루</a>
 		</li>
 		<li>
-			<a href="">메시지</a>
+			<a href="message">메시지</a>
 		</li>
 		<li>
 			<a href="member_profile.go">마이 페이지</a>
