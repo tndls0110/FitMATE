@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ScheduleController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@RequestMapping (value = "/")
+	@RequestMapping (value = {"/" ,"/schedule.go"})
 	public String main() {
 		return "schedule";
 	}
-	
-	
 }
