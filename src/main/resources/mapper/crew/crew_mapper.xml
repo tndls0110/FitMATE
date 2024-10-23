@@ -17,10 +17,10 @@
 		A.name AS crew_name,
 		<!-- 크루idx -->
 		A.crew_idx,
+		<!-- 게시글idx -->
+		I.board_idx,     
 		<!-- 크루소개글 -->
-		(SELECT B.content FROM crew_board B WHERE B.board_idx = (SELECT
-		I.board_idx FROM crew_idx I WHERE I.crew_idx = A.crew_idx)) AS
-		crew_content,
+		CB.content AS crew_content,
 		<!-- 활동지역 시단위 -->
 		(SELECT R.region_name FROM region R WHERE R.region_idx = (SELECT
 		RS.region_idx FROM region_sub RS WHERE RS.regions_idx =
@@ -31,6 +31,8 @@
 		<!-- 크루원 수 -->
 		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx =
 		A.crew_idx) AS member_count,
+		<!-- 크루장 ID -->
+		A.crew_id AS leader_id,
 		<!-- 크루장 이름 -->
 		MB.name AS leader_name,
 		<!-- 크루장 프로필사진 -->
@@ -40,7 +42,10 @@
 		P.mbtir_idx FROM profile P WHERE P.user_id = A.crew_id)) AS
 		leader_mbti FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id
 		INNER JOIN profile P ON A.crew_id = P.user_id
+		INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx
+		INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
 		<where>
+			category_idx =1
 			<!-- searchFilter(1='크루이름 검색'/ 2='크루장명 검색') -->
 			<if
 				test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')"> AND A.name LIKE CONCAT('%', #{searchKeyword}, '%') </if>
