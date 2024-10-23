@@ -67,4 +67,5 @@ public class MemberService {
 	public MemberDTO profile(String user_id) {
 		return member_dao.profile(user_id);
 	}
+
 }

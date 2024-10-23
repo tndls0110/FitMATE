@@ -129,6 +129,10 @@ public class MemberController {
 		//String user_id = (String) session.getAttribute("loginId");
 		String user_id = "member03";
 		model.addAttribute("list", member_service.profile(user_id));
+		List<RegCountyDTO> list = member_service.getRegion();
+		model.addAttribute("region", list);
+		list = member_service.getRegion2("1");
+		model.addAttribute("region2", list);
 		return "member_update";
 	}
 

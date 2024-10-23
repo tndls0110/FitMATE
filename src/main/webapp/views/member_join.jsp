@@ -59,7 +59,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><input type="text" class="full" name="status" /></p>
+						<p><textarea class="full" name="status" rows="3"></textarea></p>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>
