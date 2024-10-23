@@ -267,9 +267,8 @@
 	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음ㄴ +나중에 이전 페이지로 돌아가기 고도화
 
 	// typeScore 불러오기 =========================================================================================
-
 	function typeScore(questionIdx,optionidx){ //클릭한 것만 성향과 점수 가져오는 것
-		//1. click된 버튼의 optionidx 기반으로 운동 성향과 점수 가져오기
+		// 1. click된 버튼의 optionidx 기반으로 운동 성향과 점수 가져오기
 		$.ajax({
 			type : 'GET',
 			url : 'get_typeScore.ajax',
@@ -291,12 +290,19 @@
 					//질문 2. 현재 질문 idx 값이 있는가
 						//Yes -> selectedScore에서 질문 idx값 분리해서 비교
 						//selectedScore.
-
-
+						if(selectedScore[questionIdx] != null){
 							//질문 3. 저장된 옵션 idx가 같은가?
-								//NO -> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
+							if (selectedScore[questionIdx].options.optionidx != optionidx){
 
-						//else -> save (), addscore()
+								console.log(selectedScore[questionIdx].options.typeScores.Type);
+
+							}	//NO -> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
+								// questionIdx값이 같은 것은 아무것도 안하니까.. 추가하지 않기
+						}else{
+							//else -> save (), addscore()
+							saveScore(questionIdx,optionidx, data);
+							addScore(data);
+						}
 
 
 					//selectedScore
@@ -306,7 +312,7 @@
 
 				}else{
 					saveScore(questionIdx,optionidx, data); // 만약 값이 없으면 바로 save
-
+					addScore(data);
 
 				}
 
@@ -323,40 +329,69 @@
 	}
 
 	function saveScore(questionIdx,optionidx, data){
+
 		// =======================================
 		//저장하는 방법...
 		//1. 직접 데이터 형태를 만들기 (노가다..노가다...)
 		//2. selectedScore에 넣어주기....
 		// =======================================
 
-		// //1.
-		// selectedScore[questionIdx] = {
-		// 	questionIdx : questionIdx,
-		// 	options : []
-		// }
+		//1.
+		selectedScore[questionIdx] = {
+			questionIdx : questionIdx,
+			options : []
+		}
 
 		//data (TypeScore 분리하기...)
-		var a = 0;
-		for(var TypeScore of data.typeScore){
-			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
-			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
-			a++;
 
-		}
 
 
 
 		// //selectedScore[questionIdx].options.push({넣을 값 작성});
 
+		var a = 0;
+		console.log("typeScore: ", data.typeScore);
 
-		// selectedScore[questionIdx].options.push({
-		// 	optionidx :
+		var b = '';
+		for(var TypeScore of data.typeScore){
+			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
+			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
+			a++;
+			b+= '"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"';
+		}
+		selectedScore[questionIdx].options.push({
+			optionidx : optionidx,
+			typeScores : b
+		});
 
-		//});
-
+		console.log('selectedScore : {} ' + JSON.stringify(selectedScore,null,2)); //잘 들어간 것 같음 -> save까지 완료
 
 	}
+	//전역 변수 설정 ======================================================
+	//재선언할 수 없는 let으로
+	//띄어쓰기 있는 문자를 검색해야하니까.. let 잔근육매니아가 아닌.. let scores = {}
 
+
+	let scores = {
+		"잔근육 매니아" : 0,
+		"유산소 매니아" : 0,
+		"건강추종자" : 0,
+		"자기 개발자" : 0,
+		"시간 부족형" : 0,
+	} //add하면 scores["잔근육 매니아"] +=
+
+	function addScore(data){
+		console.log('받아온값: ', data);
+		var a = 1;
+		for(var TypeScore of data.typeScore){
+			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
+			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
+			a++;
+			scores[TypeScore.mbtir_name]+= TypeScore.mbtiscr_scr;
+		}
+		console.log('합산 점수 확인하기 : ', JSON.stringify(scores));
+
+	};
 </script>
 
 </html>
