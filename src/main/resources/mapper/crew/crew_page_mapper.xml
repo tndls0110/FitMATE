@@ -9,4 +9,43 @@
 	select * from report_reason
 </select>
 
+<insert id="crew_notice_write" useGeneratedKeys="true"
+		keyColumn="board_idx" keyProperty="board_idx"
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,subject,category_idx)
+		value(#{board_id},#{subject},4); </insert>
+<insert id="notice_write_crewidx" parameterType="com.fitmate.crew.dto.CrewIdxDTO">
+	insert into crew_idx (crew_idx,board_idx) value (#{crew_idx},#{board_idx})
+</insert>
+<update id="crew_lastdate_update">
+	update crew set last_date = now() where crew_idx = #{param1}
+</update>		
+
+<select id="crew_notice_list" parameterType="int" resultType="com.fitmate.crew.dto.CrewBoardDTO">
+	SELECT cb.*
+	FROM crew_idx ci
+	INNER JOIN crew_board cb ON ci.board_idx = cb.board_idx
+	WHERE ci.crew_idx = #{crew_idx} AND cb.category_idx = 4
+	GROUP BY cb.board_idx;
+</select>		
+
+<delete id="crew_notice_del">
+	delete from crew_board where board_idx = #{param1} 
+</delete>
+<delete id="notice_del_crewidx">
+	delete from crew_idx where board_idx = #{param1}
+</delete>
+
+<select id="crew_member_list">
+	select * from crew_member where crew_idx = #{param1}
+</select>
+
+<select id="notice_noti_crewname" parameterType="com.fitmate.crew.dto.CrewDTO" resultType="String">
+	select name from crew where crew_idx = #{crew_idx}
+</select>
+
+<insert id="crew_notice_noti">
+	insert into noti (notir_id,notis_idx,notis_cate,noti_content,noti_url,notis_date)
+	value (#{param1},#{param2},#{param3},#{param4},#{param5},now())
+</insert>
+
 </mapper>
