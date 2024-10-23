@@ -340,7 +340,6 @@
 		for(var TypeScore of data.typeScore){
 			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
 			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
-
 			a++;
 
 		}
