@@ -16,5 +16,6 @@ public interface MemberDAO {
     // 회원 가입
     List<RegCountyDTO> getRegion();
     int checknick(String nick);
+    List<RegCountyDTO> getRegion2(String regionIdx);
 
 }
