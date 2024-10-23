@@ -49,7 +49,25 @@ public class MbtiController {
 		return data;
 	}
 	
-	
-	
-	
+	@GetMapping (value = "/loadOption.ajax")
+	@ResponseBody
+	public Map<String, Object> loadOption(int Qidx){
+		logger.info("loadOption 컨트롤러 도착");
+		logger.info("loadOption컨트롤러에서 전달 받은 idx : " + Qidx);
+
+		Map<String, Object> data = m_service.loadOption(Qidx);
+
+		return data;
+	}
+
+
+	@GetMapping (value = "/get_typeScore.ajax")
+	@ResponseBody
+	public Map<String, Object> getTypeScore(int Oidx){
+		logger.info("getTypeScore 컨트롤러 도착");
+		logger.info("getTypeScore 컨트롤러에서 전달받은 option idx : " + Oidx);
+
+		Map<String,Object> data = m_service.getTypeScore(Oidx);
+		return data;
+	};
 }
