@@ -193,8 +193,8 @@
 			loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
 		}
 	}
-
-	function loadQuestion(idx){
+	// question 불러오기 =========================================================================================
+	function loadQuestion(currentQuestionidx){
 		$.ajax({
 			type : 'GET',
 			url : 'loadQuestion.ajax',
@@ -204,8 +204,57 @@
 				console.log("전체 데이터:", data);
 				console.log("질문 내용:", data.questioncontent);
 				console.log("질문 idx:",data.questionIdx);
-				console.log("옵션들:", data.option);
-				drawQuestion(data.questioncontent,data.questionIdx,data.option);
+				drawQuestion(data.questioncontent,data.questionIdx);
+				drawOption(data.questionIdx);
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+
+	function drawQuestion(questioncontent, questionIdx) {
+		var mainQuestioncontent = 'Q' + questionIdx + '. ' + questioncontent;
+		//질문 박스를 추가하는 부분 ==========================================
+		$('#main_Question').html(mainQuestioncontent);
+	}
+
+	// option 불러오기 =========================================================================================
+
+	function drawOption(questionIdx){ //questionIdx
+		$.ajax({
+			type : 'GET',
+			url : 'loadOption.ajax',
+			data: {'Qidx': questionIdx},
+			dataType : 'JSON',
+			success : function(data){ //data 전달받기
+				console.log('option의 길이:',data.length);
+				console.log('option data의 길이 :',data);
+				console.log('제대로 뽑은건가?:',data.option[0].mbtisub_con);
+				for (var i = 0; i < data.option.length; i++) { //옵션 분리
+					if(i == 0 || i-1 >= 0&& data.option[i].mbtisub_con != data.option[i-1].mbtisub_con){ //옵션에서 중복된 문항 거르기 위해 사용
+						console.log('option의 idx 값:', data.option[i].idx);
+						var optioncontent = data.option[i].mbtisub_con;
+
+						//var optionidx= 'option'+ option[i].mbtisub_idx + '=' + option[i].mbtisub_idx; //문구 넣을 필요 없었음 수정은 아래
+						var optionidx = data.option[i].mbtisub_idx;
+
+
+						var optiondiv = '';
+						optiondiv += '<div class="option" onclick="typeScore(' + questionIdx + ',' +optionidx+ ')">' + optioncontent + '</div>'; //click하면 typeScore 함수 실행
+						//ㄴ문자열 처리를 위해 \'
+
+						console.log('optiondiv : '+ optiondiv);
+
+						//로딩 문구 빼는 부분 ======================================================
+						$('.loading_context').remove();
+
+						//option 박스를 추가하는 부분 ==========================================
+						$('#main_option').append(optiondiv);
+						// 해결 : option[i].typeScores에 있는 type들을 하나 하나 빼면서 a++을 증가시키는 형태로 type1, type2... 순차적으로 type들을 저장해줌.
+
+					}
+				}
 			},
 			error:function(e){
 				console.log(e);
@@ -214,57 +263,71 @@
 		});
 	}
 
-	function drawQuestion(questioncontent, questionIdx, option) {
-		var mainQuestioncontent = 'Q' + questionIdx + '. ' + questioncontent;
-		//질문 박스를 추가하는 부분 ==========================================
-		//$('#main_Question').html(mainQuestioncontent);
+	let selectedScore = {};
+	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음ㄴ +나중에 이전 페이지로 돌아가기 고도화
+
+	// typeScore 불러오기 =========================================================================================
+
+	function typeScore(questionIdx,optionidx){ //클릭한 것만 성향과 점수 가져오는 것
+		//1. click된 버튼의 optionidx 기반으로 운동 성향과 점수 가져오기
+		$.ajax({
+			type : 'GET',
+			url : 'get_typeScore.ajax',
+			data : {'Oidx' : optionidx},
+			dataType :'JSON',
+			success : function (data){
+				console.log('typeScore 데이터:',data);
+				//typeScore 데이터 가져오기 성공
 
 
-		console.log('option의 길이:',option.length);
 
-		console.log('제대로 뽑은건가?:',option[0].mbtisub_con);
-		for (var i = 0; i < option.length; i++) { //옵션 분리
-			if(i == 0 || i-1 >= 0&& option[i].mbtisub_con != option[i-1].mbtisub_con){ //옵션에서 중복된 문항 거르기 위해 사용
-				console.log('option의 idx 값:', option[i].idx);
-				var optioncontent = option[i].mbtisub_con;
+				//1. 질문과 문항 idx 값이 selectedScores에 존재하지 않을 때 ||
+				//2. 존재하지만, 질문과 문항 idx값이 selectedScore의 질문과 문항 idx값과 같지 않을 때 수행
 
-				//var optionidx= 'option'+ option[i].mbtisub_idx + '=' + option[i].mbtisub_idx; //문구 넣을 필요 없었음 수정은 아래
-				var optionidx = option[i].mbtisub_idx;
+				if(selectedScore != null){ // 만약 값이 없으면 바로 save //만약 값이 존재할 때 비교하고 저장
+					//selectedScore에 값이 있는 경우
 
-				//var a = 1;
-				var typeScore = '';
-				for(var typescore of option[i].typeScores){
-					//console.log("option 0 의 typescore",option[0].typeScores);
-
-					//console.log('i의 typeScores:',String(typescore));
-					//console.log('i의 운동성향:',String(typescore.mbtir_name));
-					//console.log('i의 점수:',String(typescore.mbtiscr_scr));
-
-					//console.log('i의 운동성향 및 점수:'+ "type"+a+" = "+ String(typescore.mbtir_name) +", score"+a+" = "+ String(typescore.mbtiscr_scr));
-					if(typeScore != ''){ //첫번째 typeScore값은 ,가 들어가지 않게
-						typeScore += ',';
-					}
-					//typeScore+= "type"+a+" = "+ String(typescore.mbtir_name) +", score"+a+" = "+ String(typescore.mbtiscr_scr); //문구는 넣을 필요 없었음 수정 아래
-					typeScore+= "'"+String(typescore.mbtir_name)+"'"+","+ String(typescore.mbtiscr_scr);
+					//selectedScore
+					var optionIdx = selectedScore[questionIdx].map(data => data.optionIdx); //questionIdx 키를 가진 값 중
 
 
+				}else{
+					saveScore(questionIdx,optionidx, data);
 				}
-				console.log('content: '+ optioncontent + 'option'+ i + '=' + optionidx+ 'typeScore: ' + typeScore);
-				var optiondiv = '';
-				optiondiv += '<div class="option" onclick="onOptionSelect(' + optionidx + ',' + typeScore + ')">' + optioncontent + '</div>';
-																//ㄴ문자열 처리를 위해 \'
-				console.log('optiondiv : '+ optiondiv);
 
-				//로딩 문구 빼는 부분 ======================================================
-				//$('.loading_context').remove();
 
-				//option 박스를 추가하는 부분 ==========================================
-				//$('#main_option').append(optiondiv);
-				// 해결 : option[i].typeScores에 있는 type들을 하나 하나 빼면서 a++을 증가시키는 형태로 type1, type2... 순차적으로 type들을 저장해줌.
+
+				//클릭했을 때 만약 질문에 대한 문항 idx값이 다를 경우
+				addScore(optionidx, typescore);
+
+
+			},
+			error : function(e){
+
+
+			}
+		});
+	}
+
+	function saveScore(){
+		//2.만약 selectedScores에 내용이 있을 때 (조건) 같은 값이 아니면 let에 새로 저장
+		if(selectedScore != null){
+
+			//1. selectedScore에서 키(idx)들을 뽑아낸다.
+			//selectedScore의 데이터 내용은 selected = {1:{type : '잔근육 매니아'} , ..}
+
+			var keySet= Object.keys(selectedScore);
+			console.log(keySet);
+
+			//뽑아온 키를 분리
+			for (var key of keySet){
+				console.log(key); //키
+			}
+
+			if(selectedScore[key] != optionidx){
 
 			}
 		}
-
 	}
 
 </script>
