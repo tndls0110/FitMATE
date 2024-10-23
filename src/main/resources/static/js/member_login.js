@@ -6,3 +6,7 @@ if (state == 'invalidID'){
     $('input[name="pw"]').addClass('caution');
     $('.checkpw').removeClass('hide');
 }
+1
+if (msg != ''){
+    modal.showAlert(msg);
+}

@@ -12,8 +12,12 @@ public class MemberDTO {
     private Date birthday;
     private String profile;
     private String status;
+    private int region_idx;
     private int regions_idx;
+    private String region_name;
+    private String regions_name;
     private int mbtir_idx;
+    private String mbtir_name;
 
     public String getUser_id() {
         return user_id;
@@ -39,11 +43,23 @@ public class MemberDTO {
     public String getStatus() {
         return status;
     }
+    public int getRegion_idx() {
+        return region_idx;
+    }
     public int getRegions_idx() {
         return regions_idx;
     }
+    public String getRegion_name() {
+        return region_name;
+    }
+    public String getRegions_name() {
+        return regions_name;
+    }
     public int getMbtir_idx() {
         return mbtir_idx;
+    }
+    public String getMbtir_name() {
+        return mbtir_name;
     }
 
     public void setUser_id(String user_id) {
@@ -70,11 +86,23 @@ public class MemberDTO {
     public void setStatus(String status) {
         this.status = status;
     }
+    public void setRegion_idx(int region_idx) {
+        this.region_idx = region_idx;
+    }
     public void setRegions_idx(int regions_idx) {
         this.regions_idx = regions_idx;
     }
+    public void setRegion_name(String region_name) {
+        this.region_name = region_name;
+    }
+    public void setRegions_name(String regions_name) {
+        this.regions_name = regions_name;
+    }
     public void setMbtir_idx(int mbtir_idx) {
         this.mbtir_idx = mbtir_idx;
+    }
+    public void setMbtir_name(String mbtir_name) {
+        this.mbtir_name = mbtir_name;
     }
 
 }
