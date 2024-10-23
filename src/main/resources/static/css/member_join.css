@@ -11,3 +11,9 @@ h3.capt .required{
 .img_preview img{
     height: 80px;
 }
+
+.statics{
+    margin: 20px 0 28px;
+    font-size: 16px;
+    font-weight: 700;
+}

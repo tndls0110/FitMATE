@@ -64,7 +64,7 @@ public class MemberService {
 	}
 
 	// 내 프로필 조회
-	public MemberDTO profile(String user_id, Model model) {
+	public MemberDTO profile(String user_id) {
 		return member_dao.profile(user_id);
 	}
 }

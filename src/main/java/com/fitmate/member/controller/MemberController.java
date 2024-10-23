@@ -119,8 +119,17 @@ public class MemberController {
 	public String profile(Model model, HttpSession session) {
 		//String user_id = (String) session.getAttribute("loginId");
 		String user_id = "member03";
-		model.addAttribute("list", member_service.profile(user_id, model));
+		model.addAttribute("list", member_service.profile(user_id));
 		return "member_profile";
+	}
+
+	// 정보 수정하기
+	@RequestMapping (value = "/member_update.go")
+	public String update(Model model, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		model.addAttribute("list", member_service.profile(user_id));
+		return "member_update";
 	}
 
 }
