@@ -23,7 +23,7 @@
 	<select id="getTypeScore" parameterType="int" resultType="Map">
 		SELECT mbtisub_idx as 문항번호, mbtir_name as 운동성향, mbtiscr_scr as 추가할점수
 		FROM mbti_q_subscr scr
-				 inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtisub_idx = #{optionIdx};
+				 inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtisub_idx = #{Oidx};
 
 	</select>
 
