@@ -103,6 +103,9 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		if(searchFilter_ != null && !searchFilter_.equals("")) {
 			searchDTO.setSearchFilter(Integer.parseInt(searchFilter_.trim())); 
 		}
+		if(searchKeyword != null && !searchKeyword.equals("")) {
+			searchDTO.setSearchKeyword(searchKeyword.trim()); 
+		}
 		if(placeFilter_ != null && !placeFilter_.equals("")) {
 			searchDTO.setRegions_idx(Integer.parseInt(placeFilter_.trim()));
 		}
@@ -120,9 +123,6 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		return crew_dao.crewList(searchDTO);
 		
 	} 
-	
-	
-	
 	
 
 }
