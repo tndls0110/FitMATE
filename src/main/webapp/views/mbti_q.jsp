@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -7,139 +7,149 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 <head>
-<meta charset="UTF-8">
+	<meta charset="UTF-8">
 
-<style>
+	<style>
 
-/*전체 페이지에 스크롤 없애는 법*/
-html, body {
-	overflow: hidden; /* 스크롤 숨기기 */
-	height: 100%; /* 페이지 전체 높이를 설정 */
-	margin: 0; /* 기본 마진 제거 */
-	background-color: rgba(40, 43, 52, 1);
-}
+		/*전체 페이지에 스크롤 없애는 법*/
+		html, body {
+			overflow: hidden; /* 스크롤 숨기기 */
+			height: 100%; /* 페이지 전체 높이를 설정 */
+			margin: 0; /* 기본 마진 제거 */
+			background-color: rgba(40, 43, 52, 1);
+		}
 
-.Question_page {
-	margin-left: 226px;
-	margin-top: 103px;
-	width: 500px;
-	height: 510px;
-}
+		.Question_page {
+			margin-left: 226px;
+			margin-top: 103px;
+			width: 500px;
+			height: 510px;
+		}
 
-#title {
-	display: flex;
-	flex-direction: row;
-}
+		#title {
+			display: flex;
+			flex-direction: row;
+		}
 
-.b_title {
-	font-weight: bold;
-	font-size: 25px;
-}
+		.b_title {
+			font-weight: bold;
+			font-size: 25px;
+		}
 
-.s_title {
-	margin-top: 10px;
-}
+		.s_title {
+			margin-top: 10px;
+		}
 
-#line {
-	margin-top: 40px;
-	margin-bottom: 20px;
-}
+		#line {
+			margin-top: 40px;
+			margin-bottom: 20px;
+		}
 
-.line_fixed {
-	width: 500px;
-	border: 0.5px solid rgba(4, 129, 135, 1);
-}
+		.line_fixed {
+			width: 500px;
+			border: 0.5px solid rgba(4, 129, 135, 1);
+		}
 
-.line_move {
-	/* 고도화 : 헬스 mbti 테이블의 질문 수 세어서, 총 길이를 질문 수로 나눈 다음.. getElementClass('line_moved'), lineElement.style.width = lineLength 가져와서 바꾸기*/
-	width: 83px;
-	height: 5px;
-	background-color: rgba(4, 129, 135, 1);
-}
+		.line_move {
+			/* 고도화 : 헬스 mbti 테이블의 질문 수 세어서, 총 길이를 질문 수로 나눈 다음.. getElementClass('line_moved'), lineElement.style.width = lineLength 가져와서 바꾸기*/
+			width: 83px;
+			height: 5px;
+			background-color: rgba(4, 129, 135, 1);
+		}
 
-#main_Question {
-	font-weight: bold;
-	margin: 20px 0px;
-}
+		#main_Question {
+			font-weight: bold;
+			margin: 20px 0px;
+		}
 
-#main_option {
-	margin: 30px 0px;
-}
+		#main_option {
+			margin: 30px 0px;
+		}
+		.loading_context{
+			width: 480px;
+			height: 250px;
+			font-size: 29px;
+			font-weight: 800;
+			text-align: center;
+			padding: 100px;
+		}
+		.option {
+			width: 480px;
+			height: 53px;
+			background-color: rgba(40, 43, 52, 1);
+			margin: 10px 3px;
+			padding: 15px 10px 10px 10px;
+			border-radius: 5px;
+		} /*클릭 이벤트의 옵션은 초록색으로 바뀌도록*/
 
-.option {
-	width: 480px;
-	height: 30px;
-	background-color: rgba(40, 43, 52, 1);
-	margin: 10px 3px;
-	padding: 15px 10px 10px 10px;
-	border-radius: 5px;
-} /*클릭 이벤트의 옵션은 초록색으로 바뀌도록*/
-#prev_next_div {
-	display: flex;
-	flex-direction: row;
-}
+		#prev_next_div {
+			display: flex;
+			flex-direction: row;
+		}
 
-.prev {
-	width: 220px;
-	height: 50px;
-	border-radius: 5px;
-	background-color: rgba(233, 236, 239, 1);
-	padding: 15px 10px 10px 10px;
-	color: rgba(40, 43, 52, 1);
-	font-weight: bold;
-	text-align: center;
-}
+		.prev {
+			width: 220px;
+			height: 50px;
+			border-radius: 5px;
+			background-color: rgba(233, 236, 239, 1);
+			padding: 15px 10px 10px 10px;
+			color: rgba(40, 43, 52, 1);
+			font-weight: bold;
+			text-align: center;
+		}
 
-.next {
-	width: 220px;
-	height: 50px;
-	border-radius: 5px;
-	background-color: rgba(4, 129, 135, 1);
-	padding: 15px 10px 10px 10px;
-	margin-left: 30px;
-	font-weight: bold;
-	text-align: center;
-}
-</style>
+		.next {
+			width: 220px;
+			height: 50px;
+			border-radius: 5px;
+			background-color: rgba(4, 129, 135, 1);
+			padding: 15px 10px 10px 10px;
+			margin-left: 30px;
+			font-weight: bold;
+			text-align: center;
+		}
+	</style>
 
 </head>
 
 <body>
-	<div class="container">
-		<c:import url="layout/leftnav_1.jsp"></c:import>
-		<!-- 운동일지는 nav1로, mbti만 nav5로 -->
-		<div class="contents">
+<div class="container">
+	<c:import url="layout/leftnav_1.jsp"></c:import>
+	<!-- 운동일지는 nav1로, mbti만 nav5로 -->
+	<div class="contents">
 
-			<div class="Question_page">
-				<div id="title">
-					<div class="b_title">헬스 MBTI</div>
-					&nbsp;&nbsp;
-					<div class="s_title">검사하기</div>
-				</div>
-				<div id="line">
-					<div class="line_fixed"></div>
-					<div class="line_move"></div>
-					<!-- 다음 페이지 버튼 누르면 이동하게 하기-->
-				</div>
-				<div id="Question_div">
-					<div id="main_Question"></div>
-					<div id="main_option">
-						<!--foreach로 분리해서 div 추가하는 로직으로 바꾸기-->
+		<div class="Question_page">
+			<div id="title">
+				<div class="b_title">헬스 MBTI</div>
+				&nbsp;&nbsp;
+				<div class="s_title">검사하기</div>
+			</div>
+			<div id="line">
+				<div class="line_fixed"></div>
+				<div class="line_move"></div>
+				<!-- 다음 페이지 버튼 누르면 이동하게 하기-->
+			</div>
+			<div id="Question_div">
+				<div id="main_Question"></div>
+				<div id="main_option">
+					<div class = "loading_context">잠시만 기다려주세요!</div>
+					<!--foreach로 분리해서 div 추가하는 로직으로 바꾸기-->
 
-					</div>
 				</div>
+			</div>
 
-				<div id="prev_next_div">
-					<div class="prev">← 이전 질문</div>
-					<!--이미지로 넣기-->
-					<div class="next">다음 질문 →</div>
-					<!--이미지로 넣기-->
-				</div>
+			<div id="prev_next_div">
+				<div class="prev">← 이전 질문</div>
+				<!--이미지로 넣기-->
+				<div class="next">다음 질문 →</div>
+				<!--이미지로 넣기-->
 			</div>
 		</div>
 	</div>
+</div>
 <c:import url="layout/modal.jsp"></c:import>
 </body>
+
 <script src="resources/js/common.js"></script>
 
 <script>
@@ -166,21 +176,21 @@ html, body {
 					//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
 					currentQuestionIdx = result.idx;
 					minQuestionIdx = result.idx;
-					console.log(currentQuestIdx);
+					console.log(currentQuestionIdx);
 					console.log(minQuestionIdx);
 					//저장하고 나서
-					isInitialLoad = false;	
+					isInitialLoad = false;
 					loadQuestion(currentQuestionIdx); //idx 값을 기반으로
-					
+
 				},
 				error : function(e) {
 					console.log(e);
 				}
-				else{
-					loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
-				}
+
 			});
 
+		}else{
+			loadQuestion(currentQuestionIdx);	//initialload = false면 그냥 currentQuestionIdx 가져와서 loadQuestion
 		}
 	}
 
@@ -190,29 +200,73 @@ html, body {
 			url : 'loadQuestion.ajax',
 			data: {'Qidx': currentQuestionIdx},
 			dataType : 'JSON',
-			success : function(data){ //data 전달받기 
- 				console.log(data); //data 찍어보기....
- 				console.log(data.questioncontent);
- 				console.log(data.questionIdx);
- 				console.log(data.option);
+			success : function(data){ //data 전달받기
+				console.log("전체 데이터:", data);
+				console.log("질문 내용:", data.questioncontent);
+				console.log("질문 idx:",data.questionIdx);
+				console.log("옵션들:", data.option);
 				drawQuestion(data.questioncontent,data.questionIdx,data.option);
 			},
 			error:function(e){
 				console.log(e);
-				
-			}		
+
+			}
 		});
 	}
-	
-	function drawQuestion(questioncontent,questionIdx,option){
-		
+
+	function drawQuestion(questioncontent, questionIdx, option) {
+		var mainQuestioncontent = 'Q' + questionIdx + '. ' + questioncontent;
+		//질문 박스를 추가하는 부분 ==========================================
+		//$('#main_Question').html(mainQuestioncontent);
+
+
+		console.log('option의 길이:',option.length);
+
+		console.log('제대로 뽑은건가?:',option[0].mbtisub_con);
+		for (var i = 0; i < option.length; i++) { //옵션 분리
+			if(i == 0 || i-1 >= 0&& option[i].mbtisub_con != option[i-1].mbtisub_con){ //옵션에서 중복된 문항 거르기 위해 사용
+				console.log('option의 idx 값:', option[i].idx);
+				var optioncontent = option[i].mbtisub_con;
+
+				//var optionidx= 'option'+ option[i].mbtisub_idx + '=' + option[i].mbtisub_idx; //문구 넣을 필요 없었음 수정은 아래
+				var optionidx = option[i].mbtisub_idx;
+
+				//var a = 1;
+				var typeScore = '';
+				for(var typescore of option[i].typeScores){
+					//console.log("option 0 의 typescore",option[0].typeScores);
+
+					//console.log('i의 typeScores:',String(typescore));
+					//console.log('i의 운동성향:',String(typescore.mbtir_name));
+					//console.log('i의 점수:',String(typescore.mbtiscr_scr));
+
+					//console.log('i의 운동성향 및 점수:'+ "type"+a+" = "+ String(typescore.mbtir_name) +", score"+a+" = "+ String(typescore.mbtiscr_scr));
+					if(typeScore != ''){ //첫번째 typeScore값은 ,가 들어가지 않게
+						typeScore += ',';
+					}
+					//typeScore+= "type"+a+" = "+ String(typescore.mbtir_name) +", score"+a+" = "+ String(typescore.mbtiscr_scr); //문구는 넣을 필요 없었음 수정 아래
+					typeScore+= "'"+String(typescore.mbtir_name)+"'"+","+ String(typescore.mbtiscr_scr);
+
+
+				}
+				console.log('content: '+ optioncontent + 'option'+ i + '=' + optionidx+ 'typeScore: ' + typeScore);
+				var optiondiv = '';
+				optiondiv += '<div class="option" onclick="onOptionSelect(' + optionidx + ',' + typeScore + ')">' + optioncontent + '</div>';
+																//ㄴ문자열 처리를 위해 \'
+				console.log('optiondiv : '+ optiondiv);
+
+				//로딩 문구 빼는 부분 ======================================================
+				//$('.loading_context').remove();
+
+				//option 박스를 추가하는 부분 ==========================================
+				//$('#main_option').append(optiondiv);
+				// 해결 : option[i].typeScores에 있는 type들을 하나 하나 빼면서 a++을 증가시키는 형태로 type1, type2... 순차적으로 type들을 저장해줌.
+
+			}
+		}
+
 	}
-	
-	
-	
-	//$('.option').remove(); //이전의 문항 div는 삭제
-	//메인 질문의 html을 가져온 데이터로 바꿔주기
-	/* main_Question */
+
 </script>
 
 </html>
