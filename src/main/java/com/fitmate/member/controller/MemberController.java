@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fitmate.member.service.MemberService;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -58,11 +59,20 @@ public class MemberController {
 		return page;
 	}
 
+	// 로그아웃
+	@RequestMapping (value = "/member_logout.do")
+	public String logout(HttpSession session) {
+		session.removeAttribute("loginId");
+		return "member_login";
+	}
+
 	// 회원 가입
 	@RequestMapping (value = "/member_join.go")
 	public String join(Model model) {
 		List<RegCountyDTO> list = member_service.getRegion();
 		model.addAttribute("region", list);
+		list = member_service.getRegion2("1");
+		model.addAttribute("region2", list);
 		return "member_join";
 	}
 
@@ -80,6 +90,21 @@ public class MemberController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("check_nick", member_service.checknick(nick));
 		return result;
+	}
+
+	@RequestMapping (value = "member_callregion.ajax")
+	@ResponseBody
+	public Map<String, Object> callregion(String region_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", member_service.getRegion2(region_idx));
+		return result;
+	}
+
+	@RequestMapping (value = "/member_join.do")
+	public String join(@RequestParam Map<String, String> params, Model model) {
+		page = "member_login";
+
+		return page;
 	}
 
 }
