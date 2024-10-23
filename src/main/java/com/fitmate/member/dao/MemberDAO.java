@@ -23,5 +23,4 @@ public interface MemberDAO {
 
     // 내 프로필 조회
     MemberDTO profile(String user_id);
-
 }

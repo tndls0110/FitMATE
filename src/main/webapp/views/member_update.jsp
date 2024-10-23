@@ -6,7 +6,7 @@
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
-		<link rel="stylesheet" type="text/css" href="resources/css/member_profile.css">
+		<link rel="stylesheet" type="text/css" href="resources/css/member_update.css">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
@@ -21,7 +21,6 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">비밀번호 <span class="required">(필수)</span></h3>
-						<p><input type="password" class="full" name="pw" /></p>
 						<div class="btn_flex narrow">
 							<div class="width70p">
 								<input type="password" class="full flex_left" name="pw" value="${list.pw}" readonly />
@@ -56,20 +55,21 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<div class="profImg">
-							<c:if test="${list.profile == ''}">
-								<i class="bi bi-person-square"></i>
-							</c:if>
-							<c:if test="${list.profile != ''}">
-								<div style="background-image: url('/photo/${list.profile}');"></div>
-							</c:if>
-						</div>
+						<p>
+							<div class="profImg">
+								<c:if test="${list.profile == ''}">
+									<i class="bi bi-person-square"></i>
+								</c:if>
+								<c:if test="${list.profile != ''}">
+									<div style="background-image: url('/photo/${list.profile}');"></div>
+								</c:if>
+							</div>
+						</p>
 						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
-						<div class="img_preview"></div>
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><input type="text" class="full" name="status" /></p>
+						<p><textarea class="full" name="status" rows="3"></textarea></p>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>
@@ -77,14 +77,24 @@
 							<div class="width50p">
 								<select class="narrow" name="region1" onchange="onOptionChange(event)">
 									<c:forEach items="${region}" var="region">
-										<option value="${region.region_idx}">${region.region_name}</option>
+										<c:if test="${region.region_idx == list.region_idx}">
+											<option value="${region.region_idx}" selected>${region.region_name}</option>
+										</c:if>
+										<c:if test="${region.region_idx != list.region_idx}">
+											<option value="${region.region_idx}">${region.region_name}</option>
+										</c:if>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="width50p">
 								<select class="narrow" name="region2">
 									<c:forEach items="${region2}" var="region">
-										<option value="${region.regions_idx}">${region.regions_name}</option>
+										<c:if test="${region.regions_idx == list.regions_idx}">
+											<option value="${region.regions_idx}" selected>${region.regions_name}</option>
+										</c:if>
+										<c:if test="${region.regions_idx != list.regions_idx}">
+											<option value="${region.regions_idx}">${region.regions_name}</option>
+										</c:if>
 									</c:forEach>
 								</select>
 							</div>

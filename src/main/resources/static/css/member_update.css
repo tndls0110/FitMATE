@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.statics{
+    margin: 20px 0 32px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.profImg{
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    margin: 0 auto 20px 0;
+    font-size: 120px;
+    overflow: hidden;
+}
+
+.profImg div{
+    width: inherit;
+    height: inherit;
+    background-size: cover;
+}

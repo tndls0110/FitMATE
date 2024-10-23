@@ -126,7 +126,7 @@ function readFile(input){
     var reader = new FileReader();
     reader.readAsDataURL(input.files[0]);
     reader.onload = function(e) {
-        $('.img_preview').html('<img class="preview" src="'+e.target.result+'" />');
+        $('.profImg div').css('background-image', 'url("'+e.target.result+'")');
     }
 }
 
