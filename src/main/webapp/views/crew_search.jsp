@@ -13,10 +13,13 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-
+	/* /*긴 단어가 영역 넘어가면 줄 바꿈되도록 하기
+	word-wrap: break-word; */
+	
 	div.headerArea{
 		text-align: center;
 		padding: 0 10%;
+		overflow: hidden; /* 스크롤 숨기기 */
 	}
 	
 	div.searchArea{
@@ -43,7 +46,10 @@
 	}
 	
 	div.recruitArea{
+		overflow-y: scroll;
+		overflow-x: hidden;
 		width: 90%;
+		height: 65%;
 		margin-top: 10%;
 		margin-left: auto;
 		margin-right: auto;
@@ -54,18 +60,56 @@
 	
 	div.recruit{
 		width: 40%;
+		height: 200px;
 		margin: 3% 1%;
+		padding: 2% 2%;
 		background-color: #282b34;
 		flex: 1 1 40%;
-		align-content: left; 
+		/* align-content: left; */ 
+		position: relative;
 	}
 	
 	div.recruit_odd{
 		width: 48%;
+		height: 200px;
 		margin: 3% 1%;
+		padding: 2% 2%;
 		background-color: #282b34;
-		align-content: left; 
+		/* align-content: left; */
+		position: relative; 
 		
+	}
+	
+	.recruit_left{
+	    /* position: absolute; 
+	    left: 50%; */
+	    width: 15%;
+	    aspect-ratio: 1;
+	    border: 1px solid black;
+	    border-radius: 50%;
+	}
+	
+	div.recruit_right{
+		position: absolute;
+		top: 7%;
+		left: 20%;
+		width: 100%;
+	}
+	
+	div.recruit_content, div.recruit_info{
+		margin: 2% 0%;
+		padding: 5% 5%;
+        /* 줄바꿈 방지 */
+        white-space: nowrap; 
+        /* 영역을 넘어가는 경우 숨김처리.  */
+		overflow: hidden;
+		/* 숨겨지는 부분에 말줄임표(...)표시 */
+        text-overflow: ellipsis;
+	}
+	
+	
+	div.recruit_info span{
+		margin-right: 15%;
 	}
 	
 	h3.capt{
@@ -75,6 +119,50 @@
     	left: 11.5%;
 	}
 	
+	.text_area{
+		display: inline-block;
+		width: 63%;
+		margin: 0%;
+		
+		/* 영역을 넘어가는 경우 숨김처리.  */
+		overflow: hidden;
+		/* 숨겨지는 부분에 말줄임표(...)표시 */
+        text-overflow: ellipsis;
+        /* 줄바꿈 방지 */
+        white-space: nowrap;
+	}
+	
+	span.idx_hidden{
+		display: inline-block;
+		visibility: hidden;
+		width:0%;
+		margin: 0%;
+		padding: 0%;
+	}
+	
+	button{
+		background-color: #282b34;
+		color: #e9ecef;
+		border:none;
+	}
+	
+	button.add_button{
+		position: absolute;
+		top: 0%;
+		right: 2%;
+		width: 2%;
+	}
+	
+	a.recruit_detail{
+		display: block;
+		width: 80%;
+	}
+	
+	/* div.recruit_left i.bi bi-person-circle{
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+	} */
 	
 </style>
 </head>
@@ -120,21 +208,18 @@
 			
 			<!-- 크루모집 영역 -->
 			<div class="recruitArea">
-				
 			</div>
-			
 			
 		</div>
 		
-		
 	</div>
 </body>
-
+<c:import url="layout/modal.jsp"></c:import>
 <script src="resources/js/common.js"></script>
 <script>
 	//0. 초기 크루목록 가져오기
 	crewList();
-
+	
 	// 필터선택 or 검색한 경우 데이터 다시 가져오기.
 	var searchFilter = '';
 	var searchKeyword = '';
@@ -181,7 +266,7 @@
 	function search() {
 		// 검색기준을 선택하지 않은경우 경고창을 띄워줌.
 		if ($('#searchFilter').val() == '') {
-			alert('검색기준을 선택하세요.');
+			modal.showAlert('검색기준을 선택하세요.');
 		} else {
 			// 2-1. 검색관련 변수세팅 
 			searchFilter = $('#searchFilter').val();
@@ -206,68 +291,58 @@
 			},
 			dataType : 'JSON',
 			success : function(list) {
+			
+				// 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
+				var cnt = 1;
+				
+				$('div.recruitArea').empty();
+				
 				$(list).each(function(idx, item) { // 데이터 =item
-					console.log('item : ' + item);
-					console.log('item : ', item);
-					console.log('idx : ', idx);
-					
 					
 					var header = '';
 					var content = '';
 					var info = '';
 					
-					var cnt = idx + 1;
+					console.log('cnt : ' + cnt);
+							
+					console.log('profile : ' + item.leader_profile);
+					// 프로필 사진이 없을경우 기본 프로필 적용.
+					if(item.leader_profile == null || item.leader_profile == ''){
+						item.leader_profile = 'cloth_alike_op30.png'; 	
+					}
+					// Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장이름, MBTI
+					header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '" class="recruit_detail"><img class="recruit_left" src="resources/img/' +item.leader_profile+ '"/><div class="recruit_right"><h4 class="text_area">' + item.crew_name + '</h4><br/><span class="text_area"><span>' + item.leader_name + '</span><span> (' + item.leader_mbti + ')</span></span></div></a>';
+					// Content: 크루 소개글         
+					content = '<div class="recruit_content">' + item.crew_content + '</div>';
+					// Info: 크루원 수, 활동지역
+					info = '<div class="recruit_info"><span>🧟' + item.member_count + ' </span><span>🌏' + item.region_name + ' ' + item.regions_name + '</span></div>'
+
+					// item.leader_id(크루장 id)로 크루장인경우 버튼생성.
+					/* var add_button = '<button type="button" class="add_button">︙</button>'; */
+					
 					// 홀수번째 게시글은 왼쪽정렬
 					if(cnt % 2 == 1){
-						$('div.recruitArea').append('<div class="recruit_odd" id="recruit_odd' +cnt+ '"></div>');
-																		
-			            header += '<div><span>' + item.crew_idx + '</span><span>' + item.crew_name + '</span><span>' +item.leader_mbti + '</span><span>' + item.leader_name + '</span><span>' + item.leader_profile + '</span></div>';
-						content = '<div>' + item.crew_content + '</div>';
-						info = '<div><span>' + item.member_count + '</span><span>' + item.region_name + '</span><span>' + item.regions_name + '</span></div>'
-						
-						$('div#recruit_odd' + cnt).html(header + content + info);
-			            
+						$('div.recruitArea').append('<div class="recruit_odd">' + header + content + info  + '</div>');
 					}else{
-						$('div.recruitArea').append('<div class="recruit" id="recruit' +cnt+ '"></div>');
-						
-			            header += '<div><span>' + item.crew_idx + '</span><span>' + item.crew_name + '</span><span>' +item.leader_mbti + '</span><span>' + item.leader_name + '</span><span>' + item.leader_profile + '</span></div>';
-						content = '<div>' + item.crew_content + '</div>';
-						info = '<div><span>' + item.member_count + '</span><span>' + item.region_name + '</span><span> ' + item.regions_name + '</span></div>'
-						
-						$('div#recruit' + cnt).html(header + content + info);
+						$('div.recruitArea').append('<div class="recruit">' + header + content + info + '</div>');
 					}
+						
+					cnt++;
+					
 				});
-				// 읽어온 데이터가공.
-				/* 
-				1. 데이터개수/2 + 1개만큼 Row생성.   + 나눈 값이 0인경우에는 1개의 Row만 생성.
-				가져온 데이터가 2의 배수인경우 : 
-					마지막 Row 첫번째Cell에 마지막데이터 추가.    - 내크루 페이지에서는 크루생성영역
-					하나의 Row에 1개의 Cell만 존재하는 경우 -> 왼쪽정렬해야함.
-					옆에 display되지 않는 Cell을 하나더 넣는 것도 생각해볼 필요있을 듯.
-				가져온 데이터가 2의 배수아닌경우 :
-					마지막 Row 두번째Cell에 마지막데이터 추가.    - 내크루 페이지에서는 크루생성영역			
+				
+				// 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. 
+				if(list == null || list == ''){
+					modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
+				}
 
-				
-				[Controller에서 가져올데이터]
-				 * 크루 - 크루명, 크루idx, 운동지역idx, 크루장id
-				 * 지역정보 - 지역명(크루-운동지역idx)  
-				 * 크루원목록 - 크루원 수(크루-idx & COUNT함수)
-				 * 크루장 - 크루장이름(크루-크루장id)
-				 * 프로필 - 사진, 운동성향idx(크루-크루장id)
-				 * 파일(사진) - 프로필의 idx로..?
-				 * MBTI - 운동성향(프로필-운동성향idx)
-				 * 
-				
-				 [...버튼]
+				 /* [...버튼]
 				 크루장인 경우에만 ...버튼을통해 모집글 수정 or 삭제가능..?   삭제는 빼야될듯..? 크루생성과 크루모집글생성을 합쳤기 때문에...
-				 크루장인지 확인은.. sessionId와 크루장 id 비교..? OR sessionName와 크루장이름 비교
-						 
-				 						 
-				 */
+				 크루장인지 확인은.. sessionId와 크루장 id 비교..? OR sessionName와 크루장이름 비교 */
 			},
 			error : function(e) {
 				console.log(e); // 에러가 보이지 않도록 추후 처리필요?
-				alert('크루 목록가져오기 실패');
+				modal.showAlert('크루 목록가져오기 실패');
 			}
 			// Ajax 요청전 함수.
 			/* ,
