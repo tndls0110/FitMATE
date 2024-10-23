@@ -4,102 +4,70 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewDAO">
-
-<insert id="crew_create"
-useGeneratedKeys="true"
-	keyColumn="crew_idx"
-	keyProperty="crew_idx"
-	 parameterType="com.fitmate.crew.dto.CrewDTO"
->
-	insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3);
-</insert>
-
-<insert id="crew_post_create"
-useGeneratedKeys="true"
-	keyColumn="board_idx"
-	keyProperty="board_idx"
-	 parameterType="com.fitmate.crew.dto.CrewBoardDTO"
->
-	insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1);
-</insert>
-
-<insert id="crew_idx">
-	insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
-</insert>
-
-<insert id="crew_leaderjoin">
-	insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id});
-</insert>
-
-<update id="crew_create_rewrite">
-	update crew_board set 
-	content = #{content}
-	where  board_idx = #{board_idx} and category_idx = 1
-</update>
-
-<update id="crew_create_rewrite_region">
-	update crew set
-	regions_idx = #{regions_idx}
-	where crew_idx IN (
-            SELECT crew_idx
-            FROM crew_idx
-            WHERE board_idx = #{board_idx}
-        ) 
-</update>
-
-
-	<select id="placeFilter" resultType="map"> 
-		SELECT A.region_name, B.regions_idx, B.regions_name 
-		FROM region A INNER JOIN
-		region_sub B ON A.region_idx = B.region_idx 
-	</select>
-	<select id="mbtiFilter" resultType="map"> 
-		SELECT mbtir_idx, mbtir_name
-		FROM mbti_r 
-	</select>
-	<select id="crewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
-
+	<select id="placeFilter" resultType="map"> SELECT A.region_name,
+		B.regions_idx, B.regions_name FROM region A INNER JOIN region_sub B ON
+		A.region_idx = B.region_idx </select>
+	<select id="mbtiFilter" resultType="map"> SELECT mbtir_idx, mbtir_name
+		FROM mbti_r </select>
+	<select id="crewList"
+		resultType="com.fitmate.crew.dto.CrewSearchListDTO"
+		parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
 		SELECT
-			<!-- 크루명 -->
-			A.name AS crew_name,
-			<!-- 크루idx -->
-			A.crew_idx,
-			<!-- 크루소개글 -->
-			(SELECT I.content FROM crew_board I WHERE I.board_idx = (SELECT H.board_idx FROM crew_idx H WHERE H.crew_idx = A.crew_idx)) AS crew_content, 
-			<!-- 활동지역 시단위 -->
-			(SELECT B.region_name FROM region B WHERE B.region_idx = (SELECT region_idx FROM region_sub G WHERE A.regions_idx = G.regions_idx)) AS region_name,
-			<!-- 활동지역 구단위 -->
-			(SELECT G.regions_name FROM region_sub G WHERE A.regions_idx = G.regions_idx) AS regions_name, 
-			<!-- 크루원 수 -->
-			(SELECT COUNT(member_idx) FROM crew_member C WHERE A.crew_idx = C.crew_idx) AS member_count,
-			<!-- 크루장 이름 -->
-			D.name AS leader_name,
-			<!-- 크루장 프로필사진 -->
-			E.profile AS leader_profile,
-			<!-- 크루장 mbti -->
-			F.mbtir_name AS leader_mbti
-		FROM crew A 
-			INNER JOIN member D ON A.crew_id = D.user_id 
-			INNER JOIN profile E ON A.crew_id = E.user_id 
-			INNER JOIN mbti_r F ON E.mbtir_idx = F.mbtir_idx
+		<!-- 크루명 -->
+		A.name AS crew_name,
+		<!-- 크루idx -->
+		A.crew_idx,
+		<!-- 크루소개글 -->
+		(SELECT B.content FROM crew_board B WHERE B.board_idx = (SELECT
+		I.board_idx FROM crew_idx I WHERE I.crew_idx = A.crew_idx)) AS
+		crew_content,
+		<!-- 활동지역 시단위 -->
+		(SELECT R.region_name FROM region R WHERE R.region_idx = (SELECT
+		RS.region_idx FROM region_sub RS WHERE RS.regions_idx =
+		A.regions_idx)) AS region_name,
+		<!-- 활동지역 구단위 -->
+		(SELECT RS.regions_name FROM region_sub RS WHERE RS.regions_idx =
+		A.regions_idx) AS regions_name,
+		<!-- 크루원 수 -->
+		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx =
+		A.crew_idx) AS member_count,
+		<!-- 크루장 이름 -->
+		MB.name AS leader_name,
+		<!-- 크루장 프로필사진 -->
+		P.profile AS leader_profile,
+		<!-- 크루장 mbti -->
+		(SELECT M.mbtir_name FROM mbti_r M WHERE M.mbtir_idx = (SELECT
+		P.mbtir_idx FROM profile P WHERE P.user_id = A.crew_id)) AS
+		leader_mbti FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id
+		INNER JOIN profile P ON A.crew_id = P.user_id
 		<where>
 			<!-- searchFilter(1='크루이름 검색'/ 2='크루장명 검색') -->
-			<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
-				A.name LIKE CONCAT('%', #{searchKeyword}, '%') 
-			</if>
-			<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
-				D.name LIKE CONCAT('%', #{searchKeyword}, '%') 
-			</if>
+			<if
+				test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')"> AND A.name LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+			<if
+				test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')"> AND D.name LIKE CONCAT('%', #{searchKeyword}, '%') </if>
 			<!-- regions_idx(활동지역) -> WHERE 크루-운동지역idx -->
-			<if test="regions_idx != 0">
-				A.regions_idx = #{regions_idx}
-			</if>
+			<if test="regions_idx != 0"> AND A.regions_idx = #{regions_idx} </if>
 			<!-- mbtiFilter(운동성향) -> WHERE 프로필-운동성향idx OR MBTI-운동성향idx -->
-			<if test="mbtiFilter != 0">
-				E.mbtir = #{mbtiFilter}
-			</if>
+			<if test="mbtiFilter != 0"> AND P.mbtir_idx = #{mbtiFilter} </if>
 		</where>
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
-
+	<insert id="crew_create" useGeneratedKeys="true"
+		keyColumn="crew_idx" keyProperty="crew_idx"
+		parameterType="com.fitmate.crew.dto.CrewDTO"> insert into crew (crew_id,name,regions_idx) value
+		(#{crew_id},#{name},3); </insert>
+	<insert id="crew_post_create" useGeneratedKeys="true"
+		keyColumn="board_idx" keyProperty="board_idx"
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
+		value(#{board_id},#{content},1); </insert>
+	<insert id="crew_idx"> insert into crew_idx (board_idx,crew_idx) value
+		(#{board_idx},#{crew_idx}); </insert>
+	<insert id="crew_leaderjoin"> insert into crew_member (crew_idx,member_id) value
+		(#{crew_idx},#{member_id}); </insert>
+	<update id="crew_create_rewrite"> update crew_board set content = #{content} where
+		board_idx = #{board_idx} and category_idx = 1 </update>
+	<update id="crew_create_rewrite_region"> update crew set regions_idx = #{regions_idx} where
+		crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx =
+		#{board_idx} ) </update>
 </mapper>
