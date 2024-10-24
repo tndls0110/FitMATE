@@ -3,8 +3,8 @@
 <div class="leftnav">
 	<div class="brand"><span>Fit</span>MATE</div>
 	<div class="profile">
-		<i class="bi bi-person-circle" style="font-size: 70px;"></i>
-		<p><b>OOO </b>님</p>
+		<div class="leftnav_profImg"></div>
+		<p class="leftnav_nick"></p>
 		<p><button class="mainbtn minbtn">로그아웃</button></p>
 	</div>
 	<ul class="menu noDesc">
@@ -18,7 +18,7 @@
 			<a href="">내 크루</a>
 		</li>
 		<li>
-			<a href="message">메시지</a>
+			<a href="message_list.go">메시지</a>
 		</li>
 		<li>
 			<a href="member_profile.go">마이 페이지</a>
@@ -29,3 +29,4 @@
 		</li>
 	</ul>
 </div>
+<script src="resources/js/member_leftnav.js"></script>

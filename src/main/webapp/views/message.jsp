@@ -15,7 +15,7 @@
 <style>
 
 	div.contents{
-	border: 2px soldi white;
+	border: 2px solid white;
 	widthd: 1000px;
 	height: 1000px;
 	

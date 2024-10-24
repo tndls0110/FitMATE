@@ -37,6 +37,11 @@
             VALUES(#{user_id}, #{profile}, #{status}, #{region2})
     </insert>
 
+    <!-- leftnav 프로필 그리기 -->
+    <select id="getProfile" resultType="com.fitmate.member.dto.MemberDTO">
+        SELECT m.nick, p.profile FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
+    </select>
+
     <!-- 내 프로필 보기 -->
     <select id="profile" resultType="com.fitmate.member.dto.MemberDTO">
         SELECT m.user_id, m.pw, m.nick, m.name, m.email, m.birthday, p.status, p.profile, p.regions_idx,
@@ -46,5 +51,10 @@
                (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx = p.mbtir_idx) AS 'mbtir_name'
         FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
     </select>
+
+    <!-- 비밀번호 변경 -->
+    <update id="updatepw">
+        UPDATE member SET pw = #{pw} WHERE user_id = #{user_id}
+    </update>
 
 </mapper>
