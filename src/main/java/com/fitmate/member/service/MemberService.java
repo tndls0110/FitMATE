@@ -63,9 +63,22 @@ public class MemberService {
 		return result;
 	}
 
+	// leftnav 프로필 그리기
+	public MemberDTO getProfile(String loginId) {
+		return member_dao.getProfile(loginId);
+	}
+
 	// 내 프로필 조회
 	public MemberDTO profile(String user_id) {
 		return member_dao.profile(user_id);
 	}
 
+	// 비밀번호 변경
+	public boolean checkpw(String user_id, String pre_pw) {
+		boolean result = false;
+		if (member_dao.checkpw(user_id, pre_pw) == 1 && pre_pw != null) {
+			result = true;
+		}
+		return result;
+	}
 }
