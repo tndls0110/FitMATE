@@ -8,6 +8,8 @@ public class CrewSearchListDTO {
 	private String crew_name;
 	// 크루idx 
 	private int crew_idx;
+	// 게시글idx
+	private int board_idx;
 	// 크루 소개글
 	private String crew_content;
 	// 활동지역 시단위
@@ -16,14 +18,36 @@ public class CrewSearchListDTO {
 	private String regions_name; 
 	// 크루원 수 
 	private int member_count;
+	// 크루장 ID
+	private String leader_id;
 	// 크루장 이름 
 	private String leader_name;
 	// 크루장 프로필사진 
-	private File leader_profile;
+	private String leader_profile;
 	// 크루장 mbti
 	private String leader_mbti;
 	
 	
+	
+	
+	public String getLeader_profile() {
+		return leader_profile;
+	}
+	public void setLeader_profile(String leader_profile) {
+		this.leader_profile = leader_profile;
+	}
+	public String getLeader_id() {
+		return leader_id;
+	}
+	public void setLeader_id(String leader_id) {
+		this.leader_id = leader_id;
+	}
+	public int getBoard_idx() {
+		return board_idx;
+	}
+	public void setBoard_idx(int board_idx) {
+		this.board_idx = board_idx;
+	}
 	public String getCrew_name() {
 		return crew_name;
 	}
@@ -59,12 +83,6 @@ public class CrewSearchListDTO {
 	}
 	public void setLeader_name(String leader_name) {
 		this.leader_name = leader_name;
-	}
-	public File getLeader_profile() {
-		return leader_profile;
-	}
-	public void setLeader_profile(File leader_profile) {
-		this.leader_profile = leader_profile;
 	}
 	public String getLeader_mbti() {
 		return leader_mbti;
