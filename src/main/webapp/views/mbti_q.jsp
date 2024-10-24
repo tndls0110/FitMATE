@@ -495,8 +495,14 @@
 											loadQuestion(currentQuestionIdx); //idx 값을 기반으로 //얘가 밑에 있는 문제..
 											drawOption(currentQuestionIdx);
 											if(nextPageidentifier == data.count){ //근데 만약에 질문 idx가 삭제되면????? 해결 nextPageidentifier
+												//마지막이어도 점수는 합산 + save되어야 함
+												var next = document.getElementsByClassName('next')[0];
 
+												next.onclick = goToResultPage(scores){};
 												$('.next').html('결과 보기');
+
+
+												console.log('onclick :', onclick);
 												//결과 보기 버튼 누를 때 initialze 다시 true 상태로 바꾸기
 												// -> 함수 바꾸기 $('.next').attr('onclick');
 											}
@@ -521,7 +527,9 @@
 	}
 
 
-
+	function goToResultPage(result){
+		console.log('결과 버튼 눌림');
+	}
 
 </script>
 
