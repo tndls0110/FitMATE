@@ -288,17 +288,19 @@
 					//★Object.keys(selectedScore).length가 0이면 없는 거고.... 그 이상이면 값이 있는 상태
 
 					//질문 2. 현재 질문 idx 값이 있는가
-						//Yes -> selectedScore에서 질문 idx값 분리해서 비교
-						//selectedScore.
-						if(selectedScore[questionIdx] != null){
+						//Yes -> selectedScore에서 질문 idx값 분리해서 비교.
+						if(selectedScore[questionIdx] != null) { //만약 질문 idx 값이 있으면?
 							//질문 3. 저장된 옵션 idx가 같은가?
-							if (selectedScore[questionIdx].options.optionidx != optionidx){
+							// questionIdx값이 같은 것은 아무것도 안하니까.. 추가하지 않기
+							//if(){ //NO-> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
 
-								console.log(selectedScore[questionIdx].options.typeScores.Type);
-
-							}	//NO -> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
-								// questionIdx값이 같은 것은 아무것도 안하니까.. 추가하지 않기
-						}else{
+							let isMatch = selectedScore[questionIdx].options.some(function (option) {
+								//some()은 각 요소에 대해 이 함수를 호출해서 조건을 만족하는 요소가 있는지 확인
+								//option은 현재 검사 중인 배열의 요소
+								return option.optionidx == optionidx;
+							});
+							//}
+						}else{//NO
 							//else -> save (), addscore()
 							saveScore(questionIdx,optionidx, data);
 							addScore(data);
@@ -310,10 +312,9 @@
 					console.log('저장된 값 있어? 2 :', selectedScore);
 
 
-				}else{
+					}else{
 					saveScore(questionIdx,optionidx, data); // 만약 값이 없으면 바로 save
 					addScore(data);
-
 				}
 
 				//클릭했을 때 만약 질문에 대한 문항 idx값이 다를 경우
@@ -349,15 +350,19 @@
 
 		// //selectedScore[questionIdx].options.push({넣을 값 작성});
 
-		var a = 0;
+		var a = 1;
 		console.log("typeScore: ", data.typeScore);
-
+		var typescores = {}; //얘도 객체로 저장해야함
 		var b = '';
 		for(var TypeScore of data.typeScore){
-			console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
-			console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
+			//문자열로 저장해서 문제 생김 -> 객체로 저장하기...
+			// console.log('saveScore에서 TypeScore 분리한 값:',TypeScore);
+			// console.log('"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"');
+			// b+= '"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"';
+			typescores["Type"+a] = TypeScore.mbtir_name;
+			typescores["Score" + a] = TypeScore.mbtiscr_scr;
+			console.log('바꾼 TypeScore 값 : ', typescores);
 			a++;
-			b+= '"Type' + a + '":' + TypeScore.mbtir_name +','+'"score'  + a + '": "' + TypeScore.mbtiscr_scr + '"';
 		}
 		selectedScore[questionIdx].options.push({
 			optionidx : optionidx,
@@ -392,6 +397,8 @@
 		console.log('합산 점수 확인하기 : ', JSON.stringify(scores));
 
 	};
+
+
 </script>
 
 </html>
