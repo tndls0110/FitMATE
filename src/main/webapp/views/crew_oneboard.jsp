@@ -40,6 +40,7 @@
             font-weight: bold; /* 글자 수 강조 */
             margin-top: 5px; /* 위쪽 여백 */
         }
+       
     </style>
 	</head>
 	<body>
@@ -48,23 +49,29 @@
 			
 			<!-- 넓은 화면으로 작성할 시 class="contents" -->
 			<!-- 좁은 화면으로 작성할 시 class="contents narrow" -->
+			
+			
 			<div class="contents">
-	
+				
 				<!-- 제목 -->
 				<h2 class="title">크루이름<span>한줄 게시글 화면입니다.</span></h2>
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
                 <form action="crew_oneboard.do" method="post">
-                	<input type="hidden" id="sessionId" value="${sessionScope.sessionId}">
-                	<!-- 작성자 id 넣기 -->
+                	<!-- 로그인세션아이디 가져오기 작성자 구분, 크루장 구분 할때 이용 <input type="hidden" id="sessionId" value="${sessionScope.sessionId}"> -->
+                	<input type="hidden" id="sessionId" value="member01">
+                	 <!-- 작성자 id 넣기 세션아이디넣기 <input type="hidden" id="board_id" name="board_id" value="${board_id}"> -->
                 	 <input type="hidden" id="board_id" name="board_id" value="member01">
-                	 <!-- 크루 idx 넣기 -->
+                	 <!-- 나중에 크루 idx 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> -->
                 	 <input type="hidden" id="crew_idx" name="crew_idx" value="6">
+                	 <!-- 나중에 크루장 id 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> -->
+   					<input type="hidden" id="crew_id" name="crew_id" value="member01">
+                	
                 	<!-- 기본 입력창 -->
                 	<!-- class="full": width=100% -->
                 	<div class="list">
-                        <h3 class="capt">공지사항 작성란</h3>
+                        <h3 class="capt">한줄 게시글 작성란</h3>
                         
                         <!-- flex-narrow 박스 설정 -->
                         <div class="btn_flex narrow">
@@ -83,7 +90,7 @@
                                            
                     </div>
                     </div>
-                	
+                	 </form>
                     <div class="list">
                         <h3 class="capt">공지사항 목록</h3>
                         
@@ -94,7 +101,7 @@
 		      <thead>
 		        <tr>
 		            <th class="col1">#</th>
-		            <th class="col2">제목</th>
+		            <th class="col2">내용</th>
 		            <th class="col3">작성자</th>
 		            <th class="col4">작성일시</th>
 		            <th class="col5">옵션</th>
@@ -112,10 +119,8 @@
 		    </table>
 		</div>	
                    
-                    
-                   
-                    
-                </form>
+           
+               
 				
 				
 			</div>
@@ -124,11 +129,18 @@
 	</body>
 	<script>
 	
+	// 크루리더 확인하기 = 세션아이디와 크루장 아이디가 같으면 크루장
+	
+	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
+	// const isCrewLeader = ${isCrewLeader};
+	const isCrewLeader = false;
+	// 크루장이면 작성하기 폼 보여주기
+	
 	
 	$(document).ready(function() {
 	    const crew_idx = $('#crew_idx').val(); // hidden input의 값 가져오기
 	  //  console.log("crew_idx:", crew_idx); // crew_idx 값을 로그로 출력
-	  //  crewList(crew_idx); // crewList 호출 시 crew_idx 전달
+	    crewList(crew_idx); // crewList 호출 시 crew_idx 전달
 	    
 	    const subjectInput = $('#subjectInput');
 	    const charCount = $('#charCount');
@@ -155,7 +167,79 @@
 	
 	    
 	});
-
+	
+	
+	function crewList(crewIdx) {
+	    console.log("Sending crew_idx:", crewIdx); // AJAX 호출 전에 crew_idx 로그 출력
+	    // 세션 아이디 가져오기
+	    const sessionId = $('#sessionId').val();
+	    console.log(sessionId);
+	    $.ajax({
+	        url: 'crew_oneboard.ajax',
+	        type: 'GET',
+	        data: {
+	            'crew_idx': crewIdx, // crew_idx가 올바르게 포함되어 있는지 확인
+	        },
+	        dataType: 'JSON',
+	        success: function(list) {
+	            console.log("Response list:", list); // 서버 응답 로그 출력
+	            let tbody = $('.show');
+	            tbody.empty(); // 이전 내용 비우기
+						
+	          //  '<button type="button" onclick="modal.showConfirm(\'message\', \'crew_oneboard_del?board_idx=' + item.board_idx + '\')" class="mainbtn full">확인창</button>'
+	            
+	           
+	                $(list).each(function(idx, item) {
+	                	
+	                	
+	                	
+	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
+	                	// 내가 작성자이면
+	                	if (sessionId == item.board_id) {
+	                	       // deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_del?board_idx=' + item.board_idx + '\'">작성자</button>';
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '\')" class="mainbtn full">삭제하기</button>'
+	                	    }
+	                	// 크루장이면
+	                	else if(isCrewLeader){
+	                		// 숨겨진게시글이면
+	                		if(item.status == 2){
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx + '\'">크루장</button>';
+	                		}
+	              			// 숨겨진게시글이 아니라면
+	                		else{
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '\'">블라인드하기</button>';
+	                		}	                		
+	                	}
+	                	// 크루장이 아니고 작성자도 아니면
+	                	else{
+	                		deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '\'">신고하기</button>';
+	                	}
+    					
+	                	if(item.status == 2 ){
+	                		tbody.append('<tr><td colspan="4">블라인드된 게시글 입니다</td>'	                		
+	                				+ '<td>' + deleteButton + '</td></tr>');
+	                	}
+	                	else{
+	                		
+	                		tbody.append('<tr><td>' + item.board_idx 
+		                    		+ '</td><td>' + item.content
+		                    		+ '</td><td>' +item.board_id
+		                    		+ '</td><td>' +item.date
+		                    		+ '</td><td>' + deleteButton + '</td></tr>'
+	                    	);
+	                	}               
+	                });
+	         	
+	        },
+	        error: function(e) {
+	            console.log(e); // 에러 로그
+	            alert('크루 목록 가져오기 실패');
+	        }
+	    });
+	}
+	
+	
+	
 	
 </script>
 	<script src="resources/js/common.js"></script>
