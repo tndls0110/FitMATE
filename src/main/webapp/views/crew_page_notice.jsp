@@ -32,6 +32,13 @@
     font-size: 10px;    /* 글자 크기 */
     height: auto;       /* 높이 자동 */
 		}
+		 #crewleader {
+            display: none; /* 기본적으로 숨김 */
+        }
+        
+		 #crewleadertitle {
+            display: none; /* 기본적으로 숨김 */
+        }
 		#warning {
             color: red;
             display: none; /* 기본적으로 숨김 */
@@ -56,6 +63,25 @@
 			
 				<!-- 폼 -->
                 <form action="crew_page_notice.do" method="post">
+                	
+                	
+                	<!-- 
+                			!!	나중에 변경할때 참고할 코드   !!
+                			!!  페이지 이동처리시 전달받을 변수 !!
+                	
+                	 로그인세션아이디 가져오기 작성자 구분, 크루장 구분 할때 이용 <input type="hidden" id="sessionId" value="${sessionScope.sessionId}"> 
+                	<input type="hidden" id="sessionId" value="member01">
+                	  작성자 id 넣기 크루장id 넣기? <input type="hidden" id="board_id" name="board_id" value="${board_id}"> 
+                	 <input type="hidden" id="board_id" name="board_id" value="member01">
+                	 나중에 크루 idx 넣기 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> 
+                	 <input type="hidden" id="crew_idx" name="crew_idx" value="6">
+                	 나중에 크루장 id 넣기  <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> 
+   					<input type="hidden" id="crew_id" name="crew_id" value="member01">
+                	 
+                	 -->
+                	
+                	
+                	
                 	<input type="hidden" id="sessionId" value="${sessionScope.sessionId}">
                 	<!-- 작성자 id 넣기 -->
                 	 <input type="hidden" id="board_id" name="board_id" value="member01">
@@ -63,11 +89,11 @@
                 	 <input type="hidden" id="crew_idx" name="crew_idx" value="6">
                 	<!-- 기본 입력창 -->
                 	<!-- class="full": width=100% -->
-                	<div class="list">
+                	<div class="list" id="crewleader">
                         <h3 class="capt">공지사항 작성란</h3>
                         
                         <!-- flex-narrow 박스 설정 -->
-                        <div class="btn_flex narrow">
+                        <div class="btn_flex narrow" >
                         
                         	<!-- 너비 설정 -->
                             <div class="width80p">
@@ -124,6 +150,15 @@
 	</body>
 	<script>
 	
+	// 크루리더 확인하기 = 세션아이디와 크루장 아이디가 같으면 크루장
+	
+	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
+	// const isCrewLeader = ${isCrewLeader};
+	const isCrewLeader = false;
+	// 크루장이면 작성하기 폼 보여주기
+	if (isCrewLeader) {
+        document.getElementById('crewleader').style.display = 'block';
+    }
 	
 	$(document).ready(function() {
 	    const crew_idx = $('#crew_idx').val(); // hidden input의 값 가져오기
