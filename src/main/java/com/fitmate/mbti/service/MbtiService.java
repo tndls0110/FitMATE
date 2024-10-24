@@ -116,4 +116,9 @@ public class MbtiService {
 		int idx = m_dao.nextPageIdx(lastQIdx);
 		return idx;
 	}
+
+	public Object questionCount() {
+		int count = m_dao.questionCount();
+		return count;
+	}
 }

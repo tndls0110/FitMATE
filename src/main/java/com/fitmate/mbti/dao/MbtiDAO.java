@@ -17,4 +17,6 @@ public interface MbtiDAO {
 	List<Map<String, Object>> getTypeScore(int Oidx);
 
 	int nextPageIdx(int lastQIdx);
+
+	int questionCount();
 }
