@@ -26,7 +26,13 @@
 				 inner join mbti_r r on r.mbtir_idx = scr.mbtir_idx WHERE mbtisub_idx = #{Oidx};
 
 	</select>
+	<select id="nextPageIdx" parameterType="int" resultType="int">
+		SELECT mbtiq_idx FROM mbti_q where mbtiq_idx > #{lastQIdx} LIMIT 1;
+	</select>
 
+	<select id="questionCount" parameterType="int" resultType="int">
+		SELECT COUNT(mbtiq_idx) FROM mbti_q;
+	</select>
 
 
 </mapper>
