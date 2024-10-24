@@ -32,12 +32,16 @@
             VALUES(#{user_id}, #{nick}, #{pw}, #{email}, #{name}, #{birthday})
     </insert>
 
-    <insert id="insprof" parameterType="map">
-        INSERT INTO profile(user_id, profile, status, regions_idx)
-            VALUES(#{user_id}, #{profile}, #{status}, #{region2})
+    <insert id="insertProfile" parameterType="map">
+        INSERT INTO profile(user_id, status, regions_idx)
+            VALUES(#{user_id}, #{status}, #{region2})
     </insert>
 
-    <!-- leftnav 프로필 그리기 -->
+    <update id="insertImg">
+        UPDATE profile SET profile = #{profile} WHERE user_id = #{user_id}
+    </update>
+
+    <!-- leftnav 프로필 불러오기 -->
     <select id="getProfile" resultType="com.fitmate.member.dto.MemberDTO">
         SELECT m.nick, p.profile FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
     </select>

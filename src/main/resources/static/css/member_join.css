@@ -8,6 +8,16 @@ h3.capt .required{
     margin-top: -8px;
 }
 
-.img_preview img{
-    height: 80px;
+.img_preview{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px 0;
+    overflow: hidden;
+}
+
+.img_preview div{
+    width: inherit;
+    height: inherit;
+    background-size: cover;
 }

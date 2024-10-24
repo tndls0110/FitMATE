@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
-		<link rel="stylesheet" type="text/css" href="resources/css/join.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
@@ -13,7 +13,7 @@
 			<c:import url="layout/leftnav_1.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">회원가입</h2>
-				<form action="member_join.do" method="post">
+				<form action="member_join.do" method="post" enctype="multipart/form-data">
 					<div class="list">
 						<h3 class="capt">아이디 <span class="required">(필수)</span></h3>
 						<p><input type="text" class="full" name="user_id" maxlength="20" /></p>
@@ -54,8 +54,10 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
-						<div class="img_preview"></div>
+						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
+						<div class="img_preview hide">
+							<div><!-- 프로필 사진 미리보기 영역 --></div>
+						</div>
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>

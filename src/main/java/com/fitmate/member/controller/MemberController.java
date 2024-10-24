@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.fitmate.member.service.MemberService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -103,9 +104,8 @@ public class MemberController {
 	}
 
 	@RequestMapping (value = "/member_join.do")
-	public String join(HttpServletRequest files, @RequestParam Map<String, String> params, Model model) {
+	public String join(MultipartFile[] files, @RequestParam Map<String, String> params, Model model) {
 		page = "member_join";
-		logger.info("files: {}", files);
 		if (member_service.join(files, params)){
 			model.addAttribute("msg", params.get("nick")+"님, 환영합니다. 로그인하세요.");
 			model.addAttribute("user_id", params.get("user_id"));
@@ -116,7 +116,7 @@ public class MemberController {
 		return page;
 	}
 
-	// leftnav 프로필 그리기
+	// leftnav 프로필 불러오기
 	@RequestMapping (value = "/member_leftnav.ajax")
 	@ResponseBody
 	public Map<String, Object> leftnav(HttpSession session) {

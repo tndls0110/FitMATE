@@ -19,9 +19,10 @@ public interface MemberDAO {
     int checknick(String nick);
     List<RegCountyDTO> getRegion2(String regionIdx);
     int join(Map<String, String> params);
-    boolean insprof(Map<String, String> params);
+    int insertProfile(Map<String, String> params);
+    int insertImg(String user_id, String profile);
 
-    // leftnav 프로필 그리기
+    // leftnav 프로필 불러오기
     MemberDTO getProfile(String user_id);
 
     // 내 프로필 조회
@@ -29,4 +30,5 @@ public interface MemberDAO {
 
     // 비밀번호 변경
     void updatepw(String user_id, String pw);
+
 }
