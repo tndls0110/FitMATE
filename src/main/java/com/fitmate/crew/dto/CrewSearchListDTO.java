@@ -22,14 +22,20 @@ public class CrewSearchListDTO {
 	private String leader_id;
 	// 크루장 이름 
 	private String leader_name;
+	// 크루장 닉네임 
+	private String leader_nick;
 	// 크루장 프로필사진 
 	private String leader_profile;
 	// 크루장 mbti
 	private String leader_mbti;
 	
 	
-	
-	
+	public String getLeader_nick() {
+		return leader_nick;
+	}
+	public void setLeader_nick(String leader_nick) {
+		this.leader_nick = leader_nick;
+	}
 	public String getLeader_profile() {
 		return leader_profile;
 	}
