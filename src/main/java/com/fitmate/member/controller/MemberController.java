@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +105,7 @@ public class MemberController {
 	@RequestMapping (value = "/member_join.do")
 	public String join(MultipartFile[] files, @RequestParam Map<String, String> params, Model model) {
 		page = "member_join";
+		logger.info("files at controller: "+files);
 		if (member_service.join(files, params)){
 			model.addAttribute("msg", params.get("nick")+"님, 환영합니다. 로그인하세요.");
 			model.addAttribute("user_id", params.get("user_id"));

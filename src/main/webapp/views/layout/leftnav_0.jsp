@@ -2,16 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="leftnav">
 	<div class="brand"><span>Fit</span>MATE</div>
-	<div class="profile">
-		<div class="leftnav_profImg"></div>
-		<p class="leftnav_nick"></p>
-		<p><button onclick="location.href='member_logout.do'" class="mainbtn minbtn">로그아웃</button></p>
-	</div>
+	<div class="profile"></div>
 	<ul class="menu noDesc">
-		<li>
-			<a href="schedule.go">운동 일지</a>
-		</li>
 		<li class="active">
+			<a href="schedule.go">운동 일지</a> <!-- 운동일지 클릭하면 나오게-->
+		</li>
+		<li>
 			<a href="crew_search">크루 검색</a>
 		</li>
 		<li>

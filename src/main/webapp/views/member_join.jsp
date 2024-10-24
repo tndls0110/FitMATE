@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<c:import url="layout/leftnav_1.jsp"></c:import>
+			<c:import url="layout/leftnav_0.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">회원가입</h2>
 				<form action="member_join.do" method="post" enctype="multipart/form-data">
@@ -54,7 +54,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
+						<p><input type="file" multiple="multiple" class="full" name="profile" onchange="readFile(this)" /></p>
 						<div class="img_preview hide">
 							<div><!-- 프로필 사진 미리보기 영역 --></div>
 						</div>

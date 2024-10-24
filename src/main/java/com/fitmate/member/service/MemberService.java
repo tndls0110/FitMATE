@@ -7,13 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,22 +62,21 @@ public class MemberService {
 
 	public boolean join(MultipartFile[] files, Map<String, String> params) {
 		boolean result = false;
+		logger.info("files at service: "+files);
 		if (member_dao.join(params) == 1 && member_dao.insertProfile(params) == 1){
-			if (files.length > 0){
-				for (MultipartFile file : files) {
-					if (file.getOriginalFilename().lastIndexOf(".") < 0) {
-						try {
-							String ori_filename = file.getOriginalFilename();
-							String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
-							String new_filename = UUID.randomUUID().toString()+ext;
-							byte[] arr = file.getBytes();
-							Path path = Paths.get("C:/upload/"+new_filename);
-							Files.write(path, arr);
-							if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
-								result = true;
-							}
-						} catch (IOException e) {}
-					}
+			for (MultipartFile file : files) {
+				if (file.getOriginalFilename().lastIndexOf(".") < 0) {
+					try {
+						String ori_filename = file.getOriginalFilename();
+						String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
+						String new_filename = UUID.randomUUID().toString()+ext;
+						byte[] arr = file.getBytes();
+						Path path = Paths.get("C:/upload/"+new_filename);
+						Files.write(path, arr);
+						if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
+							result = true;
+						}
+					} catch (IOException e) {}
 				}
 			}
 		}

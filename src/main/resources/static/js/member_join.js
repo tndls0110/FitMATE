@@ -126,11 +126,11 @@ function readFile(input){
     if (input.files.length > 1){
         modal.showAlert("프로필 이미지는 한 장만 입력할 수 있습니다.");
         $('input[name="profile"]').val('');
-    } else {
+    } else if (input.files.length == 1) {
+        $('.img_preview').empty().removeClass('hide');
         var reader = new FileReader();
         reader.readAsDataURL(input.files[0]);
         reader.onload = function(e) {
-            $('.img_preview').removeClass('hide');
             $('.img_preview div').css('background-image', 'url("'+e.target.result+'")');
         }
     }
