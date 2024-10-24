@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
@@ -123,6 +124,22 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 		return crew_dao.crewList(searchDTO);
 		
+	}
+
+	
+	// 모집글 상세조회
+	public CrewSearchListDTO recruitDetail(String idx) {
+		int board_idx = 0;
+		
+		if(idx != null && !idx.equals("")) {
+			board_idx = Integer.parseInt(idx);
+		}
+		
+		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
+		
+		CrewAskDTO commentDTO = crew_dao.recruitComment(board_idx);
+		
+		return recruitDetailDTO;
 	} 
 	
 
