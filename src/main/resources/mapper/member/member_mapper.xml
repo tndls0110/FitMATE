@@ -53,8 +53,8 @@
     </select>
 
     <!-- 비밀번호 변경 -->
-    <select id="checkpw" resultType="int">
-        SELECT COUNT(pw) FROM member WHERE user_id = #{user_id} AND pw = #{pw}
-    </select>
+    <update id="updatepw">
+        UPDATE member SET pw = #{pw} WHERE user_id = #{user_id}
+    </update>
 
 </mapper>

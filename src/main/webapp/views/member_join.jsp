@@ -13,10 +13,10 @@
 			<c:import url="layout/leftnav_1.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">회원가입</h2>
-				<form action="member_join.do" method="post">
+				<form action="member_join.do" method="post" enctype="multipart/form-data">
 					<div class="list">
 						<h3 class="capt">아이디 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="user_id" /></p>
+						<p><input type="text" class="full" name="user_id" maxlength="20" /></p>
 						<h3 class="msg pass pass_id hide">사용할 수 있는 아이디입니다.</h3>
 						<h3 class="msg caution check_id hide">이미 사용중인 아이디입니다. 다른 아이디를 입력하세요.</h3>
 						<h3 class="msg caution npass_id hide">아이디 중복체크 통과는 필수 항목입니다.</h3>
@@ -24,14 +24,14 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">비밀번호 <span class="required">(필수)</span></h3>
-						<p><input type="password" class="full" name="pw" /></p>
+						<p><input type="password" class="full" name="pw" maxlength="20" /></p>
 						<p class="confirm"><input type="password" class="full" name="pwconfirm" /></p>
 						<h3 class="msg caution check_pw hide">비밀번호와 비밀번호 확인 값은 동일해야 합니다.</h3>
 						<h3 class="msg caution fill_pw hide">비밀번호는 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">닉네임 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="nick" /></p>
+						<p><input type="text" class="full" name="nick" maxlength="20" /></p>
 						<h3 class="msg pass pass_nick hide">사용할 수 있는 닉네임입니다.</h3>
 						<h3 class="msg caution check_nick hide">이미 사용중인 닉네임입니다. 다른 닉네임을 입력하세요.</h3>
 						<h3 class="msg caution npass_nick hide">닉네임 중복체크 통과는 필수 항목입니다.</h3>
@@ -39,12 +39,12 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">이름 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="name" /></p>
+						<p><input type="text" class="full" name="name" maxlength="20" /></p>
 						<h3 class="msg caution fill_name hide">이름은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">이메일 <span class="required">(필수)</span></h3>
-						<p><input type="text" class="full" name="email" /></p>
+						<p><input type="text" class="full" name="email" maxlength="100" /></p>
 						<h3 class="msg caution fill_email hide">이메일은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">
@@ -54,12 +54,12 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
+						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
 						<div class="img_preview"></div>
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><textarea class="full" name="status" rows="3"></textarea></p>
+						<p><textarea class="full" name="status" rows="3" maxlength="1000"></textarea></p>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>
