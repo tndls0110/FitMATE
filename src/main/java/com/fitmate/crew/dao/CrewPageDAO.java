@@ -34,5 +34,11 @@ public interface CrewPageDAO {
 	String notice_noti_crewname(CrewDTO crew);
 
 	int crew_oneboard_write(CrewBoardDTO board_dto);
+
+	List<CrewBoardDTO> crew_oneboard_list(int crew_idx);
+
+	int crew_oneboard_blind(String board_idx);
+
+	int crew_oneboard_unblind(String board_idx);
 	
 }
