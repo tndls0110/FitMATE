@@ -51,11 +51,11 @@
 			<div class="contents">
 	
 				<!-- 제목 -->
-				<h2 class="title">크루이름<span>크루 공지 화면입니다.</span></h2>
+				<h2 class="title">크루이름<span>한줄 게시글 화면입니다.</span></h2>
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
-                <form action="crew_page_notice.do" method="post">
+                <form action="crew_oneboard.do" method="post">
                 	<input type="hidden" id="sessionId" value="${sessionScope.sessionId}">
                 	<!-- 작성자 id 넣기 -->
                 	 <input type="hidden" id="board_id" name="board_id" value="member01">
@@ -71,7 +71,7 @@
                         
                         	<!-- 너비 설정 -->
                             <div class="width80p">
-                                <input type="text" class="full flex_left" name="subject" id="subjectInput"/>
+                                <input type="text" class="full flex_left" name="content" id="subjectInput"/>
                             </div>
                             <div class="width20p">
                                 <button class="mainbtn full flex_right"id="submitButton" disabled>작성하기</button>
@@ -128,7 +128,7 @@
 	$(document).ready(function() {
 	    const crew_idx = $('#crew_idx').val(); // hidden input의 값 가져오기
 	  //  console.log("crew_idx:", crew_idx); // crew_idx 값을 로그로 출력
-	    crewList(crew_idx); // crewList 호출 시 crew_idx 전달
+	  //  crewList(crew_idx); // crewList 호출 시 crew_idx 전달
 	    
 	    const subjectInput = $('#subjectInput');
 	    const charCount = $('#charCount');
@@ -156,48 +156,7 @@
 	    
 	});
 
-	function crewList(crewIdx) {
-	    console.log("Sending crew_idx:", crewIdx); // AJAX 호출 전에 crew_idx 로그 출력
-	    // 세션 아이디 가져오기
-	    const sessionId = $('#sessionId').val();
-	    console.log(sessionId);
-	    $.ajax({
-	        url: 'crew_page_notice.ajax',
-	        type: 'GET',
-	        data: {
-	            'crew_idx': crewIdx, // crew_idx가 올바르게 포함되어 있는지 확인
-	        },
-	        dataType: 'JSON',
-	        success: function(list) {
-	            console.log("Response list:", list); // 서버 응답 로그 출력
-	            let tbody = $('.show');
-	            tbody.empty(); // 이전 내용 비우기
-							
-	           
-	                $(list).each(function(idx, item) {
-	                	
-	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
-	                	 if (sessionId == item.board_id) {
-	                	        deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_notice_del?board_idx=' + item.board_idx + '\'">삭제</button>';
-	                	    }
-	                	
-	                    tbody.append('<tr><td>' + item.board_idx 
-	                    		+ '</td><td>' + item.subject
-	                    		+ '</td><td>' +item.board_id
-	                    		+ '</td><td>' +item.date
-	                    		+ '</td><td>' + deleteButton + '</td></tr>'
-                    	);
-	                    
-	                   
-	                });
-	         	
-	        },
-	        error: function(e) {
-	            console.log(e); // 에러 로그
-	            alert('크루 목록 가져오기 실패');
-	        }
-	    });
-	}
+	
 </script>
 	<script src="resources/js/common.js"></script>
 </html>

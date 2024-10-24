@@ -32,5 +32,7 @@ public interface CrewPageDAO {
 	int crew_notice_noti(String member_id, int board_idx, String noti_content, String noti_url, String name);
 
 	String notice_noti_crewname(CrewDTO crew);
+
+	int crew_oneboard_write(CrewBoardDTO board_dto);
 	
 }
