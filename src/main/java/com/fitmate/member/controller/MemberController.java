@@ -115,6 +115,17 @@ public class MemberController {
 		return page;
 	}
 
+	// leftnav 프로필 그리기
+	@RequestMapping (value = "/member_leftnav.ajax")
+	@ResponseBody
+	public Map<String, Object> leftnav(HttpSession session) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		result.put("leftnav_prof", member_service.getProfile(user_id));
+		return result;
+	}
+
 	// 내 프로필 보기
 	@RequestMapping (value = "/member_profile.go")
 	public String profile(Model model, HttpSession session) {
@@ -140,6 +151,30 @@ public class MemberController {
 		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
 		model.addAttribute("region2", list);
 		return "member_update";
+	}
+
+	// 비밀번호 변경
+	@RequestMapping (value = "/member_updatepw.go")
+	public String updatepw() {
+		return "member_updatepw";
+	}
+
+	@RequestMapping (value = "/member_updatepw.do")
+	public String updatepw(@RequestParam Map<String, Object> params, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+
+		return "/redirect:member_update";
+	}
+
+	@RequestMapping (value = "member_checkpw.ajax")
+	@ResponseBody
+	public Map<String, Object> checkpw(String pre_pw, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("check_pw", member_service.checkpw(user_id, pre_pw));
+		return result;
 	}
 
 }

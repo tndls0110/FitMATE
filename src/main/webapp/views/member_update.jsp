@@ -11,7 +11,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<c:import url="layout/leftnav_1.jsp"></c:import>
+			<c:import url="layout/leftnav_5.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">정보 수정하기</h2>
 				<form action="member_update.do" method="post">
@@ -69,7 +69,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><textarea class="full" name="status" rows="3"></textarea></p>
+						<p><textarea class="full" name="status" rows="3">${list.status}</textarea></p>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>

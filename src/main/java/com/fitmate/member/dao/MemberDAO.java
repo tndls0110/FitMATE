@@ -21,6 +21,13 @@ public interface MemberDAO {
     int join(Map<String, String> params);
     boolean insprof(Map<String, String> params);
 
+    // leftnav 프로필 그리기
+    MemberDTO getProfile(String user_id);
+
     // 내 프로필 조회
     MemberDTO profile(String user_id);
+
+    // 비밀번호 변경
+    int checkpw(String user_id, String pw);
+
 }
