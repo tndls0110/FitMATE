@@ -64,10 +64,10 @@ public class CrewPageService {
 		
 		CrewDTO crew = new CrewDTO();
 		crew.setCrew_idx(crew_idx);
-		
+		logger.info("crew_idx = "+crew_idx);
 		// 크루 이름 가져오기
-		crewpage_dao.notice_noti_crewname(crew);
-		String name = crew.getName();
+		
+		String name = crewpage_dao.notice_noti_crewname(crew);;
 		logger.info("name = "+name);
 		String crewidx = Integer.toString(crew_idx);
 		
@@ -99,6 +99,29 @@ public class CrewPageService {
 	public void crew_notice_del(String board_idx) {
 		crewpage_dao.notice_del_crewidx(board_idx);
 		crewpage_dao.crew_notice_del(board_idx);
+		
+	}
+	
+	@Transactional
+	public void crew_oneboard_write(String content, String board_id, int crew_idx) {
+		CrewBoardDTO board_dto = new CrewBoardDTO();
+		CrewIdxDTO crewidx_dto = new CrewIdxDTO();
+		
+		board_dto.setBoard_id(board_id);
+		board_dto.setContent(content);
+		// 크루 최근 활동시간 바꿔주기
+		crewpage_dao.crew_lastdate_update(crew_idx);
+
+		
+		if(	crewpage_dao.crew_oneboard_write(board_dto)>0) {
+			int board_idx = board_dto.getBoard_idx();
+			crewidx_dto.setBoard_idx(board_idx);
+			crewidx_dto.setCrew_idx(crew_idx);
+			
+			// 크루idx 와 보드idx 합쳐주기 이름은 notice_write_crewidx 이지만 oneboard와 로직은 동일하다
+			crewpage_dao.notice_write_crewidx(crewidx_dto);	
+			
+		};		
 		
 	}
 
