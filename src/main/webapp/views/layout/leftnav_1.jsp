@@ -5,7 +5,7 @@
 	<div class="profile">
 		<div class="leftnav_profImg"></div>
 		<p class="leftnav_nick"></p>
-		<p><button class="mainbtn minbtn">로그아웃</button></p>
+		<p><button onclick="location.href='/member_logout.do'" class="mainbtn minbtn">로그아웃</button></p>
 	</div>
 	<ul class="menu noDesc">
 		<li class="active">
