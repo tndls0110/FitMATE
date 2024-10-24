@@ -44,8 +44,15 @@
 </select>
 
 <insert id="crew_notice_noti">
-	insert into noti (notir_id,notis_idx,notis_cate,noti_content,noti_url,notis_date)
+	insert into noti (notir_id,notis_idx,noti_content,noti_url,notis_cate,notis_date)
 	value (#{param1},#{param2},#{param3},#{param4},#{param5},now())
 </insert>
+
+
+<insert id="crew_oneboard_write" useGeneratedKeys="true"
+		keyColumn="board_idx" keyProperty="board_idx"
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
+		value(#{board_id},#{content},2); </insert>
+
 
 </mapper>
