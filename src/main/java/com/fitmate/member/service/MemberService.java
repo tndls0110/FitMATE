@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -55,17 +59,28 @@ public class MemberService {
 		return member_dao.getRegion2(region_idx);
 	}
 
-	public boolean join(Map<String, String> params) {
+	public boolean join(HttpServletRequest files, Map<String, String> params) {
 		boolean result = false;
 		if (member_dao.join(params) == 1 && member_dao.insprof(params)){
+            //
 			result = true;
 		}
 		return result;
 	}
 
+	// leftnav 프로필 그리기
+	public MemberDTO getProfile(String loginId) {
+		return member_dao.getProfile(loginId);
+	}
+
 	// 내 프로필 조회
 	public MemberDTO profile(String user_id) {
 		return member_dao.profile(user_id);
+	}
+
+	// 비밀번호 변경
+	public void updatepw(String user_id, String pw) {
+		member_dao.updatepw(user_id, pw);
 	}
 
 }

@@ -1,3 +1,4 @@
+// 모달
 var alertCont = document.getElementsByClassName('modal_alert')[0],
     confirmCont = document.getElementsByClassName('modal_confirm')[0],
     msgstr = '',

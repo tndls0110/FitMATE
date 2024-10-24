@@ -13,6 +13,7 @@ import com.fitmate.member.service.MemberService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -102,10 +103,10 @@ public class MemberController {
 	}
 
 	@RequestMapping (value = "/member_join.do")
-	public String join(@RequestParam Map<String, String> params, Model model) {
+	public String join(HttpServletRequest files, @RequestParam Map<String, String> params, Model model) {
 		page = "member_join";
-		logger.info("params: {}", params);
-		if (member_service.join(params)){
+		logger.info("files: {}", files);
+		if (member_service.join(files, params)){
 			model.addAttribute("msg", params.get("nick")+"님, 환영합니다. 로그인하세요.");
 			model.addAttribute("user_id", params.get("user_id"));
 			page = "member_login";
@@ -113,6 +114,17 @@ public class MemberController {
 			model.addAttribute("msg", "회원 가입 과정에 문제가 발생했습니다. 다시 시도하세요.");
 		}
 		return page;
+	}
+
+	// leftnav 프로필 그리기
+	@RequestMapping (value = "/member_leftnav.ajax")
+	@ResponseBody
+	public Map<String, Object> leftnav(HttpSession session) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		result.put("leftnav_prof", member_service.getProfile(user_id));
+		return result;
 	}
 
 	// 내 프로필 보기
@@ -140,6 +152,34 @@ public class MemberController {
 		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
 		model.addAttribute("region2", list);
 		return "member_update";
+	}
+
+	// 비밀번호 변경
+	@RequestMapping (value = "/member_updatepw.go")
+	public String updatepw() {
+		return "member_updatepw";
+	}
+
+	@RequestMapping (value = "member_checkpw.ajax")
+	@ResponseBody
+	public Map<String, Object> checkpw(String old_pw, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (member_service.login(user_id, old_pw) == "pass"){
+			result.put("check_pw", true);
+		} else {
+			result.put("check_pw", false);
+		}
+		return result;
+	}
+
+	@RequestMapping (value = "/member_updatepw.do")
+	public String updatepw(String pw, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		member_service.updatepw(user_id, pw);
+		return "redirect:/member_update.go";
 	}
 
 }
