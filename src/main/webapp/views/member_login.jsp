@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<c:import url="layout/leftnav_1.jsp"></c:import>
+			<c:import url="layout/leftnav_0.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">로그인</h2>
                 <form action="member_login.do" method="post">
