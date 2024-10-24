@@ -1,16 +1,20 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ryust
-  Date: 24. 10. 24.
-  Time: 오후 5:45
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+   <meta charset="UTF-8">
+    <style></style>
 </head>
 <body>
+  <div class="container">
+    <c:import url="layout/leftnav_1.jsp"></c:import>
+    <!-- 운동일지는 nav1로, mbti만 nav5로 -->
+    <div class="contents">
 
+
+    </div>
+      <c:import url="layout/modal.jsp"></c:import>
+  </div>
 </body>
+
+<script src="resources/js/common.js"></script>
 </html>
