@@ -1,6 +1,7 @@
 package com.fitmate.member.controller;
 
 import com.fitmate.admin.dto.RegCountyDTO;
+import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,10 +129,15 @@ public class MemberController {
 	public String update(Model model, HttpSession session) {
 		//String user_id = (String) session.getAttribute("loginId");
 		String user_id = "member03";
-		model.addAttribute("list", member_service.profile(user_id));
+
+		// 프로필 불러오기
+		MemberDTO profile = member_service.profile(user_id);
+		model.addAttribute("list", profile);
+
+		// 지역 정보 불러오기
 		List<RegCountyDTO> list = member_service.getRegion();
 		model.addAttribute("region", list);
-		list = member_service.getRegion2("1");
+		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
 		model.addAttribute("region2", list);
 		return "member_update";
 	}
