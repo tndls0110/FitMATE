@@ -156,6 +156,7 @@
 	let isInitialLoad = true;
 	let currentQuestionIdx = 0;
 	let minQuestionIdx = 0;
+	let nextPageidentifier = 1;
 
 	//페이지 시작하자마자 정보 가져오기
 	//최소 idx 값을 가져오는 ajax 요청부터 실행
@@ -453,29 +454,67 @@
 	//다음 버튼 클릭하기 ===============================================
 		//다음 버튼 클릭하면 현재 idx 값 전달 -> idx보다 큰 idx 값들 찾고 limit 1 걸기
 	function load_nextPage (QuestionIdx){
-		$.ajax({
-			type : 'GET',
-			url : '/nextPageIdx.ajax',
-			data : {'lastQIdx' : QuestionIdx},
-			dataType : 'JSON',
-			success : function(result){
-				console.log(result.idx);
 
-				//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
-				currentQuestionIdx = result.idx;
-				minQuestionIdx = result.idx;
-				console.log(currentQuestionIdx);
-				console.log(minQuestionIdx);
-				//저장하고 나서
-				isInitialLoad = false;
-				loadQuestion(currentQuestionIdx); //idx 값을 기반으로
-				drawOption(currentQuestionIdx);
+		//클릭한 값 있을 때 넘어갈 수 있게 하기
+		if(Object.keys(selectedScore).length != 0){//selectedScores에 값이 있는지 보는 방법 -> keys를 구한 다음 그 길이가 0이 아니면 됨
+							//자바스크립트의 객체는 .size나 .length를 쓸 수 없음
 
+
+			//질문의 번호에 해당하는 값이 없으면 막아야함
+			if(selectedScore[QuestionIdx] != null){
+				nextPageidentifier++;
+				$.ajax({
+					type : 'GET',
+						url : '/question_count.ajax',
+						data : {},
+						dataType : 'JSON',
+						success : function (data){
+							console.log("총 질문의 개수 : ", data.count);
+							//질문의 개수 구하기
+
+							//만약에 currentIdx <질문의 개수
+							if(nextPageidentifier != data.count){ //근데 만약에 질문 idx가 삭제되면????? ->
+								//이전 페이지 질문은 remove되게 하기
+								$('#main_option').empty();
+								$.ajax({
+									type : 'GET',
+									url : '/nextPageIdx.ajax',
+									data : {'lastQIdx' : QuestionIdx},
+									dataType : 'JSON',
+									success : function(result){
+										console.log(result.idx);
+										if(selectedScore)
+												//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
+											currentQuestionIdx = result.idx;
+										minQuestionIdx = result.idx;
+										console.log(currentQuestionIdx);
+										console.log(minQuestionIdx);
+										//저장하고 나서
+										isInitialLoad = false;
+										loadQuestion(currentQuestionIdx); //idx 값을 기반으로
+										drawOption(currentQuestionIdx);
+									}
+								});
+							}else{
+								$('.next').html('결과 보기');
+								// -> 함수 바꾸기 $('.next').attr('onclick');
+							}
+					},
+					error : function (e){
+
+					}
+				});
+			}else{
+				alert('답을 선택해주세요!');
 			}
-		});
 
 
+
+
+		}else{
+			alert('답을 선택해주세요!');
 		}
+	}
 
 
 

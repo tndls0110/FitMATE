@@ -78,4 +78,13 @@ public class MbtiController {
 	result.put("idx",m_service.nextPageIdx(lastQIdx));
 	return result;
 	};
+
+
+	@GetMapping (value = "/question_count.ajax")
+	@ResponseBody
+	public Map<String, Object> questionCount(){
+		Map<String,Object> data = new HashMap<>();
+		data.put("count",m_service.questionCount());
+		return data;
+	};
 }
