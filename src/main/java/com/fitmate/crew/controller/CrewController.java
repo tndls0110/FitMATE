@@ -106,7 +106,38 @@ public class CrewController {
 		return "crew_recruit_detail";
 	}
 	
+	// 3-1. 크루 모집글 상세정보 조회
+	@GetMapping(value = "/crew_recruit_detail.ajax")
+	@ResponseBody 
+	public CrewSearchListDTO recruitDetail(String idx){
+		
+		CrewSearchListDTO recruitDetail = crew_service.recruitDetail(idx);
+	 
+		return recruitDetail; 
+	}
 	
+	
+   // 1. 내 크루 페이지
+   @RequestMapping(value = "/mycrew")
+   public String myCrew(Model model) {
+      return "mycrew";
+   }
+   
+   
+   // 2. 내 크루 목록조회
+   @GetMapping(value = "/mycrew.ajax")
+   @ResponseBody 
+   public List<CrewSearchListDTO> myCrewList( @RequestParam Map<String, String> params){
+      
+      logger.info("params2 : " + params);
+      
+      List<CrewSearchListDTO> recruitList = crew_service.crewList(params);
+      
+      logger.info("list2 : ", recruitList);
+      
+      return recruitList; 
+   }
+
 	
 }
 
