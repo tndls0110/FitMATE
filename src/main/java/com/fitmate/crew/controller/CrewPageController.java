@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,18 +65,25 @@ public class CrewPageController {
 		
 		crewpage_service.crew_notice_write(subject,board_id,crew_idx);
 		
-		return "redirect:crew_page_notice.go";
+		return "redirect:/crew_page_notice.go";
 	}
 	
 	// 공지사항목록 불러오기
 	@GetMapping(value = "/crew_page_notice.ajax")
 	@ResponseBody 
-	public List<CrewBoardDTO> crew_notice_list(@RequestParam Map<String,String> params){
+	public List<CrewBoardDTO> crew_notice_list(@RequestParam Map<String,String> params,HttpSession session){
 		
 		logger.info("params : " + params);
 		String crewidx = params.get("crew_idx");
+		
 		int crew_idx = Integer.parseInt(crewidx);
 		List<CrewBoardDTO> notcelist = crewpage_service.crew_notice_list(crew_idx);
+		
+		//크루장(작성자) 확인
+		String master = params.get("board_id");
+		
+		session.setAttribute("sessionId","member01"); // 세션아이디에 임시로 보드id 집어넣음 
+		
 		
 		logger.info("notcelist : "+notcelist);
 		return notcelist; 
@@ -87,7 +96,26 @@ public class CrewPageController {
 		
 		crewpage_service.crew_notice_del(board_idx);
 		
-		return "redirect:crew_page_notice.go";
+		return "redirect:/crew_page_notice.go";
 	}
+	
+		// 한줄 게시글 페이지로 이동하기
+		@RequestMapping(value="/crew_oneboard.go")
+		public String crew_oneboard() {
+		
+			return "crew_oneboard";
+		}
+		
+		// 한줄 게시글 작성하기
+		@RequestMapping(value="/crew_oneboard.do",method =RequestMethod.POST)
+		public String crew_oneboard_write(@RequestParam String content,@RequestParam String board_id,@RequestParam int crew_idx) {
+			// subject = 공지사항 내용이자 제목, board_id = 작성자, crew_idx = 크루 식별위한 변수 + board_idx 와 crew_idx 합쳐줄때(식별하기위해) 필요
+			
+			logger.info("입력값 {} ",content);
+			
+			crewpage_service.crew_oneboard_write(content,board_id,crew_idx);
+			
+			return "redirect:/crew_oneboard.go";
+		}
 	
 }

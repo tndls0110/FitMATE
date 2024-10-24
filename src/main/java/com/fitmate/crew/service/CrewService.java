@@ -18,6 +18,7 @@ import com.fitmate.crew.dto.CrewSearchListDTO;
 
 @Service
 public class CrewService {
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired CrewDAO crew_dao;
@@ -153,9 +154,6 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	
 	
 
-
-
-	
 
 
 
