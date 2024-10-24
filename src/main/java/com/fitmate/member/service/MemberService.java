@@ -74,11 +74,8 @@ public class MemberService {
 	}
 
 	// 비밀번호 변경
-	public boolean checkpw(String user_id, String pre_pw) {
-		boolean result = false;
-		if (member_dao.checkpw(user_id, pre_pw) == 1 && pre_pw != null) {
-			result = true;
-		}
-		return result;
+	public void updatepw(String user_id, String pw) {
+		member_dao.updatepw(user_id, pw);
 	}
+
 }

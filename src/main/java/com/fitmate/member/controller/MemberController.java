@@ -159,22 +159,26 @@ public class MemberController {
 		return "member_updatepw";
 	}
 
-	@RequestMapping (value = "/member_updatepw.do")
-	public String updatepw(@RequestParam Map<String, Object> params, HttpSession session) {
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
-
-		return "/redirect:member_update";
-	}
-
 	@RequestMapping (value = "member_checkpw.ajax")
 	@ResponseBody
-	public Map<String, Object> checkpw(String pre_pw, HttpSession session) {
+	public Map<String, Object> checkpw(String old_pw, HttpSession session) {
 		//String user_id = (String) session.getAttribute("loginId");
 		String user_id = "member03";
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("check_pw", member_service.checkpw(user_id, pre_pw));
+		if (member_service.login(user_id, old_pw) == "pass"){
+			result.put("check_pw", true);
+		} else {
+			result.put("check_pw", false);
+		}
 		return result;
+	}
+
+	@RequestMapping (value = "/member_updatepw.do")
+	public String updatepw(String pw, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member03";
+		member_service.updatepw(user_id, pw);
+		return "redirect:/member_update.go";
 	}
 
 }

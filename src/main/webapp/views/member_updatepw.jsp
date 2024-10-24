@@ -13,19 +13,17 @@
 			<c:import url="layout/leftnav_5.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">비밀번호 수정하기</h2>
-				<form action="member_update.do" method="post">
+				<form action="member_updatepw.do" method="post">
 					<div class="list">
 						<h3 class="capt">기존 비밀번호</h3>
-						<p><input type="password" class="full" name="prepw" onkeyup="countCharacters(this)" /></p>
-						<h3 class="msg cnter"><span></span>/20</h3>
-						<h3 class="msg caution check_prepw hide">기존 비밀번호를 확인하세요.</h3>
-						<h3 class="msg pass confirm_prepw hide">기존 비밀번호를 확인했습니다.</h3>
+						<p><input type="text" class="full" name="oldpw" maxlength="20" /></p>
+						<h3 class="msg msg_oldpw hide"></h3>
 					</div>
 					<div class="list">
 						<h3 class="capt">새 비밀번호</h3>
-						<p><input type="password" class="full" name="newpw" /></p>
-						<p class="confirm"><input type="password" class="full" name="pwconfirm" /></p>
-						<h3 class="msg caution check_pw hide">새 비밀번호와 새 비밀번호 확인 값은 동일해야 합니다.</h3>
+						<p><input type="text" class="full" name="pw" maxlength="20" /></p>
+						<p class="confirm"><input type="text" class="full" name="pwconfirm" maxlength="20" /></p>
+						<h3 class="msg msg_pw hide"></h3>
 					</div>
 					<div class="list">
 						<button type="button" class="full mainbtn" onclick="updatepw()">수정하기</button>

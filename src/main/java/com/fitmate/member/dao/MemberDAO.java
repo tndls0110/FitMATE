@@ -28,6 +28,5 @@ public interface MemberDAO {
     MemberDTO profile(String user_id);
 
     // 비밀번호 변경
-    int checkpw(String user_id, String pw);
-
+    void updatepw(String user_id, String pw);
 }
