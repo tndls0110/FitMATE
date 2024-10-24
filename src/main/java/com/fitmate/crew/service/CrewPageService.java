@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fitmate.admin.dto.ReportDTO;
 import com.fitmate.crew.dao.CrewPageDAO;
@@ -89,7 +90,7 @@ public class CrewPageService {
 		
 	}
 	
-	
+	// 크루의 공지사항 가져오기
 	public List<CrewBoardDTO> crew_notice_list(int crew_idx) {
 	
 		return crewpage_dao.crew_notice_list(crew_idx);
@@ -122,6 +123,37 @@ public class CrewPageService {
 			crewpage_dao.notice_write_crewidx(crewidx_dto);	
 			
 		};		
+		
+	}
+	
+	// 크루의 한줄게시글 목록가져오기
+	public List<CrewBoardDTO> crew_oneboard_list(int crew_idx) {
+		
+		return crewpage_dao.crew_oneboard_list(crew_idx);
+	}
+	
+	// 크루 한줄 게시글 삭제하기
+	// 이름은 notice이지만 게시글 삭제 로직은 같다 
+	@Transactional
+	public void crew_oneboard_del(String board_idx) {
+		crewpage_dao.notice_del_crewidx(board_idx);
+		crewpage_dao.crew_notice_del(board_idx);
+		
+	}
+	// 게시글 블라인드
+	public void crew_oneboard_blind(String board_idx) {
+		crewpage_dao.crew_oneboard_blind(board_idx);
+		
+	}
+	// 게시글 블라인드 해제
+	public void crew_oneboard_unblind(String board_idx) {
+		crewpage_dao.crew_oneboard_unblind(board_idx);
+		
+	}
+	
+	// 사진 게시글 작성하기
+	public void crew_photo_write(MultipartFile file, String content, String board_id, int crew_idx) {
+		
 		
 	}
 
