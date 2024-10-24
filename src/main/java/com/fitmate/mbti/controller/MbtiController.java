@@ -87,4 +87,10 @@ public class MbtiController {
 		data.put("count",m_service.questionCount());
 		return data;
 	};
+
+	@RequestMapping (value = "/mbtiR.go")
+	@ResponseBody
+	public String mbtiR() {
+		return "mbtiR";
+	};
 }
