@@ -54,5 +54,20 @@
 		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
 		value(#{board_id},#{content},2); </insert>
 
+<select id="crew_oneboard_list" parameterType="int" resultType="com.fitmate.crew.dto.CrewBoardDTO">
+	SELECT cb.*
+	FROM crew_idx ci
+	INNER JOIN crew_board cb ON ci.board_idx = cb.board_idx
+	WHERE ci.crew_idx = #{crew_idx} AND cb.category_idx = 2
+	GROUP BY cb.board_idx;
+</select>	
+
+<update id="crew_oneboard_blind">
+	UPDATE crew_board set status = 2 where board_idx = #{param1}
+</update>
+<update id="crew_oneboard_unblind">
+	UPDATE crew_board set status = 1 where board_idx = #{param1}
+</update>
+
 
 </mapper>
