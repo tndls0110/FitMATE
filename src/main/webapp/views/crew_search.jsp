@@ -315,10 +315,10 @@
 					// Content: 크루 소개글         
 					content = '<div class="recruit_content">' + item.crew_content + '</div>';
 					// Info: 크루원 수, 활동지역
-					info = '<div class="recruit_info"><span>🧟' + item.member_count + ' </span><span>🌏' + item.region_name + ' ' + item.regions_name + '</span></div>'
+					info = '<div class="recruit_info"><span><i class="bi bi-people-fill"></i>&nbsp;&nbsp;' + item.member_count + ' </span><span><i class="bi bi-geo-alt-fill"></i>&nbsp;&nbsp;' + item.region_name + ' ' + item.regions_name + '</span></div>'
 
 					// item.leader_id(크루장 id)로 크루장인경우 버튼생성.
-					/* var add_button = '<button type="button" class="add_button">︙</button>'; */
+					/* var add_button = '<button type="button" class="add_button"><i class="bi bi-three-dots-vertical"></i></button>'; */
 					
 					// 홀수번째 게시글은 왼쪽정렬
 					if(cnt % 2 == 1){
