@@ -496,11 +496,9 @@
 											drawOption(currentQuestionIdx);
 											if(nextPageidentifier == data.count){ //근데 만약에 질문 idx가 삭제되면????? 해결 nextPageidentifier
 												//마지막이어도 점수는 합산 + save되어야 함
-												var next = document.getElementsByClassName('next')[0];
 
-												next.onclick = goToResultPage(scores){};
 												$('.next').html('결과 보기');
-
+												$('.next').attr('onclick','goToResultPage(scores)'); //속성으로 들어간 함수 바꾸기 (onclick 속성 안의 함수 바꾸기)
 
 												console.log('onclick :', onclick);
 												//결과 보기 버튼 누를 때 initialze 다시 true 상태로 바꾸기
@@ -527,8 +525,24 @@
 	}
 
 
-	function goToResultPage(result){
+	function goToResultPage(scores){
 		console.log('결과 버튼 눌림');
+		console.log('scores 받아온 값 :',scores);
+		//값들을 전부 전달하고...이 값으로 return??
+
+		$.ajax({
+			type : 'GET',
+			url : '/mbtiR.go',
+			data : scores,
+			dataType : 'JSON',
+			success : function (){
+				console.log('mbtiR.go 전송 성공');
+			},
+			error : function (e){
+				console.log(e);
+			}
+		});
+
 	}
 
 </script>
