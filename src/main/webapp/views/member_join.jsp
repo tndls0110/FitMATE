@@ -13,7 +13,7 @@
 			<c:import url="layout/leftnav_1.jsp"></c:import>
 			<div class="contents narrow">
 				<h2 class="title">회원가입</h2>
-				<form action="member_join.do" method="post" enctype="multipart/form-data">
+				<form action="member_join.do" method="post">
 					<div class="list">
 						<h3 class="capt">아이디 <span class="required">(필수)</span></h3>
 						<p><input type="text" class="full" name="user_id" maxlength="20" /></p>
@@ -54,7 +54,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
+						<p><input type="file" class="full" name="profile" onchange="readFile(this)" /></p>
 						<div class="img_preview"></div>
 					</div>
 					<div class="list">
