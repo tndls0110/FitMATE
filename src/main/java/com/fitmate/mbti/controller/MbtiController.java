@@ -70,4 +70,12 @@ public class MbtiController {
 		Map<String,Object> data = m_service.getTypeScore(Oidx);
 		return data;
 	};
+
+	@GetMapping (value = "/nextPageIdx.ajax")
+	@ResponseBody
+	public Map<String, Object> nextPageIdx(int lastQIdx){
+	Map<String,Object> result = new HashMap<>();
+	result.put("idx",m_service.nextPageIdx(lastQIdx));
+	return result;
+	};
 }
