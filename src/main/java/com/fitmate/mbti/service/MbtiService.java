@@ -112,4 +112,8 @@ public class MbtiService {
 		return data;
 	}
 
+	public int nextPageIdx(int lastQIdx) {
+		int idx = m_dao.nextPageIdx(lastQIdx);
+		return idx;
+	}
 }
