@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
@@ -31,6 +32,10 @@ public interface CrewDAO {
 	int crew_create_rewrite(String content, int board_idx);
 
 	int crew_create_rewrite_region(int regions_idx, int board_idx);
+
+	CrewSearchListDTO recruitDetail(int board_idx);
+
+	CrewAskDTO recruitComment(int board_idx);
 	
 }
 
