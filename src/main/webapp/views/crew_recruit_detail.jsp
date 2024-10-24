@@ -53,8 +53,17 @@ h2.title {
 
 div.recruit_header {
 	position: relative;
-	margin: 5% 0;
+	margin-top: 5%;
+	height: 15%;
 }
+
+div.recruit_body {
+	position: relative;
+}
+
+div.recruit_footer {
+	position: relative;
+} 
 
 div.recruit_info {
 	margin: 5% 0;
@@ -68,13 +77,17 @@ div.recruit_info span {
 }
 
 div.comment_area {
+	overflow-y: scroll;
+    overflow-x: hidden;
 	background-color: #282b34;
 	border-radius: 4px;
 	padding: 5% 5%;
+	height: 45%;
 }
 
 div.comment {
 	position: relative;
+	margin: 5% 0;
 }
 
 button.add_button {
@@ -88,22 +101,54 @@ button.add_button {
 	margin: 0;
 }
 
-div.comment button.mainbtn.minbtn {
+div.comment .mainbtn.minbtn {
 	position: absolute;
 	bottom: 0;
 	right: 0;
 }
 
 div.recomment {
+	position: absolute;
 	width: 90%;
-	margin: 3% 0%;
 }
 
-.mainbtn {
+div.comment_ask, div.comment_reply{
+	height: 18%;
+	position: relative;
+	margin: 5% 0;
+}
+
+div.comment_reply{
+	height: 45%;
+	position: relative;
+	margin: 5% 0;
+}
+
+div.comment_ask .mainbtn{
 	position: absolute;
-	bottom: 0;
+	bottom: 0;	
 	right: 0;
 }
+
+div.comment_reply .mainbtn{
+	position: absolute;
+	bottom: 0;	
+	right: 0;
+}
+
+div.reply_right{
+	position: absolute;
+	right: 0;
+	width: 90%;
+}
+
+textarea, hr{
+	border: 1px solid white;
+	font-family: 'Noto Sans KR', sans-serif;
+	opacity: 0.5;
+}
+
+
 </style>
 </head>
 <body>
@@ -128,78 +173,144 @@ div.recomment {
 				</div>
 
 				<div class="recruit_info">
-					<span><i class="bi bi-geo-alt-fill"></i> 서울 금천구</span> <span><i
-						class="bi bi-people-fill"></i> 23명</span> <span><i
-						class="bi bi-fonts"></i> 312개</span> <span><i
-						class="bi bi-calendar-event"></i> 2024-10-14</span>
+					<span><i class="bi bi-geo-alt-fill">서울 금천구</i></span> 
+					<span><i class="bi bi-people-fill">23명</i></span>
+					<span><i class="bi bi-fonts">312개</i></span> 
+					<span><i class="bi bi-calendar-event">2024-10-14</i></span>
 				</div>
 
 			</div>
 
+			<div class="recruit_body">
+				<hr />
+					<div>크루 소개글</div>
+				<hr />
 
-			<hr />
-			<div>크루 소개글</div>
-			<hr />
-
-			<!-- 버튼 크기 최대 -->
-			<!-- [input type="submit"]에도 동일하게 적용 가능 -->
-
-			<button class="mainbtn full">크루 입단 신청하기</button>
-
-			<!-- //버튼 크기 최대 -->
-
+				<div>
+					<button class="mainbtn full">크루 입단 신청하기</button>
+				</div>	
+			</div>
+			
 			<!-- 기본 입력창 -->
 			<!-- class="full": width=100% -->
-			<div class="comment">
-				<h3 class="capt">
-					<i class="bi bi-chat-left-fill"></i>&nbsp;문의하기
-				</h3>
-				<p>
-					<textarea class="full" name="comment"></textarea>
-				</p>
-				<button class="mainbtn">작성하기</button>
-			</div>
-			<!-- //기본 입력창 -->
-
-
-			<div class="comment_area">
-				<div class="comment">
-					문의댓글 뿌려줄 영역입니다.
-					<button type="button" class="add_button">
-						<i class="bi bi-three-dots-vertical"></i>
-					</button>
-					<button class="mainbtn minbtn">답변하기</button>
-					<br /> 1234 <br /> 5678
+			<div class="recruit_footer">
+				<div class="comment_ask">
+					<h3 class="capt">
+						<i class="bi bi-chat-left-fill"></i>&nbsp;문의하기
+					</h3>
+					<p>
+						<textarea class="full" name="comment">최대 1,000자까지 입력할 수 있습니다.</textarea>
+					</p>
+					<button class="mainbtn">작성하기</button>
 				</div>
-				<hr />
-				<div class="comment">
-					문의댓글 뿌려줄 영역2입니다.
-					<button type="button" class="add_button">
-						<i class="bi bi-three-dots-vertical"></i>
-					</button>
-					<button class="mainbtn minbtn">답변하기</button>
-
-					<br /> 9101112 <br /> 13141516
+				<!-- //기본 입력창 -->
+	
+	
+				<div class="comment_area">
+					<div>
+						<div class="comment">
+							문의댓글 뿌려줄 영역입니다.
+							<button type="button" class="add_button">
+								<i class="bi bi-three-dots-vertical"></i>
+							</button>
+							<button class="mainbtn minbtn">답변하기</button>
+							<br /> 1234 <br /> 5678
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div class="comment">
+							문의댓글 뿌려줄 영역입니다.
+							<button type="button" class="add_button">
+								<i class="bi bi-three-dots-vertical"></i>
+							</button>
+							<button class="mainbtn minbtn">답변하기</button>
+							<br /> 1234 <br /> 5678
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div class="comment">
+							문의댓글 뿌려줄 영역입니다.
+							<button type="button" class="add_button">
+								<i class="bi bi-three-dots-vertical"></i>
+							</button>
+							<button class="mainbtn minbtn">답변하기</button>
+							<br /> 1234 <br /> 5678
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div class="comment">
+							문의댓글 뿌려줄 영역입니다.
+							<button type="button" class="add_button">
+								<i class="bi bi-three-dots-vertical"></i>
+							</button>
+							<button class="mainbtn minbtn">답변하기</button>
+							<br /> 1234 <br /> 5678
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div class="comment">
+							문의댓글 뿌려줄 영역2입니다.
+							<button type="button" class="add_button">
+								<i class="bi bi-three-dots-vertical"></i>
+							</button>
+							<button class="mainbtn minbtn">답변하기</button>
+		
+							<br /> 9101112 <br /> 13141516
+						</div>
+						
+						<div class="comment_reply">
+							<div class="reply_right">
+								<h3 class="capt">
+									<i class="bi bi-arrow-return-right"></i>&nbsp;답변하기
+								</h3>
+								<p>
+									<textarea name="comment" class="recomment">최대 1,000자까지 입력할 수 있습니다.</textarea>
+								</p>
+							</div>
+							<button class="mainbtn">작성하기</button>
+						</div>
+					</div>	
 				</div>
-
-				<!-- 경고 -->
-
-			</div>
-			<div class="recomment">
-				<h3 class="capt">
-					<i class="bi bi-arrow-return-right"></i>&nbsp;답변하기
-				</h3>
-				<p>
-					<textarea class="full" name="comment"></textarea>
-				</p>
-				<!-- <p class="confirm"><input type="password" class="full caution" name="pwconfirm" /></p> -->
-				<!--  <h3 class="msg caution">비밀번호와 비밀번호 확인 값은 동일해야 합니다.</h3> -->
-				<button class="mainbtn">작성하기</button>
-			</div>
+			</div>			
 		</div>
 
 	</div>
 	<c:import url="layout/modal.jsp"></c:import>
 </body>
 <script src="resources/js/common.js"></script>
+<script>
+	
+	var idx = <%= request.getParameter("idx") %>;
+	console.log('idx : ', idx);
+;	
+	if(idx != '' && idx != null){
+		// 1. 모집게시글 Header 정보가져오기
+		detail(idx);					
+	}else{
+		modal.showAlert('모집게시글 idx를 받아오지 못했습니다.');
+	}
+	
+	function detail(idx){
+		$.ajax({
+			url : 'crew_recruit_detail.ajax',
+			type : 'GET',
+			data : {
+				'idx' : idx
+			},
+			dataType : 'JSON',
+			success : function(data){
+				console.log('data : ', data);
+			},
+			error : function(e){
+				console.log(e); // 에러가 보이지 않도록 추후 처리필요?
+	            modal.showAlert('모집게시글 정보가져오기 실패.');	
+			}
+		});
+	}
+</script>
+
 </html>
