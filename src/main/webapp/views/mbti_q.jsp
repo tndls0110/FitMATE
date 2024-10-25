@@ -87,16 +87,16 @@
 			flex-direction: row;
 		}
 
-		.prev {
-			width: 220px;
-			height: 50px;
-			border-radius: 5px;
-			background-color: rgba(233, 236, 239, 1);
-			padding: 15px 10px 10px 10px;
-			color: rgba(40, 43, 52, 1);
-			font-weight: bold;
-			text-align: center;
-		}
+		/*.prev {*/
+		/*	width: 220px;*/
+		/*	height: 50px;*/
+		/*	border-radius: 5px;*/
+		/*	background-color: rgba(233, 236, 239, 1);*/
+		/*	padding: 15px 10px 10px 10px;*/
+		/*	color: rgba(40, 43, 52, 1);*/
+		/*	font-weight: bold;*/
+		/*	text-align: center;*/
+		/*}*/
 
 		.next {
 			width: 220px;
@@ -104,7 +104,7 @@
 			border-radius: 5px;
 			background-color: rgba(4, 129, 135, 1);
 			padding: 15px 10px 10px 10px;
-			margin-left: 30px;
+			margin-left: 276px;
 			font-weight: bold;
 			text-align: center;
 		}
@@ -139,7 +139,6 @@
 			</div>
 
 			<div id="prev_next_div">
-				<div class="prev">← 이전 질문</div>
 				<!--이미지로 넣기-->
 				<div class="next" onclick="load_nextPage(currentQuestionIdx)">다음 질문 →</div>
 				<!--이미지로 넣기-->
@@ -255,6 +254,7 @@
 
 						//로딩 문구 빼는 부분 ======================================================
 						$('.loading_context').remove();
+
 
 						//option 박스를 추가하는 부분 ==========================================
 						$('#main_option').append(optiondiv);
@@ -459,7 +459,6 @@
 		if(Object.keys(selectedScore).length != 0){//selectedScores에 값이 있는지 보는 방법 -> keys를 구한 다음 그 길이가 0이 아니면 됨
 							//자바스크립트의 객체는 .size나 .length를 쓸 수 없음
 
-
 			//질문의 번호에 해당하는 값이 없으면 막아야함
 			if(selectedScore[QuestionIdx] != null){
 				nextPageidentifier++;
@@ -473,9 +472,12 @@
 							//질문의 개수 구하기
 
 							//만약에 currentIdx <질문의 개수
-							if(nextPageidentifier != data.count){ //근데 만약에 질문 idx가 삭제되면????? ->
+
+
 								//이전 페이지 질문은 remove되게 하기
+								console.log('nextPageidentifier : ',nextPageidentifier);
 								$('#main_option').empty();
+
 								$.ajax({
 									type : 'GET',
 									url : '/nextPageIdx.ajax',
@@ -485,20 +487,26 @@
 										console.log(result.idx);
 										if(selectedScore)
 												//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
-											currentQuestionIdx = result.idx;
-										minQuestionIdx = result.idx;
-										console.log(currentQuestionIdx);
-										console.log(minQuestionIdx);
-										//저장하고 나서
-										isInitialLoad = false;
-										loadQuestion(currentQuestionIdx); //idx 값을 기반으로
-										drawOption(currentQuestionIdx);
+											currentQuestionIdx = result.idx; //이전 페이지 idx 다음 idx 값 가져오기
+											console.log(currentQuestionIdx);
+											console.log(minQuestionIdx);
+											//저장하고 나서
+											isInitialLoad = false;
+											loadQuestion(currentQuestionIdx); //idx 값을 기반으로 //얘가 밑에 있는 문제..
+											drawOption(currentQuestionIdx);
+											if(nextPageidentifier == data.count){ //근데 만약에 질문 idx가 삭제되면????? 해결 nextPageidentifier
+												//마지막이어도 점수는 합산 + save되어야 함
+
+												$('.next').html('결과 보기');
+												$('.next').attr('onclick','goToResultPage(scores)'); //속성으로 들어간 함수 바꾸기 (onclick 속성 안의 함수 바꾸기)
+
+												console.log('onclick :', onclick);
+												//결과 보기 버튼 누를 때 initialze 다시 true 상태로 바꾸기
+												// -> 함수 바꾸기 $('.next').attr('onclick');
+											}
 									}
 								});
-							}else{
-								$('.next').html('결과 보기');
-								// -> 함수 바꾸기 $('.next').attr('onclick');
-							}
+
 					},
 					error : function (e){
 
@@ -517,7 +525,25 @@
 	}
 
 
+	function goToResultPage(scores){
+		console.log('결과 버튼 눌림');
+		console.log('scores 받아온 값 :',scores);
+		//값들을 전부 전달하고...이 값으로 return??
 
+		$.ajax({
+			type : 'GET',
+			url : '/mbtiR.go',
+			data : scores,
+			dataType : 'JSON',
+			success : function (){
+				console.log('mbtiR.go 전송 성공');
+			},
+			error : function (e){
+				console.log(e);
+			}
+		});
+
+	}
 
 </script>
 
