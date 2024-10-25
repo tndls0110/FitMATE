@@ -9,6 +9,7 @@ import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.crew.dto.CrewReplyDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 
@@ -34,30 +35,10 @@ public interface CrewDAO {
 	int crew_create_rewrite_region(int regions_idx, int board_idx);
 
 	CrewSearchListDTO recruitDetail(int board_idx);
+	
+	List<CrewAskDTO> ask(int board_idx);
 
-	CrewAskDTO recruitComment(int board_idx);
+	CrewReplyDTO reply(int comment_idx);
+
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
