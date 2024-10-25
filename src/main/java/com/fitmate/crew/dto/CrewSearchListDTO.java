@@ -1,6 +1,6 @@
 package com.fitmate.crew.dto;
 
-import java.io.File;
+import java.sql.Date;
 
 public class CrewSearchListDTO {
 
@@ -28,8 +28,25 @@ public class CrewSearchListDTO {
 	private String leader_profile;
 	// 크루장 mbti
 	private String leader_mbti;
+	// 전체 게시글 수
+	private int board_count;
+	// 크루 생성일
+	private Date create_date;
 	
 	
+	
+	public Date getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(Date create_date) {
+		this.create_date = create_date;
+	}
+	public int getBoard_count() {
+		return board_count;
+	}
+	public void setBoard_count(int board_count) {
+		this.board_count = board_count;
+	}
 	public String getLeader_nick() {
 		return leader_nick;
 	}

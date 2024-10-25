@@ -1,5 +1,6 @@
 package com.fitmate.crew.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.CrewBoardDTO;
@@ -14,6 +16,7 @@ import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.crew.dto.CrewReplyDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 
@@ -128,56 +131,42 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 
 	
 	// 모집글 상세조회
-	public CrewSearchListDTO recruitDetail(String idx) {
+	@Transactional
+	public Map<String, Object> recruitDetail(String idx) {
 		int board_idx = 0;
+		int comment_idx = 0;
+		CrewReplyDTO replyDTO = null;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if(idx != null && !idx.equals("")) {
 			board_idx = Integer.parseInt(idx);
 		}
 		
+		// 1. 모집게시글 내용가져오기
 		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
+		map.put("recruitDetail", recruitDetailDTO);
 		
-		CrewAskDTO commentDTO = crew_dao.recruitComment(board_idx);
 		
-		return recruitDetailDTO;
+		// 2. 댓글 내용가져오기
+		List<CrewAskDTO> commentDTO = crew_dao.ask(board_idx);
+		
+		for (CrewAskDTO crewAskDTO : commentDTO) {
+			logger.info("comment_idx : " + crewAskDTO.getComment_idx());
+			// 3. 댓글 idx로 대댓글 내용가져오기.
+			comment_idx = crewAskDTO.getComment_idx();
+			
+			replyDTO = crew_dao.reply(comment_idx);
+			// 대댓글이 존재하면, 댓글DTO에 삽입. (List -> DTO -> DTO)
+			if(replyDTO != null && replyDTO.isValid()) {
+				crewAskDTO.setRecomment_chk(1);
+				crewAskDTO.setReplyDTO(replyDTO);
+			}
+		}
+		map.put("commentAll", commentDTO);
+		
+		return map;
 	} 
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
