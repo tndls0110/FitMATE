@@ -29,6 +29,9 @@
 						<button type="button" class="full mainbtn" onclick="updatepw()">수정하기</button>
 					</div>
 				</form>
+				<div class="list">
+					<button onclick="location.href='member_update.go'" class="full subbtn">돌아가기</button>
+				</div>
 			</div>
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>

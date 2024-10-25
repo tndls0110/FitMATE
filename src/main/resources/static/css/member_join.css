@@ -13,11 +13,40 @@ h3.capt .required{
     height: 120px;
     border-radius: 50%;
     margin: 0 auto 20px 0;
+    font-size: 120px;
     overflow: hidden;
+}
+
+.img_preview i{
+    font-size: 120px;
 }
 
 .img_preview div{
     width: inherit;
     height: inherit;
     background-size: cover;
+}
+
+.statics{
+    margin: 20px 0 32px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.showLength{
+    position: relative;
+}
+
+.showLength .capt{
+    margin: 0;
+    text-align: right;
+    position: absolute;
+    bottom: -3px;
+    right: 0;
+}
+
+.showLength .capt span{
+    color: #47C0C6;
+    font-weight: 700;
+    opacity: 1;
 }

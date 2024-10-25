@@ -5,6 +5,8 @@ import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -103,7 +105,6 @@ public class MemberController {
 	@RequestMapping (value = "/member_join.do")
 	public String join(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model) {
 		page = "member_join";
-		logger.info("files at controller: "+profile);
 		if (member_service.join(profile, params)){
 			model.addAttribute("msg", params.get("nick")+"님, 환영합니다. 로그인하세요.");
 			model.addAttribute("user_id", params.get("user_id"));
@@ -128,8 +129,8 @@ public class MemberController {
 	// 내 프로필 보기
 	@RequestMapping (value = "/member_profile.go")
 	public String profile(Model model, HttpSession session) {
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
+		//checkPermit(model, session);
+		String user_id = (String) session.getAttribute("loginId");
 		model.addAttribute("list", member_service.profile(user_id));
 		return "member_profile";
 	}
@@ -137,8 +138,9 @@ public class MemberController {
 	// 정보 수정하기
 	@RequestMapping (value = "/member_update.go")
 	public String update(Model model, HttpSession session) {
+		//checkPermit(model, session);
 		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
+		String user_id = "member06";
 
 		// 프로필 불러오기
 		MemberDTO profile = member_service.profile(user_id);
@@ -150,6 +152,33 @@ public class MemberController {
 		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
 		model.addAttribute("region2", list);
 		return "member_update";
+	}
+
+	@RequestMapping (value = "/member_checknick_ex.ajax")
+	@ResponseBody
+	public Map<String, Object> checknickEx(String nick, HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member06";
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (nick.equals(member_service.findnick(user_id))) {
+			result.put("check_nick", true);
+		} else {
+			result.put("check_nick", member_service.checknick(nick));
+		}
+		return result;
+	}
+
+	@RequestMapping (value = "/member_update.do")
+	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model) {
+		page = "member_update";
+		logger.info("params: {}", params);
+//		if (member_service.update(profile, params)){
+//			model.addAttribute("msg", "정보가 수정되었습니다.");
+//			page = "member_profile";
+//		} else {
+//			model.addAttribute("msg", "정보 수정 과정에 문제가 발생했습니다. 다시 시도하세요.");
+//		}
+		return page;
 	}
 
 	// 비밀번호 변경

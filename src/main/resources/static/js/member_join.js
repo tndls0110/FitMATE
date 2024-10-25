@@ -139,6 +139,16 @@ function readFile(input){
     }
 }
 
+// 소개글 작성시 글자수 출력
+function drawLength(elem) {
+    $(elem).removeClass('caution').addClass('pass');
+    $(elem).parent('p').next('.showLength').children('h3').children('span').html(elem.value.length);
+    if (elem.value.length >= $(elem).attr('maxlength')){
+        $(elem).removeClass('pass').addClass('caution');
+        modal.showAlert("최대 1,000자까지 입력할 수 있습니다.");
+    }
+}
+
 // 지역 출력
 function onOptionChange(event){
     var region_idx = event.target.value;
@@ -164,6 +174,7 @@ function drawRegion(list) {
     $('select[name="region2"]').append(tags);
 }
 
+// 제출
 function join() {
     var user_id = $('input[name="user_id"]').val();
     var pw = $('input[name="pw"]').val();

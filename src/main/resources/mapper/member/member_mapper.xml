@@ -56,6 +56,11 @@
         FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
     </select>
 
+    <!-- 정보 수정 -->
+    <select id="findnick" resultType="String">
+        SELECT nick FROM member WHERE user_id = #{user_id}
+    </select>
+
     <!-- 비밀번호 변경 -->
     <update id="updatepw">
         UPDATE member SET pw = #{pw} WHERE user_id = #{user_id}
