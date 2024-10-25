@@ -5,14 +5,14 @@
 
 <mapper namespace="com.fitmate.crew.dao.CrewPageDAO">
 
-<select id="report_list" resultType="com.fitmate.admin.dto.ReportDTO">
+<select id="report_list" resultType="com.fitmate.admin.dto.RegReportDTO">
 	select * from report_reason
 </select>
 
 <insert id="crew_notice_write" useGeneratedKeys="true"
 		keyColumn="board_idx" keyProperty="board_idx"
-		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,subject,category_idx)
-		value(#{board_id},#{subject},4); </insert>
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
+		value(#{board_id},#{content},4); </insert>
 <insert id="notice_write_crewidx" parameterType="com.fitmate.crew.dto.CrewIdxDTO">
 	insert into crew_idx (crew_idx,board_idx) value (#{crew_idx},#{board_idx})
 </insert>
@@ -69,5 +69,31 @@
 	UPDATE crew_board set status = 1 where board_idx = #{param1}
 </update>
 
+<insert id="crew_photo_write" useGeneratedKeys="true"
+		keyColumn="board_idx" keyProperty="board_idx"
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
+		value(#{board_id},#{content},3); </insert>
+<insert id="photofile_write">
+	insert into board_file (board_idx,ori_filename,new_filename,category_idx)
+	value(#{param1},#{param2},#{param3},2)
+</insert>
+
+<select id="crew_photo" resultType="com.fitmate.crew.dto.CrewFileDTO" >
+	select * from board_file where board_idx = #{param1}
+</select>
+<select id="crew_photo_detail" resultType="com.fitmate.crew.dto.CrewBoardDTO">
+	select * from crew_board where board_idx = #{param1}
+</select>
+<!-- 크루페이지에서 회원 프로필 정보와 회원 정보 가져오기 -->
+<select id="crew_getprofile" parameterType="com.fitmate.member.dto.MemberDTO" resultType="com.fitmate.member.dto.MemberDTO">
+	SELECT *
+    FROM member m
+    LEFT JOIN profile p ON m.user_id = p.user_id
+    WHERE m.user_id = #{user_id}
+</select>
+
+<delete id="crew_photofile_del">
+	delete from board_file where board_idx = #{param1}
+</delete>
 
 </mapper>

@@ -97,7 +97,7 @@
                         
                         	<!-- 너비 설정 -->
                             <div class="width80p">
-                                <input type="text" class="full flex_left" name="subject" id="subjectInput"/>
+                                <input type="text" class="full flex_left" name="content" id="subjectInput"/>
                             </div>
                             <div class="width20p">
                                 <button class="mainbtn full flex_right"id="submitButton" disabled>작성하기</button>
@@ -154,7 +154,7 @@
 	
 	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
 	// const isCrewLeader = ${isCrewLeader};
-	const isCrewLeader = false;
+	const isCrewLeader = true;
 	// 크루장이면 작성하기 폼 보여주기
 	if (isCrewLeader) {
         document.getElementById('crewleader').style.display = 'block';
@@ -217,7 +217,7 @@
 	                	    }
 	                	
 	                    tbody.append('<tr><td>' + item.board_idx 
-	                    		+ '</td><td>' + item.subject
+	                    		+ '</td><td>' + item.content
 	                    		+ '</td><td>' +item.board_id
 	                    		+ '</td><td>' +item.date
 	                    		+ '</td><td>' + deleteButton + '</td></tr>'
