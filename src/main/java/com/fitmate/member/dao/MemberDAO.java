@@ -28,6 +28,9 @@ public interface MemberDAO {
     // 내 프로필 조회
     MemberDTO profile(String user_id);
 
+    // 정보 수정
+    String findnick(String user_id);
+    
     // 비밀번호 변경
     void updatepw(String user_id, String pw);
 

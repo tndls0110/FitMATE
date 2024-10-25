@@ -6,7 +6,6 @@
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
-		<link rel="stylesheet" type="text/css" href="resources/css/member_update.css">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
@@ -18,6 +17,7 @@
 					<div class="list">
 						<h3 class="capt">아이디 <span class="required">(변경 불가)</span></h3>
 						<p class="statics">${list.user_id}</p>
+						<input type="hidden" name="user_id" value="${list.user_id}" />
 					</div>
 					<div class="list">
 						<h3 class="capt">비밀번호 <span class="required">(필수)</span></h3>
@@ -56,9 +56,11 @@
 					<div class="list">
 						<h3 class="capt">프로필</h3>
 						<p>
-							<div class="profImg">
+							<div class="img_preview">
 								<c:if test="${list.profile == ''}">
-									<i class="bi bi-person-square"></i>
+									<div>
+										<i class="bi bi-person-circle"></i>
+									</div>
 								</c:if>
 								<c:if test="${list.profile != ''}">
 									<div style="background-image: url('/photo/${list.profile}');"></div>
@@ -66,10 +68,17 @@
 							</div>
 						</p>
 						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
+						<input type="hidden" name="initProfile_value" value="" />
+						<c:if test="${list.profile != ''}">
+							<button type="button" onclick="initProfile()" class="subbtn full">프로필 삭제</button>
+						</c:if>
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><textarea class="full" name="status" rows="3" maxlength="1000">${list.status}</textarea></p>
+						<p><textarea class="full" name="status" rows="3" maxlength="1000" onkeyup="drawLength(this)">${list.status}</textarea></p>
+						<div class="showLength">
+							<h3 class="capt"><span>0</span>/1,000</h3>
+						</div>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>
@@ -105,7 +114,7 @@
 					</div>
 				</form>
 				<div class="list">
-					<button onclick="/member_profile.go" class="full subbtn">돌아가기</button>
+					<button onclick="location.href='member_profile.go'" class="full subbtn">돌아가기</button>
 				</div>
 			</div>
 		</div>

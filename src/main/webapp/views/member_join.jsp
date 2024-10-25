@@ -4,9 +4,9 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>FitMATE</title>
-		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -61,7 +61,10 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">상태 메시지</h3>
-						<p><textarea class="full" name="status" rows="3" maxlength="1000"></textarea></p>
+						<p><textarea class="full" name="status" rows="3" maxlength="1000" onkeyup="drawLength(this)"></textarea></p>
+						<div class="showLength">
+							<h3 class="capt"><span>0</span>/1,000</h3>
+						</div>
 					</div>
 					<div class="list">
 						<h3 class="capt">주로 운동하는 지역</h3>
