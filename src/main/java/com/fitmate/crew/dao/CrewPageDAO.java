@@ -4,16 +4,19 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.fitmate.admin.dto.RegReportDTO;
 import com.fitmate.admin.dto.ReportDTO;
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
+import com.fitmate.crew.dto.CrewFileDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.member.dto.MemberDTO;
 
 @Mapper
 public interface CrewPageDAO {
 
-	List<ReportDTO> report_list();
+	List<RegReportDTO> report_list();
 
 	int crew_notice_write(CrewBoardDTO board_dto);
 
@@ -40,5 +43,19 @@ public interface CrewPageDAO {
 	int crew_oneboard_blind(String board_idx);
 
 	int crew_oneboard_unblind(String board_idx);
+
+	int photofile_write(int board_idx, String ori_filename, String new_filename);
+
+	int crew_photo_write(CrewBoardDTO board_dto);
+
+	CrewBoardDTO crew_photo_detail(String board_idx);
+
+	CrewFileDTO crew_photo(String board_idx);
+
+	MemberDTO crew_getprofile(MemberDTO member_dto);
+
+	int crew_photofile_del(String board_idx);
+
+	
 	
 }
