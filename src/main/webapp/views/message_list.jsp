@@ -103,6 +103,12 @@
 						</select>
 						<input type="text" class="searchKeyword" name="searchKeyword" placeholder="ID 혹은 닉네임을 선택해 입력하세요." />
 						<button type="button" onclick="search()">검색</button>
+						
+						<!-- 검색후 나와 채팅한 사람들이 나올 영역  -->
+						<div class = "Chatlist">
+						
+						</div>
+						
 					</div>	
 				</div>	
 			</div>	
