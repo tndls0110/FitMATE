@@ -1,6 +1,11 @@
 package com.fitmate.crew.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fitmate.admin.dto.RegReportDTO;
 import com.fitmate.admin.dto.ReportDTO;
 import com.fitmate.crew.dao.CrewPageDAO;
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
+import com.fitmate.crew.dto.CrewFileDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.member.dto.MemberDTO;
 
 @Service
 public class CrewPageService {
@@ -23,13 +32,13 @@ public class CrewPageService {
 	
 	@Autowired CrewPageDAO crewpage_dao;
 	
-	public List<ReportDTO> report_list() {
+	public List<RegReportDTO> report_list() {
 		
 		return crewpage_dao.report_list();
 	}
 	
 	@Transactional
-	public int crew_notice_write(String subject, String board_id, int crew_idx) {
+	public int crew_notice_write(String content, String board_id, int crew_idx) {
 		
 		int suc = 0;
 		
@@ -38,12 +47,13 @@ public class CrewPageService {
 		CrewMemberDTO member_dto = new CrewMemberDTO();
 		
 		board_dto.setBoard_id(board_id);
-		board_dto.setSubject(subject);
+		board_dto.setContent(content);
 		// 크루 최근 활동시간 바꿔주기
 		crewpage_dao.crew_lastdate_update(crew_idx);
 
-		
+		// 공지사항이 작성되면
 		if(	crewpage_dao.crew_notice_write(board_dto)>0) {
+			// 게시글(타입:공지사항)이 작성되면 board_idx를 crew_idx와 맞춰주는 작업 == 어느 크루의 게시물인지 식별하기 위해서
 			int board_idx = board_dto.getBoard_idx();
 			crewidx_dto.setBoard_idx(board_idx);
 			crewidx_dto.setCrew_idx(crew_idx);
@@ -51,6 +61,7 @@ public class CrewPageService {
 			crewpage_dao.notice_write_crewidx(crewidx_dto);
 			suc = 1;	
 			
+			// 새로운 공지사항이 작성되면 알람 보내기
 			crew_notice_noti(board_idx,crew_idx);
 			
 		};		
@@ -60,6 +71,7 @@ public class CrewPageService {
 	}
 	
 	// 부모트랜잭션에 자식트랜잭션이 영향끼치지않기 트랜잭션 제외시키기?
+	// 공지사항 작성시 해당 크루원들에게 알람보내기
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void crew_notice_noti(int board_idx, int crew_idx) {
 		
@@ -72,9 +84,9 @@ public class CrewPageService {
 		logger.info("name = "+name);
 		String crewidx = Integer.toString(crew_idx);
 		
-		// 공지 내용
+		// 알람 내용
 		String noti_content = name+" 크루의 새로운 공지사항 갱신";
-		// url 주소
+		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
 		String noti_url = crewidx+"=url주소";
 		// 크루원 목록 가져오기
 		List<CrewMemberDTO> member_list = crewpage_dao.crew_member_list(crew_idx);
@@ -105,6 +117,7 @@ public class CrewPageService {
 	
 	@Transactional
 	public void crew_oneboard_write(String content, String board_id, int crew_idx) {
+		
 		CrewBoardDTO board_dto = new CrewBoardDTO();
 		CrewIdxDTO crewidx_dto = new CrewIdxDTO();
 		
@@ -151,10 +164,94 @@ public class CrewPageService {
 		
 	}
 	
-	// 사진 게시글 작성하기
+	// 사진 게시글 작성하기 c드라이브 업로드폴더에 넣기
 	public void crew_photo_write(MultipartFile file, String content, String board_id, int crew_idx) {
 		
+		CrewBoardDTO board_dto = new CrewBoardDTO();
+		// 크루 idx 테이블에 넣을 dto = board_idx + crew_idx 합쳐주기위함 // 어떤 크루의 게시글인지 식별하기 위해서
+		CrewIdxDTO crewidx_dto = new CrewIdxDTO();
 		
-	}
+		board_dto.setBoard_id(board_id);
+		board_dto.setContent(content);
+		// 크루 최근 활동시간 바꿔주기
+		crewpage_dao.crew_lastdate_update(crew_idx);
 
-}
+		
+		if(	crewpage_dao.crew_photo_write(board_dto)>0) {
+			
+			int board_idx = board_dto.getBoard_idx();
+			crewidx_dto.setBoard_idx(board_idx);
+			crewidx_dto.setCrew_idx(crew_idx);
+			
+			// 크루idx 와 보드idx 합쳐주기 이름은 notice_write_crewidx 이지만 phto_write 와 로직은 동일하다
+			crewpage_dao.notice_write_crewidx(crewidx_dto);
+			
+			// 파일 저장하는 로직
+			if (!file.isEmpty()) {
+	            
+				try {
+					// 파일 처리 로직 (저장, DB에 저장 등)
+		            String ori_filename = file.getOriginalFilename();
+		            // 파일 저장하는 코드 추가
+		            String ext = ori_filename.substring(ori_filename.lastIndexOf("."));				
+					logger.info(ext);
+					String new_filename = UUID.randomUUID()+ext;
+					Path path = Paths.get("C:/upload/"+new_filename);
+					logger.info("ori이름,new이름 = "+ori_filename+new_filename);
+					
+					byte[] arr = file.getBytes();
+					Files.write(path,arr);
+					crewpage_dao.photofile_write(board_idx,ori_filename,new_filename);
+					
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}	
+	        }
+		};		
+		
+		
+	} // public void crew_photo_write(MultipartFile file, String content, String board_id, int crew_idx)
+	
+	// 사진 게시글 상세보기
+	public void crew_photo_detail(String board_idx, Model model) {
+		CrewBoardDTO board_dto = new CrewBoardDTO();
+		CrewFileDTO file_dto = new CrewFileDTO();
+		MemberDTO member_dto = new MemberDTO();
+		// 사진 게시글 정보 board_dto에 담아서 가져오기
+		board_dto =	crewpage_dao.crew_photo_detail(board_idx);
+		// 사진 정보 가져오기
+		file_dto = crewpage_dao.crew_photo(board_idx);
+		// 회원 정보 가져오기
+		String user_id =board_dto.getBoard_id();
+		member_dto.setUser_id(user_id);
+		
+		// 프로필 정보 와 회원 정보 합쳐서 가져오기
+		member_dto = crewpage_dao.crew_getprofile(member_dto);
+
+		
+		logger.info("멤버 프로필 정보 = "+member_dto.getProfile());
+		
+		model.addAttribute("file", file_dto);
+		model.addAttribute("board", board_dto);
+		model.addAttribute("member", member_dto);
+		
+	
+	} // 사진게시글 상세보기 public void crew_photo_detail(String board_idx, Model model)
+	
+	
+	// 크루 사진 게시글 삭제하기
+	// 이름은 notice이지만 게시글 삭제 로직은 같다 
+	@Transactional
+	public void crew_photo_del(String board_idx) {
+		crewpage_dao.notice_del_crewidx(board_idx);
+		crewpage_dao.crew_notice_del(board_idx);
+		// 추가한 코드 사진파일 db 정보 없애주기
+		crewpage_dao.crew_photofile_del(board_idx);
+			
+	}
+	
+
+	
+} // public class CrewPageService 

@@ -3,13 +3,13 @@ package com.fitmate.crew.dto;
 import java.util.Date;
 
 public class CrewBoardDTO {
-	int board_idx;
-	String board_id;
-	String subject;
-	String content;
-	Date date;
-	int status;
-	int category_idx;
+	private	int board_idx;
+	private	String board_id;
+	private	String subject;
+	private	String content;
+	private	Date date;
+	private	int status;
+	private	int category_idx;
 	public int getBoard_idx() {
 		return board_idx;
 	}
