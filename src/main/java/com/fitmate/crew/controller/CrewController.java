@@ -109,13 +109,18 @@ public class CrewController {
 	// 3-1. 크루 모집글 상세정보 조회
 	@GetMapping(value = "/crew_recruit_detail.ajax")
 	@ResponseBody 
-	public CrewSearchListDTO recruitDetail(String idx){
+	public Map<String, Object> recruitDetail(String idx){
 		
-		CrewSearchListDTO recruitDetail = crew_service.recruitDetail(idx);
-	 
+		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx);
+		
 		return recruitDetail; 
 	}
 	
+	// 3-2. 크루 모집글 - 문의댓글 내용저장
+	@PostMapping(value="/crew_recruit_detail.replyDo")
+	public String replyWrite() {
+		return "redirect:/crew_recruit_detail";
+	}
 	
    // 1. 내 크루 페이지
    @RequestMapping(value = "/mycrew")
@@ -140,38 +145,3 @@ public class CrewController {
 
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-	
-	
-	
