@@ -6,6 +6,14 @@
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	
+	<style>
+	.mainbtn.selected {
+    background-color: #007bff; /* 선택된 버튼의 배경색 */
+    color: white; /* 선택된 버튼의 글자색 */
+}
+	</style>
+	
 	</head>
 	<body>
 		<div class="container">
@@ -25,6 +33,7 @@
 				<!-- 폼 -->
                 <form action="crew_create.do" method="post">
            			<input type="hidden" name="crew_id" value="member01">
+           			<input type="hidden" name="reportr_idx" id="reportr_idx_input" value="">
                     <!-- 경고 -->                     
                     <!-- 통과 -->
                     <div class="list">
@@ -55,40 +64,53 @@
 		</div>
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
-	<script src="resources/js/common.js">
-		var show = 1;
-		
-		reportCall(show);
 	
-	function reportCall(result){
-	$.ajax({
-		type:'GET',
-		url:'crew_report.ajax',
-		data:{
-					
-		},
-		datatype:'JSON',
-		success:function(data){
-			console.log(data);
-			if (data.reportlist) {
-                drawList(data.reportlist);
-            } else {
-                console.error("보고서 리스트가 없습니다.");
+<script>
+    var show = 1;
+
+    // 초기 호출
+    reportCall(show);
+
+    function reportCall(result) {
+        $.ajax({
+            type: 'GET',
+            url: 'crew_report.ajax',
+            data: {}, // 추가 데이터가 필요하다면 여기에 작성
+            dataType: 'JSON', // 응답 데이터 형식
+            success: function(data) {
+                console.log('AJAX 시작');
+                console.log(data);
+                drawList(data); // 데이터 목록 그리기
+            },
+            error: function(e) {
+                console.log(e); // 오류 발생 시 콘솔에 출력
             }
-		},
-		error:function(e){
-			console.log(e);
-		}
-	});
-	}
-	 	
-	 function drawList(reportlist) {
-			var content ='';
-			reportlist.forEach(function(report,idx){ 
-				 content += '<button onclick="selectReason(this)" class="mainbtn" data-idx="' + report.reportr_idx + '">신고 사유: ' + report.reportr_con + '</button>';
-			});
-			$('#report').html(content);
-		}
-	 
-	</script>
+        });
+    }
+
+function drawList(report) {
+    var content = '';
+    report.forEach(function(item) { 
+        // 각 신고 항목에 대해 버튼 생성
+        content += '<button type="button" onclick="selectReason(this)" class="mainbtn" data-reportr-idx="' + item.reportr_idx + '">신고 사유: ' + item.reportr_con + '</button><br>';
+    });
+    $('#report').html(content); // 버튼을 #report 요소에 추가
+}
+
+// 선택된 버튼 처리
+function selectReason(selectedButton) {
+    // 모든 버튼의 상태를 초기화
+    $('.mainbtn').removeClass('selected'); // 선택된 클래스를 제거
+
+    // 선택된 버튼에 클래스 추가
+    $(selectedButton).addClass('selected'); // 현재 선택된 버튼에 클래스 추가
+
+    // 필요한 경우 추가 처리
+    console.log('선택된 신고 사유:', $(selectedButton).text());
+    
+    var reportr_idx = $(selectedButton).data('reportr-idx');
+    $('#reportr_idx_input').val(reportr_idx);
+}
+</script>
+	<script src="resources/js/common.js"></script>
 </html>

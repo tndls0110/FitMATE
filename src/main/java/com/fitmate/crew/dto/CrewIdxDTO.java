@@ -2,8 +2,8 @@ package com.fitmate.crew.dto;
 
 public class CrewIdxDTO {
 	
-	int	board_idx;
-	int crew_idx;
+	private	int	board_idx;
+	private	int crew_idx;
 	public int getBoard_idx() {
 		return board_idx;
 	}
