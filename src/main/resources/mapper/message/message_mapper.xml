@@ -4,3 +4,5 @@
 >
 
 <mapper namespace="com.fitmate.message.dao.MessageDAO"></mapper>
+
+
