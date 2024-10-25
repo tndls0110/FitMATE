@@ -24,10 +24,23 @@
 	font-size: 15%;
 }
 
-div.recruit_right {
+/* div.recruit_right {
 	position: absolute;
 	top: -4%;
 	left: 20%;
+	width: 80%;
+} */
+
+div.recruit_header .recruit_right{
+	position: absolute;
+	top: -4%;
+	left: 20%;
+	width: 80%;
+}
+.comment .recruit_right, .comment_reply .recruit_right{
+	position: absolute;
+	top: -4%;
+	left: 12%;
 	width: 80%;
 }
 
@@ -46,6 +59,7 @@ div.recruit_right span {
 	/* 줄바꿈 방지 */
 	white-space: nowrap;
 }
+
 
 h2.title {
 	margin: 0;
@@ -104,7 +118,7 @@ button.add_button {
 div.comment .mainbtn.minbtn {
 	position: absolute;
 	bottom: 0;
-	right: 0;
+	right: 10%;
 }
 
 div.recomment {
@@ -139,7 +153,7 @@ div.comment_reply .mainbtn{
 div.reply_right{
 	position: absolute;
 	right: 0;
-	width: 90%;
+	width: 90%; 
 }
 
 textarea, hr{
@@ -148,10 +162,43 @@ textarea, hr{
 	opacity: 0.5;
 }
 
+span.txt_opacity{
+	opacity: 0.5;	
+}
 
+button.reply_close{
+	/* display: block; */
+	position: absolute;
+	right: 0%;
+	top: 0%;
+	background-color: #282b34;
+	color: white;
+	opacity: 0.5;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+div.comment_txt{
+	margin: 5% 0;
+}
+
+div.comment.right{
+	margin-top: 0;
+}
+
+div.content_right{
+	width: 90%;
+	margin-left: auto;
+}
+
+div.comment_box{
+	border-bottom: 1px dashed; 
+}
 </style>
 </head>
 <body>
+	<% String idx = request.getParameter("idx"); %>
 	<div class="container">
 		<c:import url="layout/leftnav_1.jsp"></c:import>
 
@@ -159,36 +206,11 @@ textarea, hr{
 		<!-- 좁은 화면으로 작성할 시 class="contents narrow" -->
 		<div class="contents narrow">
 			<div class="recruit_header">
-				<!-- item.leader_profile -->
-				<!-- 이미지가 있을경우 -->
-				<!-- <img class="recruit_left" src="resources/img/cloth_alike_op30.png"/> -->
-				<!-- 이미지가 없을경우 -->
-				<i class="bi bi-person-circle" style="font-size: 60px;"></i>
-
-
-				<div class="recruit_right">
-					<h2 class="title">item.crew_name</h2>
-					<span class="text_area"><span> + item.leader_name + </span><span>
-							( + item.leader_mbti + )</span></span>
-				</div>
-
-				<div class="recruit_info">
-					<span><i class="bi bi-geo-alt-fill">서울 금천구</i></span> 
-					<span><i class="bi bi-people-fill">23명</i></span>
-					<span><i class="bi bi-fonts">312개</i></span> 
-					<span><i class="bi bi-calendar-event">2024-10-14</i></span>
-				</div>
 
 			</div>
 
 			<div class="recruit_body">
-				<hr />
-					<div>크루 소개글</div>
-				<hr />
-
-				<div>
-					<button class="mainbtn full">크루 입단 신청하기</button>
-				</div>	
+				
 			</div>
 			
 			<!-- 기본 입력창 -->
@@ -198,83 +220,18 @@ textarea, hr{
 					<h3 class="capt">
 						<i class="bi bi-chat-left-fill"></i>&nbsp;문의하기
 					</h3>
-					<p>
-						<textarea class="full" name="comment">최대 1,000자까지 입력할 수 있습니다.</textarea>
-					</p>
-					<button class="mainbtn">작성하기</button>
+					<form action="crew_recruit_detail.replyDo?idx=<%=idx%>" method="post">
+						<p>
+							<textarea class="full" name="reply" placeholder="최대 1,000자까지 입력할 수 있습니다."></textarea>
+						</p>
+						<button class="mainbtn">작성하기</button>
+					</form>
 				</div>
 				<!-- //기본 입력창 -->
 	
-	
 				<div class="comment_area">
-					<div>
-						<div class="comment">
-							문의댓글 뿌려줄 영역입니다.
-							<button type="button" class="add_button">
-								<i class="bi bi-three-dots-vertical"></i>
-							</button>
-							<button class="mainbtn minbtn">답변하기</button>
-							<br /> 1234 <br /> 5678
-						</div>
-					</div>
-					<hr />
-					<div>
-						<div class="comment">
-							문의댓글 뿌려줄 영역입니다.
-							<button type="button" class="add_button">
-								<i class="bi bi-three-dots-vertical"></i>
-							</button>
-							<button class="mainbtn minbtn">답변하기</button>
-							<br /> 1234 <br /> 5678
-						</div>
-					</div>
-					<hr />
-					<div>
-						<div class="comment">
-							문의댓글 뿌려줄 영역입니다.
-							<button type="button" class="add_button">
-								<i class="bi bi-three-dots-vertical"></i>
-							</button>
-							<button class="mainbtn minbtn">답변하기</button>
-							<br /> 1234 <br /> 5678
-						</div>
-					</div>
-					<hr />
-					<div>
-						<div class="comment">
-							문의댓글 뿌려줄 영역입니다.
-							<button type="button" class="add_button">
-								<i class="bi bi-three-dots-vertical"></i>
-							</button>
-							<button class="mainbtn minbtn">답변하기</button>
-							<br /> 1234 <br /> 5678
-						</div>
-					</div>
-					<hr />
-					<div>
-						<div class="comment">
-							문의댓글 뿌려줄 영역2입니다.
-							<button type="button" class="add_button">
-								<i class="bi bi-three-dots-vertical"></i>
-							</button>
-							<button class="mainbtn minbtn">답변하기</button>
-		
-							<br /> 9101112 <br /> 13141516
-						</div>
-						
-						<div class="comment_reply">
-							<div class="reply_right">
-								<h3 class="capt">
-									<i class="bi bi-arrow-return-right"></i>&nbsp;답변하기
-								</h3>
-								<p>
-									<textarea name="comment" class="recomment">최대 1,000자까지 입력할 수 있습니다.</textarea>
-								</p>
-							</div>
-							<button class="mainbtn">작성하기</button>
-						</div>
-					</div>	
 				</div>
+				
 			</div>			
 		</div>
 
@@ -284,7 +241,7 @@ textarea, hr{
 <script src="resources/js/common.js"></script>
 <script>
 	
-	var idx = <%= request.getParameter("idx") %>;
+	var idx = <%=idx%>;
 	console.log('idx : ', idx);
 ;	
 	if(idx != '' && idx != null){
@@ -293,6 +250,66 @@ textarea, hr{
 	}else{
 		modal.showAlert('모집게시글 idx를 받아오지 못했습니다.');
 	}
+	
+	
+	/* data.recruitDetail : 크루정보 관련변수 */
+	// 크루명
+	var crew_name;
+	// 크루idx
+	var crew_idx;
+	// 게시글idx
+	var board_idx;
+	// 크루 소개글
+	var crew_content;
+	// 활동지역 시단위
+	var region_name;
+	// 활동지역 구단위
+	var regions_name; 
+	// 크루원 수
+	var member_count;
+	// 크루장 ID
+	var leader_id;
+	// 크루장 이름
+	var leader_name;
+	// 크루장 닉네임
+	var leader_nick;
+	// 크루장 프로필사진 
+	var leader_profile;
+	// 크루장 mbti
+	var leader_mbti;
+	// 전체 게시글 수
+	var board_count;
+	// 크루 생성일
+	var create_date;
+	
+	/* data.commentAll : 댓글, 대댓글 관련변수 */
+	// 댓글, 대댓글 idx
+	var comment_idx;
+	var recomment_idx;
+	// 댓글, 대댓글 작성자 ID
+	var comment_id;
+	var recomment_id;
+	// 댓글, 대댓글 작성자 프로필사진
+	var profile;
+	// 댓글, 대댓글 작성자 닉네임
+	var nick;
+	// 댓글, 대댓글 내용
+	var content;
+	// 댓글, 대댓글 작성일시
+	var date;
+	
+	// 대댓글 존재여부체크 0:존재X / 1:존재O
+	var recomment_chk;
+	
+	
+	
+	var header = '';
+	var body = '';
+	var footer = '';
+	
+	// 대댓글 정보
+	var item_reply;
+	var reply_area;
 	
 	function detail(idx){
 		$.ajax({
@@ -304,6 +321,120 @@ textarea, hr{
 			dataType : 'JSON',
 			success : function(data){
 				console.log('data : ', data);
+				
+				var detail = data.recruitDetail;
+				
+				// 모집 게시글정보 뿌려주기
+				<!-- item.leader_profile -->
+				<!-- 이미지가 있을경우 -->
+				<!-- <img class="recruit_left" src="resources/img/cloth_alike_op30.png"/> -->
+				<!-- 이미지가 없을경우 --> 
+				header = '<i class="bi bi-person-circle" style="font-size: 60px;"></i>' 
+						+ '<div class="recruit_right">'
+					  		+ '<h2 class="title">'
+						   		+ detail.crew_name
+		   					+ '</h2>'
+						    + '<span class="text_area"><span class="txt_opacity">크루장</span><span>&nbsp;&nbsp;' 
+								+ detail.leader_name 
+				  		    + '</span><span>&nbsp;('
+				  		  		+ detail.leader_mbti 
+						    + ')</span></span>'
+						+ '</div>'
+						+ '<div class="recruit_info">'
+							+ '<span><i class="bi bi-geo-alt-fill">'
+									+ detail.region_name + ' ' + detail.regions_name
+							+ '</i></span>' 
+							+ '<span><i class="bi bi-people-fill">'
+									+ detail.member_count
+							+ '</i></span>'
+							+ '<span><i class="bi bi-fonts">'
+								+ detail.board_count  
+							+ '개</i></span>' 
+							+ '<span><i class="bi bi-calendar-event">'
+								+ detail.create_date
+							+ '</i></span>'
+						+ '</div><hr/>';
+				
+				body = '<div>'
+					 	+ detail.crew_content
+				     + '</div><hr/>'
+				     + '<div>'
+				     	+ '<button class="mainbtn full">크루 입단 신청하기</button>'
+				     + '</div>';
+						
+				// 댓글-대댓글정보 뿌려주기
+				$(data.commentAll).each(function(idx, item){
+					
+					console.log('item : ', item.content);
+					
+					footer += '<div class="comment_box">'
+								+ '<div class="comment">'
+										+ '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+										+ '<div class="recruit_right">'
+									  		+ '<h2 class="title">'
+						   					+ '</h2>'
+										    + '<span class="text_area">'
+						   						+ '<span>&nbsp;&nbsp;' 
+													+ item.nick
+								  		    	+ '</span></br>'
+						   						+ '<span>&nbsp;'
+								  		  			+ item.date 
+										    	+ '</span>'
+							  		    		+ '</span>'
+										+ '</div>'
+									+ '<div class="comment_txt">' + item.content + '</div>';
+					// 대댓글이 없을 때 추가. 									
+					if(item.recomment_chk != 1){
+						footer += '<button class="mainbtn minbtn" onclick="reply(this)">답변하기</button>';	
+					}									
+									
+					footer += '<button type="button" class="add_button">'
+						+ '<i class="bi bi-three-dots-vertical"></i>'
+						+ '</button>'
+					+ '</div>';
+				
+									  	
+					
+					console.log('recomment_chk : ', item.recomment_chk);		
+					// 대댓글이 존재하는 경우 대댓글 추가	
+					if(item.recomment_chk == 1){
+						item_reply = item.replyDTO;
+						console.log('item_reply : ', item_reply);
+						
+						footer += '<div class="content_right">'
+									+ '<i class="bi bi-arrow-return-right"></i>'
+									+ '<div class="comment right">'
+										+ '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+										+ '<div class="recruit_right">'
+									  		+ '<h2 class="title">'
+						   					+ '</h2>'
+										    + '<span class="text_area">'
+						   						+ '<span>&nbsp;&nbsp;' 
+													+ item_reply.nick
+								  		    	+ '</span>'
+						   						+ '<span style="color: #048187">(크루장)</span></br>'
+						   						+ '<span>&nbsp;'
+								  		  			+ item_reply.date 
+										    	+ '</span>'
+							  		    		+ '</span>'
+										+ '</div>'
+									+ '<div class="comment_txt">' + item_reply.content + '</div>'
+									+ '<button type="button" class="add_button">'
+										+ '<i class="bi bi-three-dots-vertical"></i>'
+									+ '</button>'
+									+ '</div>'
+								+ '</div></div>';	
+					}
+							
+				});
+				
+				$('.recruit_header').empty();
+				$('.recruit_header').append(header);
+				$('.recruit_body').empty();
+				$('.recruit_body').append(body);
+				$('.comment_area').empty();
+				$('.comment_area').append(footer);
+				
 			},
 			error : function(e){
 				console.log(e); // 에러가 보이지 않도록 추후 처리필요?
@@ -311,6 +442,33 @@ textarea, hr{
 			}
 		});
 	}
+	
+	// 답변하기 버튼은 크루장인 경우에만 표시. & 문의글에만 답변가능.
+	function reply(obj){
+		reply_area = '<div class="comment_reply">'
+						+ '<div class="reply_right">'
+							+ '<h3 class="capt">'
+								+ '<i class="bi bi-arrow-return-right"></i>&nbsp;답변하기'
+							+ '</h3>'
+							+ '<p>'
+								+ '<textarea name="comment" class="recomment" placeholder="최대 1,000자까지 입력할 수 있습니다."></textarea>'
+							+ '</p>'
+						+ '</div>'
+						+ '<button class="mainbtn">작성하기</button>'
+						+ '<button type="button" onclick="reply_close(this)" class="reply_close"><i class="bi bi-x-circle">닫기</i></button>'
+					+ '</div>';
+					
+		$(obj).parent().append(reply_area);
+		$(obj).remove();
+	}
+	
+	// 답변 Area 삭제
+	function reply_close(obj){
+		$(obj).parent().parent().append('<button class="mainbtn minbtn" onclick="reply(this)">답변하기</button>');
+		$(obj).parent().remove();		
+	}
+
+	
 </script>
 
 </html>
