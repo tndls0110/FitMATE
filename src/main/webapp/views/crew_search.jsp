@@ -271,10 +271,12 @@
    
    // 2. 검색한 경우
    function search() {
-      // 검색기준을 선택하지 않은경우 경고창을 띄워줌.
+      // 검색기준을 선택하지 않은경우  경고창을 띄워줌.
       if ($('#searchFilter').val() == '') {
          modal.showAlert('검색기준을 선택하세요.');
-      } else {
+      } else if($('.searchKeyword').val() == ''){
+    	  modal.showAlert('검색 키워드를 입력하세요.'); 
+      }else {
          // 2-1. 검색관련 변수세팅 
          searchFilter = $('#searchFilter').val();
          searchKeyword = $('.searchKeyword').val();
@@ -356,7 +358,7 @@
       var profile = ''; // 프로필 사진
       
       // profile: 프로필사진 (프로필 사진이 없을경우 기본 프로필 적용.)
-      if(profile == null || item.leader_profile == ''){
+      if(profile == '' || item.leader_profile == ''){
          profile = '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>';                     
       }else{
          profile = '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>';

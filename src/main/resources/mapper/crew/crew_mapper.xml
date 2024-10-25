@@ -17,26 +17,29 @@
 		<!--  크루소개글  -->
 		CB.content AS crew_content,
 		<!--  활동지역 시단위  -->
-		(SELECT R.region_name FROM region R WHERE R.region_idx = (SELECT RS.region_idx FROM region_sub RS WHERE RS.regions_idx = A.regions_idx)) AS region_name,
+		R.region_name,
 		<!--  활동지역 구단위  -->
-		(SELECT RS.regions_name FROM region_sub RS WHERE RS.regions_idx = A.regions_idx) AS regions_name,
+		RS.regions_name,
 		<!--  크루원 수  -->
 		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx = A.crew_idx) AS member_count,
 		<!--  크루장 ID  -->
 		A.crew_id AS leader_id,
 		<!--  크루장 이름  -->
 		MB.name AS leader_name,
-		<!--  크루장 닉네임  -->
+		<!-- 크루장 닉네임 -->
 		MB.nick AS leader_nick,
 		<!--  크루장 프로필사진  -->
 		P.profile AS leader_profile,
 		<!--  크루장 mbti  -->
-		(SELECT M.mbtir_name FROM mbti_r M WHERE M.mbtir_idx = (SELECT P.mbtir_idx FROM profile P WHERE P.user_id = A.crew_id)) AS leader_mbti
+		M.mbtir_name AS leader_mbti
 	FROM crew A 
 		INNER JOIN member MB ON A.crew_id = MB.user_id 
 		INNER JOIN profile P ON A.crew_id = P.user_id 
 		INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
 		INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
+		INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx
+		INNER JOIN region R ON R.region_idx = RS.region_idx
+		INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx
 	<where>
 		category_idx =1
 		<!--  searchFilter(1='크루이름 검색'/ 2='크루장닉네임 검색')  -->
@@ -59,6 +62,8 @@
 	SELECT
 		<!--  크루명  -->
 		A.name AS crew_name,
+		<!-- 크루 생성일 -->
+		A.create_date,
 		<!--  크루idx  -->
 		A.crew_idx,
 		<!--  게시글idx  -->
@@ -66,9 +71,9 @@
 		<!--  크루소개글  -->
 		CB.content AS crew_content,
 		<!--  활동지역 시단위  -->
-		(SELECT R.region_name FROM region R WHERE R.region_idx = (SELECT RS.region_idx FROM region_sub RS WHERE RS.regions_idx = A.regions_idx)) AS region_name,
+		R.region_name,
 		<!--  활동지역 구단위  -->
-		(SELECT RS.regions_name FROM region_sub RS WHERE RS.regions_idx = A.regions_idx) AS regions_name,
+		RS.regions_name,
 		<!--  크루원 수  -->
 		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx = A.crew_idx) AS member_count,
 		<!--  크루장 ID  -->
@@ -80,12 +85,17 @@
 		<!--  크루장 프로필사진  -->
 		P.profile AS leader_profile,
 		<!--  크루장 mbti  -->
-		(SELECT M.mbtir_name FROM mbti_r M WHERE M.mbtir_idx = (SELECT P.mbtir_idx FROM profile P WHERE P.user_id = A.crew_id)) AS leader_mbti
+		M.mbtir_name AS leader_mbti,
+		<!-- 전체 게시글 수 -->
+		(SELECT COUNT(CB.board_idx) FROM crew_board CB WHERE CB.board_idx IN (SELECT I.board_idx FROM crew_idx I WHERE I.crew_idx = A.crew_idx)) AS board_count
 	FROM crew A 
 		INNER JOIN member MB ON A.crew_id = MB.user_id 
 		INNER JOIN profile P ON A.crew_id = P.user_id 
 		INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
 		INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
+		INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx
+		INNER JOIN region R ON R.region_idx = RS.region_idx
+		INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx
 	<where>
 		category_idx =1
 		<if test="board_idx != 0">
@@ -94,10 +104,45 @@
 	</where>
 </select>
 
-<select id="recruitComment" resultType="com.fitmate.crew.dto.CrewAskDTO" parameterType="int">
-		
+<select id="ask" resultType="com.fitmate.crew.dto.CrewAskDTO" parameterType="int">
+	SELECT
+		<!-- 댓글idx -->
+		C.comment_idx,	
+		<!-- 댓글ID -->	
+		C.comment_id,
+		<!-- 댓글 작성자 프로필 -->
+		P.profile,
+		<!-- 댓글 작성자 닉네임 -->
+		M.nick,
+		<!-- 댓글 내용 -->
+		C.content,
+		<!-- 댓글 작성일 -->
+		C.date
+	FROM comment C
+		INNER JOIN profile P ON P.user_id = C.comment_id
+		INNER JOIN member M ON M.user_id = C.comment_id 
+	WHERE board_idx = #{board_idx}
 </select>
 
+<select id="reply" resultType="com.fitmate.crew.dto.CrewReplyDTO" parameterType="int">
+	SELECT
+		<!-- 대댓글idx -->
+		RC.recomment_idx,
+		<!-- 대댓글ID -->	
+		RC.recomment_id,
+		<!-- 대댓글 작성자 프로필 -->
+		P.profile,
+		<!-- 대댓글 작성자 닉네임 -->
+		M.nick,
+		<!-- 대댓글 내용 -->
+		RC.content,
+		<!-- 대댓글 작성일 -->
+		RC.date
+	FROM recomment RC
+		INNER JOIN profile P ON P.user_id = RC.recomment_id
+		INNER JOIN member M ON M.user_id = RC.recomment_id 
+	WHERE comment_idx = #{comment_idx}	
+</select>
 
 
 <insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO"> insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3); </insert>
