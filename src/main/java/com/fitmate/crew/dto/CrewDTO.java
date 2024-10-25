@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class CrewDTO {
 	
-	int crew_idx;
-	String name;
-	String crew_id;
-	int regions_idx;
-	Date create_date;
-	boolean status;
-	Date last_date;
+	private	int crew_idx;
+	private	String name;
+	private	String crew_id;
+	private	int regions_idx;
+	private	Date create_date;
+	private	boolean status;
+	private	Date last_date;
 	
 	public int getCrew_idx() {
 		return crew_idx;
