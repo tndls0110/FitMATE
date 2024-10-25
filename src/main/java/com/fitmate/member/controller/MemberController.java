@@ -130,7 +130,8 @@ public class MemberController {
 	@RequestMapping (value = "/member_profile.go")
 	public String profile(Model model, HttpSession session) {
 		//checkPermit(model, session);
-		String user_id = (String) session.getAttribute("loginId");
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member06";
 		model.addAttribute("list", member_service.profile(user_id));
 		return "member_profile";
 	}
@@ -154,30 +155,17 @@ public class MemberController {
 		return "member_update";
 	}
 
-	@RequestMapping (value = "/member_checknick_ex.ajax")
-	@ResponseBody
-	public Map<String, Object> checknickEx(String nick, HttpSession session) {
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member06";
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (nick.equals(member_service.findnick(user_id))) {
-			result.put("check_nick", true);
-		} else {
-			result.put("check_nick", member_service.checknick(nick));
-		}
-		return result;
-	}
-
 	@RequestMapping (value = "/member_update.do")
 	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model) {
 		page = "member_update";
 		logger.info("params: {}", params);
-//		if (member_service.update(profile, params)){
-//			model.addAttribute("msg", "정보가 수정되었습니다.");
-//			page = "member_profile";
-//		} else {
-//			model.addAttribute("msg", "정보 수정 과정에 문제가 발생했습니다. 다시 시도하세요.");
-//		}
+		logger.info("profile: "+profile);
+		if (member_service.update(profile, params)){
+			model.addAttribute("msg", "정보가 수정되었습니다.");
+			page = "member_profile";
+		} else {
+			model.addAttribute("msg", "정보 수정 과정에 문제가 발생했습니다. 다시 시도하세요.");
+		}
 		return page;
 	}
 

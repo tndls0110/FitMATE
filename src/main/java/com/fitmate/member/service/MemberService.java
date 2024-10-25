@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -98,8 +99,39 @@ public class MemberService {
 	}
 
 	// 정보 수정
-	public String findnick(String user_id) {
-		return member_dao.findnick(user_id);
+	public boolean update(MultipartFile[] files, Map<String, String> params) {
+		boolean result = false;
+		if (member_dao.update1(params) == 1 && member_dao.update2(params) == 1){
+			if (params.get("initProfile_value") == "initiate") {
+//				if (member_dao.delete(params.get("user_id")) == 1){
+//					File file = new File(root+"/"+member_dao.getImgName(params.get("user_id")));
+//					if (file.exists()) {
+//						file.delete();
+//					}
+//				}
+			}
+			for (MultipartFile file : files) {
+				if (file.getOriginalFilename().lastIndexOf(".") < 0) {
+					if (member_dao.insertImg(params.get("user_id"), "") == 1){
+						result = true;
+					}
+					break;
+				} else {
+					try {
+						String ori_filename = file.getOriginalFilename();
+						String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
+						String new_filename = UUID.randomUUID().toString()+ext;
+						byte[] arr = file.getBytes();
+						Path path = Paths.get("C:/upload/"+new_filename);
+						Files.write(path, arr);
+						if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
+							result = true;
+						}
+					} catch (IOException e) {}
+				}
+			}
+		}
+		return result;
 	}
 
 	// 비밀번호 변경

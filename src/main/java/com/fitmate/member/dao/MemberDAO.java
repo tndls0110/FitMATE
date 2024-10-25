@@ -29,8 +29,11 @@ public interface MemberDAO {
     MemberDTO profile(String user_id);
 
     // 정보 수정
-    String findnick(String user_id);
-    
+    int update1(Map<String, String> params);
+    int update2(Map<String, String> params);
+    int delete(String userId);
+    String getImgName(String userId);
+
     // 비밀번호 변경
     void updatepw(String user_id, String pw);
 

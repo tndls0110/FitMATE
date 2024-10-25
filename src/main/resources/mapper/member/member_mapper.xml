@@ -57,8 +57,18 @@
     </select>
 
     <!-- 정보 수정 -->
-    <select id="findnick" resultType="String">
-        SELECT nick FROM member WHERE user_id = #{user_id}
+    <update id="update1" parameterType="map">
+        UPDATE member SET nick = #{nick}, email = #{email}, name = #{name}, birthday = #{birthday} WHERE user_id = #{user_id}
+    </update>
+
+    <update id="update2" parameterType="map">
+        UPDATE profile SET status = #{status}, regions_idx = #{regions_idx} WHERE user_id = #{user_id}
+    </update>
+
+    <delete id="deleteImg"></delete>
+    
+    <select id="getImgName" resultType="String">
+        SELECT profile FROM member WHERE user_id = #{user_id}
     </select>
 
     <!-- 비밀번호 변경 -->

@@ -1,39 +1,49 @@
 // 닉네임 중복 체크
-var check_nick = false;
+var check_nick = true;
 $('input[name="nick"]').keyup(function() {
     var nick = $('input[name="nick"]').val();
-    $.ajax({
-        type: 'post',
-        url: 'member_checknick_ex.ajax',
-        data: {
-            "nick": nick
-        },
-        success: function(data) {
-            if (nick == ""){
-                $('input[name="nick"]').removeClass('pass').addClass('caution');
-                $('.pass_nick').addClass('hide');
-                $('.check_nick').addClass('hide');
-                $('.npass_nick').addClass('hide');
-                $('.fill_nick').removeClass('hide');
-                check_nick = false;
-            } else if (nick != "" && data.check_nick) {
-                $('input[name="nick"]').removeClass('caution').addClass('pass');
-                $('.pass_nick').removeClass('hide');
-                $('.check_nick').addClass('hide');
-                $('.npass_nick').addClass('hide');
-                $('.fill_nick').addClass('hide');
-                check_nick = true;
-            } else if (nick != "" && !data.check_nick) {
-                $('input[name="nick"]').removeClass('pass').addClass('caution');
-                $('.pass_nick').addClass('hide');
-                $('.check_nick').removeClass('hide');
-                $('.npass_nick').addClass('hide');
-                $('.fill_nick').addClass('hide');
-                check_nick = false;
-            }
-        },
-        error: function(e) {}
-    });
+    console.log(ori_nick+', '+nick);
+    if (ori_nick == nick){
+        $('input[name="nick"]').removeClass('caution').addClass('pass');
+        $('.pass_nick').removeClass('hide');
+        $('.check_nick').addClass('hide');
+        $('.npass_nick').addClass('hide');
+        $('.fill_nick').addClass('hide');
+        check_nick = true;
+    } else if (nick == ""){
+        $('input[name="nick"]').removeClass('pass').addClass('caution');
+        $('.pass_nick').addClass('hide');
+        $('.check_nick').addClass('hide');
+        $('.npass_nick').addClass('hide');
+        $('.fill_nick').removeClass('hide');
+        check_nick = false;
+    } else {
+        $.ajax({
+            type: 'post',
+            url: 'member_checknick.ajax',
+            data: {
+                "nick": nick
+            },
+            success: function(data) {
+                 if (data.check_nick) {
+                    $('input[name="nick"]').removeClass('caution').addClass('pass');
+                    $('.pass_nick').removeClass('hide');
+                    $('.check_nick').addClass('hide');
+                    $('.npass_nick').addClass('hide');
+                    $('.fill_nick').addClass('hide');
+                    check_nick = true;
+                } else if (!data.check_nick) {
+                    $('input[name="nick"]').removeClass('pass').addClass('caution');
+                    $('.pass_nick').addClass('hide');
+                    $('.check_nick').removeClass('hide');
+                    $('.npass_nick').addClass('hide');
+                    $('.fill_nick').addClass('hide');
+                    check_nick = false;
+                }
+            },
+            error: function(e) {}
+        });
+    }
 });
 
 // 프로필 입력시 미리보기 출력, 입력 개수 제한
@@ -98,7 +108,6 @@ function drawRegion(list) {
 
 // 제출
 function update() {
-    var pw = $('input[name="pw"]').val();
     var nick = $('input[name="nick"]').val();
     var name = $('input[name="name"]').val();
     var email = $('input[name="email"]').val();
@@ -106,7 +115,7 @@ function update() {
     var check_null = false;
     $('input').removeClass('pass').removeClass('caution');
     $('.msg').addClass('hide');
-    if (pw != '' && nick != '' && name != '' && email != '' && birthday != ''){
+    if (nick != '' && name != '' && email != '' && birthday != ''){
         check_null = true;
     }
     if (!check_null){
@@ -115,22 +124,12 @@ function update() {
     } else if (!check_nick){
         modal.showAlert('닉네임 중복 여부를 확인하세요.');
         showNull(user_id, pw, nick, name, email, birthday);
-    } else if (!check_pw){
-        modal.showAlert('비밀번호와 비밀번호 확인값은 동일해야 합니다.');
-        showNull(user_id, pw, nick, name, email, birthday);
     } else {
         $('form').submit();
     }
 }
 
 function showNull(user_id, pw, nick, name, email, birthday) {
-    if (pw == ''){
-        $('input[name="pwconfirm"]').addClass('caution');
-        $('.fill_pw').removeClass('hide');
-    } else if (!check_pw){
-        $('input[name="pwconfirm"]').addClass('caution');
-        $('.check_pw').removeClass('hide');
-    }
     if (nick == ''){
         $('input[name="nick"]').addClass('caution');
         $('.fill_nick').removeClass('hide');
