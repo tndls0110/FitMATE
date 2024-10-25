@@ -64,8 +64,15 @@ public class MemberService {
 		boolean result = false;
 		logger.info("files at service: "+files);
 		if (member_dao.join(params) == 1 && member_dao.insertProfile(params) == 1){
+			logger.info("files at service after insert information: "+files);
 			for (MultipartFile file : files) {
+				logger.info("each file: "+file);
 				if (file.getOriginalFilename().lastIndexOf(".") < 0) {
+					result = true;
+					break;
+				} else {
+					logger.info("file exist: "+file);
+					logger.info("file exist: "+file.getOriginalFilename().lastIndexOf("."));
 					try {
 						String ori_filename = file.getOriginalFilename();
 						String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
@@ -76,7 +83,9 @@ public class MemberService {
 						if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
 							result = true;
 						}
-					} catch (IOException e) {}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

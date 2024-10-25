@@ -12,10 +12,10 @@ $.ajax({
 function drawProfile(list) {
     var profile = document.getElementsByClassName('leftnav_profImg')[0];
     var nick = document.getElementsByClassName('leftnav_nick')[0];
-   if (list.profile == ''){
+   if (list.profile == '' || list.profile == null){
        profile.innerHTML = '<i class="bi bi-person-circle"></i>';
    } else {
-       profile.innerHTML = '<div style="background-image: url(\'/photo/'+list.profile+'\');"></div>';
+       profile.innerHTML = `<div style="background-image: url('/photo/${list.profile}');"></div>`;
    }
     nick.innerHTML = '<b>'+list.nick+'</b> 님';
 }

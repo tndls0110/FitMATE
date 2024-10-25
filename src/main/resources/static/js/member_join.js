@@ -127,11 +127,14 @@ function readFile(input){
         modal.showAlert("프로필 이미지는 한 장만 입력할 수 있습니다.");
         $('input[name="profile"]').val('');
     } else if (input.files.length == 1) {
-        $('.img_preview').empty().removeClass('hide');
-        var reader = new FileReader();
-        reader.readAsDataURL(input.files[0]);
-        reader.onload = function(e) {
-            $('.img_preview div').css('background-image', 'url("'+e.target.result+'")');
+        $('.img_preview div').empty();
+        $('.img_preview').removeClass('hide');
+        for (var file of input.files) {
+            reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                $('.img_preview div').css('background-image', 'url("'+e.target.result+'")');
+            }
         }
     }
 }

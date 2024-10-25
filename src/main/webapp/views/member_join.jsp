@@ -4,9 +4,9 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>FitMATE</title>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="resources/css/member_join.css" />
-		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -54,7 +54,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">프로필</h3>
-						<p><input type="file" multiple="multiple" class="full" name="profile" onchange="readFile(this)" /></p>
+						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
 						<div class="img_preview hide">
 							<div><!-- 프로필 사진 미리보기 영역 --></div>
 						</div>
@@ -83,7 +83,7 @@
 						</div>
 					</div>
 					<div class="list">
-						<button type="button" class="full mainbtn" onclick="join()">회원 가입</button>
+						<input type="button" class="full mainbtn" value="회원 가입" onclick="join()" />
 					</div>
 				</form>
 				<div class="list">
