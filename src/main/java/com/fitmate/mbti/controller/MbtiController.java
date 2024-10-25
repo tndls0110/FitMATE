@@ -3,13 +3,14 @@ package com.fitmate.mbti.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import com.fitmate.mbti.service.MbtiService;
 
@@ -88,9 +89,15 @@ public class MbtiController {
 		return data;
 	};
 
-	@RequestMapping (value = "/mbtiR.go")
-	@ResponseBody
-	public String mbtiR() {
-		return "mbtiR";
+
+
+	@RequestMapping (value = "/mbti_r.go")
+
+	public String mbtiR(@RequestParam Map<String, Object> scores,Model model) {
+		logger.info("mbtiR 컨트롤러 도착");
+		logger.info("scores 받아온 값 : " + scores);
+
+		model.addAttribute("scores",scores);
+        return "mbti_r";
 	};
 }
