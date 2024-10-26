@@ -19,10 +19,10 @@
             <h2>로그인</h2>
         </div>
         <div class="contents narrow">
-            <form action="member_login.do" method="post">
+            <form action="admin_login.do" method="post">
                 <div class="list">
                     <h3 class="capt">아이디</h3>
-                    <p><input type="text" class="full" name="user_id" value="${user_id}" /></p>
+                    <p><input type="text" class="full" name="admin_id" value="${admin_id}" /></p>
                     <h3 class="msg caution checkid hide">아이디를 확인하세요.</h3>
                 </div>
                 <div class="list">
@@ -35,7 +35,7 @@
                 </div>
             </form>
             <div class="list">
-                <button onclick="location.href='member_login.go'" class="full subbtn">돌아가기</button>
+                <button type="button" onclick="location.href='member_login.go'" class="full subbtn">돌아가기</button>
             </div>
         </div>
     </div>

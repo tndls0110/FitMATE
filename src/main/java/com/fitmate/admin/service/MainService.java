@@ -24,8 +24,15 @@ public class MainService {
     }
 
     // 로그인
-    public String login(String userId, String pw) {
-
-        return "";
+    public String login(String admin_id, String pw) {
+        String result = "";
+        if (main_dao.login(admin_id, pw) == 1){
+            result = "pass";
+        } else if (main_dao.checkid(admin_id) == 0) {
+            result = "invalidID";
+        } else {
+            result = "invalidPW";
+        }
+        return result;
     }
 }
