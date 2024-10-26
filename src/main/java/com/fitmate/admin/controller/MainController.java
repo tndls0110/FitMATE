@@ -49,7 +49,7 @@ public class MainController {
 		page = "admin_login";
 		switch (main_service.login(admin_id, pw)){
 			case "pass":
-				session.setAttribute("loginId", admin_id);
+				session.setAttribute("loginIdx", main_service.getidx(admin_id));
 				session.setAttribute("permit", "all");
 				page = "admin_dashboard";
 				break;

@@ -11,5 +11,6 @@ public interface MainDAO {
     // 로그인
     int login(String admin_id, String pw);
     int checkid(String admin_id);
+    int getidx(String admin_id);
 
 }

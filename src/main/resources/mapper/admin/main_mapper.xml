@@ -19,4 +19,8 @@
         SELECT COUNT(admin_id) FROM admin WHERE admin_id = #{param1}
     </select>
 
+    <select id="getidx" resultType="int">
+        SELECT admin_idx FROM admin WHERE admin_id = #{param1}
+    </select>
+
 </mapper>
