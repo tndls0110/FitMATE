@@ -43,6 +43,7 @@ public class MessageController {
 		return "message_list";
 		
 	}
+
 	// 메시지 목록에서 클릭 시 메시지 페이지로 가도록 설정 
 	// 그룹 idx를 모델에 담아서 특정 그룹idx로 이동하도록 설정 
 	@RequestMapping(value = "/message.go")
