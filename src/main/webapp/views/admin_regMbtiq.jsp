@@ -13,8 +13,9 @@
         <c:param name="page" value="6"></c:param>
     </c:import>
     <div class="right_wrapper">
-        <div class="header_title">
-            <h2 class="title">헬스 MBTI 정보 관리</h2>
+        <c:import url="layout/admin_header.jsp"></c:import>
+        <div class="title">
+            <h2>>헬스 MBTI 정보 관리</h2>
         </div>
         <div class="contents"></div>
     </div>

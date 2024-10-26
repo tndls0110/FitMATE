@@ -40,18 +40,17 @@ body{
 
 .leftnav{
     width: 220px;
-    padding: 30px 0 0;
+    padding: 16px 40px 0;
     text-align: left;
 }
 
 .leftnav .brand{
-	font-family: 'Noto Sans KR', sans-serif;
+    margin: 0 0 80px;
     font-weight: 700;
-    text-align: left;
 }
 
 .leftnav .brand span{
-    color: #5bc5bb;
+    color: #048187;
 }
 
 .leftnav .menu li{
@@ -60,7 +59,7 @@ body{
 }
 
 .leftnav .menu a{
-    color: #e9ecef;
+    color: #474747;
     font-weight: 400;
 }
 
@@ -72,13 +71,39 @@ body{
     font-weight: 500;
 }
 
-.contents{
+.right_wrapper{
     width: 960px;
-    min-height: 900px;
-    margin: 32px 0;
-    padding: 24px;
+}
+
+.header{
+    width: inherit;
+    height: 40px;
+    padding: 0;
+    text-align: right;
+}
+
+.title,
+.contents{
+    width: inherit;
     background-color: #fff;
     border-radius: 5px;
+}
+
+.title{
+    height: 50px;
+    margin: 0;
+    padding: 14px 24px 0;
+}
+
+.title h2{
+    margin: 0;
+    font-size: 14px;
+}
+
+.contents{
+    min-height: 900px;
+    margin: 12px 0;
+    padding: 24px;
 }
 
 .contents.narrow{
@@ -117,7 +142,7 @@ span.min{
 }
 
 a{
-    color: #e9ecef;
+    color: #048187;
     text-decoration: none;
     cursor: pointer;
 }
@@ -152,9 +177,8 @@ form{
 h3.capt{
     width: 100%;
     margin: 0 0 -8px;
-    font-weight: 300;
+    font-weight: 600;
     font-size: 12px;
-    color: #e9ecef;
     opacity: 0.9;
 }
 
@@ -336,13 +360,13 @@ button{
 .subbtn{
     border: 1px solid #e9ecef;
     background-color: #e9ecef;
-    color: #282b34;
+    color: #474747;
 }
 
 .textbtn{
     border: 0;
     background: none;
-    color: #e9ecef;
+    color: #474747;
     font-weight: 800;
     text-decoration: underline;
 }

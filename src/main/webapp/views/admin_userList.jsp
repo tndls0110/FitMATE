@@ -13,8 +13,9 @@
         <c:param name="page" value="4"></c:param>
     </c:import>
     <div class="right_wrapper">
-        <div class="header_title">
-            <h2 class="title">사용자 목록</h2>
+        <c:import url="layout/admin_header.jsp"></c:import>
+        <div class="title">
+            <h2>>사용자 목록</h2>
         </div>
         <div class="contents"></div>
     </div>

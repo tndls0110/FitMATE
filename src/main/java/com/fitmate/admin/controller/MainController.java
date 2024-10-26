@@ -24,13 +24,22 @@ public class MainController {
 		}
 	}
 
+	// layout
+	@RequestMapping (value = "/admin_leftnav.go")
+	public String leftnav(Model model, HttpSession session) {
+		page = "admin_leftnav";
+		//String admin_id = session.removeAttribute("loginId");
+		String admin_id = "admin";
+		return page;
+	}
+
 	// 로그인
 	@RequestMapping (value = "/admin_login.go")
 	public String login(Model model, HttpSession session) {
 		return "admin_login";
 	}
 
-	@RequestMapping (value = "/member_login.do")
+	@RequestMapping (value = "/admin_login.do")
 	public String login(String user_id, String pw, Model model, HttpSession session) {
 		page = "member_login";
 		switch (main_service.login(user_id, pw)){
@@ -59,15 +68,6 @@ public class MainController {
 		session.removeAttribute("loginId");
 		session.removeAttribute("permit");
 		return "admin_login";
-	}
-
-	// header
-	@RequestMapping (value = "/admin_leftnav.go")
-	public String leftnav(Model model, HttpSession session) {
-		page = "admin_leftnav";
-		//String admin_id = session.removeAttribute("loginId");
-		String admin_id = "admin";
-		return page;
 	}
 
 	// 대시보드
