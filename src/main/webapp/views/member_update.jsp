@@ -67,10 +67,18 @@
 								</c:if>
 							</div>
 						</p>
-						<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
-						<input type="hidden" name="initProfile_value" value="" />
+						<c:if test="${list.profile == ''}">
+							<p><input type="file" class="full" name="profile" onchange="readFile(this)" multiple /></p>
+						</c:if>
 						<c:if test="${list.profile != ''}">
-							<button type="button" onclick="initProfile()" class="subbtn full">프로필 삭제</button>
+							<div class="btn_flex narrow">
+								<div class="width80p">
+									<input type="file" class="full flex_left" name="profile" onchange="readFile(this)" multiple />
+								</div>
+								<div class="width20p">
+									<button type="button" onclick="initProfile()" class="subbtn full flex_right">삭제</button>
+								</div>
+							</div>
 						</c:if>
 					</div>
 					<div class="list">

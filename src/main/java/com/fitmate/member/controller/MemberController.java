@@ -45,7 +45,7 @@ public class MemberController {
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
-				page = "/";
+				page = "index";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -155,14 +155,20 @@ public class MemberController {
 		return "member_update";
 	}
 
+	@RequestMapping (value = "member_deleteImg.ajax")
+	@ResponseBody
+	public void deleteImg(HttpSession session) {
+		//String user_id = (String) session.getAttribute("loginId");
+		String user_id = "member06";
+		member_service.deleteImg(user_id);
+	}
+
 	@RequestMapping (value = "/member_update.do")
 	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model) {
 		page = "member_update";
-		logger.info("params: {}", params);
-		logger.info("profile: "+profile);
 		if (member_service.update(profile, params)){
 			model.addAttribute("msg", "정보가 수정되었습니다.");
-			page = "member_profile";
+			page = "redirect:/member_profile.go";
 		} else {
 			model.addAttribute("msg", "정보 수정 과정에 문제가 발생했습니다. 다시 시도하세요.");
 		}

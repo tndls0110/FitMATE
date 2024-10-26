@@ -101,15 +101,22 @@ public class MemberService {
 	// 정보 수정
 	public boolean update(MultipartFile[] files, Map<String, String> params) {
 		boolean result = false;
+
+		// 정보 입력
 		if (member_dao.update1(params) == 1 && member_dao.update2(params) == 1){
-			if (params.get("initProfile_value") == "initiate") {
-//				if (member_dao.delete(params.get("user_id")) == 1){
-//					File file = new File(root+"/"+member_dao.getImgName(params.get("user_id")));
-//					if (file.exists()) {
-//						file.delete();
-//					}
-//				}
+			String user_id = params.get("user_id");
+			MemberDTO dto = member_dao.getProfile(user_id);
+			// 삭제 혹은 파일 변경시 기존 파일 삭제
+			if (files.length > 0) {
+				if (member_dao.deleteImg(params.get("user_id")) == 1){
+					File file = new File("C:/upload/"+dto.getProfile());
+					if (file.exists()) {
+						file.delete();
+					}
+				}
 			}
+
+			// 새 파일 업로드
 			for (MultipartFile file : files) {
 				if (file.getOriginalFilename().lastIndexOf(".") < 0) {
 					if (member_dao.insertImg(params.get("user_id"), "") == 1){
@@ -130,8 +137,21 @@ public class MemberService {
 					} catch (IOException e) {}
 				}
 			}
+
 		}
+
 		return result;
+	}
+
+	// 프로필 이미지 삭제
+	public void deleteImg(String user_id) {
+		MemberDTO dto = member_dao.getProfile(user_id);
+		if (member_dao.deleteImg(user_id) == 1){
+			File file = new File("C:/upload/"+dto.getProfile());
+			if (file.exists()) {
+				file.delete();
+			}
+		}
 	}
 
 	// 비밀번호 변경

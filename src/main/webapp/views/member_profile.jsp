@@ -15,7 +15,7 @@
 				<h2 class="title">내 프로필 보기</h2>
 				<div class="profImg">
 					<c:if test="${list.profile == ''}">
-						<i class="bi bi-person-square"></i>
+						<i class="bi bi-person-circle"></i>
 					</c:if>
 					<c:if test="${list.profile != ''}">
 						<div style="background-image: url('/photo/${list.profile}');"></div>

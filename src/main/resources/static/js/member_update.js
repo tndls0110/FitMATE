@@ -52,7 +52,6 @@ function readFile(input){
         modal.showAlert("프로필 이미지는 한 장만 입력할 수 있습니다.");
         $('input[name="profile"]').val('');
     } else if (input.files.length == 1) {
-        $('input[name="initProfile"]').val('initiate');
         for (var file of input.files) {
             $('.img_preview div').empty();
             reader = new FileReader();
@@ -66,12 +65,20 @@ function readFile(input){
 
 // 프로필 초기화
 function initProfile() {
-    modal.showAlert("하단의 수정하기 버튼을 클릭하면 프로필 사진이 삭제됩니다.");
-    $('input[name="initProfile"]').val('initiate');
-    $('.img_preview div').css('background-image', 'none').html('<i class="bi bi-person-circle"></i>');
+    $.ajax({
+        type: 'post',
+        url: 'member_deleteImg.ajax',
+        data: {},
+        success: function(data) {
+            $('.img_preview div').css('background-image', 'none').html('<i class="bi bi-person-circle"></i>');
+        },
+        error: function(e) {}
+    });
 }
 
 // 소개글 작성시 글자수 출력
+var leng = document.getElementsByTagName('textarea')[0].value.length;
+$('.showLength span').html(leng);
 function drawLength(elem) {
     $(elem).removeClass('caution').addClass('pass');
     $(elem).parent('p').next('.showLength').children('h3').children('span').html(elem.value.length);
