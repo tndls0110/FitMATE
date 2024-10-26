@@ -122,4 +122,9 @@ public class MbtiService {
 		return count;
 	}
 
+	public Map<String,String> mbtiRGet(String max_mbti) {
+		//DTO형태로 가져오기 = m_dao.mbtiRGet
+		Map<String,String> mbti_recommend = m_dao.mbtiRGet(max_mbti);
+		return mbti_recommend;
+	}
 }
