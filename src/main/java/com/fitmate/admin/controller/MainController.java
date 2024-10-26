@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -25,12 +28,14 @@ public class MainController {
 	}
 
 	// layout
-	@RequestMapping (value = "/admin_leftnav.go")
-	public String leftnav(Model model, HttpSession session) {
-		page = "admin_leftnav";
+	@RequestMapping (value = "/admin_header.ajax")
+	@ResponseBody
+	public Map<String, Object> leftnav(HttpSession session) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		//String admin_id = session.removeAttribute("loginId");
 		String admin_id = "admin";
-		return page;
+		result.put("name", main_service.getnick(admin_id));
+		return result;
 	}
 
 	// 로그인

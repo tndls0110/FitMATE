@@ -22,7 +22,7 @@
 </div>
 <c:import url="layout/modal.jsp"></c:import>
 </body>
-<script src="resources/js/common.js"></script>
+<script src="resources/js/admin_common.js"></script>
 <script>
     var msg = '${msg}';
 </script>

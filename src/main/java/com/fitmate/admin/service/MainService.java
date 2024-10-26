@@ -18,6 +18,11 @@ public class MainService {
     // 세션 체크
     String page = "";
 
+    // layout
+    public String getnick(String admin_id) {
+        return main_dao.getname(admin_id);
+    }
+
     // 로그인
     public String login(String userId, String pw) {
 

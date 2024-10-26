@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="header">
 	<p>
-		<span>${nick}님, 오늘도 열일하세요~ ^-^</span>
+		<span class="admin_name"></span>님, 오늘도 열일하세요~ ^-^
 		<button onclick="location.href='admin_logout.do'" class="mainbtn minbtn">로그아웃</button>
 	</p>
 </div>
+<script src="resources/js/admin_header.js"></script>
