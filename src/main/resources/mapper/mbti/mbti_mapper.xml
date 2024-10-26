@@ -33,4 +33,8 @@
 	<select id="questionCount" parameterType="int" resultType="int">
 		SELECT COUNT(mbtiq_idx) FROM mbti_q;
 	</select>
+
+	<select id="mbtiRGet" parameterType="String" resultType="map">
+		SELECT mbtir_con, mbtir_exc,mbtir_rou FROM mbti_r where mbtir_name = #{max_mbti};
+	</select>
 </mapper>
