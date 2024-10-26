@@ -130,5 +130,8 @@
 	</body>
 	<script src="resources/js/common.js"></script>
 	<script src="resources/js/member_update.js"></script>
-	<script>var ori_nick = '${list.nick}';</script>
+	<script>
+		var msg = '${msg}';
+		var ori_nick = '${list.nick}';
+	</script>
 </html>
