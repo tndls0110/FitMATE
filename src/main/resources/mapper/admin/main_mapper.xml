@@ -7,7 +7,7 @@
 
     <!-- layout -->
     <select id="getname" resultType="String">
-        SELECT admin_name FROM admin WHERE admin_id = #{param}
+        SELECT admin_name FROM admin WHERE admin_idx = #{param}
     </select>
 
     <!-- 로그인 -->

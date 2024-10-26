@@ -32,9 +32,9 @@ public class MainController {
 	@ResponseBody
 	public Map<String, Object> leftnav(HttpSession session) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		//String admin_id = session.removeAttribute("loginId");
-		String admin_id = "admin";
-		result.put("name", main_service.getnick(admin_id));
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		result.put("name", main_service.getnick(admin_idx));
 		return result;
 	}
 
@@ -70,7 +70,7 @@ public class MainController {
 	// 로그아웃
 	@RequestMapping (value = "/admin_logout.go")
 	public String logout(Model model, HttpSession session) {
-		session.removeAttribute("loginId");
+		session.removeAttribute("loginIdx");
 		session.removeAttribute("permit");
 		return "admin_login";
 	}
@@ -80,8 +80,8 @@ public class MainController {
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
 		//checkPermit(model, session);
-		//String admin_id = session.removeAttribute("loginId");
-		String admin_id = "admin";
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 

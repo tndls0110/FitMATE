@@ -17,8 +17,8 @@ public class MainService {
     String page = "";
 
     // layout
-    public String getnick(String admin_id) {
-        return main_dao.getname(admin_id);
+    public String getnick(int admin_idx) {
+        return main_dao.getname(admin_idx);
     }
 
     // 로그인

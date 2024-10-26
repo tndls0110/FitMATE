@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 public class NoticeController {
@@ -17,11 +20,38 @@ public class NoticeController {
 
 	// 세션 체크
 	String page = "";
+	@Autowired MainController main_controller;
 
-	// 공지사항 조회
+	// 공지사항
 	@RequestMapping (value = "/admin_notice.go")
-	public String notice (Model model, HttpSession session) {
+	public String list (Model model, HttpSession session) {
 		page = "admin_notice";
+		//main_controller.checkPermit(model, session);
+		return page;
+	}
+
+	// 공지사항 목록
+	@RequestMapping (value = "/notice_list.ajax")
+	@ResponseBody
+	public Map<String, Object> list(String page, String cnt, String opt, String keyword) {
+		int pageInt = Integer.parseInt(page);
+		int cntInt = Integer.parseInt(cnt);
+
+		return notice_service.list(pageInt, cntInt, opt, keyword);
+	}
+
+	// 공지사항 작성
+	@RequestMapping (value = "/admin_noticeWrite.do")
+	public String write (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_notice.go";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		if (notice_service.write(params.get("notice_cont"), admin_idx)){
+			model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");
+		} else {
+			model.addAttribute("msg", "문제가 발생하여 공지사항을 작성하지 못했습니다. 공지사항을 다시 작성하세요.");
+		}
 		return page;
 	}
 

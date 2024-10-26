@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MainDAO {
 
     // layout
-    String getname(String admin_id);
+    String getname(int admin_idx);
 
     // 로그인
     int login(String admin_id, String pw);

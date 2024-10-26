@@ -8,6 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         var index = -1;
+        var state = '${state}';
+        var msg = '${msg}';
     </script>
 </head>
 <body>
@@ -42,10 +44,6 @@
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
-<script>
-    var state = '${state}';
-    var msg = '${msg}';
-</script>
 <script src="resources/js/admin_common.js"></script>
 <script src="resources/js/member_login.js"></script>
 </html>
