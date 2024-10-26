@@ -121,4 +121,5 @@ public class MbtiService {
 		int count = m_dao.questionCount();
 		return count;
 	}
+
 }
