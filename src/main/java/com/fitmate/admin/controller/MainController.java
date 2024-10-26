@@ -45,22 +45,22 @@ public class MainController {
 	}
 
 	@RequestMapping (value = "/admin_login.do")
-	public String login(String user_id, String pw, Model model, HttpSession session) {
-		page = "member_login";
-		switch (main_service.login(user_id, pw)){
+	public String login(String admin_id, String pw, Model model, HttpSession session) {
+		page = "admin_login";
+		switch (main_service.login(admin_id, pw)){
 			case "pass":
-				session.setAttribute("loginId", user_id);
+				session.setAttribute("loginId", admin_id);
 				session.setAttribute("permit", "all");
 				page = "admin_dashboard";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
-				model.addAttribute("user_id", user_id);
+				model.addAttribute("admin_id", admin_id);
 				model.addAttribute("pw", pw);
 				break;
 			case "invalidPW":
 				model.addAttribute("state", "invalidPW");
-				model.addAttribute("user_id", user_id);
+				model.addAttribute("admin_id", admin_id);
 				model.addAttribute("pw", pw);
 				break;
 		}
