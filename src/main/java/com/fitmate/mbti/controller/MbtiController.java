@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.fitmate.mbti.dto.MbtiQRDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class MbtiController {
 		return data;
 	};
 
-	@GetMapping (value = "/mbti_r.go")
+	@GetMapping (value = "/mbti_r.go") //결과 페이지에서 insert 시켜줘야하니까.. 그냥 결과 쪽에 다 넘겨서 결과 단에서 최댓값 계산하게 하기
 	public String mbtiR(@RequestParam Map<String, String> scores, Model model) {
 			logger.info("mbtiR 컨트롤러 도착");
 		logger.info("scores 받아온 값 : " + scores);
@@ -113,8 +114,15 @@ public class MbtiController {
 
 	};
 
-	//=========test ===========
+	@GetMapping (value = "/mbti_r_get.ajax")
+	@ResponseBody
+	public Map<String,String> mbtiRGet(String max_mbti) {
+		logger.info("mbti_r_get.ajax 컨트롤러 도착");
+		logger.info("max_mbti : {}",max_mbti);
+		Map<String,String> recommend =  m_service.mbtiRGet(max_mbti);
 
+		return recommend;
+	};
 
 
 
