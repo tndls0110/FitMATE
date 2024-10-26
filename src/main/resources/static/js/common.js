@@ -30,3 +30,8 @@ const modal = {
         confirmCont.style.display = 'flex';
     }
 }
+
+// ${msg} 값이 있을 경우 알림창 이벤트 발생
+if (msg != ''){
+    modal.showAlert(msg);
+}

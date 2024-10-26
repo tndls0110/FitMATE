@@ -64,7 +64,8 @@
 						</c:if>
 						<c:if test="${list.mbtir_name != null}">
 							<td>
-								${list.mbtir_name}
+								<p>${list.mbtir_name}</p>
+								<p><button class="subbtn minbtn">다시 검사하기</button></p>
 							</td>
 						</c:if>
 					</tr>
@@ -77,4 +78,7 @@
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
+	<script>
+		var msg = '${msg}';
+	</script>
 </html>
