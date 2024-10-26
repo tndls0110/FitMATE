@@ -3,29 +3,29 @@
 <div class="leftnav">
 	<div class="brand"><span>Fit</span>MATE</div>
 	<ul class="menu noDesc">
-		<li class="active">
-			<a href="/admin_dashboard.go">대시보드</a>
+		<li class="leftnav_list">
+			<a href="admin_dashboard.go">대시보드</a>
 		</li>
-		<li>
-			<a href="/admin_reportList.go">신고 게시글 조회</a>
+		<li class="leftnav_list">
+			<a href="admin_reportList.go">신고 게시글 조회</a>
 		</li>
-		<li>
-			<a href="/admin_notice.go">공지사항 관리</a>
+		<li class="leftnav_list">
+			<a href="admin_notice.go">공지사항 관리</a>
 		</li>
-		<li>
-			<a href="/admin_userList.go">사용자 조회</a>
+		<li class="leftnav_list">
+			<a href="admin_userList.go">사용자 조회</a>
 		</li>
-		<li>
-			<a href="/admin_crewList.go">크루 조회</a>
+		<li class="leftnav_list">
+			<a href="admin_crewList.go">크루 조회</a>
 		</li>
-		<li>
-			<a href="/admin_regMbtiq.go">헬스 MBTI 정보 관리</a>
+		<li class="leftnav_list">
+			<a href="admin_regMbtiq.go">헬스 MBTI 정보 관리</a>
 		</li>
-		<li>
-			<a href="/admin_regRegion.go">지역 정보 관리</a>
+		<li class="leftnav_list">
+			<a href="admin_regRegion.go">지역 정보 관리</a>
 		</li>
-		<li>
-			<a href="/admin_regReport.go">신고 사유 관리</a>
+		<li class="leftnav_list">
+			<a href="admin_regReport.go">신고 사유 관리</a>
 		</li>
 	</ul>
 </div>
