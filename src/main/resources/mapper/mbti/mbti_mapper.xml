@@ -33,6 +33,4 @@
 	<select id="questionCount" parameterType="int" resultType="int">
 		SELECT COUNT(mbtiq_idx) FROM mbti_q;
 	</select>
-
-
 </mapper>
