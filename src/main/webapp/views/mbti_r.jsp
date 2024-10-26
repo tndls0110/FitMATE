@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -107,7 +107,8 @@
     <div class="contents">
         <div class="Question_page">
             <div id="title">
-                <div class="b_title">헬스 MBTI</div>
+                <div class="b_title">헬스 mbti</div>
+
                 &nbsp;&nbsp;
                 <div class="s_title">검사하기</div>
             </div>
@@ -124,20 +125,44 @@
                 <div class="recommend_title">추천하는 운동 프로그램</div>
                 <div class="recommend_detail">전신 근력 운동: 덤벨 스쿼트, 푸시업, 바디웨이트 로우</div>
                 <div class="recommend_routine">주 2-3회: 한 세션당 30-45분, 세트 사이에 충분한 휴식</div>
-
-
-
             </div>
-        </div>
     </div>
+</div>
     <c:import url="layout/modal.jsp"></c:import>
 </div>
 </body>
 
 <script src="resources/js/common.js"></script>
 <script>
-    var scores = ${scores};
-    console.log('scores : ', scores);
+    //JS에서 map 형태 사용하는 법
+    console.log('scores :{}','${scores}');
+    var max = {'': 0};//만약 max보다 크면 저장...
+    //매개변수
+    //var max = 0;
+    //전달받은 매개변수
+    <c:forEach var="score" items='${scores}'>
+         console.log('entry :{}','${score.key}','${score.value}');
+        //object 객체에 값 넣기
+        var key = '${score.key}'; // score.${score.key}= value;로 할 때 작동 안되는 이유 : var key = '${score.key}';는 문자열로 취급되기 때문에 JavaScript에서 변수로서 사용될 수 없음
+        var value = ${score.value};
+        console.log('value:{}',value);
+
+
+        var keys = Object.keys(max);
+        console.log('keys:'+keys);
+        for (var k of keys){
+        console.log('key:{}',k);
+        console.log('value:{}',max[k]);
+         //score.${score.key}= value;
+            if(value>max[k]){ //만약 key에 저장된 값이 score.value보다 작으면 score.value 및 score.key를 저장
+                delete max[k]; //이미 저장되어있던 값 지우기
+                max[key] = value; //만약 max보다 크면 score[k]에 저장 -> 정처기 공부했던 내용 적용..
+            }
+    }
+    </c:forEach>
+    console.log(max);
+    //max를 전달해서 이에 해당하는
+
 
 </script>
 
