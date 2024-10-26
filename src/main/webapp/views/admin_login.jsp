@@ -11,8 +11,9 @@
 <div class="container">
     <c:import url="layout/admin_leftnav.jsp"></c:import>
     <div class="right_wrapper">
-        <div class="header_title">
-            <h2 class="title">로그인</h2>
+        <c:import url="layout/admin_header.jsp"></c:import>
+        <div class="title">
+            <h2>로그인</h2>
         </div>
         <div class="contents narrow">
             <form action="member_login.do" method="post">
@@ -31,10 +32,7 @@
                 </div>
             </form>
             <div class="list">
-                <button onclick="location.href='member_join.go'" class="full subbtn">회원가입</button>
-            </div>
-            <div class="list">
-                <button type="button" onclick="location.href='admin_login.go'" class="full textbtn">관리자 로그인</button>
+                <button onclick="location.href='member_login.go'" class="full subbtn">돌아가기</button>
             </div>
         </div>
     </div>
