@@ -6,21 +6,22 @@
     <title>FitMATE</title>
     <link rel="stylesheet" type="text/css" href="resources/css/admin_common.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        var index = 1;
+    </script>
 </head>
 <body>
 <div class="container">
-    <c:import url="layout/admin_leftnav.jsp">
-        <c:param name="page" value="1"></c:param>
-    </c:import>
+    <c:import url="layout/admin_leftnav.jsp" />
     <div class="right_wrapper">
-        <c:import url="layout/admin_header.jsp"></c:import>
+        <c:import url="layout/admin_header.jsp" />
         <div class="title">
             <h2>대시보드</h2>
         </div>
         <div class="contents"></div>
     </div>
 </div>
-<c:import url="layout/modal.jsp"></c:import>
+<c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
 <script>

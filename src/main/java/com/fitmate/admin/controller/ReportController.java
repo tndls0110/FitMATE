@@ -18,14 +18,14 @@ public class ReportController {
 	// 신고 목록
 	@RequestMapping (value = "/admin_reportList.go")
 	public String noticeList(){
-		page = "admin_noticeList";
+		page = "admin_reportList";
 		return page;
 	}
 
 	// 신고 상새보기
-	@RequestMapping (value = "/admin_noticeDetail.go")
+	@RequestMapping (value = "/admin_reportDetail.go")
 	public String noticeDetail(){
-		page = "admin_noticeDetail";
+		page = "admin_reportDetail";
 		return page;
 	}
 
