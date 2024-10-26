@@ -19,4 +19,5 @@ public interface MbtiDAO {
 	int nextPageIdx(int lastQIdx);
 
 	int questionCount();
+
 }
