@@ -4,13 +4,13 @@ import com.fitmate.admin.dto.NoticeDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface NoticeDAO {
 
     // 공지사항 작성
-    int write(String notice_cont, int admin_idx);
+    int write(NoticeDTO dto);
+    int insertAlert(int notice_idx);
 
     // 공지사항 목록
     int allCount(int cnt);
@@ -19,4 +19,5 @@ public interface NoticeDAO {
 
     // 공지사항 삭제
     int invisible(int noticeIdx);
+
 }

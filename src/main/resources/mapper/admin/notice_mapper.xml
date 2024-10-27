@@ -6,8 +6,15 @@
 <mapper namespace="com.fitmate.admin.dao.NoticeDAO">
 
     <!-- 공지사항 작성 -->
-    <insert id="write">
-        INSERT INTO notice (notice_cont, admin_idx) VALUES (#{param1}, #{param2});
+    <insert id="write" parameterType="com.fitmate.admin.dto.NoticeDTO" useGeneratedKeys="true" keyColumn="notice_idx" keyProperty="notice_idx">
+        INSERT INTO notice (notice_cont, admin_idx) VALUES (#{notice_cont}, #{admin_idx});
+    </insert>
+
+    <insert id="insertAlert">
+        INSERT INTO noti (notis_idx, notis_cate, noti_content, notis_date)
+            VALUES (#{param}, 2,
+                    (SELECT notice_cont FROM notice WHERE notice_idx = #{param}),
+                    (SELECT notice_regdate FROM notice WHERE notice_idx = #{param}));
     </insert>
 
     <!-- 공지사항 목록 -->
