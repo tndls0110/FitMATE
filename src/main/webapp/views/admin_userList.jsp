@@ -60,7 +60,7 @@
             </div>
             <div class="search">
                 <form>
-                    <div class="btn_flex">
+                    <div class="btn_flex full">
                         <div class="width20p">
                             <select name="searchType" class="subbtn full">
                                 <option value="user_id" selected>사용자 ID</option>
