@@ -3,4 +3,36 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.admin.dao.UserDAO"></mapper>
+<mapper namespace="com.fitmate.admin.dao.UserDAO">
+
+    <!-- 사용자 목록 -->
+    <select id="userAllCount" resultType="int">
+        SELECT CEIL(COUNT(user_id) / #{param1}) FROM member
+    </select>
+
+    <select id="userCountIdx" resultType="int">
+        SELECT COUNT(user_id) FROM member
+    </select>
+
+    <select id="userList" resultType="com.fitmate.member.dto.MemberDTO">
+        SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.profile,
+            (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate'
+            FROM member m JOIN profile p ON m.user_id = p.user_id
+            <where>
+                <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
+                    m.user_id LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('nick')">
+                    m.nick LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('name')">
+                    m.name LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('email')">
+                    m.email LIKE CONCAT('%', #{param4}, '%')
+                </if>
+            </where>
+            LIMIT #{param2} OFFSET #{param1}
+    </select>
+
+</mapper>
