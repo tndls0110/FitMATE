@@ -18,13 +18,36 @@
         <div class="title">
             <h2>신고 사유 관리</h2>
         </div>
-        <div class="contents"></div>
+        <div class="contents narrow">
+            <ul class="noDesc">
+                <c:forEach items="${list}" var="list">
+                    <li>
+                        <div class="btn_flex narrow">
+                            <div class="width80p">
+                                <input type="text" name="reportr_con" value="${list.reportr_con}" class="full flex_left" onblur="updateData(this, ${list.reportr_idx})" />
+                            </div>
+                            <div class="width20p">
+                                <button onclick="deleteData(this, ${list.reportr_idx})" class="mainbtn full flex_right">삭제</button>
+                            </div>
+                        </div>
+                    </li>
+                </c:forEach>
+            </ul>
+            <form>
+                <div class="btn_flex narrow">
+                    <div class="width80p">
+                        <input type="text" name="reportr_con" class="full flex_left insertData" placeholder="추가할 항목을 입력하세요." />
+                    </div>
+                    <div class="width20p">
+                        <input type="button" value="추가" onclick="insertData()" class="mainbtn full flex_right" />
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script>
-    var msg = '${msg}';
-</script>
+<script src="resources/js/admin_regData.js"></script>
 </html>

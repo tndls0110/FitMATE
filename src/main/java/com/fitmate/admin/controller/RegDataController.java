@@ -17,50 +17,73 @@ public class RegDataController {
 
 	// 세션 체크
 	String page = "";
+	@Autowired MainController main_controller;
 
 	// 헬스 MBTI 질문 관리
 	@RequestMapping (value = "/admin_regMbtiq.go")
-	public String reg_mbtiQuestion (Model model, HttpSession session) {
+	public String regMbtiQuestion (Model model, HttpSession session) {
 		page = "admin_regMbtiq";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtiq_sub.go")
-	public String reg_mbtiQuestion_sub (Model model, HttpSession session) {
+	public String regMbtiQuestionSub (Model model, HttpSession session) {
 		page = "admin_regMbtiq_sub";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtiq_scr.go")
-	public String reg_mbtiQuestion_score (Model model, HttpSession session) {
+	public String regMbtiQuestionScore (Model model, HttpSession session) {
 		page = "admin_regMbtiq_scr";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	// 헬스 MBTI 결과 관리
 	@RequestMapping (value = "/admin_regMbtir.go")
-	public String reg_mbtiResult (Model model, HttpSession session) {
+	public String regMbtiResult (Model model, HttpSession session) {
 		page = "admin_regMbtir";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	// 지역 목록 관리
 	@RequestMapping (value = "/admin_regRegion.go")
-	public String reg_region (Model model, HttpSession session) {
+	public String regRegion (Model model, HttpSession session) {
 		page = "admin_regRegion";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regRegion_sub.go")
-	public String reg_region_sub (Model model, HttpSession session) {
+	public String regRegionSub (Model model, HttpSession session) {
 		page = "admin_regRegion_sub";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
 		return page;
 	}
 
 	// 신고 사유 관리
 	@RequestMapping (value = "/admin_regReport.go")
-	public String reg_report (Model model, HttpSession session) {
+	public String regReport (Model model, HttpSession session) {
 		page = "admin_regReport";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		model.addAttribute("list", regData_service.regReport());
 		return page;
 	}
 
