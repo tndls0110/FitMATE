@@ -161,6 +161,9 @@
 	let currentQuestionIdx = 0;
 	let minQuestionIdx = 0;
 	let nextPageidentifier = 1;
+	let selectedScore = {};
+	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음 +나중에 이전 페이지로 돌아가기 고도화
+
 
 	//페이지 시작하자마자 정보 가져오기
 	//최소 idx 값을 가져오는 ajax 요청부터 실행
@@ -183,8 +186,7 @@
 					minQuestionIdx = result.idx;
 					console.log(currentQuestionIdx);
 					console.log(minQuestionIdx);
-					//저장하고 나서
-					isInitialLoad = false;
+					//저장하고 나서 initial Load 자리 총 합산 변수 자리로 옮김
 					loadQuestion(currentQuestionIdx); //idx 값을 기반으로
 					drawOption(currentQuestionIdx);
 
@@ -267,6 +269,12 @@
 
 					}
 				}
+
+				//끝나면 전역변수 만들어주기..
+				//1. 총 점수 합산할 변수 만들기 -> let scores
+				if(isInitialLoad){
+				create_Totalscore();
+				}
 			},
 			error:function(e){
 				console.log(e);
@@ -275,12 +283,49 @@
 		});
 	}
 
-	let selectedScore = {};
-	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음ㄴ +나중에 이전 페이지로 돌아가기 고도화
+
+	// let scores = {
+	// 	"잔근육매니아" : 0,
+	// 	"유산소매니아" : 0,
+	// 	"건강추종자" : 0,
+	// 	"자기개발자" : 0,
+	// 	"시간부족형" : 0
+	// }
+
+	//총 합산 점수 구할 변수 만들기
+	let scores = {}; //여기는 let scores = new scores();
+	function create_Totalscore(){ //이것도 처음할 때만 하도록...
+			$.ajax({
+				type: 'GET',
+				url: '/create_Totalscore.ajax',
+				data: {},
+				dataType: 'JSON',
+				success: function (score) { //여기 scores랑 전역변수 scores랑 이름이 비슷해서 생긴 문제
+					console.log('create_scores:', score);
+					console.log('create_scores:', score.create_totalScore);
+					var create_totalScore = score.create_totalScore;
+					for (var type_name of create_totalScore) {
+						console.log('type_name:', type_name); //받아온 성향 이름 분리
+						scores[type_name] = 0; //받아온 성향 이름 : 0 을 scores 변수에 넣음
+					}
+					console.log('점수 합산할 변수 만들기 성공 : ', scores);
+
+					//for (var i = 0; i < )
+					isInitialLoad = false; //이후부터는 최소 idx 및 변수 설정 안되도록..
+
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+	}
+
+
 
 	// typeScore (성향 점수) 불러오기 =========================================================================================
 	function typeScore(questionIdx,optionidx){ //클릭한 것만 성향과 점수 가져오는 것
 		// 1. click된 버튼의 optionidx 기반으로 운동 성향과 점수 가져오기
+
 		$.ajax({
 			type : 'GET',
 			url : 'get_typeScore.ajax',
@@ -291,6 +336,7 @@
 				//typeScore 데이터 가져오기 성공
 				console.log('저장된 값 있어? 1:', selectedScore);
 
+				//조건에 따라서 얻은 점수와 성향을 전달해서 점수를 +하거나 - 하기
 				//질문 1. 저장된 값이 있는가
 				console.log('저장된 값의 길이: ' + Object.keys(selectedScore).length);
 
@@ -416,17 +462,6 @@
 	//재선언할 수 없는 let으로
 	//띄어쓰기 있는 문자를 검색해야하니까.. let 잔근육매니아가 아닌.. let scores = {}
 
-	let scores = {
-		"잔근육매니아" : 0,
-		"유산소매니아" : 0,
-		"건강추종자" : 0,
-		"자기개발자" : 0,
-		"시간부족형" : 0
-	}
-
-	//변수 -> index => 결합도 => 변수 만드는 것까지 넣기
-	//let scores를 밖에 선언해주고 ..
-	// TypeScore 만들 때 넣기
 
 	//점수 더하기 ======================================================
 	function addScore(data){
