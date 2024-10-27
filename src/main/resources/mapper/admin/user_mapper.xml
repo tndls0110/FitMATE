@@ -78,7 +78,7 @@
     <!-- 크루 조회 -->
     <select id="crewDetail" resultType="com.fitmate.admin.dto.CrewListDTO">
         SELECT c.crew_idx, c.name, c.crew_id, m.nick, c.regions_idx, c.create_date, c.status, c.last_date,
-               (SELECT p.profile FROM profile p JOIN member m ON p.user_id = m.user_id WHERE m.user_id = c.crew_id) AS 'profile',
+                (SELECT p.profile FROM profile p JOIN member m ON p.user_id = m.user_id WHERE m.user_id = c.crew_id) AS 'profile',
                 (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx =
                     (SELECT p.mbtir_idx FROM profile p JOIN member m ON p.user_id = m.user_id WHERE m.user_id = c.crew_id)) AS 'mbtir_name',
                 (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = c.regions_idx) AS 'region_name',
