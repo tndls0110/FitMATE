@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 public class ScheduleController {
-	@Autowired ScheduleService s_service = new ScheduleService();
+	@Autowired ScheduleService s_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@RequestMapping (value = {"/" ,"/schedule.go"})
