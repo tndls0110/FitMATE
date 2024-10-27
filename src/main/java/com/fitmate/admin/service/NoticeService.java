@@ -18,12 +18,14 @@ public class NoticeService {
 	// 공지사항 작성
 	public boolean write(String notice_cont, int admin_idx) {
 		boolean result = false;
-		NoticeDTO notice = new NoticeDTO();
-		notice.setNotice_cont(notice_cont);
-		notice.setAdmin_idx(admin_idx);
-		if (notice_dao.write(notice_cont, admin_idx) == 1){
-			//if (notice_dao.insertAlert())
-			result = true;
+		NoticeDTO dto = new NoticeDTO();
+		dto.setNotice_cont(notice_cont);
+		dto.setAdmin_idx(admin_idx);
+		if (notice_dao.write(dto) == 1){
+			int notice_idx = dto.getNotice_idx();
+			if (notice_dao.insertAlert(notice_idx) == 1){
+				result = true;
+			}
 		}
 		return result;
 	}
