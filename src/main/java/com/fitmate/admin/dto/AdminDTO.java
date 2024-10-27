@@ -1,5 +1,7 @@
 package com.fitmate.admin.dto;
 
+import java.time.LocalDateTime;
+
 public class AdminDTO {
 
     private int admin_idx;
@@ -9,8 +11,8 @@ public class AdminDTO {
     private String admin_name;
     private String admin_email;
     private String admin_phone;
-    private String admin_regdate;
-    private String admin_quitdate;
+    private LocalDateTime admin_regdate;
+    private LocalDateTime admin_quitdate;
 
     public int getAdmin_idx() {
         return admin_idx;
@@ -33,10 +35,10 @@ public class AdminDTO {
     public String getAdmin_phone() {
         return admin_phone;
     }
-    public String getAdmin_regdate() {
+    public LocalDateTime getAdmin_regdate() {
         return admin_regdate;
     }
-    public String getAdmin_quitdate() {
+    public LocalDateTime getAdmin_quitdate() {
         return admin_quitdate;
     }
 
@@ -61,10 +63,10 @@ public class AdminDTO {
     public void setAdmin_phone(String admin_phone) {
         this.admin_phone = admin_phone;
     }
-    public void setAdmin_regdate(String admin_regdate) {
+    public void setAdmin_regdate(LocalDateTime admin_regdate) {
         this.admin_regdate = admin_regdate;
     }
-    public void setAdmin_quitdate(String admin_quitdate) {
+    public void setAdmin_quitdate(LocalDateTime admin_quitdate) {
         this.admin_quitdate = admin_quitdate;
     }
 

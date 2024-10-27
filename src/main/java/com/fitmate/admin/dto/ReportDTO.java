@@ -1,6 +1,6 @@
 package com.fitmate.admin.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class ReportDTO {
 
@@ -11,12 +11,12 @@ public class ReportDTO {
     private int board_idx;
     private int board_type;
     private int report_prog;
-    private Date reported_date;
+    private LocalDateTime reported_date;
 
     private int reportd_idx;
     private int admin_idx;
     private String reportd_con;
-    private Date reportd_date;
+    private LocalDateTime reportd_date;
 
     private String reportr_con;
 
@@ -41,7 +41,7 @@ public class ReportDTO {
     public int getReport_prog() {
         return report_prog;
     }
-    public Date getReported_date() {
+    public LocalDateTime getReported_date() {
         return reported_date;
     }
     public int getReportd_idx() {
@@ -53,7 +53,7 @@ public class ReportDTO {
     public String getReportd_con() {
         return reportd_con;
     }
-    public Date getReportd_date() {
+    public LocalDateTime getReportd_date() {
         return reportd_date;
     }
     public String getReportr_con() {
@@ -63,7 +63,7 @@ public class ReportDTO {
     public void setReportr_con(String reportr_con) {
         this.reportr_con = reportr_con;
     }
-    public void setReportd_date(Date reportd_date) {
+    public void setReportd_date(LocalDateTime reportd_date) {
         this.reportd_date = reportd_date;
     }
     public void setReportd_con(String reportd_con) {
@@ -75,7 +75,7 @@ public class ReportDTO {
     public void setReportd_idx(int reportd_idx) {
         this.reportd_idx = reportd_idx;
     }
-    public void setReported_date(Date reported_date) {
+    public void setReported_date(LocalDateTime reported_date) {
         this.reported_date = reported_date;
     }
     public void setReport_prog(int report_prog) {

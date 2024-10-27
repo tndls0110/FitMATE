@@ -1,12 +1,13 @@
 package com.fitmate.admin.service;
 
 import com.fitmate.admin.dao.MainDAO;
+import com.fitmate.admin.dto.DashboardDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class MainService {
@@ -37,4 +38,9 @@ public class MainService {
         return main_dao.getidx(admin_id);
     }
 
+    // 대시보드 > 공지사항 목록
+    public List<DashboardDTO> dashboardList() {
+        List<DashboardDTO> list = main_dao.dashboardList();
+        return main_dao.dashboardList();
+    }
 }

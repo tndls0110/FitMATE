@@ -1,19 +1,13 @@
+// 공지사항 출력
 var showPage = 1;
-var cnt = $('#pagePerNum').val();
-var vPages = 8;
+var cnt = 10;
+var vPages = 10;
 
 const searchParams = new URLSearchParams(window.location.search);
-var opt = searchParams.get('opt');
-var keyword = searchParams.get('keyword');
+var searchType = searchParams.get('searchType');
+var keywords = searchParams.get('keywords');
 
 pageShow(showPage);
-console.log(cnt)
-
-$('#pagePerNum').change(function() {
-    $('#pagination').twbsPagination('destroy');
-    cnt = $('#pagePerNum').val();
-    pageShow(showPage);
-});
 
 function pageShow(page) {
     $.ajax({
@@ -22,8 +16,8 @@ function pageShow(page) {
         data: {
             'page': page,
             'cnt': cnt,
-            'opt': opt,
-            'keyword': keyword
+            'opt': searchType,
+            'keyword': keywords
         },
         dataType: 'json',
         success: function(data) {
@@ -53,7 +47,7 @@ function listPrint(list, totalIdx, currentPage, offset) {
     for (var i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
-        tags += '<td>'+list[i].notice_cont+'</td>';
+        tags += '<td class="left">'+list[i].notice_cont+'</td>';
         tags += '<td>'+list[i].admin_name+'</td>';
         tags += '<td>'+list[i].notice_regdate+'</td>';
         if (list[i].notice_show == 1){
@@ -62,14 +56,35 @@ function listPrint(list, totalIdx, currentPage, offset) {
             tags += '<td><button class="subbtn minbtn">게시안함</button></td>';
         }
         if (list[i].notice_show == 1){
-            tags += '<td><button class="textbtn minbtn">게시중단</button></td>';
+            tags += '<td><button onclick="invisible('+list[i].notice_idx+')" class="textbtn minbtn">게시중단</button></td>';
+        } else {
+            tags += '<td></td>';
         }
         tags += '</tr>';
     }
-    console.log(tags);
     document.getElementsByTagName('tbody')[0].innerHTML = tags;
 }
 
+function invisible(idx) {
+    showPage = document.getElementsByClassName('active')[1].children[0].innerHTML;
+    $.ajax({
+        type: 'post',
+        url: 'notice_invisible.ajax',
+        data: {
+            'notice_idx': idx
+        },
+        dataType: 'json',
+        success: function(data) {
+            if (data.success){
+                $('#pagination').twbsPagination('destroy');
+                pageShow(showPage);
+            }
+        },
+        error: function(e) {}
+    });
+}
+
+// 공지사항 작성
 function writeNotice() {
     var leng = document.getElementsByTagName('textarea')[0].value.length;
     if (leng == 0){

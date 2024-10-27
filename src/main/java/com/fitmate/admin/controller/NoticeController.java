@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -30,16 +31,6 @@ public class NoticeController {
 		return page;
 	}
 
-	// 공지사항 목록
-	@RequestMapping (value = "/notice_list.ajax")
-	@ResponseBody
-	public Map<String, Object> list(String page, String cnt, String opt, String keyword) {
-		int pageInt = Integer.parseInt(page);
-		int cntInt = Integer.parseInt(cnt);
-
-		return notice_service.list(pageInt, cntInt, opt, keyword);
-	}
-
 	// 공지사항 작성
 	@RequestMapping (value = "/admin_noticeWrite.do")
 	public String write (@RequestParam Map<String, String> params, Model model, HttpSession session) {
@@ -55,4 +46,22 @@ public class NoticeController {
 		return page;
 	}
 
+	// 공지사항 목록
+	@RequestMapping (value = "/notice_list.ajax")
+	@ResponseBody
+	public Map<String, Object> list(String page, String cnt, String opt, String keyword) {
+		int pageInt = Integer.parseInt(page);
+		int cntInt = Integer.parseInt(cnt);
+		return notice_service.list(pageInt, cntInt, opt, keyword);
+	}
+
+	// 공지사항 삭제
+	@RequestMapping (value = "notice_invisible.ajax")
+	@ResponseBody
+	public Map<String, Object> invisible(String notice_idx) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		int noticeIdx = Integer.parseInt(notice_idx);
+		result.put("success", notice_service.invisible(noticeIdx));
+		return result;
+	}
 }

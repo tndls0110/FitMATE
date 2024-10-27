@@ -38,10 +38,9 @@ if (msg != ''){
 
 // textarea에 작성시 글자수 출력
 function drawLength(elem) {
-    $(elem).removeClass('caution').addClass('pass');
-    $(elem).next('.showLength').children('h3').children('span').html(elem.value.length);
+    document.getElementsByClassName('counter')[0].innerHTML = elem.value.length;
     if (elem.value.length >= $(elem).attr('maxlength')){
-        $(elem).removeClass('pass').addClass('caution');
+        $(elem).addClass('caution');
         modal.showAlert("최대 1,000자까지 입력할 수 있습니다.");
     }
 }
