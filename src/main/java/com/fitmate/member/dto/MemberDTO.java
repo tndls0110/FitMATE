@@ -1,6 +1,8 @@
 package com.fitmate.member.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MemberDTO {
 
@@ -18,6 +20,7 @@ public class MemberDTO {
     private String regions_name;
     private int mbtir_idx;
     private String mbtir_name;
+    private LocalDateTime last_regdate;
 
     public String getUser_id() {
         return user_id;
@@ -60,6 +63,14 @@ public class MemberDTO {
     }
     public String getMbtir_name() {
         return mbtir_name;
+    }
+    public String getLast_regdate() {
+        if (last_regdate == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return last_regdate.format(formatter);
+        }
     }
 
     public void setUser_id(String user_id) {
@@ -104,5 +115,7 @@ public class MemberDTO {
     public void setMbtir_name(String mbtir_name) {
         this.mbtir_name = mbtir_name;
     }
-
+    public void setLast_regdate(LocalDateTime last_regdate) {
+        this.last_regdate = last_regdate;
+    }
 }

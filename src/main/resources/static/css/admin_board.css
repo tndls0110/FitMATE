@@ -59,6 +59,17 @@ table td .textbtn{
     font-weight: 400;
 }
 
+table td .profile{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #e1e4ea;
+    background-size: cover;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
 table tfoot td{
     padding: 0;
 }
