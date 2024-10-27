@@ -22,4 +22,6 @@ public interface MbtiDAO {
 	int questionCount();
 
 	Map<String,String> mbtiRGet(String maxMbti);
+
+	List<Map<String, String>> create_totalScore();
 }
