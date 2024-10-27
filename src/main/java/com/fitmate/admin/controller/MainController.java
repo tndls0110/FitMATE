@@ -80,8 +80,7 @@ public class MainController {
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
 		//checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
+		model.addAttribute("notice", main_service.dashboardList());
 		return page;
 	}
 

@@ -1,6 +1,9 @@
 package com.fitmate.admin.dao;
 
+import com.fitmate.admin.dto.DashboardDTO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface MainDAO {
@@ -13,4 +16,6 @@ public interface MainDAO {
     int checkid(String admin_id);
     int getidx(String admin_id);
 
+    // 대시보드 > 공지사항 목록
+    List<DashboardDTO> dashboardList();
 }

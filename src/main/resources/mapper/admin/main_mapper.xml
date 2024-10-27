@@ -22,5 +22,10 @@
     <select id="getidx" resultType="int">
         SELECT admin_idx FROM admin WHERE admin_id = #{param1}
     </select>
+    
+    <!-- 대시보드 > 공지사항 목록 -->
+    <select id="dashboardList" resultType="com.fitmate.admin.dto.DashboardDTO">
+        SELECT notice_cont, notice_regdate, notice_show FROM notice ORDER BY notice_idx DESC LIMIT 10 OFFSET 1
+    </select>
 
 </mapper>

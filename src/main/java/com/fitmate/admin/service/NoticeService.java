@@ -8,13 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class NoticeService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired NoticeDAO notice_dao;
+
+	// 공지사항 작성
+	public boolean write(String notice_cont, int admin_idx) {
+		boolean result = false;
+		NoticeDTO notice = new NoticeDTO();
+		notice.setNotice_cont(notice_cont);
+		notice.setAdmin_idx(admin_idx);
+		if (notice_dao.write(notice_cont, admin_idx) == 1){
+			//if (notice_dao.insertAlert())
+			result = true;
+		}
+		return result;
+	}
 
 	// 공지사항 목록
 	public Map<String, Object> list(int page, int cnt, String opt, String keyword) {
@@ -33,12 +45,12 @@ public class NoticeService {
 		return result;
 	}
 
-	// 공지사항 작성
-	public boolean write(String notice_cont, int admin_idx) {
-		boolean result = false;
-		if (notice_dao.write(notice_cont, admin_idx) == 1){
-			result = true;
+	// 공지사항 삭제
+	public boolean invisible(int notice_idx) {
+		boolean success = false;
+		if (notice_dao.invisible(notice_idx) == 1){
+			success = true;
 		}
-		return result;
+		return success;
 	}
 }
