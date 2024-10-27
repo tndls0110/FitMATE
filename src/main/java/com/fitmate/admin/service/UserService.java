@@ -37,4 +37,20 @@ public class UserService {
 	public MemberDTO userDetail(String user_id) {
 		return user_dao.userDetail(user_id);
 	}
+
+	// 크루 목록
+	public Map<String, Object> crewList(int page, int cnt, String opt, String keyword) {
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+		int totalPages = user_dao.crewAllCount(cnt);
+		int totalIdx = user_dao.crewCountIdx();
+
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("totalPages", totalPages);
+		result.put("totalIdx", totalIdx);
+		result.put("currentPage", page);
+		result.put("offset", offset);
+		result.put("list", user_dao.crewList(offset, limit, opt, keyword));
+		return result;
+	}
 }

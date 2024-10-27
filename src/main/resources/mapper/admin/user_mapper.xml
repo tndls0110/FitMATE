@@ -46,4 +46,33 @@
         FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
     </select>
 
+    <!-- 크루 목록 -->
+    <select id="crewAllCount" resultType="int">
+        SELECT CEIL(COUNT(crew_idx) / #{param1}) FROM crew
+    </select>
+
+    <select id="crewCountIdx" resultType="int">
+        SELECT COUNT(crew_idx) FROM crew
+    </select>
+
+    <select id="crewList" resultType="com.fitmate.admin.dto.CrewListDTO">
+        SELECT c.crew_idx, c.name, c.crew_id, c.create_date, c.status, c.last_date, m.nick,
+        (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = c.regions_idx) AS 'region_name',
+        (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = c.regions_idx) AS 'regions_name',
+        ((SELECT COUNT(member_idx) FROM crew_member WHERE crew_idx = c.crew_idx) + 1) AS 'cnt_members'
+        FROM crew c JOIN member m ON c.crew_id = m.user_id
+        <where>
+            <if test="param4 != null and !param4.equals('') and param3.equals('name')">
+                c.name LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
+                c.crew_id LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="param4 != null and !param4.equals('') and param3.equals('nick')">
+                m.nick LIKE CONCAT('%', #{param4}, '%')
+            </if>
+        </where>
+        ORDER BY c.crew_idx DESC LIMIT #{param2} OFFSET #{param1}
+    </select>
+
 </mapper>

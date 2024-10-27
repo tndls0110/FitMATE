@@ -20,8 +20,7 @@ public class NoticeDTO {
     }
     public String getNotice_regdate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = notice_regdate.format(formatter);
-        return formattedDateTime;
+        return notice_regdate.format(formatter);
     }
     public int getNotice_show() {
         return notice_show;

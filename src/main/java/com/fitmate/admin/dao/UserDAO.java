@@ -15,4 +15,9 @@ public interface UserDAO {
 
     // 사용자 조회
     MemberDTO userDetail(String user_id);
+
+    // 크루 목록
+    int crewAllCount(int cnt);
+    int crewCountIdx();
+    List<MemberDTO> crewList(int offset, int limit, String opt, String keyword);
 }
