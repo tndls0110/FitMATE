@@ -10,8 +10,7 @@ import java.util.Date;
 
 @Service
 public class ScheduleService {
-	@Autowired
-	ScheduleDAO s_dao = new scheduleDAO();
+	@Autowired ScheduleDAO s_dao;
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	public Date getEvents() {
