@@ -168,6 +168,34 @@ html, body {
 .crew_schedule_text {
 	color: lightgray;
 }
+
+
+.fc .fc-event {
+	position: unset;
+}
+
+.type-one {
+	background-color: orange; /* 제목이 '1'인 경우의 배경색 */
+	color: white; /* 텍스트 색상 */
+}
+
+.type-two {
+	background-color: #5bc5bb; /* 제목이 '2'인 경우의 배경색 */
+	color: black; /* 텍스트 색상 */
+}
+
+.fc-daygrid-day-events{
+	display: flex;
+	margin : -10px 11px 9px 17px;
+	bottom: 10px;
+}
+
+
+.fc .fc-daygrid-day-top {
+	display: block;
+	text-align: center;
+	position: relative;
+}
 </style>
 
 </head>
@@ -278,12 +306,30 @@ html, body {
 
 <script>
 
+
+
+
 	// 캘린더 렌더링 위치
 	var calendarEl = document.getElementById('calendar');
 
 
 	let events = [];
 	window.onload = function event(){ //start : '2024-10-25' //journal에서 날짜만 뽑아오기..
+
+		const events = document.querySelectorAll('.fc-event'); //.fc-event 요소들 모두 가져오기
+		// 각 이벤트에 대해 반복
+		events.forEach(function (event) { //events 분리
+
+			const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
+
+			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
+			if (title === '1') {
+				event.classList.add('type-one'); // 클래스 추가
+			} else if (title === '2') {
+				event.classList.add('type-two'); // 클래스 추가
+			}
+		});
+
 		$.ajax({
 			type : 'GET',
 			url : 'get_events.ajax',
@@ -317,25 +363,34 @@ html, body {
 
 		//이벤트가 있는 날을 불러와서 start에 넣기?
 
-		events : events
+		//events : events;
 
 
 	// 	// 이벤트 삭제 후 작업 진행하셔야 합니다.
-	// 	events: [
-	// 		{
-	// 			start  : '2024-10-15'
-	// 		},
-	// 		{
-	// 			start  : '2024-10-18'
-	// 		},
-	// 		{
-	// 			start  : '2024-10-18'
-	// 		},
-	// 		{
-	// 			start  : '2024-10-19'
-	// 		}
-	// 	]
-	// 	// 이벤트 끝
+		events: [
+			{
+				title : '1',
+				start  : '2024-10-15'
+			},
+			{
+				title : '1',
+				start  : '2024-10-18',
+				type: '1'
+
+			},
+			{
+				title : '2',
+				start  : '2024-10-18',
+				type: '2'
+			},
+			{
+				title : '2',
+				start  : '2024-10-19'
+			},
+
+		]
+		// 이벤트 끝
+
 
 
 
