@@ -124,6 +124,14 @@ public class MbtiController {
 		return recommend;
 	};
 
+	@GetMapping (value = "/create_Totalscore.ajax")
+	@ResponseBody
+	public Map<String,Object> createTotalScore() {
+		Map<String,Object> scores = new HashMap<>();
+		scores.put("create_totalScore",m_service.create_totalScore());
+		return scores;
+	};
+
 
 
 
