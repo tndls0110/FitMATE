@@ -31,11 +31,6 @@ const modal = {
     }
 }
 
-// ${msg} 값이 있을 경우 알림창 이벤트 발생
-if (msg != ''){
-    modal.showAlert(msg);
-}
-
 // textarea에 작성시 글자수 출력
 function drawLength(elem) {
     document.getElementsByClassName('counter')[0].innerHTML = elem.value.length;

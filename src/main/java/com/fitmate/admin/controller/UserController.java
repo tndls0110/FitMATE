@@ -64,9 +64,10 @@ public class UserController {
 
 	// 크루 조회
 	@RequestMapping (value = "/admin_crewDetail.go")
-	public String crewDetail (Model model, HttpSession session) {
+	public String crewDetail (String crew_idx, Model model, HttpSession session) {
 		page = "admin_crewDetail";
 		//main_controller.checkPermit(model, session);
+		model.addAttribute("crew", user_service.crewDetail(crew_idx));
 		return page;
 	}
 

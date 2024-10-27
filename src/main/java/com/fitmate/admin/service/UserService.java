@@ -1,6 +1,7 @@
 package com.fitmate.admin.service;
 
 import com.fitmate.admin.dao.UserDAO;
+import com.fitmate.admin.dto.CrewListDTO;
 import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,5 +53,10 @@ public class UserService {
 		result.put("offset", offset);
 		result.put("list", user_dao.crewList(offset, limit, opt, keyword));
 		return result;
+	}
+
+	// 크루 조회
+	public CrewListDTO crewDetail(String crew_idx) {
+		return user_dao.crewDetail(crew_idx);
 	}
 }

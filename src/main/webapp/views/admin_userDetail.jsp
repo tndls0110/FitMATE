@@ -27,7 +27,14 @@
                 </colgroup>
                 <tr>
                     <td colspan="2">
-                        <div class="profImg" style="background-image: url('/photo/${member.profile}')"></div>
+                        <c:if test="${member.profile != ''}">
+                            <div class="profImg" style="background-image: url('/photo/${member.profile}')"></div>
+                        </c:if>
+                        <c:if test="${member.profile == ''}">
+                            <div class="profImg" style="background-image: url('/photo/${member.profile}')">
+                                <i class="bi bi-person-square" style="font-size: 140px;"></i>
+                            </div>
+                        </c:if>
                     </td>
                 </tr>
                 <tr>
@@ -86,7 +93,4 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script>
-    var msg = '${msg}';
-</script>
 </html>
