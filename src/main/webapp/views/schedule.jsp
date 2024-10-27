@@ -6,8 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="resources/css/calendar.css" />
+	<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <style>
 
 /*전체 페이지에 스크롤 없애는 법*/
@@ -17,6 +20,7 @@ html, body {
 	margin: 0; /* 기본 마진 제거 */
 	background-color: rgba(40, 43, 52, 1);
 }
+
 
 #calendar_related {
 	width: 500px;
@@ -29,9 +33,9 @@ html, body {
 
 .calendar {
 	width: 412px;
-	height: 500px;
-	margin-top: 50px;
-	background-color: red;
+	height: 580px;
+	margin-top: -15px;
+	background-color: #282b34;
 }
 
 .journal_write_button {
@@ -47,10 +51,10 @@ html, body {
 
 #schedule {
 	width: 475px;
-	height: 797px;
+	height: 680px;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	margin: -755px  -11px 3px 0px;
+	margin: -925px  -414px 9px 0px;
 	float : right;
 }
 
@@ -76,6 +80,9 @@ html, body {
 	background-color: rgba(40, 43, 52, 1);
 }
 
+.contents{
+	margin: 32px -28px;
+}
 .journal {
 	margin: 20px 0px 10px 0px;
 }
@@ -173,9 +180,21 @@ html, body {
 			<p>Hello, FitMATE!</p>
 			<div id="calendar_related">
 
-			<div class="calendar"></div>
 
-			<div class="journal_write_button">일지 작성하기</div>
+					<div class="contents">
+
+						<!-- 달력 -->
+						<div class="calendar">
+							<div class="title_calendar">
+								<p>일정 보기</p>
+								<div id="date"></div>
+								<button class="writebtn mainbtn minbtn">일정 작성</button>
+							</div>
+							<div id="calendar"></div>
+						</div>
+
+
+				<div class="journal_write_button">일지 작성하기</div>
 
 		</div>
 
@@ -250,4 +269,93 @@ html, body {
 <c:import url="layout/modal.jsp"></c:import>
 </body>
 <script src="resources/js/common.js"></script>
+<!-- 달력 JS (필수 파일입니다.) -->
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.15/index.global.min.js'></script>
+<script src="resources/js/calendar.js"></script>
+
+
+<script>
+
+	// 캘린더 렌더링 위치
+	var calendarEl = document.getElementById('calendar');
+
+
+	let events = [];
+	window.onload = function event(){ //start : '2024-10-25' //journal에서 날짜만 뽑아오기..
+		$.ajax({
+			type : 'GET',
+			url : 'get_events.ajax',
+			data : {},
+			dataType : 'JSON',
+			success : function (event_day){
+				console.log(event_day);
+			},
+			error : function (e){
+				console.log(e);
+			}
+
+		});
+
+
+	};
+	// 캘린더 설정
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView: 'dayGridMonth',
+		aspectRatio: 1.1,
+
+		headerToolbar: {
+			start: 'title',
+			center: '',
+			end: 'prev next'
+		},
+
+		DateFormatter: {
+			year:'numeric', month: 'numeric', day: 'numeric'
+		},
+
+		//이벤트가 있는 날을 불러와서 start에 넣기?
+
+		events : events
+
+
+	// 	// 이벤트 삭제 후 작업 진행하셔야 합니다.
+	// 	events: [
+	// 		{
+	// 			start  : '2024-10-15'
+	// 		},
+	// 		{
+	// 			start  : '2024-10-18'
+	// 		},
+	// 		{
+	// 			start  : '2024-10-18'
+	// 		},
+	// 		{
+	// 			start  : '2024-10-19'
+	// 		}
+	// 	]
+	// 	// 이벤트 끝
+
+
+
+	 });
+
+
+
+
+	// 캘린더 렌더링
+	calendar.render();
+
+	// 상단에 날짜 출력
+	var today = $('.fc-day-today').attr('data-date');
+	document.getElementById('date').innerHTML = today;
+
+	calendar.on('dateClick', function(info) {
+		document.getElementById('date').innerHTML = info.dateStr;
+	});
+
+
+
+</script>
 </html>
