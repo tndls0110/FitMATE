@@ -313,12 +313,31 @@ html, body {
 	var calendarEl = document.getElementById('calendar');
 
 
-	let events = [];
+	let event_create = [];
 	window.onload = function event(){ //start : '2024-10-25' //journal에서 날짜만 뽑아오기..
 
+		//1. event 추가 함수 먼저 실행
+
+		$.ajax({
+			type : 'GET',
+			url : 'get_events.ajax',
+			data : {},
+			dataType : 'JSON',
+			success : function (event_day){
+				console.log(event_day);
+				let event_Object ={}; //먼저 객체에 추가 후 event_create에 넣기
+			},
+			error : function (e){
+				console.log(e);
+			}
+
+		});
+
+		// 2. event 크루인지, 일지인지에 따라 다른 css 적용하기
 		const events = document.querySelectorAll('.fc-event'); //.fc-event 요소들 모두 가져오기
-		// 각 이벤트에 대해 반복
+		// 이벤트 forEach로 분리
 		events.forEach(function (event) { //events 분리
+			console.log(event);
 
 			const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
 
@@ -329,21 +348,6 @@ html, body {
 				event.classList.add('type-two'); // 클래스 추가
 			}
 		});
-
-		$.ajax({
-			type : 'GET',
-			url : 'get_events.ajax',
-			data : {},
-			dataType : 'JSON',
-			success : function (event_day){
-				console.log(event_day);
-			},
-			error : function (e){
-				console.log(e);
-			}
-
-		});
-
 
 	};
 	// 캘린더 설정
@@ -361,15 +365,14 @@ html, body {
 			year:'numeric', month: 'numeric', day: 'numeric'
 		},
 
-		//이벤트가 있는 날을 불러와서 start에 넣기?
 
-		//events : events;
+		events : event_create //event_create 전역변수에 만든 event를 events에 넣어주기
 
 
-	// 	// 이벤트 삭제 후 작업 진행하셔야 합니다.
-		events: [
+		//event 예시
+/*		events: [
 			{
-				title : '1',
+				title : '1', -- 일지면 title에 1 넣기
 				start  : '2024-10-15'
 			},
 			{
@@ -379,7 +382,7 @@ html, body {
 
 			},
 			{
-				title : '2',
+				title : '2', -- 크루 일정이면 title에 2 넣기
 				start  : '2024-10-18',
 				type: '2'
 			},
@@ -388,7 +391,7 @@ html, body {
 				start  : '2024-10-19'
 			},
 
-		]
+		]*/
 		// 이벤트 끝
 
 
