@@ -90,7 +90,4 @@
 </body>
 <script src="resources/js/admin_common.js"></script>
 <script src="resources/js/admin_crewList.js"></script>
-<script>
-    var msg = '${msg}';
-</script>
 </html>

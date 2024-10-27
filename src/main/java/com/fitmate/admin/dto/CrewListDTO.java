@@ -8,13 +8,16 @@ public class CrewListDTO {
     private int crew_idx;
     private String name;
     private String crew_id;
+    private String nick;
+    private String profile;
+    private String mbtir_name;
     private int regions_idx;
     private String region_name;
     private String regions_name;
     private int cnt_members;
     private int cnt_plan;
     private int cnt_board;
-    private int cnt_recruit;
+    private String recruit;
     private int cnt_notice;
     private int cnt_singleline;
     private int cnt_photo;
@@ -30,6 +33,15 @@ public class CrewListDTO {
     }
     public String getCrew_id() {
         return crew_id;
+    }
+    public String getNick() {
+        return nick;
+    }
+    public String getProfile() {
+        return profile;
+    }
+    public String getMbtir_name() {
+        return mbtir_name;
     }
     public int getRegions_idx() {
         return regions_idx;
@@ -49,8 +61,8 @@ public class CrewListDTO {
     public int getCnt_board() {
         return cnt_board;
     }
-    public int getCnt_recruit() {
-        return cnt_recruit;
+    public String getRecruit() {
+        return recruit;
     }
     public int getCnt_notice() {
         return cnt_notice;
@@ -90,6 +102,15 @@ public class CrewListDTO {
     public void setCrew_id(String crew_id) {
         this.crew_id = crew_id;
     }
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+    public void setMbtir_name(String mbtir_name) {
+        this.mbtir_name = mbtir_name;
+    }
     public void setRegions_idx(int regions_idx) {
         this.regions_idx = regions_idx;
     }
@@ -108,8 +129,8 @@ public class CrewListDTO {
     public void setCnt_board(int cnt_board) {
         this.cnt_board = cnt_board;
     }
-    public void setCnt_recruit(int cnt_recruit) {
-        this.cnt_recruit = cnt_recruit;
+    public void setRecruit(String recruit) {
+        this.recruit = recruit;
     }
     public void setCnt_notice(int cnt_notice) {
         this.cnt_notice = cnt_notice;

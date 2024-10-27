@@ -1,5 +1,6 @@
 package com.fitmate.admin.dao;
 
+import com.fitmate.admin.dto.CrewListDTO;
 import com.fitmate.member.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,5 +20,8 @@ public interface UserDAO {
     // 크루 목록
     int crewAllCount(int cnt);
     int crewCountIdx();
-    List<MemberDTO> crewList(int offset, int limit, String opt, String keyword);
+    List<CrewListDTO> crewList(int offset, int limit, String opt, String keyword);
+
+    // 크루 조회
+    CrewListDTO crewDetail(String crew_idx);
 }
