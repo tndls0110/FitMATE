@@ -81,7 +81,7 @@ public class MbtiService {
 		//최종 저장할 곳
 		Map<String, Object> data = new HashMap<>();
 
-		//List<
+		//List //꺼내온 값은 List<map 형태> -> 이 값을 List<DTO>에 저장
 		List<Map<String, Object>> typeScoreData = m_dao.getTypeScore(Oidx);
 
 		// List <MBTIQRDTO.TypeScore> typescores 객체화 -- 한 문항에 여러 개의 성향 저장하기 위함
@@ -106,6 +106,8 @@ public class MbtiService {
 			typescore.setMbtiscr_scr(mbtiscr_scr);
 
 			typescores.add(typescore);// typescore, typeScores에 add하기
+
+			//List<DTO>를 Map에 넣어주기
 			data.put("typeScore", typescores);
 
 		}
@@ -126,5 +128,11 @@ public class MbtiService {
 		//DTO형태로 가져오기 = m_dao.mbtiRGet
 		Map<String,String> mbti_recommend = m_dao.mbtiRGet(max_mbti);
 		return mbti_recommend;
+	}
+
+	public List<Map<String,String>> create_totalScore() {
+		//꺼내올 때는 List<Map> -> map에 담아서 보내기 (DTO 담을 필요 x)
+		List<Map<String,String>> create_totalScore = m_dao.create_totalScore();
+		return create_totalScore;
 	}
 }
