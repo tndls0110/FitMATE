@@ -30,7 +30,11 @@ public class UserService {
 		result.put("currentPage", page);
 		result.put("offset", offset);
 		result.put("list", user_dao.userList(offset, limit, opt, keyword));
-		logger.info("list: {}", user_dao.userList(offset, limit, opt, keyword));
 		return result;
+	}
+
+	// 사용자 조회
+	public MemberDTO userDetail(String user_id) {
+		return user_dao.userDetail(user_id);
 	}
 }

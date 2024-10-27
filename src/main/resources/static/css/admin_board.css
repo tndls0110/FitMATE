@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* write */
 
 .writer{
@@ -38,7 +40,7 @@ table th,
 table td{
     margin: 0;
     padding: 8px 4px;
-    font-size: 12px;
+    font-size: 13px;
     text-align: center;
 }
 
@@ -72,6 +74,38 @@ table td .profile{
 
 table tfoot td{
     padding: 0;
+}
+
+
+
+/* table narrow */
+
+.narrow table{
+    margin-bottom: 24px;
+}
+
+.narrow th,
+.narrow td{
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.narrow th {
+    font-size: 12px;
+    font-weight: 400;
+    vertical-align: top;
+}
+
+.narrow td{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.narrow td .profImg{
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 24px;
+    border-radius: 5px;
+    background-size: cover;
 }
 
 
@@ -111,6 +145,10 @@ table tfoot td{
 
 .search{
     margin-top: 28px;
+}
+
+.btn_flex.full{
+    width: 936px;
 }
 
 .search .btn_flex .btn_flex.narrow{
