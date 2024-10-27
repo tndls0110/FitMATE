@@ -1,4 +1,4 @@
-// 사용자 목록 출력
+// 크루 목록 출력
 var showPage = 1;
 var cnt = 10;
 var vPages = 10;
@@ -12,7 +12,7 @@ pageShow(showPage);
 function pageShow(page) {
     $.ajax({
         type: 'post',
-        url: 'user_list.ajax',
+        url: 'crew_list.ajax',
         data: {
             'page': page,
             'cnt': cnt,
@@ -48,24 +48,19 @@ function listPrint(list, totalIdx, currentPage, offset) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
         tags += '<td class="left">';
-        tags += '<a href="admin_userDetail.go?user_id='+list[i].user_id+'">';
-        if (list[i].profile == '' || list[i].profile == null){
-            tags += '<i class="bi bi-person-circle"></i> ';
-        } else {
-            tags += '<div class="profile" style="background-image: url(\'/photo/'+list[i].profile+'\')"></div> ';
-        }
-        tags += list[i].user_id+' ('+list[i].nick+')';
+        tags += '<a href="admin_crewDetail.go?crew_idx='+list[i].crew_idx+'">';
+        tags += list[i].name;
         tags += '</a></td>';
-        tags += '<td>'+list[i].email+'</td>';
-        tags += '<td>'+list[i].name+'</td>';
-        tags += '<td>'+list[i].birthday+'</td>';
-        if (list[i].last_regdate == ""){
-            tags += '<td>이용내역 없음</td>';
+        tags += '<td>'+list[i].crew_id+' ('+list[i].nick+')</td>';
+        tags += '<td>'+list[i].region_name+' '+list[i].regions_name+'</td>';
+        tags += '<td>'+list[i].cnt_members+'</td>';
+        tags += '<td>'+list[i].create_date+'</td>';
+        tags += '<td>'+list[i].last_date+'</td>';
+        if (list[i].status){
+            tags += '<td><button class="mainbtn minbtn">운영중</button></td>';
         } else {
-            tags += '<td>'+list[i].last_regdate+'</td>';
+            tags += '<td><button class="subbtn minbtn">운영종료</button></td>';
         }
-        tags += '<td>이용상태</td>';
-        tags += '<td>잔여제재일</td>';
         tags += '</tr>';
     }
     document.getElementsByTagName('tbody')[0].innerHTML = tags;

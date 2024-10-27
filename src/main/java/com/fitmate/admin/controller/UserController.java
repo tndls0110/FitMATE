@@ -29,7 +29,6 @@ public class UserController {
 		return page;
 	}
 
-	// 공지사항 목록
 	@RequestMapping (value = "/user_list.ajax")
 	@ResponseBody
 	public Map<String, Object> userList(String page, String cnt, String opt, String keyword) {
@@ -53,6 +52,14 @@ public class UserController {
 		page = "admin_crewList";
 		//main_controller.checkPermit(model, session);
 		return page;
+	}
+
+	@RequestMapping (value = "/crew_list.ajax")
+	@ResponseBody
+	public Map<String, Object> crewList(String page, String cnt, String opt, String keyword) {
+		int pageInt = Integer.parseInt(page);
+		int cntInt = Integer.parseInt(cnt);
+		return user_service.crewList(pageInt, cntInt, opt, keyword);
 	}
 
 	// 크루 조회
