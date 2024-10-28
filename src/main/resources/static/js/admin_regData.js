@@ -7,13 +7,14 @@ function regData(regType, idx) {
 
 // 지역 정보 관리
 manageRegion();
-
 function manageRegion() {
     var urlParams = new URLSearchParams(window.location.search);
     var region_idx = urlParams.get('region_idx');
     $('option[value="' + region_idx + '"]').attr('selected', 'selected');
-    $('option[name="region_idx"]').val(region_idx);
-    console.log($('option[name="region_idx"]').val());
+    for (let i = 0; i < document.getElementsByName('region_idx').length; i++) {
+        document.getElementsByName('region_idx')[i].value = region_idx;
+    }
+    document.getElementById('insert').action = 'admin_insertRegion_sub.do?region_idx='+region_idx;
 }
 
 function onOptionChange(event){
