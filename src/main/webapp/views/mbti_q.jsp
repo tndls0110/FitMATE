@@ -146,7 +146,6 @@
 					<input type = "button" class="next" value="다음 질문 →" onclick="load_nextPage(currentQuestionIdx)">
 				</form>
 
-
 				<!--이미지로 넣기-->
 			</div>
 		</div>
@@ -162,6 +161,9 @@
 	let currentQuestionIdx = 0;
 	let minQuestionIdx = 0;
 	let nextPageidentifier = 1;
+	let selectedScore = {};
+	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음 +나중에 이전 페이지로 돌아가기 고도화
+
 
 	//페이지 시작하자마자 정보 가져오기
 	//최소 idx 값을 가져오는 ajax 요청부터 실행
@@ -184,8 +186,7 @@
 					minQuestionIdx = result.idx;
 					console.log(currentQuestionIdx);
 					console.log(minQuestionIdx);
-					//저장하고 나서
-					isInitialLoad = false;
+					//저장하고 나서 initial Load 자리 총 합산 변수 자리로 옮김
 					loadQuestion(currentQuestionIdx); //idx 값을 기반으로
 					drawOption(currentQuestionIdx);
 
@@ -268,6 +269,12 @@
 
 					}
 				}
+
+				//끝나면 전역변수 만들어주기..
+				//1. 총 점수 합산할 변수 만들기 -> let scores
+				if(isInitialLoad){
+				create_Totalscore();
+				}
 			},
 			error:function(e){
 				console.log(e);
@@ -276,8 +283,44 @@
 		});
 	}
 
-	let selectedScore = {};
-	//선택지들 중 뭐를 선택했는지 확인해야.. 선택지 누를 때 다른 선택지 클릭했는지 구분할 수 있음ㄴ +나중에 이전 페이지로 돌아가기 고도화
+
+	// let scores = {
+	// 	"잔근육매니아" : 0,
+	// 	"유산소매니아" : 0,
+	// 	"건강추종자" : 0,
+	// 	"자기개발자" : 0,
+	// 	"시간부족형" : 0
+	// }
+
+	//총 합산 점수 구할 변수 만들기
+	let scores = {}; //여기는 let scores = new scores();
+	function create_Totalscore(){ //이것도 처음할 때만 하도록...
+			$.ajax({
+				type: 'GET',
+				url: '/create_Totalscore.ajax',
+				data: {},
+				dataType: 'JSON',
+				success: function (score) { //여기 scores랑 전역변수 scores랑 이름이 비슷해서 생긴 문제
+					console.log('create_scores:', score);
+					console.log('create_scores:', score.create_totalScore);
+					var create_totalScore = score.create_totalScore;
+					for (var type_name of create_totalScore) {
+						console.log('type_name:', type_name); //받아온 성향 이름 분리
+						scores[type_name] = 0; //받아온 성향 이름 : 0 을 scores 변수에 넣음
+					}
+					console.log('점수 합산할 변수 만들기 성공 : ', scores);
+
+					//for (var i = 0; i < )
+					isInitialLoad = false; //이후부터는 최소 idx 및 변수 설정 안되도록..
+
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+	}
+
+
 
 	// typeScore (성향 점수) 불러오기 =========================================================================================
 	function typeScore(questionIdx,optionidx){ //클릭한 것만 성향과 점수 가져오는 것
@@ -293,6 +336,7 @@
 				//typeScore 데이터 가져오기 성공
 				console.log('저장된 값 있어? 1:', selectedScore);
 
+				//조건에 따라서 얻은 점수와 성향을 전달해서 점수를 +하거나 - 하기
 				//질문 1. 저장된 값이 있는가
 				console.log('저장된 값의 길이: ' + Object.keys(selectedScore).length);
 
@@ -302,34 +346,34 @@
 					//★Object.keys(selectedScore).length가 0이면 없는 거고.... 그 이상이면 값이 있는 상태
 
 					//질문 2. 현재 질문 idx 값이 있는가
-						//Yes -> selectedScore에서 질문 idx값 분리해서 비교.
-						if(selectedScore[questionIdx] != null) { //만약 질문 idx 값이 있으면?
-							//질문 3. 저장된 옵션 idx가 같은가?
-							// questionIdx값이 같은 것은 아무것도 안하니까.. 추가하지 않기
-							//if(){ //NO-> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
-							console.log("저장된 값 뽑아오기 test 2 :",selectedScore[questionIdx].options);
+					//Yes -> selectedScore에서 질문 idx값 분리해서 비교.
+					if(selectedScore[questionIdx] != null) { //만약 질문 idx 값이 있으면?
+						//질문 3. 저장된 옵션 idx가 같은가?
+						// questionIdx값이 같은 것은 아무것도 안하니까.. 추가하지 않기
+						//if(){ //NO-> saved된 값의 성향, 점수 가져오기 -> decrease() + 새로운 값 save(),add()
+						console.log("저장된 값 뽑아오기 test 2 :",selectedScore[questionIdx].options);
 
-							//해결 -> selectedScore에서 option의 idx 값 뽑아오기
-							let isMatch = selectedScore[questionIdx].options.some(function (option) {
+						//해결 -> selectedScore에서 option의 idx 값 뽑아오기
+						let isMatch = selectedScore[questionIdx].options.some(function (option) {
 
-								//some()은 각 요소에 대해 이 함수를 호출해서 조건을 만족하는 요소가 있는지 확인
-								//option은 현재 검사 중인 배열의 요소
-								console.log('option에서 받아온 optionidx 값 : ', option.optionidx); //option idx 뽑아오기 성공
-								if(option.optionidx != optionidx){
-									//저장된 값에서 type과 score 분리하기
-									console.log('option에서 받아온 typeScore 값 :', option.typeScores);
+							//some()은 각 요소에 대해 이 함수를 호출해서 조건을 만족하는 요소가 있는지 확인
+							//option은 현재 검사 중인 배열의 요소
+							console.log('option에서 받아온 optionidx 값 : ', option.optionidx); //option idx 뽑아오기 성공
+							if(option.optionidx != optionidx){
+								//저장된 값에서 type과 score 분리하기
+								console.log('option에서 받아온 typeScore 값 :', option.typeScores);
 
-									decrease(option.typeScores); //저장된 값에 있는 type과 점수 전달 -> decrease에서 감소시키기
-									saveScore(questionIdx,optionidx, data);
-									addScore(data);
-								}
-							});
-							//}
-						}else{//NO
-							//else -> save (), addscore()
-							saveScore(questionIdx,optionidx, data);
-							addScore(data);
-						}
+								decrease(option.typeScores); //저장된 값에 있는 type과 점수 전달 -> decrease에서 감소시키기
+								saveScore(questionIdx,optionidx, data);
+								addScore(data);
+							}
+						});
+						//}
+					}else{//NO
+						//else -> save (), addscore()
+						saveScore(questionIdx,optionidx, data);
+						addScore(data);
+					}
 
 
 					//selectedScore
@@ -337,7 +381,7 @@
 					console.log('저장된 값 있어? 2 :', selectedScore);
 
 
-					}else{
+				}else{
 					saveScore(questionIdx,optionidx, data); // 만약 값이 없으면 바로 save
 					addScore(data);
 				}
@@ -348,7 +392,7 @@
 
 			},
 			error : function(e){
-			console.log(e);
+				console.log(e);
 
 			}
 		});
@@ -418,13 +462,6 @@
 	//재선언할 수 없는 let으로
 	//띄어쓰기 있는 문자를 검색해야하니까.. let 잔근육매니아가 아닌.. let scores = {}
 
-		let scores = {
-			"잔근육매니아" : 0,
-			"유산소매니아" : 0,
-			"건강추종자" : 0,
-			"자기개발자" : 0,
-			"시간부족형" : 0
-		}
 
 	//점수 더하기 ======================================================
 	function addScore(data){
@@ -459,61 +496,61 @@
 	}
 
 	//다음 버튼 클릭하기 ===============================================
-		//다음 버튼 클릭하면 현재 idx 값 전달 -> idx보다 큰 idx 값들 찾고 limit 1 걸기
+	//다음 버튼 클릭하면 현재 idx 값 전달 -> idx보다 큰 idx 값들 찾고 limit 1 걸기
 	function load_nextPage (QuestionIdx){
 
 		//클릭한 값 있을 때 넘어갈 수 있게 하기
 		if(Object.keys(selectedScore).length != 0){//selectedScores에 값이 있는지 보는 방법 -> keys를 구한 다음 그 길이가 0이 아니면 됨
-							//자바스크립트의 객체는 .size나 .length를 쓸 수 없음
+			//자바스크립트의 객체는 .size나 .length를 쓸 수 없음
 
 			//질문의 번호에 해당하는 값이 없으면 막아야함
 			if(selectedScore[QuestionIdx] != null){
 				nextPageidentifier++;
 				$.ajax({
 					type : 'GET',
-						url : '/question_count.ajax',
-						data : {},
-						dataType : 'JSON',
-						success : function (data){
-							console.log("총 질문의 개수 : ", data.count);
-							//질문의 개수 구하기
+					url : '/question_count.ajax',
+					data : {},
+					dataType : 'JSON',
+					success : function (data){
+						console.log("총 질문의 개수 : ", data.count);
+						//질문의 개수 구하기
 
-							//만약에 currentIdx <질문의 개수
-
-
-								//이전 페이지 질문은 remove되게 하기
-								console.log('nextPageidentifier : ',nextPageidentifier);
-								$('#main_option').empty();
-
-								$.ajax({
-									type : 'GET',
-									url : '/nextPageIdx.ajax',
-									data : {'lastQIdx' : QuestionIdx},
-									dataType : 'JSON',
-									success : function(result){
-										console.log(result.idx);
-										if(selectedScore)
-												//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
-											currentQuestionIdx = result.idx; //이전 페이지 idx 다음 idx 값 가져오기
-											console.log(currentQuestionIdx);
-											console.log(minQuestionIdx);
-											//저장하고 나서
-											isInitialLoad = false;
-											loadQuestion(currentQuestionIdx); //idx 값을 기반으로 //얘가 밑에 있는 문제..
-											drawOption(currentQuestionIdx);
-											if(nextPageidentifier == data.count){ //근데 만약에 질문 idx가 삭제되면????? 해결 nextPageidentifier
-												//마지막이어도 점수는 합산 + save되어야 함
-												$('.next').attr('onclick','goToResultPage(scores)'); //속성으로 들어간 함수 바꾸기 (onclick 속성 안의 함수 바꾸기)
-												$('.next').attr('value','결과 보기');
+						//만약에 currentIdx <질문의 개수
 
 
+						//이전 페이지 질문은 remove되게 하기
+						console.log('nextPageidentifier : ',nextPageidentifier);
+						$('#main_option').empty();
 
-												console.log('onclick :', onclick);
-												//결과 보기 버튼 누를 때 initialze 다시 true 상태로 바꾸기
-												// -> 함수 바꾸기 $('.next').attr('onclick');
-											}
-									}
-								});
+						$.ajax({
+							type : 'GET',
+							url : '/nextPageIdx.ajax',
+							data : {'lastQIdx' : QuestionIdx},
+							dataType : 'JSON',
+							success : function(result){
+								console.log(result.idx);
+								if(selectedScore)
+										//최소 idx 가져오면 currentQuestionIdx와 minQuestionIdx에 저장하기
+									currentQuestionIdx = result.idx; //이전 페이지 idx 다음 idx 값 가져오기
+								console.log(currentQuestionIdx);
+								console.log(minQuestionIdx);
+								//저장하고 나서
+								isInitialLoad = false;
+								loadQuestion(currentQuestionIdx); //idx 값을 기반으로 //얘가 밑에 있는 문제..
+								drawOption(currentQuestionIdx);
+								if(nextPageidentifier == data.count){ //근데 만약에 질문 idx가 삭제되면????? 해결 nextPageidentifier
+									//마지막이어도 점수는 합산 + save되어야 함
+									$('.next').attr('onclick','goToResultPage(scores)'); //속성으로 들어간 함수 바꾸기 (onclick 속성 안의 함수 바꾸기)
+									$('.next').attr('value','결과 보기');
+
+
+
+									console.log('onclick :', onclick);
+									//결과 보기 버튼 누를 때 initialze 다시 true 상태로 바꾸기
+									// -> 함수 바꾸기 $('.next').attr('onclick');
+								}
+							}
+						});
 
 					},
 					error : function (e){
@@ -533,13 +570,17 @@
 	}
 
 	var do_append = true;
+
 	function goToResultPage(scores){
+
 		if(do_append){
 
 			console.log('결과 버튼 눌림');
 			console.log('scores 받아온 값 :',scores);
 
-			//scores(객체)를 form에 추가해주기
+
+			//합산한 점수 보내는 방법 ===============================================
+			//scores(객체)를 form에 추가해주기 => 합산한 점수 보내는 방법
 
 			//1.form을 가져오기
 			//2.scores 분리하기
@@ -548,23 +589,24 @@
 			//5.form 안에 appendChild?해주기
 
 			//1. 객체에서 key 꺼내기
-				var keys = Object.keys(scores);
+			var keys = Object.keys(scores);
 
-				var input = '';
-				for(var key of keys){ //form에 input 형태로 객체 분리해서 넣어주기
-					//key 값 하나씩 가져올 것임
-					input = document.createElement('input');
-					input.type = 'hidden';
-					input.name = key;
-					input.value = scores[key];
+			var input = '';
+			for(var key of keys){ //form에 input 형태로 객체 분리해서 넣어주기
+				//key 값 하나씩 가져올 것임
+				input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = key;
+				input.value = scores[key];
 
-					console.log('key:',key);
-					console.log('scores.key :',scores[key]); //scores.key가 아닌 scores[key]로 뽑아짐
-					$('form').append(input); //append와 appendChild 차이
-					//클릭 한번만 되게 하기 - 하고 append 안되게...
-					$('form').submit();
-					do_append = false;
-				}
+				console.log('key:',key);
+				console.log('scores.key :',scores[key]); //scores.key가 아닌 scores[key]로 뽑아짐
+				$('form').append(input); //append와 appendChild 차이
+
+				//클릭 한번만 되게 하기 - 하고 append 안되게...
+				$('form').submit();
+				do_append = false;
+			}
 		}
 
 
@@ -591,8 +633,8 @@
 		// 			// input.type = key_val[1];
 		// 			console.log('key_val:',key_val);
 		// 		}
-			//}
-			//$('form').submit();
+		//}
+		//$('form').submit();
 
 		console.log('mbti_r.go에 값 보내기 성공 1');
 
@@ -623,6 +665,7 @@
 		// 	});
 	}
 
+	//$(요소 선택).load(url, data, 콜백함수)
 </script>
 
 </html>
