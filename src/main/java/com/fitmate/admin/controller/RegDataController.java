@@ -59,6 +59,15 @@ public class RegDataController {
 		return page;
 	}
 
+	@RequestMapping (value = "/admin_regMbtir_detail.go")
+	public String regMbtiResultDetail (Model model, HttpSession session) {
+		page = "admin_regMbtir_detail";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		return page;
+	}
+
 	// 지역 정보 관리
 	@RequestMapping (value = "/admin_regRegion.go")
 	public String regRegion (Model model, HttpSession session) {
