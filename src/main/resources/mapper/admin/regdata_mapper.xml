@@ -5,9 +5,54 @@
 
 <mapper namespace="com.fitmate.admin.dao.RegDataDAO">
 
+    <!-- 지역 정보 관리 -->
+    <select id="regRegion" resultType="com.fitmate.admin.dto.RegCountyDTO">
+        SELECT region_idx, region_name FROM region WHERE region_show = 1
+    </select>
+
+    <update id="updateRegion" parameterType="map">
+        UPDATE region SET region_name = #{region_name}, admin_idx = #{admin_idx} WHERE region_idx = #{region_idx}
+    </update>
+
+    <update id="deleteRegion" parameterType="map">
+        UPDATE region SET region_show = 0, admin_idx = #{admin_idx} WHERE region_idx = #{region_idx}
+    </update>
+
+    <insert id="insertRegion" parameterType="map">
+        INSERT INTO region (region_name, admin_idx) VALUES (#{region_name}, #{admin_idx})
+    </insert>
+
+    <select id="regRegionSub" resultType="com.fitmate.admin.dto.RegCountyDTO">
+        SELECT regions_idx, regions_name FROM region_sub WHERE region_idx = #{param} AND regions_show = 1
+    </select>
+
+    <update id="updateRegionSub" parameterType="map">
+        UPDATE region_sub SET regions_name = #{regions_name}, admin_idx = #{admin_idx} WHERE regions_idx = #{regions_idx}
+    </update>
+
+    <update id="deleteRegionSub" parameterType="map">
+        UPDATE region_sub SET regions_show = 0, admin_idx = #{admin_idx} WHERE regions_idx = #{regions_idx}
+    </update>
+
+    <insert id="insertRegionSub" parameterType="map">
+        INSERT INTO region_sub (region_idx, regions_name, admin_idx) VALUES (#{region_idx}, #{regions_name}, #{admin_idx})
+    </insert>
+
     <!-- 신고 사유 관리 -->
     <select id="regReport" resultType="com.fitmate.admin.dto.RegReportDTO">
         SELECT reportr_idx, reportr_con FROM report_reason WHERE reportr_show = 1
     </select>
+
+    <update id="updateReport" parameterType="map">
+        UPDATE report_reason SET reportr_con = #{reportr_con}, admin_idx = #{admin_idx} WHERE reportr_idx = #{reportr_idx}
+    </update>
+
+    <update id="deleteReport" parameterType="map">
+        UPDATE report_reason SET reportr_show = 0, admin_idx = #{admin_idx} WHERE reportr_idx = #{reportr_idx}
+    </update>
+
+    <insert id="insertReport" parameterType="map">
+        INSERT INTO report_reason (reportr_con, admin_idx) VALUES (#{reportr_con}, #{admin_idx})
+    </insert>
 
 </mapper>

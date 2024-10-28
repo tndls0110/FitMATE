@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 public class RegDataController {
@@ -57,22 +59,66 @@ public class RegDataController {
 		return page;
 	}
 
-	// 지역 목록 관리
+	// 지역 정보 관리
 	@RequestMapping (value = "/admin_regRegion.go")
 	public String regRegion (Model model, HttpSession session) {
 		page = "admin_regRegion";
 		//main_controller.checkPermit(model, session);
 		//String admin_idx = session.removeAttribute("loginIdx");
 		int admin_idx = 1;
+		model.addAttribute("list", regData_service.regRegion());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_updateRegion.do")
+	public String updateRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.regRegion(params, admin_idx);
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_insertRegion.do")
+	public String insertRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.insertRegion(params, admin_idx);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regRegion_sub.go")
-	public String regRegionSub (Model model, HttpSession session) {
+	public String regRegionSub (String region_idx, Model model, HttpSession session) {
 		page = "admin_regRegion_sub";
 		//main_controller.checkPermit(model, session);
 		//String admin_idx = session.removeAttribute("loginIdx");
 		int admin_idx = 1;
+		model.addAttribute("region", regData_service.regRegion());
+		model.addAttribute("list", regData_service.regRegionSub(region_idx));
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_updateRegion_sub.do")
+	public String regRegionSub (@RequestParam Map<String, String> params, String region_idx, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		logger.info(region_idx);
+		regData_service.regRegionSub(params, region_idx, admin_idx);
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_insertRegion_sub.do")
+	public String insertRegionSub (@RequestParam Map<String, String> params, String region_idx, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.insertRegionSub(params, region_idx, admin_idx);
 		return page;
 	}
 
@@ -84,6 +130,26 @@ public class RegDataController {
 		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
 		model.addAttribute("list", regData_service.regReport());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_updateReport.do")
+	public String regReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regReport.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.regReport(params, admin_idx);
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_insertReport.do")
+	public String insertReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regReport.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.insertReport(params, admin_idx);
 		return page;
 	}
 
