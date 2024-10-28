@@ -1,5 +1,6 @@
 package com.fitmate.crew.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
 
@@ -103,6 +109,7 @@ public class CrewController {
 	// 3. 크루 모집글 상세조회
 	@RequestMapping(value="/crew_recruit_detail.go")
 	public String recruitDetail() {
+		
 		return "crew_recruit_detail";
 	}
 	
@@ -116,10 +123,17 @@ public class CrewController {
 		return recruitDetail; 
 	}
 	
-	// 3-2. 크루 모집글 - 문의댓글 내용저장
-	@PostMapping(value="/crew_recruit_detail.replyDo")
-	public String replyWrite() {
-		return "redirect:/crew_recruit_detail";
+	// 3-2. 크루 모집글 - 문의댓글/답변대댓글 내용저장
+	@PostMapping(value="/crew_recruit_detail.do")
+	public String commentWrite(@RequestParam Map<String, String> params) {
+		
+		// 이동할 페이지
+		String board_idx = params.get("board_idx");
+		
+		// 댓글 또는 대댓글작성.
+		crew_service.commentWrite(params);
+		
+		return "redirect:/crew_recruit_detail.go?idx=" + board_idx;
 	}
 	
    // 1. 내 크루 페이지
@@ -141,6 +155,24 @@ public class CrewController {
       logger.info("list2 : ", recruitList);
       
       return recruitList; 
+   }
+   
+   // 3. Comment 모달 - 댓글 수정/삭제/신고 이벤트 처리
+   @PostMapping(value = "/comment_event.ajax")
+   @ResponseBody
+   public Map<String, Object> comment_event(@RequestBody String json_info) throws Exception {
+	   
+	   //String 을 Map 을 바꿔주기위해 라이브러리 사용.
+	   ObjectMapper mapper = new ObjectMapper();
+	   HashMap<String, Object> info = mapper.readValue(json_info, new TypeReference<HashMap<String, Object>>(){});
+	   logger.info("info : " + info);
+	   
+	   crew_service.comment_event(info);
+	   
+	   Map<String, Object> map = new HashMap<String, Object>();
+	   map.put("success", "성공");
+	   
+	   return map;
    }
 
 	
