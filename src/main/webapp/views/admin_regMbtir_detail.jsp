@@ -29,10 +29,10 @@
             <li>
                 <a href="admin_regMbtiq_scr.go?mbtisub_idx=1">질문별 점수</a>
             </li>
-            <li class="active_tab">
+            <li>
                 <a href="admin_regMbtir.go">결과</a>
             </li>
-            <li>
+            <li class="active_tab">
                 <a href="admin_regMbtir_detail.go?mbtir_idx=1">결과 상세</a>
             </li>
         </ul>

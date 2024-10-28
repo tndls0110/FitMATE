@@ -6,6 +6,11 @@
     padding: 0 10px;
 }
 
+.noDesc.menu_tab.wide{
+    width: 530px;
+    padding: 0;
+}
+
 .noDesc.menu_tab li{
     width: 100px;
     margin: 0;
