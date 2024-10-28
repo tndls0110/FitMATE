@@ -397,6 +397,28 @@
 			dataType: 'JSON',
 			success : function (journal){
 				console.log(journal);
+					var keySet = Object.keys(journal.content);
+					console.log('journal.length :',keySet.length);
+					for(var key of keySet){
+						if(keySet.length > 0){ //만약 key의 길이가 0보다 크면
+							console.log('값 있음');
+
+							console.log('key:{}',key);
+							console.log('value:{}',journal.content[key]);
+							var j_data = journal.content[key];
+
+							var content = '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
+							content += j_data.date + '</div><div class="journal_time">';
+							content += + j_data.+'</div>'
+
+
+
+
+
+							$('.journal').html();
+
+						}
+					}
 			},
 			error : function (e){
 				console.log(e);

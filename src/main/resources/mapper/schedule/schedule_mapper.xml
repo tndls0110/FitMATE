@@ -5,7 +5,10 @@
 
 <mapper namespace="com.fitmate.schedule.dao.ScheduleDAO">
     <select id="getEvents" resultType="Map">
-        SELECT DISTINCT date FROM schedule s;
+        SELECT DISTINCT date FROM schedule s
     </select>
-    
+
+    <select id="getJournal" resultType="Map">
+        SELECT * FROM schedule where user_id = #{id} AND date = #{date};
+    </select>
 </mapper>

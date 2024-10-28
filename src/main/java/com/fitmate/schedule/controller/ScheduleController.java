@@ -36,8 +36,9 @@ public class ScheduleController {
 	@GetMapping (value = "journal_get.ajax")
 	@ResponseBody
 	public Map<String,Object> getJournal(String date) {
+		String id = "member01";
 		Map<String,Object> journal = new HashMap<String,Object>();
-			List<Map<String,Object>> journal_list =s_service.getJournal(date);
+			List<Map<String,Object>> journal_list =s_service.getJournal(date,id);
 			journal.put("content", journal_list);
 		return journal;
 	}
