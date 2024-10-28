@@ -2,9 +2,9 @@ package com.fitmate.mbti.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitmate.mbti.dto.MbtiQRDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,38 +18,40 @@ import com.fitmate.mbti.service.MbtiService;
 public class MbtiController {
 	@Autowired MbtiService m_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
+
+
+
 	@RequestMapping (value = "/mbti")//push하기 전에 /mbti로 수정해두기
 	public String main() {
 		return "redirect_test";
 	}
-	
+
 	@RequestMapping (value = "/mbtiQ.go")
 	public String mbtiQ() {
 		return "mbti_q";
 	}
-	
+
 	@GetMapping (value = "/mbtiIdx.ajax")
 	@ResponseBody
 	public Map<String, Object> mbtiIdx() {
 		logger.info("mbti 컨트롤러 도착");
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("idx",m_service.mbtiIdx());
-		
+
 		return result;
 	}
-	
+
 	@GetMapping (value = "/loadQuestion.ajax")
 	@ResponseBody
 	public Map<String, Object> loadQuestion(int Qidx){
 		logger.info("loadQuestion 컨트롤러 도착");
 		logger.info("컨트롤러에서 전달 받은 idx : " + Qidx);
-		
+
 		Map<String, Object> data = m_service.loadQuestion(Qidx);
-		
+
 		return data;
 	}
-	
+
 	@GetMapping (value = "/loadOption.ajax")
 	@ResponseBody
 	public Map<String, Object> loadOption(int Qidx){
@@ -75,9 +77,9 @@ public class MbtiController {
 	@GetMapping (value = "/nextPageIdx.ajax")
 	@ResponseBody
 	public Map<String, Object> nextPageIdx(int lastQIdx){
-	Map<String,Object> result = new HashMap<>();
-	result.put("idx",m_service.nextPageIdx(lastQIdx));
-	return result;
+		Map<String,Object> result = new HashMap<>();
+		result.put("idx",m_service.nextPageIdx(lastQIdx));
+		return result;
 	};
 
 
@@ -89,15 +91,48 @@ public class MbtiController {
 		return data;
 	};
 
-
-
-	@RequestMapping (value = "/mbti_r.go")
-
-	public String mbtiR(@RequestParam Map<String, Object> scores,Model model) {
-		logger.info("mbtiR 컨트롤러 도착");
+	@GetMapping (value = "/mbti_r.go") //결과 페이지에서 insert 시켜줘야하니까.. 그냥 결과 쪽에 다 넘겨서 결과 단에서 최댓값 계산하게 하기
+	public String mbtiR(@RequestParam Map<String, String> scores, Model model) {
+			logger.info("mbtiR 컨트롤러 도착");
 		logger.info("scores 받아온 값 : " + scores);
 
+		Map<String,Object> data = new HashMap<>();
+		Set <String> keySets = scores.keySet();
+		logger.info("keySets 받아온 값 : " + keySets);
+		//List로 보내기?
+		for (String key : keySets) {
+			logger.info("key 받아온 값 : " + key);
+			String value = scores.get(key);
+			logger.info("value 받아온 값 : " + value);
+			data.put(key, value);
+		}
+		logger.info("data:{}",data);
+
 		model.addAttribute("scores",scores);
-        return "mbti_r";
+		return "mbti_r";
+
+
 	};
+
+	@GetMapping (value = "/mbti_r_get.ajax")
+	@ResponseBody
+	public Map<String,String> mbtiRGet(String max_mbti) {
+		logger.info("mbti_r_get.ajax 컨트롤러 도착");
+		logger.info("max_mbti : {}",max_mbti);
+		Map<String,String> recommend =  m_service.mbtiRGet(max_mbti);
+
+		return recommend;
+	};
+
+	@GetMapping (value = "/create_Totalscore.ajax")
+	@ResponseBody
+	public Map<String,Object> createTotalScore() {
+		Map<String,Object> scores = new HashMap<>();
+		scores.put("create_totalScore",m_service.create_totalScore());
+		return scores;
+	};
+
+
+
+
 }
