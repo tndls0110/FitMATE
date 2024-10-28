@@ -3,4 +3,95 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.admin.dao.UserDAO"></mapper>
+<mapper namespace="com.fitmate.admin.dao.UserDAO">
+
+    <!-- 사용자 목록 -->
+    <select id="userAllCount" resultType="int">
+        SELECT CEIL(COUNT(user_id) / #{param1}) FROM member
+    </select>
+
+    <select id="userCountIdx" resultType="int">
+        SELECT COUNT(user_id) FROM member
+    </select>
+
+    <select id="userList" resultType="com.fitmate.member.dto.MemberDTO">
+        SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.profile,
+            (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate'
+            FROM member m JOIN profile p ON m.user_id = p.user_id
+            <where>
+                <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
+                    m.user_id LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('nick')">
+                    m.nick LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('name')">
+                    m.name LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('email')">
+                    m.email LIKE CONCAT('%', #{param4}, '%')
+                </if>
+            </where>
+            LIMIT #{param2} OFFSET #{param1}
+    </select>
+
+    <!-- 사용자 조회 -->
+    <select id="userDetail"  resultType="com.fitmate.member.dto.MemberDTO">
+    SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.status, p.profile, p.regions_idx,
+        (SELECT r.region_idx FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = p.regions_idx) AS 'region_idx',
+        (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = p.regions_idx) AS 'region_name',
+        (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = p.regions_idx) AS 'regions_name',
+        (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx = p.mbtir_idx) AS 'mbtir_name',
+        (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate'
+        FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
+    </select>
+
+    <!-- 크루 목록 -->
+    <select id="crewAllCount" resultType="int">
+        SELECT CEIL(COUNT(crew_idx) / #{param1}) FROM crew
+    </select>
+
+    <select id="crewCountIdx" resultType="int">
+        SELECT COUNT(crew_idx) FROM crew
+    </select>
+
+    <select id="crewList" resultType="com.fitmate.admin.dto.CrewListDTO">
+        SELECT c.crew_idx, c.name, c.crew_id, c.create_date, c.status, c.last_date, m.nick,
+        (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = c.regions_idx) AS 'region_name',
+        (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = c.regions_idx) AS 'regions_name',
+        ((SELECT COUNT(member_idx) FROM crew_member WHERE crew_idx = c.crew_idx) + 1) AS 'cnt_members'
+        FROM crew c JOIN member m ON c.crew_id = m.user_id
+        <where>
+            <if test="param4 != null and !param4.equals('') and param3.equals('name')">
+                c.name LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
+                c.crew_id LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="param4 != null and !param4.equals('') and param3.equals('nick')">
+                m.nick LIKE CONCAT('%', #{param4}, '%')
+            </if>
+        </where>
+        ORDER BY c.crew_idx DESC LIMIT #{param2} OFFSET #{param1}
+    </select>
+
+    <!-- 크루 조회 -->
+    <select id="crewDetail" resultType="com.fitmate.admin.dto.CrewListDTO">
+        SELECT c.crew_idx, c.name, c.crew_id, m.nick, c.regions_idx, c.create_date, c.status, c.last_date,
+                (SELECT p.profile FROM profile p JOIN member m ON p.user_id = m.user_id WHERE m.user_id = c.crew_id) AS 'profile',
+                (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx =
+                    (SELECT p.mbtir_idx FROM profile p JOIN member m ON p.user_id = m.user_id WHERE m.user_id = c.crew_id)) AS 'mbtir_name',
+                (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = c.regions_idx) AS 'region_name',
+                (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = c.regions_idx) AS 'regions_name',
+                ((SELECT COUNT(member_idx) FROM crew_member WHERE crew_idx = c.crew_idx) + 1) AS 'cnt_members',
+                (SELECT COUNT(plan_idx) FROM crew_plan WHERE crew_idx = c.crew_idx) AS 'cnt_plan',
+                ((SELECT COUNT(board_idx) FROM crew_idx WHERE crew_idx = c.crew_idx) -
+                    (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 1 AND i.crew_idx = c.crew_idx)) AS 'cnt_board',
+                (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 4 AND i.crew_idx = c.crew_idx) AS 'cnt_notice',
+                (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 2 AND i.crew_idx = c.crew_idx) AS 'cnt_singleline',
+                (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 3 AND i.crew_idx = c.crew_idx) AS 'cnt_photo',
+                (SELECT b.subject FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 1 AND i.crew_idx = c.crew_idx) AS 'recruit'
+        FROM crew c JOIN member m ON c.crew_id = m.user_id WHERE c.crew_idx = #{param}
+    </select>
+
+</mapper>

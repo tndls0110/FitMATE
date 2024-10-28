@@ -31,8 +31,7 @@ public interface MemberDAO {
     // 정보 수정
     int update1(Map<String, String> params);
     int update2(Map<String, String> params);
-    int delete(String userId);
-    String getImgName(String userId);
+    int deleteImg(String user_id);
 
     // 비밀번호 변경
     void updatepw(String user_id, String pw);

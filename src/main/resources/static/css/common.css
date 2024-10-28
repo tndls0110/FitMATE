@@ -209,12 +209,23 @@ input[type="file"],
 input[type="date"],
 select{
     width: 100%;
-    padding: 16px;
     border: 1px solid #282b34;
     border-radius: 6px;
     background-color: #282b34;
     color: #e9ecef;
     font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+input[type="date"],
+select{
+    padding: 16px;
+}
+
+input[type="file"]{
+    padding: 12px;
 }
 
 input[type="text"].caution,
@@ -271,7 +282,7 @@ a.btn{
 input[type="submit"],
 input[type="button"],
 button{
-    margin: 8px 0 3px;
+    margin: 0;
     padding: 14px 24px;
     border-radius: 4px;
     font-size: 14px;

@@ -3,4 +3,11 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.admin.dao.RegDataDAO"></mapper>
+<mapper namespace="com.fitmate.admin.dao.RegDataDAO">
+
+    <!-- 신고 사유 관리 -->
+    <select id="regReport" resultType="com.fitmate.admin.dto.RegReportDTO">
+        SELECT reportr_idx, reportr_con FROM report_reason WHERE reportr_show = 1
+    </select>
+
+</mapper>

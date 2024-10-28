@@ -3,4 +3,11 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.admin.dao.ReportDAO"></mapper>
+<mapper namespace="com.fitmate.admin.dao.ReportDAO">
+
+    <!-- 신고 목록 -->
+    <select id="getlist" resultType="com.fitmate.admin.dto.ReportDTO">
+        SELECT * FROM report;
+    </select>
+
+</mapper>
