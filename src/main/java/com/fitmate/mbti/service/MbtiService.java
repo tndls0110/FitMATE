@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.fitmate.mbti.dao.MbtiDAO;
 import com.fitmate.mbti.dto.MbtiQRDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class MbtiService {
@@ -134,5 +135,37 @@ public class MbtiService {
 		//꺼내올 때는 List<Map> -> map에 담아서 보내기 (DTO 담을 필요 x)
 		List<Map<String,String>> create_totalScore = m_dao.create_totalScore();
 		return create_totalScore;
+	}
+
+	public Boolean saveResult(String id, Map<String, Object> score) {
+		logger.info("save 서비스에서 받아온 값 :{}",id);
+		logger.info("save 서비스에서 받아온 값 :{}",score);
+		Boolean result = false;
+		int updated = m_dao.saveResult(id,score);
+		if(updated > 1){
+			result = true;
+		}
+
+		return result;
+	}
+
+	public Boolean checkResult(String id) {
+		logger.info("check 서비스에서 받아온 id 값 : " + id);
+		int result = m_dao.checkResult(id);
+		Boolean success = false;
+		if (result > 0){
+			success = true;
+		}
+		return success;
+	}
+
+	public Boolean deleteResult(String id) {
+		logger.info("delete 서비스에서 받아온 id 값 :{}" + id);
+		int result = m_dao.deleteResult(id);
+		Boolean success = false;
+		if (result > 0){
+			success = true;
+		}
+		return success;
 	}
 }
