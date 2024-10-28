@@ -41,4 +41,22 @@
 	<select id="create_totalScore" resultType="String">
 		SELECT mbtir_name FROM mbti_r;
 	</select>
+
+	<select id="checkResult" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM mbti_r_detail WHERE user_id = #{id}
+	</select>
+	
+	<delete id="deleteResult" parameterType="String">
+		DELETE FROM mbti_r_detail WHERE user_id = #{id}
+	</delete>
+
+	<insert id="saveResult" parameterType="map">
+		INSERT INTO mbti_r_detail (user_id,mbtir_idx,mbtir_scrtotal)
+		VALUES
+		<foreach collection="score" item = "value" index="key" separator=",">
+		    -- map으로 전달된 파라메터에 id값까지 포함되는 문제...
+		    -- entry로 묶고, entry의 index 값이 0보다 클 때 진행
+				(#{id},(SELECT mbtir_idx FROM mbti_r WHERE mbtir_name = #{key}), #{value})
+		</foreach>
+	</insert>
 </mapper>
