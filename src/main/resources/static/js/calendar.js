@@ -16,7 +16,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 		year:'numeric', month: 'numeric', day: 'numeric'
 	},
 
-	// 이벤트 삭제 후 작업 진행하셔야 합니다.
+/*	// 이벤트 삭제 후 작업 진행하셔야 합니다.
 	events: [
 		{
 			start  : '2024-10-15'
@@ -31,7 +31,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 			start  : '2024-10-19'
 		}
 	]
-	// 이벤트 끝
+	// 이벤트 끝*/
 });
 
 // 캘린더 렌더링

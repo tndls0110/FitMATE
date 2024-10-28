@@ -3,7 +3,6 @@ package com.fitmate.mbti.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.fitmate.mbti.dto.MbtiQRDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -24,4 +23,10 @@ public interface MbtiDAO {
 	Map<String,String> mbtiRGet(String maxMbti);
 
 	List<Map<String, String>> create_totalScore();
+
+	int saveResult(String id, Map<String, Object> score);
+
+	int checkResult(String id);
+
+	int deleteResult(String id);
 }

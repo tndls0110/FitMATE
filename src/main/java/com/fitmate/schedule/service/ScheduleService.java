@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,5 +16,10 @@ public class ScheduleService {
 
 	public List<Map<String,Object>> getEvents() {
 		return s_dao.getEvents();
+	}
+
+	public List<Map<String, Object>> getJournal(String date, String id) {
+		List<Map<String,Object>> journal_list = s_dao.getJournal(date,id);
+		return journal_list;
 	}
 }
