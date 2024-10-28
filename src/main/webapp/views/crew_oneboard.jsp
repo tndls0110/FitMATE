@@ -78,7 +78,7 @@
                         
                         	<!-- 너비 설정 -->
                             <div class="width80p">
-                                <input type="text" class="full flex_left" name="content" id="subjectInput"/>
+                                <input type="text" class="full flex_left" name="subject" id="subjectInput"/>
                             </div>
                             <div class="width20p">
                                 <button class="mainbtn full flex_right"id="submitButton" disabled>작성하기</button>
@@ -212,7 +212,7 @@
 	                	}
 	                	// 크루장이 아니고 작성자도 아니면
 	                	else{
-	                		deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '\'">신고하기</button>';
+	                		deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '&board_id=' + item.board_id +'\'">신고하기</button>';
 	                	}
     					
 	                	if(item.status == 2 ){
@@ -222,7 +222,7 @@
 	                	else{
 	                		
 	                		tbody.append('<tr><td>' + item.board_idx 
-		                    		+ '</td><td>' + item.content
+		                    		+ '</td><td>' + item.subject
 		                    		+ '</td><td>' +item.board_id
 		                    		+ '</td><td>' +item.date
 		                    		+ '</td><td>' + deleteButton + '</td></tr>'
