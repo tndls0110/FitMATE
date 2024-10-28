@@ -56,6 +56,8 @@ public interface CrewPageDAO {
 
 	int crew_photofile_del(String board_idx);
 
+	String board_reported_id(String board_idx);
+
 	
 	
 }

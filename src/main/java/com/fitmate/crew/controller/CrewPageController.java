@@ -47,17 +47,22 @@ public class CrewPageController {
 	
 	// 신고 페이지 이동 test code
 	@RequestMapping(value="/crew_report.go")
-	public String crew_report(Map<String,String> param,Model model) {
+	public String crew_report(@RequestParam Map<String,String> params,Model model) {
 		
-		// 보드idx가 있다면
-		if(param.get("board_idx")!=null) {
-			// 신고 board_type 은 게시물
-			model.addAttribute("board_type", "1");
+		// 보드 idx가 있으면 >> 신고글이 게시글이면
+		if(params.get("board_idx")!=null) {
+			model.addAttribute("board_type", 1);
+			model.addAttribute("board_idx", params.get("board_idx"));
+			model.addAttribute("board_id", params.get("board_id"));
+			
 		}
-		else {
-			// 신고 board_type 은 댓글 // 댓글만 신고가능 대댓글신고 불가능
-			model.addAttribute("board_type", "2");
+		else { // 신고글이 게시글이 아니라면
+			model.addAttribute("board_type", 2);
+			model.addAttribute("board_idx", params.get("comment_idx"));
+			model.addAttribute("board_id", params.get("comment_id"));
 		}
+		
+
 		
 		return "crew_report";
 	}
@@ -73,10 +78,13 @@ public class CrewPageController {
 		
 		return report;
 	}
-	// 신고하기
+	
+	// 신고하기 board_type 가져오는거 확인하기 == 게시글인경우 board_type=1, 댓글인경우 board_type=2
 	@RequestMapping(value="/crew_report.do")
-	public String crew_report_do() {
-				
+	public String crew_report_do(@RequestParam Map<String,String> params) {
+		
+		crewpage_service.crew_report_do(params);
+		
 		return "index";
 	}
 	
@@ -288,15 +296,15 @@ public class CrewPageController {
 		}
 		
 		// 사진게시글 삭제
-				@GetMapping(value="/crew_photo_del")
-				public String crew_photo_del(@RequestParam String board_idx) {
+		@GetMapping(value="/crew_photo_del")
+		public String crew_photo_del(@RequestParam String board_idx) {
 					
-					// logger.info("oneboard 보드번호는 ? " + board_idx);
+			// logger.info("oneboard 보드번호는 ? " + board_idx);
 					
-					crewpage_service.crew_photo_del(board_idx);
+			crewpage_service.crew_photo_del(board_idx);
 					
-					return "index";
-				}
+			return "index";
+		}
 		
 		
 }
