@@ -39,7 +39,7 @@ public class CrewPageService {
 	}
 	
 	@Transactional
-	public int crew_notice_write(String content, String board_id, int crew_idx) {
+	public int crew_notice_write(String subject, String board_id, int crew_idx) {
 		
 		int suc = 0;
 		
@@ -48,7 +48,7 @@ public class CrewPageService {
 		CrewMemberDTO member_dto = new CrewMemberDTO();
 		
 		board_dto.setBoard_id(board_id);
-		board_dto.setContent(content);
+		board_dto.setSubject(subject);
 		// 크루 최근 활동시간 바꿔주기
 		crewpage_dao.crew_lastdate_update(crew_idx);
 
@@ -117,13 +117,13 @@ public class CrewPageService {
 	}
 	
 	@Transactional
-	public void crew_oneboard_write(String content, String board_id, int crew_idx) {
+	public void crew_oneboard_write(String subject, String board_id, int crew_idx) {
 		
 		CrewBoardDTO board_dto = new CrewBoardDTO();
 		CrewIdxDTO crewidx_dto = new CrewIdxDTO();
 		
 		board_dto.setBoard_id(board_id);
-		board_dto.setContent(content);
+		board_dto.setSubject(subject);
 		// 크루 최근 활동시간 바꿔주기
 		crewpage_dao.crew_lastdate_update(crew_idx);
 
@@ -166,14 +166,14 @@ public class CrewPageService {
 	}
 	
 	// 사진 게시글 작성하기 c드라이브 업로드폴더에 넣기
-	public void crew_photo_write(MultipartFile file, String content, String board_id, int crew_idx) {
+	public void crew_photo_write(MultipartFile file, String subject, String board_id, int crew_idx) {
 		
 		CrewBoardDTO board_dto = new CrewBoardDTO();
 		// 크루 idx 테이블에 넣을 dto = board_idx + crew_idx 합쳐주기위함 // 어떤 크루의 게시글인지 식별하기 위해서
 		CrewIdxDTO crewidx_dto = new CrewIdxDTO();
 		
 		board_dto.setBoard_id(board_id);
-		board_dto.setContent(content);
+		board_dto.setSubject(subject);
 		// 크루 최근 활동시간 바꿔주기
 		crewpage_dao.crew_lastdate_update(crew_idx);
 
@@ -261,7 +261,7 @@ public class CrewPageService {
 			ReportDTO report_dto = new ReportDTO();
 			
 		    // 신고자 아이디
-			String reporter_id =params.get("sessionId");
+			String reporter_id =params.get("reporter_id");
 			report_dto.setReporter_id(reporter_id);
 			// 신고 사유 idx
 			String reportr_idx = params.get("reportr_idx");
@@ -273,13 +273,13 @@ public class CrewPageService {
 			String board_type = params.get("board_type");
 			report_dto.setBoard_type(Integer.parseInt(board_type));
 			// 피신고자 아이디 가져오기
-			String reported_id = params.get("board_id");
+			String reported_id = params.get("reported_id");
 			report_dto.setReported_id(reported_id);
 			
 			logger.info("params 리포트 서비스 값 = {} ",params);
 			
 			// 다음 리포트 dto로 신고 인서트 시키기 
-		//	crewpage_dao.report_do(report_dto);
+			crewpage_dao.report_do(report_dto);
 		
 	}
 	
