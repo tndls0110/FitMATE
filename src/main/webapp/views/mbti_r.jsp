@@ -38,9 +38,10 @@
         }
         .name{
             display: flex;
-            margin: 66px 197px 24px 193px;
+            margin: 65px -18px 22px 182px;
             font-weight: 500;
             font-size: 16px;
+            width: 124px;
         }
         .name_b{
             font-weight: 500;
@@ -108,7 +109,7 @@
         }
         #recommed_content{
             width: 431px;
-            margin: -1px 77px;
+            margin: -1px 56px;
         }
     </style>
 </head>
@@ -140,7 +141,7 @@
                     <div class="recommend_routine"></div>
                 </div>
             </div>
-            <div class="saveResult" onclick="saveResult()">결과 저장하기</div>
+            <div class="saveResult" onclick="checkResult()">내 프로필에 결과 저장하기</div>
     </div>
 </div>
     <c:import url="layout/modal.jsp"></c:import>
@@ -154,12 +155,26 @@
     //[2]전달받은 매개변수(성향 및 성향별 점수) insert 수행하기
     //JS에서 map 형태 사용하는 법
     console.log('scores :{}','${scores}');
-    var max = {'': 0};//만약 max보다 크면 저장...
-    //매개변수
-    //var max = 0;
-    //전달받은 매개변수
-    <c:forEach var="score" items='${scores}'>
-         console.log('entry :{}','${score.key}','${score.value}');
+    console.log('scores :{}','${data}');
+
+    <c:forEach var = "id" items='${data}'>
+        var login_id = '${id.value}';
+        console.log('login_id:{}',login_id);
+    </c:forEach>
+
+    $('.name_b').html(login_id);
+
+    let saved_scores = {}; //여기는 let scores = new scores();
+
+    window.onload = function initialLoad() {
+
+
+        var max = {'': 0};//만약 max보다 크면 저장...
+        //매개변수
+        //var max = 0;
+        //전달받은 매개변수
+        <c:forEach var="score" items='${scores}'>
+        console.log('entry :{}','${score.key}','${score.value}');
         //object 객체에 값 넣기
         var key = '${score.key}'; // score.${score.key}= value;로 할 때 작동 안되는 이유 : var key = '${score.key}';는 문자열로 취급되기 때문에 JavaScript에서 변수로서 사용될 수 없음
         var value = ${score.value};
@@ -169,46 +184,113 @@
         var keys = Object.keys(max);
         console.log('keys:'+keys);
         for (var k of keys){
-        console.log('key:{}',k);
-        console.log('value:{}',max[k]);
-         //score.${score.key}= value;
+            console.log('key:{}',k);
+            console.log('value:{}',max[k]);
+            saved_scores[key] = value;
             if(value>max[k]){ //만약 key에 저장된 값이 score.value보다 작으면 score.value 및 score.key를 저장
                 delete max[k]; //이미 저장되어있던 값 지우기
                 max[key] = value; //만약 max보다 크면 score[k]에 저장 -> 정처기 공부했던 내용 적용..
             }
+        }
+        </c:forEach>
+        console.log('최대값 :{}', max);
+        console.log('저장된 값 :{}', saved_scores);
+
+        //max 분리하기
+        var key_result = Object.keys(max);
+        console.log('max 결과 key:'+keys);
+        for (var k of keys){
+            console.log('key:{}',k);
+            console.log('value:{}',max[k]);
+
+            //(1) 운동 성향은 이미 있으니까 넣어주기
+            $('.result_name_b').html(k);
+            //(2) max를 ajax로 전달해서 이에 해당하는 성향 설명 및 루틴 가져오기
+            //그리고... id도 필요할 것 같은데........ (로그인 물어보기) //아니면 걍 session에서 가져오기
+
+            $.ajax({
+                type : 'GET',
+                url : '/mbti_r_get.ajax',
+                data : {'max_mbti':k},
+                dataType : 'JSON',
+                success : function(recommend){
+                    console.log(recommend);
+                    $('.result_detail').html(recommend.mbtir_con);
+                    $('.recommend_detail').html(recommend.mbtir_exc);
+                    $('.recommend_routine').html(recommend.mbtir_rou);
+                },
+                error : function (e){
+                    console.log(e);
+                }
+            });
+        }
+
     }
-    </c:forEach>
-    console.log(max);
-    //max 분리하기
-    var key_result = Object.keys(max);
-    console.log('max 결과 key:'+keys);
-    for (var k of keys){
-        console.log('key:{}',k);
-        console.log('value:{}',max[k]);
 
-        //(1) 운동 성향은 이미 있으니까 넣어주기
-        $('.result_name_b').html(k);
-        //(2) max를 ajax로 전달해서 이에 해당하는 성향 설명 및 루틴 가져오기
-        //그리고... id도 필요할 것 같은데........ (로그인 물어보기) //아니면 걍 session에서 가져오기
 
+    //checkResult - 기존의 값이 있는지 없는지 확인
+    function checkResult(){ //값이 있는지 없는지 확인하는 함수
         $.ajax({
             type : 'GET',
-            url : '/mbti_r_get.ajax',
-            data : {'max_mbti':k},
+            url : 'checkResult.ajax', //select된 값이 있으면 true, 없으면 false
+            data : {'id': login_id},
             dataType : 'JSON',
-            success : function(recommend){
-                console.log(recommend);
-                $('.result_detail').html(recommend.mbtir_con);
-                $('.recommend_detail').html(recommend.mbtir_exc);
-                $('.recommend_routine').html(recommend.mbtir_rou);
+            success : function(data){
+                console.log('기존 data 있는지:',data.success);
+                if(data.success){
+                    deleteResult(login_id);
+                }else{
+                    saveResult(saved_scores);
+                }
+
             },
             error : function (e){
                 console.log(e);
             }
-
         });
+
     }
 
+
+
+
+
+
+
+    //[1] 이미 입력된 값이 있으면 deleteResult 수행 => saveResult
+    function deleteResult(login_id){
+        $.ajax({
+            type : 'POST',
+            url : 'delete_result.ajax',
+            data : {'id' : login_id},
+            dataType: 'JSON',
+            success : function (data){
+                console.log('delete 성공:',data.success); //delete 시킨 후 성공 여부
+            },
+            error : function (e){
+                console.log(e);
+            }
+        });
+        saveResult(saved_scores);
+    }
+
+
+    //[2] 입력된 값이 없으면 saveResult 수행
+    function saveResult(saved_scores){
+        $.ajax({
+            type : 'POST',
+            url : 'save_result.ajax',
+            data: JSON.stringify(saved_scores),
+            dataType: 'JSON',
+            contentType : 'application/json ; charset = UTF-8',
+            success : function (data){
+                console.log('데이터 넣기 성공 :',data.success); //insert 시킨 후 성공 여부
+            },
+            error : function (e){
+                console.log(e);
+            }
+        });
+    }
 
 </script>
 
