@@ -409,8 +409,7 @@
 
 							var content = '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 							content += j_data.date + '</div><div class="journal_time">';
-							content += + j_data.+'</div>'
-
+							//content += + j_data.+'</div>';
 
 
 
