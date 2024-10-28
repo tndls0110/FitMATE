@@ -411,8 +411,7 @@
 							content += j_data.date + '</div><div class="journal_time">';
 							//content += + j_data.+'</div>';
 
-
-
+							//j_data.time(journal_end)
 
 							$('.journal').html();
 
