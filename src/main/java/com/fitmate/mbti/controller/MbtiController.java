@@ -1,6 +1,7 @@
 package com.fitmate.mbti.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -93,25 +94,28 @@ public class MbtiController {
 
 	@GetMapping (value = "/mbti_r.go") //결과 페이지에서 insert 시켜줘야하니까.. 그냥 결과 쪽에 다 넘겨서 결과 단에서 최댓값 계산하게 하기
 	public String mbtiR(@RequestParam Map<String, String> scores, Model model) {
-			logger.info("mbtiR 컨트롤러 도착");
+
+		//login id 임의 설정
+		logger.info("mbtiR 컨트롤러 도착");
 		logger.info("scores 받아온 값 : " + scores);
+		String login_id = "member01";
 
 		Map<String,Object> data = new HashMap<>();
-		Set <String> keySets = scores.keySet();
+		data.put("login_id",login_id);
+		/*Set <String> keySets = scores.keySet();
 		logger.info("keySets 받아온 값 : " + keySets);
 		//List로 보내기?
-		for (String key : keySets) {
-			logger.info("key 받아온 값 : " + key);
-			String value = scores.get(key);
-			logger.info("value 받아온 값 : " + value);
-			data.put(key, value);
-		}
-		logger.info("data:{}",data);
+			for (String key : keySets) {
+				logger.info("key 받아온 값 : " + key);
+				String value = scores.get(key);
+				logger.info("value 받아온 값 : " + value);
+				data.put(key, value);
+			}
+		logger.info("data:{}",data);*/
+		model.addAttribute("data",data);
 
 		model.addAttribute("scores",scores);
 		return "mbti_r";
-
-
 	};
 
 	@GetMapping (value = "/mbti_r_get.ajax")
@@ -132,7 +136,47 @@ public class MbtiController {
 		return scores;
 	};
 
+	@GetMapping (value = "/checkResult.ajax")
+	@ResponseBody
+	public Map<String,Object> checkResult(String id) {
+		logger.info("check 컨트롤러에서 받아온 id 값 : " + id);
+		Map<String,Object> data = new HashMap<>();
+		Boolean success = m_service.checkResult(id);
+		data.put("success",success);
+		return data;
+	}
 
+
+	@PostMapping (value = "delete_result.ajax")
+	@ResponseBody
+	public Map<String,Object> deleteResult(String id) {
+		logger.info("delete 컨트롤러에서 받아온 id 값 :",id);
+		Map<String,Object> data = new HashMap<>();
+		Boolean success = m_service.deleteResult(id);
+		data.put("success",success);
+		return data;
+	}
+
+
+	@PostMapping (value = "/save_result.ajax")
+	@ResponseBody
+	public Map<String,Object> saveResult(@RequestBody Map<String,Object> score) {
+		//String id는 그냥 session에서 받아다 써...;;;;;
+		String id = "member01";
+		logger.info("save 컨트롤러에서 받아온 값 :{}",score);
+
+		Set <String> keys= score.keySet();
+		for(String key : keys) {
+			logger.info("key : {}",key);
+
+			Object value = score.get(key);
+			logger.info("value : {}",value);
+		}
+		Map<String,Object> data = new HashMap<>();
+		Boolean success = m_service.saveResult(id,score);
+		data.put("success",success);
+		return data;
+	}
 
 
 }
