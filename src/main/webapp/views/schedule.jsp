@@ -10,7 +10,6 @@
 	<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 	<style>
 
 		/*전체 페이지에 스크롤 없애는 법*/
@@ -175,12 +174,12 @@
 		}
 
 		.type-one {
-			background-color: orange; /* 제목이 '1'인 경우의 배경색 */
+			background-color: #5bc5bb; /* 제목이 '1'인 경우의 배경색 */
 			color: white; /* 텍스트 색상 */
 		}
 
 		.type-two {
-			background-color: #5bc5bb; /* 제목이 '2'인 경우의 배경색 */
+			background-color: orange; /* 제목이 '2'인 경우의 배경색 */
 			color: black; /* 텍스트 색상 */
 		}
 
@@ -190,12 +189,13 @@
 			bottom: 10px;
 		}
 
-
 		.fc .fc-daygrid-day-top {
 			display: block;
 			text-align: center;
 			position: relative;
 		}
+
+
 	</style>
 
 </head>
@@ -306,135 +306,103 @@
 
 <script>
 
+	document.addEventListener('DOMContentLoaded', function() {
+		let event_create = []; // 이벤트 배열 초기화
 
+		// 1. 캘린더 - 이벤트 날짜 가져오기
+		$.ajax({
+			type: 'GET',
+			url: 'get_jounalevents.ajax',
+			data: {},
+			dataType: 'JSON',
+			success: function(event_day) {
+				console.log('event_day:', event_day);
 
+				// AJAX 응답에서 날짜를 반복하여 이벤트 객체 생성
+				for (var dates of event_day.date) {
+					let event_Object = {
+						start: dates.date,
+						title: '1' // 원하는 제목으로 설정
+					};
+					event_create.push(event_Object); // 이벤트 배열에 추가
+				}
 
-	// 캘린더 렌더링 위치
-	var calendarEl = document.getElementById('calendar');
+				console.log('event_create:', event_create); // 최종 이벤트 배열 확인
 
-
-	let event_create = [];
-	window.onload = function event(){ //start : '2024-10-25' //journal에서 날짜만 뽑아오기..
-		// 상단에 날짜 출력
-		var today = $('.fc-day-today').attr('data-date');
-		document.getElementById('date').innerHTML = today;
-
-		calendar.on('dateClick', function(info) {
-			document.getElementById('date').innerHTML = info.dateStr;
+				// 캘린더 설정
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth',
+					aspectRatio: 1.1,
+					headerToolbar: {
+						start: 'title',
+						center: '',
+						end: 'prev next'
+					},
+					events: event_create
+				});
+				calendar.render(); // 캘린더 렌더링 후 css를 해야하는 이유 : 랜더링-> 실제 코드를 적용하는 것 -> 랜더링 전 css 하면 .fc-event 요소들이 DOM에 존재하지 않기 때문에 CSS를 적용할 수 없음
+				change_css();
+			},
+			error: function(xhr, status, error) {
+				console.error('AJAX 오류:', status, error);
+			}
 		});
 
-		//1. event_create 생성
+
+
+
+	});
+
+	function change_css(){
+		const events = document.querySelectorAll('.fc-event'); //.fc-event 요소들 모두 가져오기
+		// 이벤트 forEach로 분리
+		events.forEach(function (event) { //events 분리
+
+			const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
+
+			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
+			if (title === '1') {
+				event.classList.add('type-one'); // 클래스 추가
+			} else if (title === '2') {
+				event.classList.add('type-two'); // 클래스 추가
+			}
+		});
+	}
+
+	// 날짜 뽑아오기
+	var date;
+	$('td[aria-labelledby]').each(function(event){
+
+		this.addEventListener('click',function(evt){
+
+			date = $(this).attr('data-date');
+
+			console.log('캘린더로부터 뽑아온 date : {}' + date);
+
+			$('#date').html(date);
+
+			//get_crewdate(date);
+
+			get_journal(date);
+
+		});
+	});
+
+	function get_journal(date){
 		$.ajax({
 			type : 'GET',
-			url : 'get_events.ajax',
-			data : {},
-			dataType : 'JSON',
-			success : function (event_day){
-				console.log('event_day:',event_day);
-
-				console.log('event_day.date:',event_day.date);
-
-				for(var dates of event_day.date){
-					console.log(dates);//dates 배열
-					console.log(dates.date); //2024-10-28 출력됨
-
-					let event_Object ={
-						start : dates.date,
-						title  : '1'
-					}; //먼저 객체에 추가 후 event_create에 넣기 => 안에 있어야 함 key는 start와 title로 고정되니까..
-
-					console.log('event_Object:{}',event_Object); //event_Object 확인
-					//event_create에 event_Object 넣기
-					event_create.push(event_Object); //list에 push
-				}
-				console.log('event_create:{}',event_create); //event_Object 확인
-				event_set(); //event 넣어주기
+			url : 'journal_get.ajax',
+			data : {'date' : date},
+			dataType: 'JSON',
+			success : function (journal){
+				console.log(journal);
 			},
 			error : function (e){
 				console.log(e);
 			}
 		});
-
-
-		var calendar;
-		function event_set(){
-			// 캘린더 설정
-			calendar = new FullCalendar.Calendar(calendarEl, {
-				initialView: 'dayGridMonth',
-				aspectRatio: 1.1,
-
-				headerToolbar: {
-					start: 'title',
-					center: '',
-					end: 'prev next'
-				},
-
-				DateFormatter: {
-					year:'numeric', month: 'numeric', day: 'numeric'
-				},
-
-
-				events : event_create //event_create 전역변수에 만든 event를 events에 넣어주기
-				//event 예시
-				/*		events: [
-                            {
-                                title : '1', -- 일지면 title에 1 넣기
-                                start  : '2024-10-15'
-                            },
-                            {
-                                title : '1',
-                                start  : '2024-10-18',
-                                type: '1'
-
-                            },
-                            {
-                                title : '2', -- 크루 일정이면 title에 2 넣기
-                                start  : '2024-10-18',
-                                type: '2'
-                            },
-                            {
-                                title : '2',
-                                start  : '2024-10-19'
-                            },
-
-                        ]*/
-				// 이벤트 끝
-
-			});
-			css_change();
-
-		}
-
-		console.log(event_create);
-
-		// event 크루인지, 일지인지에 따라 다른 css 적용하기
-		function css_change(){
-
-			const events = document.querySelectorAll('.fc-event'); //.fc-event 요소들 모두 가져오기
-			// 이벤트 forEach로 분리
-			events.forEach(function (event) { //events 분리
-
-				const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
-
-				// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
-				if (title === '1') {
-					event.classList.add('type-one'); // 클래스 추가
-				} else if (title === '2') {
-					event.classList.add('type-two'); // 클래스 추가
-				}
-			});
-
-		};
-
 	}
-
-
-
-	// 캘린더 렌더링
-	function render_cal(){
-		calendar.render(); //코드 -> UI
-	}
-
 
 
 </script>

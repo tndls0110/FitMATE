@@ -9,5 +9,5 @@ import java.util.Map;
 @Mapper
 public interface ScheduleDAO {
     List<Map<String,Object>> getEvents();
-
+    List<Map<String, Object>> getJournal(String date);
 }
