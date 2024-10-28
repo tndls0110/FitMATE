@@ -31,9 +31,11 @@
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
-                <form action="crew_create.do" method="post">
+                <form action="crew_report.do" method="get">
            			<input type="hidden" name="crew_id" value="member01">
            			<input type="hidden" name="reportr_idx" id="reportr_idx_input" value="">
+           			<input type="hidden" name="board_type"  value="${board_type}">
+           			
                     <!-- 경고 -->                     
                     <!-- 통과 -->
                     <div class="list">
