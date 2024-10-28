@@ -58,6 +58,8 @@ public interface CrewPageDAO {
 
 	String board_reported_id(String board_idx);
 
+	int report_do(ReportDTO report_dto);
+
 	
 	
 }

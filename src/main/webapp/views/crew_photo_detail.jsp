@@ -2,11 +2,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 	<head>
+		
 		<meta charset="UTF-8">
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<!-- 추가한코드 -->
+		
 		<style>
+		
+		/* 모달 기본 스타일 */
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed; 
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+}
+
+.modal-content {
+    background-color: #282b34; /* 기존 스타일과 일치 */
+    margin: 15% auto; 
+    padding: 20px;
+    border-radius: 4px; /* 둥근 모서리 */
+    width: 80%; 
+    color: white; /* 글자 색상 */
+}
+
+.close {
+    color: #aaa; /* 닫기 버튼 색상 */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 		
 		/*내용 작성란 스타일 크기 조절*/
 		#contentInput {
@@ -174,8 +206,13 @@ textarea, hr{
 				
 				<!-- 제목 -->
 				<h2 class="title">크루이름<span>사진게시글</span></h2>
-
-                   
+					
+					<input type="hidden" id="sessionId" value="sessionid">
+                	<!-- 작성자 id 넣기 -->
+                	 <input type="hidden" id="board_id" name="board_id" value="${board.board_id}">
+                	 <!-- 크루 idx 넣기 -->
+                	 <input type="hidden" id="board_idx" name="board_idx" value="${board.board_idx}">     	             
+                    
                     <div id="img_list" class="list">
    							<img alt="${file.ori_filename}" src="/photo/${file.new_filename}"><br/>
                     </div>  
@@ -207,16 +244,33 @@ textarea, hr{
 					<span><i class="bi bi-geo-alt-fill">어떤</i></span> 
 					<span><i class="bi bi-people-fill">값을</i></span>
 					<span><i class="bi bi-fonts">넣을</i></span> 
-					<span><i class="bi bi-calendar-event">옵션버튼넣기</i></span>
+					<!-- 옵션버튼 시작 -->
+					
+					 <button type="button" class="mainbtn small" onclick="showReportModal()">옵션</button>
+
+                       <div id="reportModal" class="modal">
+						    <div class="modal-content">
+						        <span class="close" onclick="hideReportModal()">&times;</span>
+						        <h5 id="modaltitle">신고하기/블라인드하기/블라인드취소하기/삭제하기</h5>
+						        <p id="modalcontent">신고하시겠습니까?/블라인드하시겠습니까?/블라인드취소하시겠습니까?/삭제하시겠습니까?</p>
+						        <p id="buttontype">
+						      	<button  onclick="submitReport()"></button> </p>
+						        <button onclick="hideReportModal()">취소하기</button>
+						    </div>
+						</div>
+										
+					<!-- 옵션버튼 끝 -->
+				<!-- <span id="buttontype"></span> -->	
 				</div>
 				<div>
 				<div class="list">
-				 <p><textarea  class="full pass" name="content" id="contentInput" readonly/>${board.content}</textarea></p>
+				 <p><textarea  class="full pass" name="subject" id="contentInput" readonly/>${board.subject}</textarea></p>
 					
 				</div>
+	
 			</div>
                        
-                    </div>
+            </div>
 
 			</div>
 		</div>
@@ -230,9 +284,98 @@ textarea, hr{
      var board = "${board}"; // EL을 사용하여 모델 값 가져오기
      console.log(board); // 콘솔에 출력
 
+
      var member = "${member.nick}"; // EL을 사용하여 모델 값 가져오기
      console.log(member); // 콘솔에 출력
      console.log(member.profile);
+     
+     // 크루장인지 확인하는 변수
+     var isCrewLeader = true;
+     console.log(Object.keys(board)); 
+     Buttontype(board);
+     
+    
+   //  const reportUrl = ''; // URL 설정
+     const boardIdx = "${board.board_idx}"; // board_idx 값
+     
+     var reportUrl = '';
+     
+     function Buttontype() {
+    	    // 기본 버튼 설정
+    	    let deleteButton = '<button type="button" class="mainbtn small"></button>';
+    	    
+    	    const modalTitle = document.getElementById("modaltitle");
+    	     const modalContent = document.getElementById("modalcontent");
+    	     const buttonName = document.getElementById("buttonname");
+    	    // 내가 작성자이면
+    	    if (sessionId === "${board.board_id}") {
+    	        deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
+    	        reportUrl = 'crew_oneboard_del?board_idx=${board.board_idx}';
+    	        modalTitle.textContent = '삭제하기';
+    	        modalContent.textContent = '정말로 삭제하시겠습니까';
+    	        buttonName.textContent = '삭제하기'
+    	    }
+    	    // 크루장이면
+    	    else if (isCrewLeader) {
+    	        // 숨겨진 게시글이면
+    	        if ("${board.status}" === "2") {
+    	            deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_oneboard_unblind?board_idx=${board.board_idx}\')">블라인드취소하기</button>';
+    	            reportUrl = 'crew_oneboard_unblind?board_idx=${board.board_idx}';
+    	            modalTitle.textContent = '블라인드풀기';
+        	        modalContent.textContent = '정말로 블라인드 해제 하시겠습니까';
+        	        buttonName.textContent = '보여주기'
+    	        } else {
+    	            deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_oneboar._blind?board_idx=${board.board_idx}\')">블라인드하기</button>';
+    	            reportUrl = 'crew_oneboar._blind?board_idx=${board.board_idx}';
+    	            modalTitle.textContent = '블라인드하기';
+        	        modalContent.textContent = '정말로 블라인드 하시겠습니까';
+        	        buttonName.textContent = '블라인드'
+    	        }
+    	    }
+
+    	    // 블라인드되지 않은 게시글에만 신고하기 버튼 추가
+    	    if ("${board.status}" !== "2") {
+			    deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}\')">신고하기</button>';
+			    reportUrl = 'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}';
+			    modalTitle.textContent = '신고하기';
+    	        modalContent.textContent = '정말로 신고 하시겠습니까';
+    	        buttonName.textContent = '신고하기'
+    	    }
+
+    	    // 상태에 따라 블라인드된 게시글 표시
+    	    if ("${board.status}" === "2") {
+    	        deleteButton = '<tr><td>블라인드된 게시글 입니다</td><td>' + deleteButton + '</td></tr>';
+    	    	
+    	    }
+
+    	    // 버튼을 #buttontype 요소에 추가
+    	    $('#buttontype').append(deleteButton);
+    	}
+	
+    
+
+     function showReportModal(reportUrl) {
+          // 신고 URL 저장
+         document.getElementById("reportModal").style.display = "block"; // 모달 보여주기
+         
+         
+         
+     }
+
+     function hideReportModal() {
+         document.getElementById("reportModal").style.display = "none"; // 모달 숨기기
+     }
+     
+     function submitReport() {
+    	    console.log("신고가 완료되었습니다.");
+    	    // 신고 URL로 이동
+    	    console.log(reportUrl);
+    	    location.href = reportUrl; 
+    	    hideReportModal(); // 모달 닫기
+    	}
+     
+     //
+     
      
 	</script>
 	<script src="resources/js/common.js"></script>

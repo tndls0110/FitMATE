@@ -31,10 +31,18 @@
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
-                <form action="crew_report.do" method="get">
-           			<input type="hidden" name="crew_id" value="member01">
-           			<input type="hidden" name="reportr_idx" id="reportr_idx_input" value="">
+                <form action="crew_report.do" method="POST">
+                	<!-- 신고자  !! 나중에 세션값 넣기  !! -->
+           			<input type="hidden" name="reporter_id" value="member01">
+           			<!-- 신고 사유 idx -->
+           		<!--	<input type="hidden" name="reportr_idx" id="reportr_idx_input" value="1">-->
+           			<input type="hidden" id="reportr_idx_input" name="reportr_idx"  value="">
+           			<!-- 신고글 유형 -->
            			<input type="hidden" name="board_type"  value="${board_type}">
+           			<!-- 신고글 idx -->
+           			<input type="hidden" name="board_idx"  value="${board_idx}">
+		           	<!-- 피신고자 id -->		
+		           	<input type="hidden" name="reported_id"  value="${reported_id}">
            			
                     <!-- 경고 -->                     
                     <!-- 통과 -->
@@ -50,8 +58,8 @@
                
                     <!-- 제출 버튼 -->
                     <div class="list" >
-                        <button onclick="selectReason(this)" class="mainbtn">취소하기</button>
-                        <button onclick="selectReason(this)" class="mainbtn">신고하기</button>
+                        <button type="button" onclick="location.href='http://localhost:8080/Fitmate/'" class="mainbtn">취소하기</button>
+                        <button  class="mainbtn">신고하기</button>
                     </div>
                     <!-- //제출 버튼 -->
                    
@@ -94,7 +102,7 @@ function drawList(report) {
     var content = '';
     report.forEach(function(item) { 
         // 각 신고 항목에 대해 버튼 생성
-        content += '<button type="button" onclick="selectReason(this)" class="mainbtn" data-reportr-idx="' + item.reportr_idx + '">신고 사유: ' + item.reportr_con + '</button><br>';
+        content += '<button type="button" onclick="selectReason(this)" class="mainbtn" value="' + item.reportr_idx + '">신고 사유: ' + item.reportr_con + '</button><br>';
     });
     $('#report').html(content); // 버튼을 #report 요소에 추가
 }
@@ -109,10 +117,14 @@ function selectReason(selectedButton) {
 
     // 필요한 경우 추가 처리
     console.log('선택된 신고 사유:', $(selectedButton).text());
+    var reportr_idx = selectedButton.value;
     
-    var reportr_idx = $(selectedButton).data('reportr-idx');
     $('#reportr_idx_input').val(reportr_idx);
+    console.log('Reportr idx input value:', $('#reportr_idx_input').val());
 }
+
+
+
 </script>
 	<script src="resources/js/common.js"></script>
 </html>
