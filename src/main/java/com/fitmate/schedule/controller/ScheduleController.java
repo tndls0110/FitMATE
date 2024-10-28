@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -27,7 +28,7 @@ public class ScheduleController {
 	@ResponseBody
 	public Map<String,Object> getEvents() {
 		Map<String,Object> event_day = new HashMap<String,Object>();
-		Date events_day = s_service.getEvents();
+		List<Map<String,Object>> events_day = s_service.getEvents();
 		event_day.put("date", events_day);
 		return event_day;
 	}
