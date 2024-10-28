@@ -2,7 +2,8 @@
 var alertCont = document.getElementsByClassName('modal_alert')[0],
     confirmCont = document.getElementsByClassName('modal_confirm')[0],
     msgstr = '',
-    locationAddr = '';
+    locationAddr = '',
+    eventfx;
 
 const modal = {
     hide: function() {
