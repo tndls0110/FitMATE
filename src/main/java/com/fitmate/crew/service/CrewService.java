@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Case;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.AskWriteDTO;
 import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
@@ -19,6 +21,7 @@ import com.fitmate.crew.dto.CrewMemberDTO;
 import com.fitmate.crew.dto.CrewReplyDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
+import com.fitmate.crew.dto.ReplyWriteDTO;
 
 @Service
 public class CrewService {
@@ -152,7 +155,6 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		List<CrewAskDTO> commentDTO = crew_dao.ask(board_idx);
 		
 		for (CrewAskDTO crewAskDTO : commentDTO) {
-			logger.info("comment_idx : " + crewAskDTO.getComment_idx());
 			// 3. 댓글 idx로 대댓글 내용가져오기.
 			comment_idx = crewAskDTO.getComment_idx();
 			
@@ -166,7 +168,90 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		map.put("commentAll", commentDTO);
 		
 		return map;
-	} 
-	
+	}
 
+
+	public void commentWrite(Map<String, String> params) {
+		
+		// Insert 성공여부 체크변수
+		int success = 0;
+		
+		// content_chk (0: 댓글, 1: 대댓글) 
+		if(params.get("content_chk").equals("0")) {
+			AskWriteDTO askWriteDTO = new AskWriteDTO();
+			// 게시판 idx
+			int board_idx = Integer.parseInt(params.get("board_idx"));
+			askWriteDTO.setBoard_idx(board_idx);
+			// 작성자 id
+			String comment_id = params.get("comment_id");
+			askWriteDTO.setComment_id(comment_id);
+			// 내용
+			String content = params.get("content");
+			askWriteDTO.setContent(content);
+			
+			success = crew_dao.askWrite(askWriteDTO);
+		}else if(params.get("content_chk").equals("1")) {
+			ReplyWriteDTO replyWriteDTO = new ReplyWriteDTO();
+			// 댓글 idx
+			int comment_idx = Integer.parseInt(params.get("comment_idx"));
+			replyWriteDTO.setComment_idx(comment_idx);
+			// 작성자 id
+			String recomment_id = params.get("recomment_id");
+			replyWriteDTO.setRecomment_id(recomment_id);
+			// 내용
+			String content = params.get("content");
+			replyWriteDTO.setContent(content);
+			
+			success = crew_dao.replyWrite(replyWriteDTO);
+		}
+		
+		if(success == 0) {
+			logger.info("댓글저장에 실패했습니다.");
+		}
+		
+	}
+
+	// Comment 모달 - 댓글 수정/삭제/신고 이벤트 처리
+	public void comment_event(HashMap<String, Object> info) {
+		
+		int success = 0;
+		
+		// update, delete, report
+		String event = (String) info.get("event");
+		// 0: 댓글, 1: 대댓글
+		int content_chk = (int) info.get("content_chk");
+		
+		switch (event) {
+		// 수정
+		case "update":
+			if(content_chk == 0) {
+				success = crew_dao.comment_update(info);
+			}else {
+				success = crew_dao.recomment_update(info);
+			}
+			break;
+		// 삭제
+		case "delete":
+			if(content_chk == 0) {
+				success = crew_dao.comment_delete(info);
+			}else {
+				success = crew_dao.recomment_delete(info);
+			}
+			break;
+		/*
+		 * case "report": crew_dao.comment_report(); break;
+		 */
+		default:
+			break;
+		}
+		
+		
+	} 
+
+	
+	
+	
+	
+	
+	
 }

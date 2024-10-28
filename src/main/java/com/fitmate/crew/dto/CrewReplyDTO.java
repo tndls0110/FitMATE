@@ -1,6 +1,6 @@
 package com.fitmate.crew.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class CrewReplyDTO {
 	// 대댓글 idx
@@ -14,7 +14,7 @@ public class CrewReplyDTO {
 	// 대댓글 내용
 	private String content;
 	// 작성일시
-	private Date date;
+	private LocalDateTime date;
 	
 	// 값이 제대로 담겼는지 여부체크 true:성공 / fals:실패
 	public boolean isValid() {
@@ -51,10 +51,12 @@ public class CrewReplyDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getDate() {
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	
