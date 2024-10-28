@@ -275,7 +275,7 @@
       if ($('#searchFilter').val() == '') {
          modal.showAlert('검색기준을 선택하세요.');
       } else if($('.searchKeyword').val() == ''){
-    	  modal.showAlert('검색 키워드를 입력하세요.'); 
+    	  modal.showAlert('검색 키워드를 입력하세요.');
       }else {
          // 2-1. 검색관련 변수세팅 
          searchFilter = $('#searchFilter').val();
@@ -300,23 +300,24 @@
          },
          dataType : 'JSON',
          success : function(list) {
-         
-            // 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
-            var cnt = 1;
-            
-            $('div.recruitArea').empty();
-            
-            $(list).each(function(idx, item) { // 데이터 =item
-               
-               console.log('cnt : ' + cnt);
-               // Controller에서 받아온 크루원 모집게시글 추가.
-               recruitAdd(item, cnt);      
-               cnt++;
-            });
-            
-            // 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. 
+        	 
+            // 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. => 기존 데이터 그대로 유지 
             if(list == null || list == ''){
                modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
+               
+            }else{ 
+            	// 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
+                var cnt = 1;
+                
+                $('div.recruitArea').empty();
+                
+                $(list).each(function(idx, item) { // 데이터 =item
+                   
+                   console.log('cnt : ' + cnt);
+                   // Controller에서 받아온 크루원 모집게시글 추가.
+                   recruitAdd(item, cnt);      
+                   cnt++;
+                });		
             }
 
              /* [...버튼]

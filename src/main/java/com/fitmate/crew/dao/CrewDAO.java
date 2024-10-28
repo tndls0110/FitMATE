@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.AskWriteDTO;
+import com.fitmate.crew.dto.CrewApprovalDTO;
 import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
@@ -54,6 +55,12 @@ public interface CrewDAO {
 	int recomment_update(HashMap<String, Object> info);
 
 	int recomment_delete(HashMap<String, Object> info);
+
+	CrewApprovalDTO crewApproval(String currentId);
+
+	int joinCrew(int crew_idx_, String join_id, int status);
+
+	int leaveCrew(int join_idx);
 
 	
 }
