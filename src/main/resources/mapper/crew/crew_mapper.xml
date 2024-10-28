@@ -7,144 +7,114 @@
 <select id="placeFilter" resultType="map"> SELECT A.region_name, B.regions_idx, B.regions_name FROM region A INNER JOIN region_sub B ON A.region_idx = B.region_idx </select>
 <select id="mbtiFilter" resultType="map"> SELECT mbtir_idx, mbtir_name FROM mbti_r </select>
 <select id="crewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
-	SELECT
-		<!--  크루명  -->
-		A.name AS crew_name,
-		<!--  크루idx  -->
-		A.crew_idx,
-		<!--  게시글idx  -->
-		I.board_idx,
-		<!--  크루소개글  -->
-		CB.content AS crew_content,
-		<!--  활동지역 시단위  -->
-		R.region_name,
-		<!--  활동지역 구단위  -->
-		RS.regions_name,
-		<!--  크루원 수  -->
-		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx = A.crew_idx) AS member_count,
-		<!--  크루장 ID  -->
-		A.crew_id AS leader_id,
-		<!--  크루장 이름  -->
-		MB.name AS leader_name,
-		<!-- 크루장 닉네임 -->
-		MB.nick AS leader_nick,
-		<!--  크루장 프로필사진  -->
-		P.profile AS leader_profile,
-		<!--  크루장 mbti  -->
-		M.mbtir_name AS leader_mbti
-	FROM crew A 
-		INNER JOIN member MB ON A.crew_id = MB.user_id 
-		INNER JOIN profile P ON A.crew_id = P.user_id 
-		INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
-		INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
-		INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx
-		INNER JOIN region R ON R.region_idx = RS.region_idx
-		INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx
-	<where>
-		category_idx =1
-		<!--  searchFilter(1='크루이름 검색'/ 2='크루장닉네임 검색')  -->
-		<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
-			AND A.name LIKE CONCAT('%', #{searchKeyword}, '%') 
-		</if>
-		<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')"> 
-			AND MB.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
-		</if>
-		<!--  regions_idx(활동지역) -> WHERE 크루-운동지역idx  -->
-		<if test="regions_idx != 0"> AND A.regions_idx = #{regions_idx} </if>
-		<!--  mbtiFilter(운동성향) -> WHERE 프로필-운동성향idx OR MBTI-운동성향idx  -->
-		<if test="mbtiFilter != 0"> AND P.mbtir_idx = #{mbtiFilter} </if>
-	</where>
-	LIMIT #{limit} OFFSET #{offset}
+SELECT
+<!--   크루명   -->
+A.name AS crew_name,
+<!--   크루idx   -->
+A.crew_idx,
+<!--   게시글idx   -->
+I.board_idx,
+<!--   크루소개글   -->
+CB.content AS crew_content,
+<!--   활동지역 시단위   -->
+R.region_name,
+<!--   활동지역 구단위   -->
+RS.regions_name,
+<!--   크루원 수   -->
+MC.member_count,
+<!--   크루장 ID   -->
+A.crew_id AS leader_id,
+<!--   크루장 이름   -->
+MB.name AS leader_name,
+<!--  크루장 닉네임  -->
+MB.nick AS leader_nick,
+<!--   크루장 프로필사진   -->
+P.profile AS leader_profile,
+<!--   크루장 mbti   -->
+M.mbtir_name AS leader_mbti FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id INNER JOIN profile P ON A.crew_id = P.user_id INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx INNER JOIN crew_board CB ON CB.board_idx = I.board_idx INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx INNER JOIN region R ON R.region_idx = RS.region_idx INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+<where>
+category_idx =1
+<!--   searchFilter(1='크루이름 검색'/ 2='크루장닉네임 검색')   -->
+<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')"> AND A.name LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')"> AND MB.nick LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+<!--   regions_idx(활동지역) -> WHERE 크루-운동지역idx   -->
+<if test="regions_idx != 0"> AND A.regions_idx = #{regions_idx} </if>
+<!--   mbtiFilter(운동성향) -> WHERE 프로필-운동성향idx OR MBTI-운동성향idx   -->
+<if test="mbtiFilter != 0"> AND P.mbtir_idx = #{mbtiFilter} </if>
+</where>
+LIMIT #{limit} OFFSET #{offset}
 </select>
-
-
 <select id="recruitDetail" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="int">
-	SELECT
-		<!--  크루명  -->
-		A.name AS crew_name,
-		<!-- 크루 생성일 -->
-		A.create_date,
-		<!--  크루idx  -->
-		A.crew_idx,
-		<!--  게시글idx  -->
-		I.board_idx,
-		<!--  크루소개글  -->
-		CB.content AS crew_content,
-		<!--  활동지역 시단위  -->
-		R.region_name,
-		<!--  활동지역 구단위  -->
-		RS.regions_name,
-		<!--  크루원 수  -->
-		(SELECT COUNT(member_idx) FROM crew_member CM WHERE CM.crew_idx = A.crew_idx) AS member_count,
-		<!--  크루장 ID  -->
-		A.crew_id AS leader_id,
-		<!--  크루장 이름  -->
-		MB.name AS leader_name,
-		<!-- 크루장 닉네임 -->
-		MB.nick AS leader_nick,
-		<!--  크루장 프로필사진  -->
-		P.profile AS leader_profile,
-		<!--  크루장 mbti  -->
-		M.mbtir_name AS leader_mbti,
-		<!-- 전체 게시글 수 -->
-		(SELECT COUNT(CB.board_idx) FROM crew_board CB WHERE CB.board_idx IN (SELECT I.board_idx FROM crew_idx I WHERE I.crew_idx = A.crew_idx)) AS board_count
-	FROM crew A 
-		INNER JOIN member MB ON A.crew_id = MB.user_id 
-		INNER JOIN profile P ON A.crew_id = P.user_id 
-		INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
-		INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
-		INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx
-		INNER JOIN region R ON R.region_idx = RS.region_idx
-		INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx
-	<where>
-		category_idx =1
-		<if test="board_idx != 0">
-			AND CB.board_idx = #{board_idx}
-		</if>
-	</where>
+SELECT
+<!--   크루명   -->
+A.name AS crew_name,
+<!--  크루 생성일  -->
+A.create_date,
+<!--   크루idx   -->
+A.crew_idx,
+<!--   게시글idx   -->
+I.board_idx,
+<!--   크루소개글   -->
+CB.content AS crew_content,
+<!--   활동지역 시단위   -->
+R.region_name,
+<!--   활동지역 구단위   -->
+RS.regions_name,
+<!--   크루원 수   -->
+MC.member_count,
+<!--   크루장 ID   -->
+A.crew_id AS leader_id,
+<!--   크루장 이름   -->
+MB.name AS leader_name,
+<!--  크루장 닉네임  -->
+MB.nick AS leader_nick,
+<!--   크루장 프로필사진   -->
+P.profile AS leader_profile,
+<!--   크루장 mbti   -->
+M.mbtir_name AS leader_mbti,
+<!--  전체 게시글 수  -->
+BC.board_count FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id INNER JOIN profile P ON A.crew_id = P.user_id INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx INNER JOIN crew_board CB ON CB.board_idx = I.board_idx INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx INNER JOIN region R ON R.region_idx = RS.region_idx INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+<where>
+category_idx =1
+<if test="board_idx != 0"> AND CB.board_idx = #{board_idx} </if>
+</where>
 </select>
-
 <select id="ask" resultType="com.fitmate.crew.dto.CrewAskDTO" parameterType="int">
-	SELECT
-		<!-- 댓글idx -->
-		C.comment_idx,	
-		<!-- 댓글ID -->	
-		C.comment_id,
-		<!-- 댓글 작성자 프로필 -->
-		P.profile,
-		<!-- 댓글 작성자 닉네임 -->
-		M.nick,
-		<!-- 댓글 내용 -->
-		C.content,
-		<!-- 댓글 작성일 -->
-		C.date
-	FROM comment C
-		INNER JOIN profile P ON P.user_id = C.comment_id
-		INNER JOIN member M ON M.user_id = C.comment_id 
-	WHERE board_idx = #{board_idx}
+SELECT
+<!--  댓글idx  -->
+C.comment_idx,
+<!--  댓글ID  -->
+C.comment_id,
+<!--  댓글 작성자 프로필  -->
+P.profile,
+<!--  댓글 작성자 닉네임  -->
+M.nick,
+<!--  댓글 내용  -->
+C.content,
+<!--  댓글 작성일  -->
+C.date FROM comment C INNER JOIN profile P ON P.user_id = C.comment_id INNER JOIN member M ON M.user_id = C.comment_id WHERE board_idx = #{board_idx}
 </select>
-
 <select id="reply" resultType="com.fitmate.crew.dto.CrewReplyDTO" parameterType="int">
-	SELECT
-		<!-- 대댓글idx -->
-		RC.recomment_idx,
-		<!-- 대댓글ID -->	
-		RC.recomment_id,
-		<!-- 대댓글 작성자 프로필 -->
-		P.profile,
-		<!-- 대댓글 작성자 닉네임 -->
-		M.nick,
-		<!-- 대댓글 내용 -->
-		RC.content,
-		<!-- 대댓글 작성일 -->
-		RC.date
-	FROM recomment RC
-		INNER JOIN profile P ON P.user_id = RC.recomment_id
-		INNER JOIN member M ON M.user_id = RC.recomment_id 
-	WHERE comment_idx = #{comment_idx}	
+SELECT
+<!--  대댓글idx  -->
+RC.recomment_idx,
+<!--  대댓글ID  -->
+RC.recomment_id,
+<!--  대댓글 작성자 프로필  -->
+P.profile,
+<!--  대댓글 작성자 닉네임  -->
+M.nick,
+<!--  대댓글 내용  -->
+RC.content,
+<!--  대댓글 작성일  -->
+RC.date FROM recomment RC INNER JOIN profile P ON P.user_id = RC.recomment_id INNER JOIN member M ON M.user_id = RC.recomment_id WHERE comment_idx = #{comment_idx}
 </select>
-
-
+<insert id="askWrite" parameterType="com.fitmate.crew.dto.AskWriteDTO"> INSERT INTO comment(board_idx, comment_id, content) VALUES(#{board_idx}, #{comment_id}, #{content}) </insert>
+<insert id="replyWrite" parameterType="com.fitmate.crew.dto.ReplyWriteDTO"> INSERT INTO recomment(comment_idx, recomment_id, content) VALUES(#{comment_idx}, #{recomment_id}, #{content}) </insert>
+<update id="comment_update" parameterType="hashmap"> UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx} </update>
+<update id="recomment_update" parameterType="hashmap"> UPDATE recomment SET content = #{content} WHERE recomment_idx = #{comment_idx} </update>
+<delete id="comment_delete" parameterType="hashmap"> DELETE FROM comment WHERE comment_idx = #{comment_idx} </delete>
+<delete id="recomment_delete" parameterType="hashmap"> DELETE FROM recomment WHERE recomment_idx = #{comment_idx} </delete>
 <insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO"> insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3); </insert>
 <insert id="crew_post_create" useGeneratedKeys="true" keyColumn="board_idx" keyProperty="board_idx" parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1); </insert>
 <insert id="crew_idx"> insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx}); </insert>
@@ -152,5 +122,3 @@
 <update id="crew_create_rewrite"> update crew_board set content = #{content} where board_idx = #{board_idx} and category_idx = 1 </update>
 <update id="crew_create_rewrite_region"> update crew set regions_idx = #{regions_idx} where crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx = #{board_idx} ) </update>
 </mapper>
-
-
