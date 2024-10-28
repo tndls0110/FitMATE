@@ -96,4 +96,8 @@
 	delete from board_file where board_idx = #{param1}
 </delete>
 
+<select id="board_reported_id" resultType="String">
+	select board_id from crew_board where board_idx = #{param1}
+</select>
+
 </mapper>

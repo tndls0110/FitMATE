@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -242,14 +243,44 @@ public class CrewPageService {
 	
 	
 	// 크루 사진 게시글 삭제하기
-	// 이름은 notice이지만 게시글 삭제 로직은 같다 
 	@Transactional
 	public void crew_photo_del(String board_idx) {
+		// 이름은 notice이지만 게시글 삭제 로직은 같다 == board_idx 와 엮인 crew_idx 지우기
 		crewpage_dao.notice_del_crewidx(board_idx);
+		// 이름은 notice 이지만 게시글 삭제 로직은 같다 == board_idx로 게시글 지우기
 		crewpage_dao.crew_notice_del(board_idx);
 		// 추가한 코드 사진파일 db 정보 없애주기
 		crewpage_dao.crew_photofile_del(board_idx);
 			
+	}
+
+	// 게시글 댓글 신고하기
+	public void crew_report_do(Map<String, String> params) {
+			
+			// 담을 dto 선언해주기
+			ReportDTO report_dto = new ReportDTO();
+			
+		    // 신고자 아이디
+			String reporter_id =params.get("sessionId");
+			report_dto.setReporter_id(reporter_id);
+			// 신고 사유 idx
+			String reportr_idx = params.get("reportr_idx");
+			report_dto.setReportr_idx(Integer.parseInt(reportr_idx));
+			// 보드 idx
+			String board_idx = params.get("board_idx");	
+			report_dto.setBoard_idx(Integer.parseInt(board_idx));
+			// 게시글 타입  
+			String board_type = params.get("board_type");
+			report_dto.setBoard_type(Integer.parseInt(board_type));
+			// 피신고자 아이디 가져오기
+			String reported_id = params.get("board_id");
+			report_dto.setReported_id(reported_id);
+			
+			logger.info("params 리포트 서비스 값 = {} ",params);
+			
+			// 다음 리포트 dto로 신고 인서트 시키기 
+		//	crewpage_dao.report_do(report_dto);
+		
 	}
 	
 
