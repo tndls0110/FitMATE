@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitmate.crew.dto.CrewApprovalDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
 
@@ -116,12 +115,50 @@ public class CrewController {
 	// 3-1. 크루 모집글 상세정보 조회
 	@GetMapping(value = "/crew_recruit_detail.ajax")
 	@ResponseBody 
-	public Map<String, Object> recruitDetail(String idx){
+	public Map<String, Object> recruitDetail(String idx, String currentId){
 		
-		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx);
+		// 크루정보 및 댓글 정보 가져오기. + 현재유저의 크루 입단여부 확인하기.
+		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx, currentId);
 		
 		return recruitDetail; 
 	}
+	
+	// 크루 입단 신청
+	@PostMapping(value = "/join_crew.ajax")
+	@ResponseBody
+	public Map<String, Object> joinCrew(String crew_idx, String join_id){
+		boolean success = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int row = crew_service.joinCrew(crew_idx, join_id);
+		
+		// Insert에 성공했을 때 
+		if(row > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		return map;
+	}
+	
+	// 크루 입단 취소
+	@PostMapping(value = "/leave_crew.ajax")
+	@ResponseBody
+	public Map<String, Object> leaveCrew(String join_idx){
+		boolean success = false;
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int row = crew_service.leaveCrew(join_idx);
+		
+		// Insert에 성공했을 때 
+		if(row > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		return map;
+	}
+	
 	
 	// 3-2. 크루 모집글 - 문의댓글/답변대댓글 내용저장
 	@PostMapping(value="/crew_recruit_detail.do")
@@ -161,19 +198,39 @@ public class CrewController {
    @PostMapping(value = "/comment_event.ajax")
    @ResponseBody
    public Map<String, Object> comment_event(@RequestBody String json_info) throws Exception {
-	   
+	   // 이동할 페이지 (기본값 : 모집게시글 상세페이지)
+	   String page = "crew_recruit_detail.go?idx="; 
+	   // 신고페이지로 이동인지 확인하기 위함. (1인경우 신고페이지에 넘겨줄 데이터가 존재함을 의미.)
+	   String report_chk = "0"; 
+
 	   //String 을 Map 을 바꿔주기위해 라이브러리 사용.
 	   ObjectMapper mapper = new ObjectMapper();
 	   HashMap<String, Object> info = mapper.readValue(json_info, new TypeReference<HashMap<String, Object>>(){});
 	   logger.info("info : " + info);
 	   
-	   crew_service.comment_event(info);
-	   
 	   Map<String, Object> map = new HashMap<String, Object>();
-	   map.put("success", "성공");
 	   
+	   String event = (String) info.get("event");
+	   
+	   if(event.equals("report")) {
+		   // 신고페이지에 넘겨줄 데이터
+		   int comment_idx = (int) info.get("comment_idx");  
+		   String comment_id = (String) info.get("comment_id");
+		  
+		   report_chk = "1";
+		   page = "crew_report.go"; 
+		   map.put("comment_idx", comment_idx); // 신고대상 댓글idx 
+		   map.put("comment_id", comment_id); // 신고대상 댓글id 
+		   map.put("board_type", "2"); // 댓글신고유형
+		   
+	   }else {
+		   crew_service.comment_event(info);
+	   }
+	   		
+	   map.put("success", "성공");
+	   map.put("report_chk", report_chk);
+	   map.put("page", page);
 	   return map;
    }
 
-	
 }

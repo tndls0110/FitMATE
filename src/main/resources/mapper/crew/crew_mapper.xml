@@ -109,6 +109,20 @@ RC.content,
 <!--  대댓글 작성일  -->
 RC.date FROM recomment RC INNER JOIN profile P ON P.user_id = RC.recomment_id INNER JOIN member M ON M.user_id = RC.recomment_id WHERE comment_idx = #{comment_idx}
 </select>
+
+<select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String">
+	SELECT * FROM crew_join 
+		WHERE join_id = #{currentId}
+</select>
+
+<insert id="joinCrew">
+	INSERT INTO crew_join(crew_idx, join_id, status) VALUES(#{param1}, #{param2}, #{param3})
+</insert>
+
+<delete id="leaveCrew" parameterType="int">
+	DELETE FROM crew_join WHERE join_idx = #{join_idx} 
+</delete>
+
 <insert id="askWrite" parameterType="com.fitmate.crew.dto.AskWriteDTO"> INSERT INTO comment(board_idx, comment_id, content) VALUES(#{board_idx}, #{comment_id}, #{content}) </insert>
 <insert id="replyWrite" parameterType="com.fitmate.crew.dto.ReplyWriteDTO"> INSERT INTO recomment(comment_idx, recomment_id, content) VALUES(#{comment_idx}, #{recomment_id}, #{content}) </insert>
 <update id="comment_update" parameterType="hashmap"> UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx} </update>
