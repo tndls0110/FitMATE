@@ -94,31 +94,28 @@ public class RegDataController {
 	public String regRegionSub (String region_idx, Model model, HttpSession session) {
 		page = "admin_regRegion_sub";
 		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
 		model.addAttribute("region", regData_service.regRegion());
 		model.addAttribute("list", regData_service.regRegionSub(region_idx));
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_updateRegion_sub.do")
-	public String regRegionSub (@RequestParam Map<String, String> params, String region_idx, Model model, HttpSession session) {
+	public String regRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
 		//main_controller.checkPermit(model, session);
 		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
-		logger.info(region_idx);
-		regData_service.regRegionSub(params, region_idx, admin_idx);
+		regData_service.regRegionSub(params, admin_idx);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_insertRegion_sub.do")
-	public String insertRegionSub (@RequestParam Map<String, String> params, String region_idx, Model model, HttpSession session) {
+	public String insertRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
 		//main_controller.checkPermit(model, session);
 		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
-		regData_service.insertRegionSub(params, region_idx, admin_idx);
+		regData_service.insertRegionSub(params, admin_idx);
 		return page;
 	}
 
@@ -127,8 +124,6 @@ public class RegDataController {
 	public String regReport (Model model, HttpSession session) {
 		page = "admin_regReport";
 		//main_controller.checkPermit(model, session);
-		//int admin_idx = session.getAttribute("loginIdx");
-		int admin_idx = 1;
 		model.addAttribute("list", regData_service.regReport());
 		return page;
 	}

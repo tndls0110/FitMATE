@@ -24,7 +24,4 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script>
-    var msg = '${msg}';
-</script>
 </html>

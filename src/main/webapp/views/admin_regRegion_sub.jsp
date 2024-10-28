@@ -28,7 +28,6 @@
             </li>
         </ul>
         <div class="contents narrow">
-            <h3 class="capt">기존 항목</h3>
             <p>
                 <select name="region" class="full" onchange="onOptionChange(event)">
                     <c:forEach items="${region}" var="list">
@@ -42,6 +41,7 @@
                     <li>
                         <form id="${list.regions_idx}" action="admin_updateRegion_sub.do" method="post">
                             <div class="btn_flex narrow">
+                                <input type="hidden" name="region_idx" />
                                 <input type="hidden" name="regions_idx" value="${list.regions_idx}" />
                                 <input type="hidden" name="reg_type" value="update" />
                                 <div class="width80p">

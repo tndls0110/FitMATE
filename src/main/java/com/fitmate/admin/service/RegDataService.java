@@ -43,9 +43,8 @@ public class RegDataService {
         return regData_dao.regRegionSub(region_idx);
     }
 
-    public void regRegionSub(Map<String, String> params, String region_idx, int admin_idx) {
+    public void regRegionSub(Map<String, String> params, int admin_idx) {
         params.put("admin_idx", Integer.toString(admin_idx));
-        params.put("region_idx", region_idx);
         switch (params.get("reg_type")){
             case "update":
                 regData_dao.updateRegionSub(params);
@@ -56,9 +55,8 @@ public class RegDataService {
         }
     }
 
-    public void insertRegionSub(Map<String, String> params, String region_idx, int admin_idx) {
+    public void insertRegionSub(Map<String, String> params, int admin_idx) {
         params.put("admin_idx", Integer.toString(admin_idx));
-        params.put("region_idx", region_idx);
         regData_dao.insertRegionSub(params);
     }
 
