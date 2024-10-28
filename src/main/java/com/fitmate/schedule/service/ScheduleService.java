@@ -18,4 +18,8 @@ public class ScheduleService {
 	public List<Map<String,Object>> getEvents() {
 		return s_dao.getEvents();
 	}
+
+	public List<Map<String, Object>> getJournal(String date) {
+		List<Map<String,Object>> journal_list = s_dao.getJournal(date);
+	}
 }
