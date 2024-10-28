@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>FitMATE</title>
     <link rel="stylesheet" type="text/css" href="resources/css/admin_common.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/admin_regData.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         var index = 8;
@@ -19,7 +20,8 @@
             <h2>신고 사유 관리</h2>
         </div>
         <div class="contents narrow">
-            <ul class="noDesc">
+            <h3 class="capt">기존 항목</h3>
+            <ul class="noDesc narrow">
                 <c:forEach items="${list}" var="list">
                     <li>
                         <div class="btn_flex narrow">
@@ -34,6 +36,7 @@
                 </c:forEach>
             </ul>
             <form>
+                <h3 class="capt">항목 추가</h3>
                 <div class="btn_flex narrow">
                     <div class="width80p">
                         <input type="text" name="reportr_con" class="full flex_left insertData" placeholder="추가할 항목을 입력하세요." />

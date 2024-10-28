@@ -81,7 +81,7 @@ public class RegDataController {
 	public String regReport (Model model, HttpSession session) {
 		page = "admin_regReport";
 		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
+		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
 		model.addAttribute("list", regData_service.regReport());
 		return page;
