@@ -38,4 +38,7 @@
 	</body>
 	<script src="resources/js/common.js"></script>
 	<script src="resources/js/member_updatepw.js"></script>
+	<script>
+		var msg = '${msg}';
+	</script>
 </html>

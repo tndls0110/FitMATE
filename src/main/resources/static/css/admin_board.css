@@ -1,0 +1,156 @@
+@charset "UTF-8";
+
+/* write */
+
+.writer{
+    width: 930px;
+    margin: -14px 0 32px;
+}
+
+.mainbtn.full.heightDouble{
+    padding: 22px 0;
+}
+
+.counterContainer{
+    width: 100%;
+    text-align: right;
+    position: relative;
+    right: -7px;
+}
+
+.counterContainer .counter{
+    color: #048187;
+    font-weight: 700;
+}
+
+
+
+/* table */
+table, tr, td{
+    margin: 0;
+    border-collapse: collapse;
+}
+
+table, tr{
+    width: 100%;
+    padding: 0;
+}
+
+table th,
+table td{
+    margin: 0;
+    padding: 8px 4px;
+    font-size: 13px;
+    text-align: center;
+}
+
+table th{
+    border-bottom: 1px solid #848484;
+}
+
+table td{
+    border-bottom: 1px solid #d9d9d9;
+}
+
+table th.left,
+table td.left{
+    text-align: left;
+}
+
+table td .textbtn{
+    font-weight: 400;
+}
+
+table td .profile{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #e1e4ea;
+    background-size: cover;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+table tfoot td{
+    padding: 0;
+}
+
+
+
+/* table narrow */
+
+.narrow table{
+    margin-bottom: 24px;
+}
+
+.narrow th,
+.narrow td{
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.narrow th {
+    font-size: 12px;
+    font-weight: 400;
+    vertical-align: top;
+}
+
+.narrow td{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.narrow td .profImg{
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 24px;
+    border-radius: 5px;
+    background-size: cover;
+}
+
+
+
+/* pagination */
+
+.pagination{
+    list-style-type: none;
+    margin: 2px 0 0 -40px;
+}
+
+.pagination .page-item{
+    width: auto;
+    padding: 8px 0;
+    display: inline-block;
+}
+
+.pagination .page-item a{
+    padding: 8px 14px;
+    color: #848484;
+}
+
+.pagination .page-item.active{
+    color: #474747;
+    font-weight: 700;
+    border-bottom: 3px solid #d9d9d9;
+}
+
+.pagination .page-item.first,
+.pagination .page-item.last{
+    padding: 8px 10px;
+}
+
+
+
+/* search */
+
+.search{
+    margin-top: 28px;
+}
+
+.btn_flex.full{
+    width: 936px;
+}
+
+.search .btn_flex .btn_flex.narrow{
+    margin: 0;
+}

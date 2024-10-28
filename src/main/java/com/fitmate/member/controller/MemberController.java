@@ -45,7 +45,7 @@ public class MemberController {
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
-				page = "/";
+				page = "index";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -120,8 +120,7 @@ public class MemberController {
 	@ResponseBody
 	public Map<String, Object> leftnav(HttpSession session) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
+		String user_id = (String) session.getAttribute("loginId");
 		result.put("leftnav_prof", member_service.getProfile(user_id));
 		return result;
 	}
@@ -129,19 +128,19 @@ public class MemberController {
 	// 내 프로필 보기
 	@RequestMapping (value = "/member_profile.go")
 	public String profile(Model model, HttpSession session) {
-		//checkPermit(model, session);
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member06";
+		page = "member_profile";
+		checkPermit(model, session);
+		String user_id = (String) session.getAttribute("loginId");
 		model.addAttribute("list", member_service.profile(user_id));
-		return "member_profile";
+		return page;
 	}
 
 	// 정보 수정하기
 	@RequestMapping (value = "/member_update.go")
 	public String update(Model model, HttpSession session) {
-		//checkPermit(model, session);
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member06";
+		page = "member_update";
+		checkPermit(model, session);
+		String user_id = (String) session.getAttribute("loginId");
 
 		// 프로필 불러오기
 		MemberDTO profile = member_service.profile(user_id);
@@ -152,17 +151,25 @@ public class MemberController {
 		model.addAttribute("region", list);
 		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
 		model.addAttribute("region2", list);
-		return "member_update";
+		return page;
+	}
+
+	@RequestMapping (value = "member_deleteImg.ajax")
+	@ResponseBody
+	public void deleteImg(Model model, HttpSession session) {
+		checkPermit(model, session);
+		String user_id = (String) session.getAttribute("loginId");
+		member_service.deleteImg(user_id);
 	}
 
 	@RequestMapping (value = "/member_update.do")
-	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model) {
+	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "member_update";
-		logger.info("params: {}", params);
-		logger.info("profile: "+profile);
+		checkPermit(model, session);
+		page = "member_update";
 		if (member_service.update(profile, params)){
 			model.addAttribute("msg", "정보가 수정되었습니다.");
-			page = "member_profile";
+			page = "redirect:/member_profile.go";
 		} else {
 			model.addAttribute("msg", "정보 수정 과정에 문제가 발생했습니다. 다시 시도하세요.");
 		}
@@ -171,15 +178,16 @@ public class MemberController {
 
 	// 비밀번호 변경
 	@RequestMapping (value = "/member_updatepw.go")
-	public String updatepw() {
-		return "member_updatepw";
+	public String updatepw(Model model, HttpSession session) {
+		page = "member_updatepw";
+		checkPermit(model, session);
+		return page;
 	}
 
 	@RequestMapping (value = "member_checkpw.ajax")
 	@ResponseBody
 	public Map<String, Object> checkpw(String old_pw, HttpSession session) {
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
+		String user_id = (String) session.getAttribute("loginId");
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (member_service.login(user_id, old_pw) == "pass"){
 			result.put("check_pw", true);
@@ -190,11 +198,12 @@ public class MemberController {
 	}
 
 	@RequestMapping (value = "/member_updatepw.do")
-	public String updatepw(String pw, HttpSession session) {
-		//String user_id = (String) session.getAttribute("loginId");
-		String user_id = "member03";
+	public String updatepw(String pw, HttpSession session, Model model) {
+		page = "redirect:/member_update.go";
+		checkPermit(model, session);
+		String user_id = (String) session.getAttribute("loginId");
 		member_service.updatepw(user_id, pw);
-		return "redirect:/member_update.go";
+		return page;
 	}
 
 }

@@ -15,7 +15,7 @@
 				<h2 class="title">내 프로필 보기</h2>
 				<div class="profImg">
 					<c:if test="${list.profile == ''}">
-						<i class="bi bi-person-square"></i>
+						<i class="bi bi-person-circle"></i>
 					</c:if>
 					<c:if test="${list.profile != ''}">
 						<div style="background-image: url('/photo/${list.profile}');"></div>
@@ -64,7 +64,8 @@
 						</c:if>
 						<c:if test="${list.mbtir_name != null}">
 							<td>
-								${list.mbtir_name}
+								<p>${list.mbtir_name}</p>
+								<p><button class="subbtn minbtn">다시 검사하기</button></p>
 							</td>
 						</c:if>
 					</tr>
@@ -77,4 +78,7 @@
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
+	<script>
+		var msg = '${msg}';
+	</script>
 </html>

@@ -3,4 +3,46 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.admin.dao.NoticeDAO"></mapper>
+<mapper namespace="com.fitmate.admin.dao.NoticeDAO">
+
+    <!-- 공지사항 작성 -->
+    <insert id="write" parameterType="com.fitmate.admin.dto.NoticeDTO" useGeneratedKeys="true" keyColumn="notice_idx" keyProperty="notice_idx">
+        INSERT INTO notice (notice_cont, admin_idx) VALUES (#{notice_cont}, #{admin_idx});
+    </insert>
+
+    <insert id="insertAlert">
+        INSERT INTO noti (notis_idx, notis_cate, noti_content, notis_date)
+            VALUES (#{param}, 2,
+                    (SELECT notice_cont FROM notice WHERE notice_idx = #{param}),
+                    (SELECT notice_regdate FROM notice WHERE notice_idx = #{param}));
+    </insert>
+
+    <!-- 공지사항 목록 -->
+    <select id="allCount" resultType="int">
+        SELECT CEIL(COUNT(notice_idx) / #{param1}) FROM notice
+    </select>
+
+    <select id="countIdx" resultType="int">
+        SELECT COUNT(notice_idx) FROM notice
+    </select>
+
+    <select id="list" resultType="com.fitmate.admin.dto.NoticeDTO">
+        SELECT notice_idx, notice_cont, notice_regdate, (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) AS 'admin_name', notice_show
+            FROM notice
+            <where>
+                <if test="param4 != null and !param4.equals('') and param3.equals('notice_cont')">
+                    notice_cont LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('admin_name')">
+                    (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{param4}, '%')
+                </if>
+            </where>
+            ORDER BY notice_idx DESC LIMIT #{param1} OFFSET #{param2}
+    </select>
+
+    <!-- 공지사항 삭제 -->
+    <update id="invisible">
+        UPDATE notice SET notice_show = 0 WHERE notice_idx = #{param}
+    </update>
+
+</mapper>

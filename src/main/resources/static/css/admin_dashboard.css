@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+
+
+/* layout */
+
+.contents_flex{
+    width: 976px;
+    display: flex;
+    margin: 12px -8px;
+}
+
+.contents_flex .contents{
+    margin: 0 8px;
+}
+
+.contents.notice{
+    width: 420px;
+}
+
+.contents.report{
+    width: 530px;
+}
+
+.contents_flex table {
+    margin: 0 0 20px;
+}

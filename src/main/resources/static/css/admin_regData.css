@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+.contents.narrow .noDesc.narrow{
+    margin: 0 0 28px;
+}
+
+.contents.narrow .noDesc.narrow li{
+    margin: 0 0 0 -40px;
+}
+
+.contents.narrow .noDesc.narrow li h3.capt{
+    margin-bottom: 3px;
+}
+
+.contents.narrow .noDesc.narrow li .btn_flex.narrow{
+    margin: 4px 0;
+}
+
+.contents.narrow .noDesc.narrow li .btn_flex.narrow .subbtn{
+    background-color: #d9d9d9;
+}

@@ -38,9 +38,9 @@
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
+	<script src="resources/js/member_login.js"></script>
 	<script>
 		var state = '${state}';
 		var msg = '${msg}';
 	</script>
-	<script src="resources/js/member_login.js"></script>
 </html>
