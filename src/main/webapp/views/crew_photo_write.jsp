@@ -60,7 +60,7 @@
                         
                         <!-- flex-narrow 박스 설정 -->
                         	<!-- 너비 설정 -->
-                         <p><textarea  class="full pass" name="content" id="contentInput" /></textarea></p>
+                         <p><textarea  class="full pass" name="subject" id="contentInput" /></textarea></p>
                             <div>
 		                        <span id="charCount">0/1000</span>
 		                          <div id="warning" style="display: none; color: red;">1000자를 초과할 수 없습니다!</div>

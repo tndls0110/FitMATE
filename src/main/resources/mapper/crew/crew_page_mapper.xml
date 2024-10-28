@@ -11,8 +11,8 @@
 
 <insert id="crew_notice_write" useGeneratedKeys="true"
 		keyColumn="board_idx" keyProperty="board_idx"
-		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
-		value(#{board_id},#{content},4); </insert>
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,subject,category_idx)
+		value(#{board_id},#{subject},4); </insert>
 <insert id="notice_write_crewidx" parameterType="com.fitmate.crew.dto.CrewIdxDTO">
 	insert into crew_idx (crew_idx,board_idx) value (#{crew_idx},#{board_idx})
 </insert>
@@ -51,8 +51,8 @@
 
 <insert id="crew_oneboard_write" useGeneratedKeys="true"
 		keyColumn="board_idx" keyProperty="board_idx"
-		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
-		value(#{board_id},#{content},2); </insert>
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,subject,category_idx)
+		value(#{board_id},#{subject},2); </insert>
 
 <select id="crew_oneboard_list" parameterType="int" resultType="com.fitmate.crew.dto.CrewBoardDTO">
 	SELECT cb.*
@@ -71,8 +71,8 @@
 
 <insert id="crew_photo_write" useGeneratedKeys="true"
 		keyColumn="board_idx" keyProperty="board_idx"
-		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx)
-		value(#{board_id},#{content},3); </insert>
+		parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,subject,category_idx)
+		value(#{board_id},#{subject},3); </insert>
 <insert id="photofile_write">
 	insert into board_file (board_idx,ori_filename,new_filename,category_idx)
 	value(#{param1},#{param2},#{param3},2)
@@ -99,5 +99,10 @@
 <select id="board_reported_id" resultType="String">
 	select board_id from crew_board where board_idx = #{param1}
 </select>
+
+<insert id="report_do">
+	insert into report (reporter_id,reportr_idx,reported_id,board_idx,board_type,report_prog,report_date) 
+	value (#{reporter_id},#{reportr_idx},#{reported_id},#{board_idx},#{board_type},1,now())
+</insert>
 
 </mapper>

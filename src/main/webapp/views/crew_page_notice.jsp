@@ -97,7 +97,7 @@
                         
                         	<!-- 너비 설정 -->
                             <div class="width80p">
-                                <input type="text" class="full flex_left" name="content" id="subjectInput"/>
+                                <input type="text" class="full flex_left" name="subject" id="subjectInput"/>
                             </div>
                             <div class="width20p">
                                 <button class="mainbtn full flex_right"id="submitButton" disabled>작성하기</button>
@@ -217,7 +217,7 @@
 	                	    }
 	                	
 	                    tbody.append('<tr><td>' + item.board_idx 
-	                    		+ '</td><td>' + item.content
+	                    		+ '</td><td>' + item.subject
 	                    		+ '</td><td>' +item.board_id
 	                    		+ '</td><td>' +item.date
 	                    		+ '</td><td>' + deleteButton + '</td></tr>'
