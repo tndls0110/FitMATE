@@ -49,17 +49,20 @@ public class CrewPageController {
 	@RequestMapping(value="/crew_report.go")
 	public String crew_report(@RequestParam Map<String,String> params,Model model) {
 		
+		
+		logger.info("신고 페이지 이동 params = {}",params);
+		
 		// 보드 idx가 있으면 >> 신고글이 게시글이면
 		if(params.get("board_idx")!=null) {
 			model.addAttribute("board_type", 1);
 			model.addAttribute("board_idx", params.get("board_idx"));
-			model.addAttribute("board_id", params.get("board_id"));
+			model.addAttribute("reported_id", params.get("board_id"));
 			
 		}
 		else { // 신고글이 게시글이 아니라면
 			model.addAttribute("board_type", 2);
 			model.addAttribute("board_idx", params.get("comment_idx"));
-			model.addAttribute("board_id", params.get("comment_id"));
+			model.addAttribute("reported_id", params.get("comment_id"));
 		}
 		
 
@@ -80,8 +83,12 @@ public class CrewPageController {
 	}
 	
 	// 신고하기 board_type 가져오는거 확인하기 == 게시글인경우 board_type=1, 댓글인경우 board_type=2
-	@RequestMapping(value="/crew_report.do")
+	@RequestMapping(value="/crew_report.do",method =RequestMethod.POST)
 	public String crew_report_do(@RequestParam Map<String,String> params) {
+		
+		logger.info("params = {}", params);
+		 String reportrIdxStr = params.get("reportr_idx");
+		 logger.info("Received reportr_idx = {}", reportrIdxStr);
 		
 		crewpage_service.crew_report_do(params);
 		
@@ -125,12 +132,12 @@ public class CrewPageController {
 	
 	// 공지사항 작성하기
 	@RequestMapping(value="/crew_page_notice.do",method =RequestMethod.POST)
-	public String crew_notice_write(@RequestParam String content,@RequestParam String board_id,@RequestParam int crew_idx) {
+	public String crew_notice_write(@RequestParam String subject,@RequestParam String board_id,@RequestParam int crew_idx) {
 		// subject = 공지사항 내용이자 제목, board_id = 작성자, crew_idx = 크루 식별위한 변수 + board_idx 와 crew_idx 합쳐줄때(식별하기위해) 필요
 		
-		logger.info("입력값 {} ",content);
+		logger.info("입력값 {} ",subject);
 		
-		crewpage_service.crew_notice_write(content,board_id,crew_idx);
+		crewpage_service.crew_notice_write(subject,board_id,crew_idx);
 		
 		return "redirect:/crew_page_notice.go";
 	}
@@ -198,12 +205,12 @@ public class CrewPageController {
 		
 		// 한줄 게시글 작성하기
 		@RequestMapping(value="/crew_oneboard.do",method =RequestMethod.POST)
-		public String crew_oneboard_write(@RequestParam String content,@RequestParam String board_id,@RequestParam int crew_idx) {
+		public String crew_oneboard_write(@RequestParam String subject,@RequestParam String board_id,@RequestParam int crew_idx) {
 			// subject = 공지사항 내용이자 제목, board_id = 작성자, crew_idx = 크루 식별위한 변수 + board_idx 와 crew_idx 합쳐줄때(식별하기위해) 필요
 			
-			logger.info("입력값 {} ",content);
+			logger.info("입력값 {} ",subject);
 			
-			crewpage_service.crew_oneboard_write(content,board_id,crew_idx);
+			crewpage_service.crew_oneboard_write(subject,board_id,crew_idx);
 			
 			return "redirect:/crew_oneboard.go";
 		}
@@ -275,11 +282,11 @@ public class CrewPageController {
 		
 		// 사진 게시글 작성하기
 		@RequestMapping(value="/crew_photo_write.do",method =RequestMethod.POST)
-		public String crew_photo_write(MultipartFile file,@RequestParam String content,@RequestParam String board_id,@RequestParam int crew_idx) {
+		public String crew_photo_write(MultipartFile file,@RequestParam String subject,@RequestParam String board_id,@RequestParam int crew_idx) {
 				
-			logger.info("입력값 {} ",content);
+			logger.info("입력값 {} ",subject);
 			
-			crewpage_service.crew_photo_write(file,content,board_id,crew_idx);
+			crewpage_service.crew_photo_write(file,subject,board_id,crew_idx);
 						
 			return "index";
 			
