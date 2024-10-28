@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Case;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fitmate.crew.dao.CrewDAO;
-import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.AskWriteDTO;
+import com.fitmate.crew.dto.CrewApprovalDTO;
 import com.fitmate.crew.dto.CrewAskDTO;
+import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
@@ -135,10 +135,12 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	
 	// 모집글 상세조회
 	@Transactional
-	public Map<String, Object> recruitDetail(String idx) {
+	public Map<String, Object> recruitDetail(String idx, String currentId) {
 		int board_idx = 0;
 		int comment_idx = 0;
 		CrewReplyDTO replyDTO = null;
+		
+		int approval_status = 0; // 크루입단 신청여부 (0: 신청전 / 1: 신청/ 2: 거절/ 3: 수락)
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -165,7 +167,23 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 				crewAskDTO.setReplyDTO(replyDTO);
 			}
 		}
+		
+		// 3. 크루입단신청 여부 가져오기. 
+		CrewApprovalDTO approval = crew_dao.crewApproval(currentId);
+		
+		// 값이 존재하면.. 크루입단 신청여부만
+		if(approval != null && approval.isValid()) {
+			approval_status = approval.getStatus();
+			map.put("approval_status", approval_status);
+			logger.info("approval_status : " + approval_status);
+			
+			map.put("join_idx", approval.getJoin_idx());
+		}else { // 값이 존재하지 않으면... 크루입단 신청전
+			approval_status = 0; // 신청전
+		}  
+		
 		map.put("commentAll", commentDTO);
+		
 		
 		return map;
 	}
@@ -238,20 +256,31 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 				success = crew_dao.recomment_delete(info);
 			}
 			break;
-		/*
-		 * case "report": crew_dao.comment_report(); break;
-		 */
 		default:
 			break;
 		}
 		
-		
-	} 
+	}
 
-	
-	
-	
-	
+	public int joinCrew(String crew_idx_, String join_id) {
+		
+		int crew_idx = Integer.parseInt(crew_idx_);
+		// 1: 신청 / 2: 신청 거절/ 3: 수락
+		int status = 1;
+		
+		return crew_dao.joinCrew(crew_idx, join_id, status);
+	}
+
+
+	public int leaveCrew(String join_idx_) {
+
+		int join_idx = Integer.parseInt(join_idx_);
+		
+		logger.info(join_idx_);
+		
+		return crew_dao.leaveCrew(join_idx);
+	}
+
 	
 	
 }

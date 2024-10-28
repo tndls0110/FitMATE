@@ -252,7 +252,7 @@
                     <form action="crew_recruit_detail.do?idx=<%=idx%>" method="post">
                         <input type="text" name="board_idx" value="<%=idx%>" hidden/>
                         <input type="text" name="comment_id" value="" id="currentUserId" hidden/>
-                        <input type="text" name="comment_chk" value="0" hidden/>
+                        <input type="text" name="content_chk" value="0" hidden/>
                         <p>
                             <textarea class="full" name="content" placeholder="최대 1,000자까지 입력할 수 있습니다."></textarea>
                         </p>
@@ -302,7 +302,8 @@
     var currentUserId = 'member01'; // 현재사용자ID => 나중에 sessionID정보로 바꿔줄 예정.
     // 문의하기에 현재 유저ID넣어주기.
     $('#currentUserId').val(currentUserId);
-    
+    // 크루 idx
+    var crew_idx = 0;
     
     if (board_idx != '' && board_idx != null) {
         detail(board_idx);                    
@@ -318,12 +319,15 @@
         $.ajax({
             url: 'crew_recruit_detail.ajax',
             type: 'GET',
-            data: { 'idx': board_idx },
+            data: { 'idx': board_idx,              // 게시글 및 댓글정보를 가져오기 위함.
+            		'currentId' : currentUserId    // 크루입단 신청여부를 파악하기 위함.
+           		  },
             dataType: 'JSON',
             success: function(data) {
                 console.log('data : ', data);
                 
                 var detail = data.recruitDetail;
+                var join_idx = data.join_idx;        // 크루 입단신청목록 idx
                 var crewLeaderId = detail.leader_id; // Ajax로 가져온 크루장의 ID정보
                 
                 var leader_chk = 0; // 0:일반유저, 1: 크루장
@@ -332,6 +336,12 @@
                 if(crewLeaderId === currentUserId){
 					leader_chk = 1;
                 }
+                
+                // 현재 유저가 크루입단 신청중인지여부 (0: 신청전/ 1: 신청중/ 2: 신청거절/ 3: 신청수락)
+                var apv_status = data.approval_status;
+                console.log('apv_status : ' + apv_status);
+                
+                crew_idx = detail.crew_idx;
                 
                 // 신고하기 모달인지 수정/삭제 모달인지 요소선택.
                 var modal = '';
@@ -350,13 +360,14 @@
                 
                 body = '<div class="body_content">' + detail.crew_content + '</div>'
                      + '<div class="line">'
-                     + '<button class="mainbtn full" id="joinButton">크루 입단 신청하기</button>' // 초기 텍스트
+                     + '<form action="" method="post">' 
+                   	 + '<button class="mainbtn full" id="crew_btn"></button>'
+                     + '</form>'
                      + '</div>';
                 
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data.commentAll).each(function(idx, item) {
 				    console.log('item : ', item.content);
-				    var datetime = item.date.split('T'); 
 				
 				    footer += '<div class="comment_box">'
 				        + '<div class="comment">'
@@ -365,7 +376,7 @@
 				        + '<h2 class="title"></h2>'
 				        + '<span class="text_area">'
 				        + '<span>&nbsp;&nbsp;' + item.nick + '</span></br>'
-				        + '<span>&nbsp;' + datetime[0] + ' / ' + datetime[1] + '</span>'
+				        + '<span>&nbsp;' + item.date + '</span>'
 				        + '</span>'
 				        + '</div>'
 				        + '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.content + '</textarea></div>'
@@ -389,7 +400,7 @@
 				            + '<span class="text_area">'
 				            + '<span>&nbsp;&nbsp;' + item_reply.nick + '</span>'
 				            + '<span style="color: #048187">(크루장)</span></br>'
-				            + '<span>&nbsp;' + datetime[0] + ' / ' + datetime[1] + '</span>'
+				            + '<span>&nbsp;' + item.date + '</span>'
 				            + '</span>'
 				            + '</div>';
 				            
@@ -451,12 +462,26 @@
                 		'max-height': 610
                 	})
                 	
-                    $('#joinButton').text('신청자 관리하기').attr('onclick', 'apply_manage()'); // 크루장일 경우 버튼 텍스트 변경
+                    $('#crew_btn').text('신청자 관리하기').attr('onclick', 'approv_manage()'); // 크루장일 경우 버튼 텍스트 변경
+                    // approve_manage클릭시 크루입단 신청유저관리 페이지로 이동하도록..
                     $('#commentAskSection').hide(); // 크루장일 경우 문의하기 섹션 숨김
-                } else {
-                    $('#joinButton').click(function() {
-                        joinCrew(currentUserId, idx); // 크루원일 경우 입단 신청 처리
-                    });
+                } else { // 크루장이 아닐경우
+					console.log('apv_status : ' + apv_status);
+					switch (apv_status) {
+					// 입단 신청 처리 -> 입단 신청버튼
+					case 0:
+					case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' +crew_idx + ')'); 
+							$('#crew_btn').attr('class', 'mainbtn full');
+						break;
+					// 신청중상태 -> 입단 취소버튼	
+					case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ')');
+							$('#crew_btn').attr('class', 'subbtn full');
+						break;
+					// 이미 크루원인 유저 (추후 크루 탈퇴하기정도 넣어줄 수 있을 듯 함.)
+					default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' +crew_idx + ')');
+							 $('#crew_btn').attr('class', 'mainbtn full');
+						break;
+					}
                 }
             },
             error: function(e) {
@@ -465,19 +490,21 @@
             }
         });
     }
-
-    function joinCrew(userId, boardId) {
+    
+    function join_crew(crew_idx) {
         $.ajax({
             url: 'join_crew.ajax', // 입단 신청 처리 URL
             type: 'POST',
             data: {
-                // 크루가입신청 crew_join테이블 - crew_idx크루idx, join_id신청자ID, status(1: 신청)
+                crew_idx : crew_idx,
+                join_id : currentUserId
             },
             success: function(data) {
                 if (data.success) {
-                    $('#joinButton').text('입단 신청 완료').prop('disabled', true); // 버튼 텍스트 변경 및 비활성화
+                	location.href = 'crew_recruit_detail.go?idx=' + board_idx;
+                	/* $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(join_idx)'); */ 
                 } else {
-                    modal.showAlert('입단 신청 실패: ' + data.message);
+                    modal.showAlert('입단 신청 실패');
                 }
             },
             error: function() {
@@ -486,10 +513,38 @@
         });
     }
 
-    function apply_manage() {
+    function leave_crew(join_idx) {
+    	
+        $.ajax({
+            url: 'leave_crew.ajax', // 입단 신청 처리 URL
+            type: 'POST',
+            data: {
+                join_idx : join_idx // 크루 입단신청 idx => 입단신청 목록에서 삭제하기 위함.
+            },
+            success: function(data) {
+                if (data.success) {
+                	location.href = 'crew_recruit_detail.go?idx=' + board_idx; 
+                } else {
+                    modal.showAlert('입단 취소 실패');
+                }
+            },
+            error: function() {
+                modal.showAlert('입단 취소 처리 중 오류가 발생했습니다.');
+            }
+        });
+    }
+ 
+    
+    
+    function approv_manage(){
         // 크루장일 경우 신청자 관리 페이지로 이동
-        // 여기서 세션ID를 한번더 체크해줄 예정...ID값은 여기서 넣어줄 필요없이 sessionID를 활용해서 controller에서 처리.
-        location.href = 'manage_applicants.do';
+        if(leader_chk == 1){
+        	console.log('신청자 관리페이지로 이동!');	
+        }else{
+        	console.log('당신은 크루장이 아닙니다.');
+        }
+        
+        /* location.href = 'manage_applicants.do'; */
     }
 	
     function reply(obj) {
@@ -727,12 +782,39 @@
     		success: function(data){
    				console.log('데이터 처리완료');
    				
-   				// 저장 또는 삭제 버튼을 누르면 새로고침.
-   				location.href='crew_recruit_detail.go?idx=' + board_idx;
-   				
-   				// 신고하기 버튼누르면 신고페이지로 이동.
-   				/* location.href = 'crew_report.go?idx=' + ; */
-   				// report테이블 board_type신고글유형(2:댓글), reporter_id신고자ID, reported_id피신고자ID, board_idx댓글idx, report_prog처리상태(1:처리전)   
+   				if(data.report_chk === '0'){
+	   				// 저장 또는 삭제 버튼을 누르면 새로고침.
+	   				location.href = data.page + board_idx;
+   				}else{
+   					// 폼 생성
+   			        var form = $('<form>', {
+   			            action: data.page, // 이동할 페이지
+   			            method: 'POST'     // POST 방식
+   			        });
+
+   			        // 데이터 추가
+   			        $('<input>').attr({
+   			            type: 'hidden',
+   			            name: 'comment_idx',
+   			            value: data.comment_idx // 댓글 idx
+   			        }).appendTo(form);
+
+   			        $('<input>').attr({
+   			            type: 'hidden',
+   			            name: 'comment_id',
+   			            value: data.comment_id // 댓글 id
+   			        }).appendTo(form);
+
+   			        $('<input>').attr({
+   			            type: 'hidden',
+   			            name: 'board_type',
+   			            value: data.board_type // 댓글 신고 유형
+   			        }).appendTo(form);
+
+   			        // 폼을 body에 추가하고 제출
+   			        form.appendTo('body');
+   			        form.submit();
+   				}
     		},
     		error: function(e){
     			console.log(e);

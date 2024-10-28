@@ -1,6 +1,7 @@
 package com.fitmate.crew.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CrewAskDTO {
 	// 댓글 idx
@@ -15,6 +16,15 @@ public class CrewAskDTO {
 	private String content;
 	// 작성일시
 	private LocalDateTime date;
+	
+	public String getCreate_date() {
+        if (date == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return date.format(formatter);
+        }
+	}
 	
 	// 대댓글 존재여부체크 0:존재X / 1:존재O 
 	private int recomment_chk;
