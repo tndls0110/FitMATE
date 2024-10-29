@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class CrewMemberDTO {
 	
-	int member_idx;
-	int crew_idx;
-	String member_id;
-	Date join_date;
-	Date leave_date;
-	Boolean status;
+	private	int member_idx;
+	private int crew_idx;
+	private String member_id;
+	private Date join_date;
+	private Date leave_date;
+	private Boolean status;
 	
 	public int getMember_idx() {
 		return member_idx;
