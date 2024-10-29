@@ -360,9 +360,7 @@
                 
                 body = '<div class="body_content">' + detail.crew_content + '</div>'
                      + '<div class="line">'
-                     + '<form action="" method="post">' 
-                   	 + '<button class="mainbtn full" id="crew_btn"></button>'
-                     + '</form>'
+                   	 + '<button class="mainbtn full" id="crew_btn" type="button"></button>'
                      + '</div>';
                 
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
@@ -462,7 +460,7 @@
                 		'max-height': 610
                 	})
                 	
-                    $('#crew_btn').text('신청자 관리하기').attr('onclick', 'approv_manage()'); // 크루장일 경우 버튼 텍스트 변경
+                    $('#crew_btn').text('신청자 관리하기').attr('onclick', 'approv_manage(' + leader_chk + ',' + crew_idx + ');'); // 크루장일 경우 버튼 텍스트 변경
                     // approve_manage클릭시 크루입단 신청유저관리 페이지로 이동하도록..
                     $('#commentAskSection').hide(); // 크루장일 경우 문의하기 섹션 숨김
                 } else { // 크루장이 아닐경우
@@ -470,15 +468,15 @@
 					switch (apv_status) {
 					// 입단 신청 처리 -> 입단 신청버튼
 					case 0:
-					case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' +crew_idx + ')'); 
+					case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');'); 
 							$('#crew_btn').attr('class', 'mainbtn full');
 						break;
 					// 신청중상태 -> 입단 취소버튼	
-					case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ')');
+					case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ');');
 							$('#crew_btn').attr('class', 'subbtn full');
 						break;
 					// 이미 크루원인 유저 (추후 크루 탈퇴하기정도 넣어줄 수 있을 듯 함.)
-					default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' +crew_idx + ')');
+					default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');');
 							 $('#crew_btn').attr('class', 'mainbtn full');
 						break;
 					}
@@ -536,10 +534,10 @@
  
     
     
-    function approv_manage(){
+    function approv_manage(leader_chk, crew_idx){
         // 크루장일 경우 신청자 관리 페이지로 이동
-        if(leader_chk == 1){
-        	console.log('신청자 관리페이지로 이동!');	
+        if(leader_chk === 1){
+        	location.href = 'mycrew_joinList.go?idx=' + crew_idx;	
         }else{
         	console.log('당신은 크루장이 아닙니다.');
         }
@@ -607,16 +605,7 @@
 		// add버튼 위치좌표		
 		var offset = $(obj).offset();
 		
-		// 열려 있는 모달이 있을 경우
-	    if ($('.modal:visible').length) {
-	        $('.modal:visible').fadeOut(function() {
-	            // 기존 모달이 닫힌 후 새로운 모달을 열기
-	            showModal(modal, offset, obj);
-	        });
-	    } else {
-	        // 열려 있는 모달이 없을 경우 바로 새로운 모달 열기
-	        showModal(modal, offset, obj);
-	    }
+        showModal(modal, offset, obj);
 	    
 		// 브라우저 및 comment_area 스크롤 비활성화
 	    $('.comment_area').css({
