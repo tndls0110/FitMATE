@@ -319,7 +319,7 @@
             <div class="journal_name">일지</div>
             <textarea id = "textarea" placeholder="최대 1000자까지 입력할 수 있습니다." onkeyup="word_count()"></textarea>
             <div id="word_alert">1,000자를 초과하여 작성할 수 없습니다.</div>
-            <div id = "words"><div class="count_words">1,000</div><div class="total_words">/1,000</div></div>
+            <div id = "words"><div class="count_words">0</div><div class="total_words">/1,000</div></div>
             <!--파일 버튼 커스텀 하는 법
             label 안에 커스텀 버튼을 넣고, type = file은 display : none-->
 
