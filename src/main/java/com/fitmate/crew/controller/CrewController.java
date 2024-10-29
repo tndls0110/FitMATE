@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fitmate.crew.dto.CrewApprovalDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
 
