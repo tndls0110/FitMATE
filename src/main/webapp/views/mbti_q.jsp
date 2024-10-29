@@ -284,6 +284,9 @@
 	}
 
 
+
+
+	//총 합산 점수 구할 변수 만들기
 	// let scores = {
 	// 	"잔근육매니아" : 0,
 	// 	"유산소매니아" : 0,
@@ -292,7 +295,6 @@
 	// 	"시간부족형" : 0
 	// }
 
-	//총 합산 점수 구할 변수 만들기
 	let scores = {}; //여기는 let scores = new scores();
 	function create_Totalscore(){ //이것도 처음할 때만 하도록...
 			$.ajax({
@@ -368,7 +370,6 @@
 								addScore(data);
 							}
 						});
-						//}
 					}else{//NO
 						//else -> save (), addscore()
 						saveScore(questionIdx,optionidx, data);

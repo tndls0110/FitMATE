@@ -5,9 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class ScheduleController {
 		return "schedule";
 	}
 
-	@GetMapping (value = "get_jounalevents.ajax")
+	@GetMapping (value = "/get_jounalevents.ajax")
 	@ResponseBody
 	public Map<String,Object> getEvents() {
 		Map<String,Object> event_day = new HashMap<String,Object>();
@@ -33,7 +32,7 @@ public class ScheduleController {
 		return event_day;
 	}
 
-	@GetMapping (value = "journal_get.ajax")
+	@GetMapping (value = "/journal_get.ajax")
 	@ResponseBody
 	public Map<String,Object> getJournal(String date) {
 		String id = "member01";
@@ -44,5 +43,20 @@ public class ScheduleController {
 	}
 
 
+	@RequestMapping (value = "/schedule_write.go")
+	public String schedule_write() {
+		return "schedule_write";
+	}
 
+	@PostMapping (value = "/schedule.go")
+	public String schedule_write(MultipartFile[] files, @RequestParam String content) {
+		//세션으로 나중에 바꾸기
+		String id = "member01";
+
+		logger.info("files 길이 :",files.length);
+		s_service.schedule_write(files,id,content);
+
+
+		return "redirect:/schedule.go";
+	}
 }
