@@ -19,15 +19,12 @@
         <div class="title">
             <h2>헬스 MBTI 정보 관리</h2>
         </div>
-        <ul class="noDesc menu_tab wide">
+        <ul class="noDesc menu_tab">
             <li>
                 <a href="admin_regMbtiq.go">질문</a>
             </li>
             <li>
                 <a href="admin_regMbtiq_sub.go?mbtiq_idx=1">세부 질문</a>
-            </li>
-            <li>
-                <a href="admin_regMbtiq_scr.go?mbtisub_idx=1">질문별 점수</a>
             </li>
             <li class="active_tab">
                 <a href="admin_regMbtir.go">결과</a>
@@ -41,32 +38,23 @@
             <ul class="noDesc narrow">
                 <c:forEach items="${list}" var="list">
                     <li>
-                        <form id="${list.reportr_idx}" action="admin_updateReport.do" method="post">
-                            <div class="btn_flex narrow">
-                                <input type="hidden" name="mbtir_idx" value="${list.reportr_idx}" />
-                                <input type="hidden" name="reg_type" value="update" />
-                                <div class="width80p">
-                                    <input type="text" name="reportr_con" value="${list.mbtir_name}" class="full flex_left" onblur="regData('update', ${list.reportr_idx})" />
-                                </div>
-                                <div class="width20p">
-                                    <input type="button" value="삭제" class="subbtn full flex_right" onclick="regData('delete', ${list.reportr_idx})" />
-                                </div>
+                        <div class="btn_flex narrow">
+                            <div class="width80p">
+                                <input type="text" name="mbtir_name" value="${list.mbtir_name}" class="full flex_left" readonly />
                             </div>
-                        </form>
+                            <div class="width20p">
+                                <input type="submit" value="수정" class="subbtn full flex_right" onclick="location.href='admin_regMbtir_detail.go?mbtir_idx=${list.mbtir_idx}'" />
+                            </div>
+                        </div>
                     </li>
                 </c:forEach>
             </ul>
-            <form id="insert" action="admin_insertReport.do" method="post">
-                <h3 class="capt">항목 추가</h3>
-                <div class="btn_flex narrow">
-                    <div class="width80p">
-                        <input type="text" name="reportr_con" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
-                    </div>
-                    <div class="width20p">
-                        <input type="submit" value="추가" class="mainbtn full flex_right" />
-                    </div>
-                </div>
-            </form></div>
+            <ul class="noDesc">
+                <li>
+                    <p><input type="button" value="추가하기" class="full mainbtn" onclick="location.href='admin_regMbtir_insert.go'" /></p>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />

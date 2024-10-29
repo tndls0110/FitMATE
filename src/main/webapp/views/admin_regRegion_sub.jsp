@@ -29,7 +29,7 @@
         </ul>
         <div class="contents narrow">
             <p>
-                <select name="region" class="full" onchange="onOptionChange(event)">
+                <select name="region" class="full bg_dark" onchange="onOptionChange(event)">
                     <c:forEach items="${region}" var="list">
                         <option name="region" value="${list.region_idx}">${list.region_name}</option>
                     </c:forEach>
@@ -56,16 +56,20 @@
                 </c:forEach>
             </ul>
             <form id="insert" action="admin_insertRegion_sub.do" method="post">
-                <h3 class="capt">항목 추가</h3>
-                <input type="hidden" name="region_idx" />
-                <div class="btn_flex narrow">
-                    <div class="width80p">
-                        <input type="text" name="regions_name" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
-                    </div>
-                    <div class="width20p">
-                        <input type="submit" value="추가" class="mainbtn full flex_right" />
-                    </div>
-                </div>
+                <ul class="noDesc narrow">
+                    <li>
+                        <h3 class="capt">항목 추가</h3>
+                        <input type="hidden" name="region_idx" />
+                        <div class="btn_flex narrow">
+                            <div class="width80p">
+                                <input type="text" name="regions_name" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
+                            </div>
+                            <div class="width20p">
+                                <input type="submit" value="추가" class="mainbtn full flex_right" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </form>
         </div>
     </div>
@@ -74,4 +78,5 @@
 </body>
 <script src="resources/js/admin_common.js"></script>
 <script src="resources/js/admin_regData.js"></script>
+<script src="resources/js/admin_regRegion.js"></script>
 </html>

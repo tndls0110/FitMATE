@@ -5,6 +5,49 @@
 
 <mapper namespace="com.fitmate.admin.dao.RegDataDAO">
 
+    <!-- 헬스 MBTI 질문 관리 -->
+    <select id="regMbtiQuestion" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtiq_idx, mbtiq_con FROM mbti_q WHERE mbtiq_show = 1
+    </select>
+
+    <insert id="insertMbtiQuestion" parameterType="com.fitmate.admin.dto.RegMBTIDTO"
+            useGeneratedKeys="true" keyColumn="mbtiq_idx" keyProperty="mbtiq_idx">
+        INSERT INTO mbti_q (mbtiq_con, admin_idx) VALUES (#{mbtiq_con}, #{admin_idx})
+    </insert>
+
+    <!-- 헬스 MBTI 결과 관리 -->
+    <select id="regMbtiResult" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtir_idx, mbtir_name FROM mbti_r WHERE mbtir_show = 1
+    </select>
+
+    <select id="regMbtiResultDetail" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtir_idx, mbtir_name, mbtir_img, mbtir_con, mbtir_exc, mbtir_rou FROM mbti_r WHERE mbtir_idx = #{param}
+    </select>
+
+    <insert id="insertMbtiResult" parameterType="com.fitmate.admin.dto.RegMBTIDTO"
+        useGeneratedKeys="true" keyColumn="mbtir_idx" keyProperty="mbtir_idx">
+        INSERT INTO mbti_r (mbtir_name, mbtir_con, mbtir_exc, mbtir_rou) VALUES (#{mbtir_name}, #{mbtir_con}, #{mbtir_exc}, #{mbtir_rou})
+    </insert>
+
+    <update id="updateMbtiResult" parameterType="map">
+        UPDATE mbti_r
+            SET mbtir_name = #{mbtir_name}, mbtir_con = #{mbtir_con}, mbtir_exc = #{mbtir_exc}, mbtir_rou = #{mbtir_rou}, admin_idx = #{admin_idx}
+            WHERE mbtir_idx = #{mbtir_idx}
+    </update>
+
+    <update id="insertImg">
+        UPDATE mbti_r SET mbtir_img = #{param2} WHERE mbtir_idx = #{param1}
+    </update>
+
+    <update id="deleteImg">
+        UPDATE mbti_r SET mbtir_img = '' WHERE mbtir_idx = #{param}
+    </update>
+
+    <update id="deleteMbtiResult" parameterType="map">
+
+        UPDATE mbti_r SET mbtir_show = 0, admin_idx = #{admin_idx} WHERE mbtir_idx = #{mbtir_idx}
+    </update>
+
     <!-- 지역 정보 관리 -->
     <select id="regRegion" resultType="com.fitmate.admin.dto.RegCountyDTO">
         SELECT region_idx, region_name FROM region WHERE region_show = 1

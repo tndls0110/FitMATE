@@ -42,9 +42,9 @@ function pageShow(page) {
 }
 
 function listPrint(list, totalIdx, currentPage, offset) {
-    var tags = '';
+    let tags = '';
 
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
         tags += '<td class="left">'+list[i].notice_cont+'</td>';
@@ -86,7 +86,7 @@ function invisible(idx) {
 
 // 공지사항 작성
 function writeNotice() {
-    var leng = document.getElementsByTagName('textarea')[0].value.length;
+    let leng = document.getElementsByTagName('textarea')[0].value.length;
     if (leng == 0){
         modal.showAlert("내용을 입력하세요.");
     } else {

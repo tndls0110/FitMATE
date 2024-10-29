@@ -42,9 +42,9 @@ function pageShow(page) {
 }
 
 function listPrint(list, totalIdx, currentPage, offset) {
-    var tags = '';
+    let tags = '';
 
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
         tags += '<td class="left">';
