@@ -10,6 +10,6 @@ $.ajax({
 });
 
 function drawProfile(name) {
-    var admin_name = document.getElementsByClassName('admin_name')[0];
+    let admin_name = document.getElementsByClassName('admin_name')[0];
     admin_name.innerHTML = name;
 }
