@@ -59,4 +59,15 @@
 				(#{id},(SELECT mbtir_idx FROM mbti_r WHERE mbtir_name = #{key}), #{value})
 		</foreach>
 	</insert>
+
+	
+	<insert id="profileMbti" parameterType="map">
+		UPDATE profile set mbtir_idx = 
+		    
+		    <foreach collection="max" item="value" index="key" separator=",">
+		    (SELECT mbtir_idx FROM mbti_r WHERE mbtir_name = #{key})
+			</foreach>
+		WHERE user_id = #{id}
+	</insert>
+
 </mapper>
