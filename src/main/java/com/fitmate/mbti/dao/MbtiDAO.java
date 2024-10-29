@@ -29,4 +29,6 @@ public interface MbtiDAO {
 	int checkResult(String id);
 
 	int deleteResult(String id);
+
+	int profileMbti(Map<String, String> max, String id);
 }
