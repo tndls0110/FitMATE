@@ -212,9 +212,14 @@
 	                $(list).each(function(idx, item) {
 	                	
 	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
-	                	 if (sessionId == item.board_id) {
-	                	        deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_notice_del?board_idx=' + item.board_idx + '\'">삭제</button>';
-	                	    }
+	                	 // sessionId == item.board_id
+	                	if (1) {
+	                	     //   deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_notice_del?board_idx=' + item.board_idx + '\'">삭제</button>';
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'공지사항을 정말로 삭제하시겠습니까\', \'crew_notice_del?board_idx=' + item.board_idx + '\')" class="mainbtn small"><i class="bi bi-x-square"></i></button>'
+	                	 }
+	                	 else{
+	                		 deleteButton = '<button type="button" onclick="modal.showAlert(\'공지사항 입니다\')" class="mainbtn small"><i class="bi bi-file-earmark-person"></i></button>'
+	                	 }
 	                	
 	                    tbody.append('<tr><td>' + item.board_idx 
 	                    		+ '</td><td>' + item.subject
