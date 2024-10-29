@@ -168,4 +168,13 @@ public class MbtiService {
 		}
 		return success;
 	}
+
+	public Boolean profileMbti(Map<String, String> max, String id) {
+		int updated_rows = m_dao.profileMbti(max,id);
+		Boolean result = false;
+		if(updated_rows > 0){
+			result = true;
+		}
+		return result;
+	}
 }
