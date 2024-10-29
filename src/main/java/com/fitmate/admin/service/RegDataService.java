@@ -34,18 +34,49 @@ public class RegDataService {
         return regData_dao.regMbtiResultDetail(mbtir_idx);
     }
 
+    public int regMbtiResultInsert(MultipartFile[] files, Map<String, String> params, int admin_idx) {
+        RegMBTIDTO dto = new RegMBTIDTO();
+        dto.setMbtir_name(params.get("mbtir_name"));
+        dto.setMbtir_con(params.get("mbtir_con"));
+        dto.setMbtir_exc(params.get("mbtir_exc"));
+        dto.setMbtir_rou(params.get("mbtir_rou"));
+        dto.setAdmin_idx(admin_idx);
+        if (regData_dao.insertMbtiResult(dto) == 1){
+            int mbtir_idx = dto.getMbtir_idx();
+            for (MultipartFile file : files) {
+                if (file.getOriginalFilename().lastIndexOf(".") < 0) {
+                    regData_dao.insertImg(String.valueOf(mbtir_idx), "");
+                    break;
+                } else {
+                    try {
+                        String ori_filename = file.getOriginalFilename();
+                        String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
+                        String new_filename = UUID.randomUUID().toString()+ext;
+                        byte[] arr = file.getBytes();
+                        Path path = Paths.get("C:/upload/"+new_filename);
+                        Files.write(path, arr);
+                        regData_dao.insertImg(String.valueOf(mbtir_idx), new_filename);
+                    } catch (IOException e) {}
+                }
+            }
+        }
+        return dto.getMbtir_idx();
+    }
+
     public void regMbtiResultDetail(MultipartFile[] files, Map<String, String> params, int admin_idx) {
+        logger.info("img at service: "+files.toString());
         params.put("admin_idx", Integer.toString(admin_idx));
+        logger.info("params: {}", params);
+        logger.info(String.valueOf(regData_dao.updateMbtiResult(params)));
         switch (params.get("reg_type")){
             case "update":
                 // 정보 입력
                 if (regData_dao.updateMbtiResult(params) == 1){
-                    String mbtir_idx = params.get("mbtir_idx");
-                    RegMBTIDTO dto = regData_dao.regMbtiResultDetail(mbtir_idx);
+                    RegMBTIDTO dto = regData_dao.regMbtiResultDetail(params.get("mbtir_idx"));
                     // 삭제 혹은 파일 변경시 기존 파일 삭제
                     if (files.length > 0) {
                         if (regData_dao.deleteImg(params.get("mbtir_idx")) == 1){
-                            File file = new File("resources/img/"+dto.getMbtir_img());
+                            File file = new File("C:/upload/"+dto.getMbtir_img());
                             if (file.exists()) {
                                 file.delete();
                             }
@@ -53,17 +84,21 @@ public class RegDataService {
                     }
 
                     // 새 파일 업로드
+                    logger.info("img before iterator: "+files.toString());
                     for (MultipartFile file : files) {
+                        logger.info("img at iterator: "+files.toString());
+                        logger.info("img at iterator: "+file);
                         if (file.getOriginalFilename().lastIndexOf(".") < 0) {
                             regData_dao.insertImg(params.get("mbtir_idx"), "");
                             break;
                         } else {
                             try {
                                 String ori_filename = file.getOriginalFilename();
+                                logger.info("img name at iterator: "+ori_filename);
                                 String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
                                 String new_filename = UUID.randomUUID().toString()+ext;
                                 byte[] arr = file.getBytes();
-                                Path path = Paths.get("resources/img/"+new_filename);
+                                Path path = Paths.get("C:/upload/"+new_filename);
                                 Files.write(path, arr);
                                 regData_dao.insertImg(params.get("mbtir_idx"), new_filename);
                             } catch (IOException e) {}

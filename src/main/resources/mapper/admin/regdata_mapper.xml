@@ -14,6 +14,11 @@
         SELECT mbtir_idx, mbtir_name, mbtir_img, mbtir_con, mbtir_exc, mbtir_rou FROM mbti_r WHERE mbtir_idx = #{param}
     </select>
 
+    <insert id="insertMbtiResult" parameterType="com.fitmate.admin.dto.RegMBTIDTO"
+        useGeneratedKeys="true" keyColumn="mbtir_idx" keyProperty="mbtir_idx">
+        INSERT INTO mbti_r (mbtir_name, mbtir_con, mbtir_exc, mbtir_rou) VALUES (#{mbtir_name}, #{mbtir_con}, #{mbtir_exc}, #{mbtir_rou})
+    </insert>
+
     <update id="updateMbtiResult" parameterType="map">
         UPDATE mbti_r
             SET mbtir_name = #{mbtir_name}, mbtir_con = #{mbtir_con}, mbtir_exc = #{mbtir_exc}, mbtir_rou = #{mbtir_rou}, admin_idx = #{admin_idx}
