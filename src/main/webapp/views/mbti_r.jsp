@@ -165,11 +165,11 @@
     $('.name_b').html(login_id);
 
     let saved_scores = {}; //여기는 let scores = new scores();
-
+    var max;
     window.onload = function initialLoad() {
 
 
-        var max = {'': 0};//만약 max보다 크면 저장...
+        max = {'': 0};//만약 max보다 크면 저장...
         //매개변수
         //var max = 0;
         //전달받은 매개변수
@@ -285,11 +285,34 @@
             contentType : 'application/json ; charset = UTF-8',
             success : function (data){
                 console.log('데이터 넣기 성공 :',data.success); //insert 시킨 후 성공 여부
+                profile_mbti(max);
             },
             error : function (e){
                 console.log(e);
             }
         });
+    }
+
+
+    //최대값 회원 프로필에 넣어주기
+    function profile_mbti (max){
+
+        $.ajax({
+            type : 'GET',
+            url : '/profile_mbti.ajax',
+            data : max,
+            dataType : 'JSON',
+            success : function (data){
+                console.log('프로필 저장 성공 :',data.success); //insert 시킨 후 성공 여부
+                location.href = "/member_profile.go";
+            },
+            error : function (e){
+                console.log(e);
+            }
+        });
+
+
+
     }
 
 </script>

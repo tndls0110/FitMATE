@@ -102,16 +102,7 @@ public class MbtiController {
 
 		Map<String,Object> data = new HashMap<>();
 		data.put("login_id",login_id);
-		/*Set <String> keySets = scores.keySet();
-		logger.info("keySets 받아온 값 : " + keySets);
-		//List로 보내기?
-			for (String key : keySets) {
-				logger.info("key 받아온 값 : " + key);
-				String value = scores.get(key);
-				logger.info("value 받아온 값 : " + value);
-				data.put(key, value);
-			}
-		logger.info("data:{}",data);*/
+
 		model.addAttribute("data",data);
 
 		model.addAttribute("scores",scores);
@@ -124,7 +115,6 @@ public class MbtiController {
 		logger.info("mbti_r_get.ajax 컨트롤러 도착");
 		logger.info("max_mbti : {}",max_mbti);
 		Map<String,String> recommend =  m_service.mbtiRGet(max_mbti);
-
 		return recommend;
 	};
 
@@ -174,6 +164,18 @@ public class MbtiController {
 		}
 		Map<String,Object> data = new HashMap<>();
 		Boolean success = m_service.saveResult(id,score);
+		data.put("success",success);
+		return data;
+	}
+
+	@GetMapping (value = "/profile_mbti.ajax")
+	@ResponseBody
+	public Map<String,Object> profileMbti(@RequestParam Map<String, String> max) {
+		String id = "member01";
+		Map<String,Object> data = new HashMap<>();
+		logger.info("profile_mbti 컨트롤러에서 받아온 값 :{}",max);
+		Boolean success = m_service.profileMbti(max,id);
+
 		data.put("success",success);
 		return data;
 	}

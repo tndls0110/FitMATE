@@ -101,6 +101,10 @@
 			font-weight: bold; /*굵은 글씨*/
 		}
 
+		.journal_time{
+			margin-left: 9px;
+		}
+
 		.journal_start_end {
 			display: flex;
 			flex-direction: row;
@@ -111,6 +115,7 @@
 			background-color: rgba(54, 57, 64, 1);
 			border-radius: 5px;
 			padding: 5px 5px;
+			margin:0px 5px;;
 		}
 
 		.crew_tag {
@@ -123,12 +128,15 @@
 			background-color: rgba(4, 129, 135, 1);
 			border-radius: 5px;
 			padding: 5px 5px;
+			margin : 0px 6px 0px -19px;
 		}
 
 		.journal {
 			margin-bottom: 360px;
 		}
-
+		.journal_content{
+			margin: 0px 0px 332px 0px;
+		}
 		.journal_text {
 			margin: 10px 10px;
 			width: 430px;
@@ -138,7 +146,7 @@
 
 		.journal_image {
 			width: 500px;
-			height: 370px;
+			height: 419px;
 			background-color: lightgray;
 		}
 
@@ -222,7 +230,7 @@
 				</div>
 
 
-				<div class="journal_write_button">일지 작성하기</div>
+				<div class="journal_write_button" onclick="write_go()">일지 작성하기</div>
 
 			</div>
 
@@ -244,7 +252,8 @@
 					</div>
 				</div>
 
-				<div class="journal">
+				<div id = "journal_total">
+			<%--	<div class="journal">
 					<div class="journal_content">
 						<div class="journal_datetime">
 							<div class="journal_date">2024-10-14</div>
@@ -264,13 +273,13 @@
 						<div class="journal_image"></div>
 					</div>
 
-				</div>
-				<div class="journal">
+				</div>--%>
+			<%--	<div class="journal">
 					<div class="journal_content">
 						<div class="journal_datetime">
 							<div class="journal_date">2024-10-14</div>
 							&nbsp;&nbsp;&nbsp;
-							<!--<div class="journal_time">09:20</div>-->
+							<div class="journal_time">09:20</div>
 							<div class="journal_start_end">
 								<div class="individual_tag">개인</div>
 								&nbsp;&nbsp;&nbsp;
@@ -284,7 +293,8 @@
 
 						<div class="journal_image"></div>
 					</div>
-				</div>
+				</div>--%>
+			</div>
 
 			</div>
 		</div>
@@ -305,11 +315,11 @@
 
 
 <script>
-
 	document.addEventListener('DOMContentLoaded', function() {
 		let event_create = []; // 이벤트 배열 초기화
 
-		// 1. 캘린더 - 이벤트 날짜 가져오기
+
+		// 1. 캘린더 - 이벤트 날짜 가져오기 (개인 일정)
 		$.ajax({
 			type: 'GET',
 			url: 'get_jounalevents.ajax',
@@ -318,11 +328,11 @@
 			success: function(event_day) {
 				console.log('event_day:', event_day);
 
-				// AJAX 응답에서 날짜를 반복하여 이벤트 객체 생성
+				// (이벤트 만들기) AJAX 응답에서 날짜를 반복 -> 이벤트 객체 생성
 				for (var dates of event_day.date) {
 					let event_Object = {
 						start: dates.date,
-						title: '1' // 원하는 제목으로 설정
+						title: '1' // 개인 일정
 					};
 					event_create.push(event_Object); // 이벤트 배열에 추가
 				}
@@ -347,11 +357,27 @@
 			error: function(xhr, status, error) {
 				console.error('AJAX 오류:', status, error);
 			}
+
 		});
 
+		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
+		date = $('#date').html();
 
+		console.log('오늘 날짜:', date);
 
-
+		$.ajax({
+			type : 'GET',
+			url : '/journal_get.ajax',
+			data : {'date' : date},
+			dataType : 'JSON',
+			success : function(journal){
+				console.log('journal 가져오기 성공:',journal);
+				draw_journal(journal);
+			},
+			error : function(e){
+				console.log(e);
+			}
+		});
 	});
 
 	function change_css(){
@@ -391,39 +417,70 @@
 
 	function get_journal(date){
 		$.ajax({
-			type : 'GET',
-			url : 'journal_get.ajax',
-			data : {'date' : date},
+			type: 'GET',
+			url: 'journal_get.ajax',
+			data: {'date': date},
 			dataType: 'JSON',
-			success : function (journal){
+			success: function (journal) {
 				console.log(journal);
-					var keySet = Object.keys(journal.content);
-					console.log('journal.length :',keySet.length);
-					for(var key of keySet){
-						if(keySet.length > 0){ //만약 key의 길이가 0보다 크면
-							console.log('값 있음');
-
-							console.log('key:{}',key);
-							console.log('value:{}',journal.content[key]);
-							var j_data = journal.content[key];
-
-							var content = '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
-							content += j_data.date + '</div><div class="journal_time">';
-							//content += + j_data.+'</div>';
-
-
-
-
-							$('.journal').html();
-
-						}
-					}
+				draw_journal(journal);
 			},
 			error : function (e){
 				console.log(e);
 			}
 		});
 	}
+
+	function draw_journal(journal){
+		var keySet = Object.keys(journal.content);
+		console.log('journal.length :', keySet.length);
+		var content ='';
+		for (var key of keySet) {
+			if (keySet.length > 0) { //만약 key의 길이가 0보다 크면
+				console.log('값 있음');
+
+				console.log('key:{}', key);
+				console.log('value:{}', journal.content[key]);
+				var j_data = journal.content[key];
+
+				//time에서 초 잘라내기
+				var start_time = j_data['time(journal_start)'].toString();
+				var s_time = start_time.substring(0, 5);
+				console.log('s_time:', s_time);
+				var end_time = j_data['time(journal_end)'].toString();
+				var e_time = end_time.substring(0, 5);
+				console.log('e_time:', e_time);
+
+
+
+				content += '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
+				content += j_data['date'] + '</div><div class="journal_time">';
+				content += e_time + '</div>';
+				content += '<div class="journal_start_end">';
+				if (j_data['journal_cate'] == 1) {
+					content += '<div class="individual_tag">개인</div>';
+				} else if (j_data['journal_cate'] == 2) {
+					content += '<div class="crew_tag">크루</div>';
+				}
+
+
+				content += '<div class="journal_start">' + s_time + '</div>';
+				content += '<div class="journal_end">' + e_time + '</div> </div></div>';
+				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>'
+
+				/*if(j_data['journal']) 사진 나중에 추가하기*/
+				content += '<div class="journal_image"></div></div>';
+
+			}
+		}
+		console.log('content: ', content);
+		$('#journal_total').html(content);
+	}
+
+	function write_go(){
+		location.href = "schedule_write.go";
+	}
+
 
 
 </script>
