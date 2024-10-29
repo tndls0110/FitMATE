@@ -2,7 +2,7 @@
 addActive(index);
 
 function addActive(index) {
-    var i = index;
+    let i = index;
     if (i >= 0){
         $('.leftnav_list:nth-child('+i+')').addClass('active');
     }

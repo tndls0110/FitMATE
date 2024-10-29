@@ -1,6 +1,7 @@
 package com.fitmate.admin.dao;
 
 import com.fitmate.admin.dto.RegCountyDTO;
+import com.fitmate.admin.dto.RegMBTIDTO;
 import com.fitmate.admin.dto.RegReportDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -9,6 +10,19 @@ import java.util.Map;
 
 @Mapper
 public interface RegDataDAO {
+
+    // 헬스 MBTI 질문 관리
+    List<RegMBTIDTO> regMbtiQuestion();
+    int insertMbtiQuestion(RegMBTIDTO dto);
+
+    // 헬스 MBTI 결과 관리
+    List<RegMBTIDTO> regMbtiResult();
+    RegMBTIDTO regMbtiResultDetail(String mbtir_idx);
+    int updateMbtiResult(Map<String, String> params);
+    int insertMbtiResult(RegMBTIDTO dto);
+    int deleteImg(String mbtir_idx);
+    int insertImg(String mbtir_idx, String mbtir_img);
+    int deleteMbtiResult(Map<String, String> params);
 
     // 지역 정보 관리
     List<RegCountyDTO> regRegion();

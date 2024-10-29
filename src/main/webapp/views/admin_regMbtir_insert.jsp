@@ -34,51 +34,39 @@
             </li>
         </ul>
         <div class="contents narrow">
-            <p>
-                <select class="full bg_dark" onchange="onOptionChange(event)">
-                    <c:forEach items="${mbtir}" var="mbtir">
-                        <option name="mbtir" value="${mbtir.mbtir_idx}">${mbtir.mbtir_name}</option>
-                    </c:forEach>
-                </select>
-            </p>
-            <form action="admin_updateMbtir.do" method="post" enctype="multipart/form-data">
+            <form action="admin_insertMbtir.do" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="reg_type" value="update" />
-                <input type="hidden" name="mbtir_idx" value="${list.mbtir_idx}" />
                 <ul class="noDesc">
                     <li>
                         <h3 class="capt">결과 이름</h3>
-                        <p><input type="text" name="mbtir_name" value="${list.mbtir_name}" class="full" /></p>
+                        <p><input type="text" name="mbtir_name" class="full" /></p>
                     </li>
                     <li>
                         <h3 class="capt">이미지 파일</h3>
                         <p>
-                            <div class="img_preview">
-                                <c:if test="${list.mbtir_img != ''}">
-                                    <img src="/photo/${list.mbtir_img}" alt="${list.mbtir_name} 이미지 파일" />
-                                </c:if>
-                            </div>
+                            <div class="img_preview"></div>
                         </p>
-                        <p><input type="file" name="mbtir_img" value="${list.mbtir_img}" onchange="readFile(this)" class="full" multiple /></p>
+                        <p><input type="file" name="mbtir_img" onchange="readFile(this)" class="full" multiple /></p>
                     </li>
                     <li>
                         <h3 class="capt">설명</h3>
-                        <p><textarea name="mbtir_con" class="full">${list.mbtir_con}</textarea></p>
+                        <p><textarea name="mbtir_con" class="full"></textarea></p>
                     </li>
                     <li>
                         <h3 class="capt">추천하는 운동</h3>
-                        <p><textarea name="mbtir_exc" class="full">${list.mbtir_exc}</textarea></p>
+                        <p><textarea name="mbtir_exc" class="full"></textarea></p>
                     </li>
                     <li>
                         <h3 class="capt">추천하는 루틴</h3>
-                        <p><textarea name="mbtir_rou" class="full">${list.mbtir_rou}</textarea></p>
+                        <p><textarea name="mbtir_rou" class="full"></textarea></p>
                     </li>
                 </ul>
                 <ul class="noDesc">
                     <li>
-                        <p><input type="button" value="수정하기" class="full mainbtn" onclick="regData('update')" /></p>
+                        <p><input type="submit" value="추가하기" class="full mainbtn" /></p>
                     </li>
                     <li>
-                        <p><input type="button" value="삭제하기" class="full subbtn" onclick="regData('delete')" /></p>
+                        <p><input type="button" value="목록으로 돌아가기" class="full subbtn" onclick="location.href='admin_regMbtir.go'" /></p>
                     </li>
                 </ul>
             </form>
