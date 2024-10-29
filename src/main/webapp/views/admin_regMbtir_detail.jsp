@@ -37,40 +37,56 @@
             </li>
         </ul>
         <div class="contents narrow">
-            <h3 class="capt">기존 항목</h3>
-            <ul class="noDesc narrow">
-                <c:forEach items="${list}" var="list">
+            <p>
+                <select class="full bg_dark" onchange="onOptionChange(event)">
+                    <c:forEach items="${mbtir}" var="mbtir">
+                        <option name="mbtir" value="${mbtir.mbtir_idx}">${mbtir.mbtir_name}</option>
+                    </c:forEach>
+                </select>
+            </p>
+            <form action="admin_updateMbtir.do" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="reg_type" value="update" />
+                <ul class="noDesc">
                     <li>
-                        <form id="${list.reportr_idx}" action="admin_updateReport.do" method="post">
-                            <div class="btn_flex narrow">
-                                <input type="hidden" name="mbtir_idx" value="${list.reportr_idx}" />
-                                <input type="hidden" name="reg_type" value="update" />
-                                <div class="width80p">
-                                    <input type="text" name="reportr_con" value="${list.mbtir_name}" class="full flex_left" onblur="regData('update', ${list.reportr_idx})" />
-                                </div>
-                                <div class="width20p">
-                                    <input type="button" value="삭제" class="subbtn full flex_right" onclick="regData('delete', ${list.reportr_idx})" />
-                                </div>
-                            </div>
-                        </form>
+                        <h3 class="capt">결과 이름</h3>
+                        <p><input type="text" name="mbtir_name" value="${list.mbtir_name}" class="full" /></p>
                     </li>
-                </c:forEach>
-            </ul>
-            <form id="insert" action="admin_insertReport.do" method="post">
-                <h3 class="capt">항목 추가</h3>
-                <div class="btn_flex narrow">
-                    <div class="width80p">
-                        <input type="text" name="reportr_con" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
-                    </div>
-                    <div class="width20p">
-                        <input type="submit" value="추가" class="mainbtn full flex_right" />
-                    </div>
-                </div>
-            </form></div>
+                    <li>
+                        <h3 class="capt">이미지 파일</h3>
+                        <p>
+                            <div class="img_preview hide">
+                                <img src="resources/img/${list.mbtir_img}" alt="${list.mbtir_name} 이미지 파일" />
+                            </div>
+                        </p>
+                        <p><input type="file" name="mbtir_img" value="${list.mbtir_img}" onchange="readFile(this)" class="full" multiple /></p>
+                    </li>
+                    <li>
+                        <h3 class="capt">설명</h3>
+                        <p><textarea name="mbtir_con" class="full">${list.mbtir_con}</textarea></p>
+                    </li>
+                    <li>
+                        <h3 class="capt">추천하는 운동</h3>
+                        <p><textarea name="mbtir_exc" class="full">${list.mbtir_exc}</textarea></p>
+                    </li>
+                    <li>
+                        <h3 class="capt">추천하는 루틴</h3>
+                        <p><textarea name="mbtir_rou" class="full">${list.mbtir_rou}</textarea></p>
+                    </li>
+                </ul>
+                <ul class="noDesc">
+                    <li>
+                        <p><input type="button" value="수정하기" class="full mainbtn" onclick="regData('update')" /></p>
+                    </li>
+                    <li>
+                        <p><input type="button" value="삭제하기" class="full subbtn" onclick="regData('delete')" /></p>
+                    </li>
+                </ul>
+            </form>
+        </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script src="resources/js/admin_regData.js"></script>
+<script src="resources/js/admin_regMbtiR.js"></script>
 </html>
