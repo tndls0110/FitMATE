@@ -253,7 +253,7 @@ public class CrewPageController {
 		@GetMapping(value="/crew_oneboard_blind")
 		public String crew_oneboard_blind(@RequestParam String board_idx) {
 			
-			// logger.info("oneboard 보드번호는 ? " + board_idx);
+			 logger.info("한줄게시글 블라인드 ? " + board_idx);
 			
 			crewpage_service.crew_oneboard_blind(board_idx);
 			
@@ -264,12 +264,14 @@ public class CrewPageController {
 		@GetMapping(value="/crew_oneboard_unblind")
 		public String crew_oneboard_unblind(@RequestParam String board_idx) {
 			
-			// logger.info("oneboard 보드번호는 ? " + board_idx);
+			 logger.info("한줄게시글 블라인드 해제 ? " + board_idx);
 			
 			crewpage_service.crew_oneboard_unblind(board_idx);
 			
 			return "redirect:/crew_oneboard.go";
 		}
+		
+		
 		
 		
 		// 사진 게시글 작성 페이지로 이동하기
@@ -314,4 +316,40 @@ public class CrewPageController {
 		}
 		
 		
+		// 사진게시글 블라인드
+		@GetMapping(value="/crew_photo_blind")
+		public String crew_photo_blind(@RequestParam String board_idx) {
+					
+				 logger.info("사진게시글 블라인드 컨트로러 실행");
+				logger.info(board_idx);	
+				crewpage_service.crew_oneboard_blind(board_idx);
+					
+				String page ="redirect:/crew_photo_detail.go?board_idx="+ board_idx.toString();
+				
+				return page;
+			}
+				
+		// 사진게시글 블라인드 해제
+		@GetMapping(value="/crew_photo_unblind")
+		public String crew_photo_unblind(@RequestParam String board_idx) {
+					
+				logger.info("사진게시글 블라인드 해제 컨트로러 실행");
+				logger.info(board_idx);	
+				crewpage_service.crew_oneboard_unblind(board_idx);
+				
+				String page ="redirect:/crew_photo_detail.go?board_idx="+ board_idx.toString();
+				
+				return page;
+			}
+		
+		
+		
+		
+		
+		
+		//  카카오 api test code
+		@GetMapping(value="/kakao")
+		public String kakao() {
+			return "kakao_map";
+		}
 }
