@@ -157,7 +157,7 @@ public class CrewPageService {
 	// 게시글 블라인드
 	public void crew_oneboard_blind(String board_idx) {
 		crewpage_dao.crew_oneboard_blind(board_idx);
-		
+		logger.info("사진게시글 블라인드 서비스 실행");
 	}
 	// 게시글 블라인드 해제
 	public void crew_oneboard_unblind(String board_idx) {
