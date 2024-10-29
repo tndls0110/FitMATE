@@ -27,26 +27,25 @@ public class RegDataController {
 	public String regMbtiQuestion (Model model, HttpSession session) {
 		page = "admin_regMbtiq";
 		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
+		model.addAttribute("list", regData_service.regMbtiQuestion());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_insertMbtiq.do")
+	public String insertMbtiQuestion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
+		int mbtiq_idx = regData_service.insertMbtiQuestion(params, admin_idx);
+		page = "redirect:/admin_regMbtiq_sub.go?mbtiq_idx="+mbtiq_idx;
+		//main_controller.checkPermit(model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtiq_sub.go")
-	public String regMbtiQuestionSub (Model model, HttpSession session) {
+	public String regMbtiQuestionSub (String mbtiq_idx, Model model, HttpSession session) {
 		page = "admin_regMbtiq_sub";
 		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
-		return page;
-	}
-
-	@RequestMapping (value = "/admin_regMbtiq_scr.go")
-	public String regMbtiQuestionScore (Model model, HttpSession session) {
-		page = "admin_regMbtiq_scr";
-		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
+		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
 		return page;
 	}
 
@@ -97,7 +96,6 @@ public class RegDataController {
 		} else if (params.get("reg_type").equals("delete")) {
 			page = "redirect:/admin_regMbtir.go";
 		}
-
 		//main_controller.checkPermit(model, session);
 		return page;
 	}

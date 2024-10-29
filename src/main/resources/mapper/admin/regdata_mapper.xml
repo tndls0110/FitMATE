@@ -5,6 +5,16 @@
 
 <mapper namespace="com.fitmate.admin.dao.RegDataDAO">
 
+    <!-- 헬스 MBTI 질문 관리 -->
+    <select id="regMbtiQuestion" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtiq_idx, mbtiq_con FROM mbti_q WHERE mbtiq_show = 1
+    </select>
+
+    <insert id="insertMbtiQuestion" parameterType="com.fitmate.admin.dto.RegMBTIDTO"
+            useGeneratedKeys="true" keyColumn="mbtiq_idx" keyProperty="mbtiq_idx">
+        INSERT INTO mbti_q (mbtiq_con, admin_idx) VALUES (#{mbtiq_con}, #{admin_idx})
+    </insert>
+
     <!-- 헬스 MBTI 결과 관리 -->
     <select id="regMbtiResult" resultType="com.fitmate.admin.dto.RegMBTIDTO">
         SELECT mbtir_idx, mbtir_name FROM mbti_r WHERE mbtir_show = 1
@@ -34,6 +44,7 @@
     </update>
 
     <update id="deleteMbtiResult" parameterType="map">
+
         UPDATE mbti_r SET mbtir_show = 0, admin_idx = #{admin_idx} WHERE mbtir_idx = #{mbtir_idx}
     </update>
 

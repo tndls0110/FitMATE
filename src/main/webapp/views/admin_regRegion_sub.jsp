@@ -29,7 +29,7 @@
         </ul>
         <div class="contents narrow">
             <p>
-                <select name="region" class="full" onchange="onOptionChange(event)">
+                <select name="region" class="full bg_dark" onchange="onOptionChange(event)">
                     <c:forEach items="${region}" var="list">
                         <option name="region" value="${list.region_idx}">${list.region_name}</option>
                     </c:forEach>

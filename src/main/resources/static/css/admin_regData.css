@@ -3,16 +3,11 @@
 .menu_tab{
     width: 400px;
     margin: 18px auto -12px;
-    padding: 0 10px;
-}
-
-.menu_tab.wide{
-    width: 530px;
     padding: 0;
 }
 
 .menu_tab li{
-    width: 100px;
+    width: 97px;
     margin: 0;
     padding: 12px 0;
     text-align: center;
@@ -45,10 +40,6 @@
 
 .noDesc.narrow li h3.capt{
     margin-bottom: 3px;
-}
-
-.noDesc.narrow li input{
-    padding: 14px;
 }
 
 .noDesc.narrow li .btn_flex.narrow{
