@@ -15,6 +15,7 @@ public interface RegDataDAO {
     List<RegMBTIDTO> regMbtiResult();
     RegMBTIDTO regMbtiResultDetail(String mbtir_idx);
     int updateMbtiResult(Map<String, String> params);
+    int insertMbtiResult(RegMBTIDTO dto);
     int deleteImg(String mbtir_idx);
     int insertImg(String mbtir_idx, String mbtir_img);
     int deleteMbtiResult(Map<String, String> params);

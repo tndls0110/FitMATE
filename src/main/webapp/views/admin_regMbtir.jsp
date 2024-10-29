@@ -52,21 +52,11 @@
                     </li>
                 </c:forEach>
             </ul>
-            <form id="insert" action="admin_insertMbtir.do" method="post">
-                <ul class="noDesc narrow">
-                    <li>
-                        <h3 class="capt">항목 추가</h3>
-                        <div class="btn_flex narrow">
-                            <div class="width80p">
-                                <input type="text" name="mbtir_name" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
-                            </div>
-                            <div class="width20p">
-                                <input type="submit" value="추가" class="mainbtn full flex_right" />
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </form>
+            <ul class="noDesc">
+                <li>
+                    <p><input type="button" value="추가하기" class="full mainbtn" onclick="location.href='admin_regMbtir_insert.go'" /></p>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
