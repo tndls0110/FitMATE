@@ -11,4 +11,9 @@
     <select id="getJournal" resultType="Map">
         SELECT journal_cate, journal_content, date,time(journal_start) , time(journal_end) FROM schedule where user_id = #{id} AND date = #{date};
     </select>
+    
+    
+    <insert id="">
+
+    </insert>
 </mapper>
