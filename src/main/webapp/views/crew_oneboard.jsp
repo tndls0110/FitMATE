@@ -197,27 +197,33 @@
 	                	// 내가 작성자이면
 	                	if (sessionId == item.board_id) {
 	                	       // deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_del?board_idx=' + item.board_idx + '\'">작성자</button>';
-	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '\')" class="mainbtn full">삭제하기</button>'
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '\')" class="mainbtn full"><i class="bi bi-x-square"></i></button>'
 	                	    }
 	                	// 크루장이면
 	                	else if(isCrewLeader){
 	                		// 숨겨진게시글이면
 	                		if(item.status == 2){
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx + '\'">크루장</button>';
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx + '\'"><i class="bi bi-file-richtext"></i></button>';
 	                		}
 	              			// 숨겨진게시글이 아니라면
 	                		else{
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '\'">블라인드하기</button>';
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '\'"><i class="bi bi-file-earmark-lock2"></i></button>';
 	                		}	                		
 	                	}
 	                	// 크루장이 아니고 작성자도 아니면
 	                	else{
-	                		deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '&board_id=' + item.board_id +'\'">신고하기</button>';
+	                		if(item.status == 2){
+	                			deleteButton = '<button type="button" onclick="modal.showAlert(\'이글은 블라인드 된 글입니다\')" class="mainbtn full"><i class="bi bi-file-earmark-lock2"></i></button>'
+	                		}
+	                		else{
+	                		deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 신고하시겠습니까\', \'crew_report.go?board_idx='+ item.board_idx + '&board_id=' + item.board_id +'\')" class="mainbtn full"><i class="bi bi-exclamation-circle"></i></button>'
+	                	//	deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '&board_id=' + item.board_id +'\'"><i class="bi bi-geo-alt-fill"></i></button>';
+	                		}
 	                	}
     					
-	                	if(item.status == 2 ){
+	                	if(item.status == 2){
 	                		tbody.append('<tr><td colspan="4">블라인드된 게시글 입니다</td>'	                		
-	                				+ '<td>' + deleteButton + '</td></tr>');
+	                				+ '<td>'+ deleteButton  +'</td></tr>');
 	                	}
 	                	else{
 	                		
