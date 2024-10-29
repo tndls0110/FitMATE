@@ -19,15 +19,12 @@
         <div class="title">
             <h2>헬스 MBTI 정보 관리</h2>
         </div>
-        <ul class="noDesc menu_tab wide">
+        <ul class="noDesc menu_tab">
             <li>
                 <a href="admin_regMbtiq.go">질문</a>
             </li>
             <li>
                 <a href="admin_regMbtiq_sub.go?mbtiq_idx=1">세부 질문</a>
-            </li>
-            <li>
-                <a href="admin_regMbtiq_scr.go?mbtisub_idx=1">질문별 점수</a>
             </li>
             <li>
                 <a href="admin_regMbtir.go">결과</a>

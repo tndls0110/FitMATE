@@ -25,6 +25,19 @@ public class RegDataService {
 	Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired RegDataDAO regData_dao;
 
+    // 헬스 MBTI 질문 관리
+    public List<RegMBTIDTO> regMbtiQuestion() {
+        return regData_dao.regMbtiQuestion();
+    }
+
+    public int insertMbtiQuestion(Map<String, String> params, int admin_idx) {
+        RegMBTIDTO dto = new RegMBTIDTO();
+        dto.setMbtiq_con(params.get("mbtiq_con"));
+        dto.setAdmin_idx(admin_idx);
+        regData_dao.insertMbtiQuestion(dto);
+        return dto.getMbtiq_idx();
+    }
+
     // 헬스 MBTI 결과 관리
     public List<RegMBTIDTO> regMbtiResult() {
         return regData_dao.regMbtiResult();

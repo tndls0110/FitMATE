@@ -11,6 +11,10 @@ import java.util.Map;
 @Mapper
 public interface RegDataDAO {
 
+    // 헬스 MBTI 질문 관리
+    List<RegMBTIDTO> regMbtiQuestion();
+    int insertMbtiQuestion(RegMBTIDTO dto);
+
     // 헬스 MBTI 결과 관리
     List<RegMBTIDTO> regMbtiResult();
     RegMBTIDTO regMbtiResultDetail(String mbtir_idx);

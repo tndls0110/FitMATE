@@ -19,15 +19,12 @@
         <div class="title">
             <h2>헬스 MBTI 정보 관리</h2>
         </div>
-        <ul class="noDesc menu_tab wide">
+        <ul class="noDesc menu_tab">
             <li>
                 <a href="admin_regMbtiq.go">질문</a>
             </li>
             <li class="active_tab">
                 <a href="admin_regMbtiq_sub.go?mbtiq_idx=1">세부 질문</a>
-            </li>
-            <li>
-                <a href="admin_regMbtiq_scr.go?mbtisub_idx=1">질문별 점수</a>
             </li>
             <li>
                 <a href="admin_regMbtir.go">결과</a>
@@ -36,7 +33,26 @@
                 <a href="admin_regMbtir_detail.go?mbtir_idx=1">결과 상세</a>
             </li>
         </ul>
-        <div class="contents narrow"></div>
+        <div class="contents narrow">
+            <p>
+                <select class="full bg_dark" onchange="onOptionChange(event)">
+                    <c:forEach items="${mbtiq}" var="mbtiq">
+                        <option name="mbtiq" value="${mbtiq.mbtir_idx}">${mbtiq.mbtiq_con}</option>
+                    </c:forEach>
+                </select>
+            </p>
+            <form action="admin_updateMbtiq.do" method="post">
+                <!-- 문항 들어가는 지점 -->
+                <ul class="noDesc">
+                    <li>
+                        <p><input type="button" value="수정하기" class="full mainbtn" onclick="regData('update')" /></p>
+                    </li>
+                    <li>
+                        <p><input type="button" value="삭제하기" class="full subbtn" onclick="regData('delete')" /></p>
+                    </li>
+                </ul>
+            </form>
+        </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
