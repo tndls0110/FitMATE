@@ -3,4 +3,44 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.crew.dao.CrewMemberDAO"></mapper>
+<mapper namespace="com.fitmate.crew.dao.CrewMemberDAO">
+<select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+	SELECT 
+		A.*, 
+		B.nick,
+		C.profile
+	FROM crew_join A 
+	INNER JOIN member B ON B.user_id = A.join_id
+	INNER JOIN profile C ON C.user_id = A.join_id 	
+	WHERE A.crew_idx = #{crew_idx} AND A.status = 1 
+	ORDER BY A.date ASC 
+</select>
+
+<select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+	SELECT 
+		A.crew_idx,
+		A.name AS crew_name,
+		A.crew_id AS leader_id,
+		B.nick,
+		C.profile
+	FROM crew A
+	INNER JOIN member B ON B.user_id = A.crew_id
+	INNER JOIN profile C ON C.user_id = A.crew_id
+	WHERE A.crew_idx = #{crew_idx}	
+</select>
+
+<update id="joinApproval" parameterType="map">
+	UPDATE crew_join SET 
+		status = 3,
+		date = #{date}
+		WHERE join_idx = #{join_idx}
+		AND status = 1
+		AND crew_idx = #{crew_idx}
+</update>
+
+<insert id="crewMember" parameterType="map">
+	INSERT INTO crew_member(crew_idx, member_id, join_date, status)
+		VALUES(#{crew_idx}, #{join_id}, #{date}, 1)
+</insert>
+
+</mapper>
