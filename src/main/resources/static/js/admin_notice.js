@@ -1,11 +1,11 @@
 // 공지사항 출력
-var showPage = 1;
-var cnt = 10;
-var vPages = 10;
+let showPage = 1;
+let cnt = 10;
+let vPages = 10;
 
 const searchParams = new URLSearchParams(window.location.search);
-var searchType = searchParams.get('searchType');
-var keywords = searchParams.get('keywords');
+let searchType = searchParams.get('searchType');
+let keywords = searchParams.get('keywords');
 
 pageShow(showPage);
 

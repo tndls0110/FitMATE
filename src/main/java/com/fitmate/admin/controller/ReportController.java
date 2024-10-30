@@ -28,7 +28,7 @@ public class ReportController {
 		return page;
 	}
 
-	// 신고 상새보기
+	// 신고 상세보기
 	@RequestMapping (value = "/admin_reportDetail.go")
 	public String noticeDetail(){
 		//main_controller.checkPermit(model, session);

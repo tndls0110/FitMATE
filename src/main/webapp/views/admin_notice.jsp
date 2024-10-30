@@ -11,7 +11,6 @@
     <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
     <script>
         var index = 3;
-        var msg = '${msg}';
     </script>
 </head>
 <body>
