@@ -1,5 +1,6 @@
 package com.fitmate.crew.controller;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -47,14 +48,14 @@ public class CrewScheduleController {
 	
 	@PostMapping(value="/crew_schedule_write.do")
 	public String crew_schedule_write(@RequestParam(value = "day", required = false) String[] days,
-			@RequestParam String crew_id,
-			@RequestParam String crew_idx,
-			@RequestParam String date,
-			@RequestParam("start-time") String start_time,
-			@RequestParam("end-time") String end_time,
-			@RequestParam String place,
-			@RequestParam String content,
-			@RequestParam String subject) {
+			 String crew_id,
+			 String crew_idx,
+			 String date,
+			 String start_time,
+			 String end_time,
+			String place,
+			String content,
+			 String subject) {
 		
 		// 받을 파라미터 = 크루idx,모임일시,모임장소,모인이유 // 주기적 일정인 경우 주기적날짜 정보
 		
@@ -62,13 +63,15 @@ public class CrewScheduleController {
 		logger.info("전달 받은 값 "+crew_id+date+start_time+end_time+place+content+subject);
 		 // 선택된 요일 배열 받기
 		if (days != null) {
-	        for (String day : days) {
+			for (String day : days) {
 	            logger.info("선택된 날짜는 {}", day);
 	        }
 	    } else {
 	        logger.info("선택된 날짜가 없습니다.");
 	    }
-	    
+		
+		crewschedule_service.crew_plan_create(days,crew_id,crew_idx,date,start_time,end_time,place,content,subject);
+	       
 		return "index";
 	}
 
