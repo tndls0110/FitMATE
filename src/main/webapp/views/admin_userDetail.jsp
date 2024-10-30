@@ -70,6 +70,10 @@
                     <td class="left">${member.mbtir_name}</td>
                 </tr>
                 <tr>
+                    <th class="left">게시글 수</th>
+                    <td class="left"></td>
+                </tr>
+                <tr>
                     <th class="left">마지막 활동일시</th>
                     <td class="left">${member.last_regdate}</td>
                 </tr>

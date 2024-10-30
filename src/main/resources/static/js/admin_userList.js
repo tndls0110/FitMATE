@@ -58,7 +58,7 @@ function listPrint(list, totalIdx, currentPage, offset) {
         tags += '</a></td>';
         tags += '<td>'+list[i].email+'</td>';
         tags += '<td>'+list[i].name+'</td>';
-        tags += '<td>'+list[i].birthday+'</td>';
+        tags += '<td>게시글 수</td>';
         if (list[i].last_regdate == ""){
             tags += '<td>이용내역 없음</td>';
         } else {

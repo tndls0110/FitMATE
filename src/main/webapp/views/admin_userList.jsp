@@ -28,7 +28,7 @@
                         <col width="60px" />
                         <col width="auto" />
                         <col width="auto" />
-                        <col width="auto" />
+                        <col width="100px" />
                         <col width="100px" />
                         <col width="150px" />
                         <col width="80px" />
@@ -40,7 +40,7 @@
                         <th>아이디 (닉네임)</th>
                         <th>이메일</th>
                         <th>이름</th>
-                        <th>생년월일</th>
+                        <th>게시글 수</th>
                         <th>마지막 이용일</th>
                         <th>이용상태</th>
                         <th>잔여제재일</th>
