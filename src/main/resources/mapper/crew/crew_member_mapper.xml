@@ -4,19 +4,35 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewMemberDAO">
-<select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+<select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 
 		A.*, 
 		B.nick,
 		C.profile
 	FROM crew_join A 
 	INNER JOIN member B ON B.user_id = A.join_id
-	INNER JOIN profile C ON C.user_id = A.join_id 	
-	WHERE A.crew_idx = #{crew_idx} AND A.status = 1 
-	ORDER BY A.date ASC 
+	INNER JOIN profile C ON C.user_id = A.join_id
+	<where>
+	A.crew_idx = #{crew_idx} AND A.status = 1 
+	<!--    searchFilter(1='크루원닉네임 검색'/ 2='크루원ID 검색')    -->
+	<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
+		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
+		AND A.join_id LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	</where>
+	<choose>
+		<when test="orderBy != null and orderBy != ''">
+			ORDER BY B.nick ${orderBy}
+		</when>
+		<otherwise>
+			ORDER BY A.date DESC
+		</otherwise>
+	</choose>
 </select>
 
-<select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+<select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 
 		A.crew_idx,
 		A.name AS crew_name,
@@ -31,7 +47,7 @@
 
 <update id="joinApproval" parameterType="map">
 	UPDATE crew_join SET 
-		status = 3,
+		status = #{status},
 		date = #{date}
 		WHERE join_idx = #{join_idx}
 		AND status = 1
@@ -42,60 +58,5 @@
 	INSERT INTO crew_member(crew_idx, member_id, join_date, status)
 		VALUES(#{crew_idx}, #{join_id}, #{date}, 1)
 </insert>
-
-<!-- 2024.10.30 추가 -->
-<select id="memberDetail" parameterType="String" resultType="com.fitmate.crew.dto.CrewMemberProfileDTO">
-SELECT
-	<!-- 크루명 -->
-	c.name AS crew_name,
-	<!-- 크루장ID -->
-	c.crew_id,
-	<!-- 크루원목록 idx --> 
-	cm.member_idx,
-	<!-- 크루원 입단날짜 -->
-	cm.join_date,
-	<!-- 유저ID -->
-    m.user_id,
-    <!-- 유저 닉네임 --> 
-    m.nick, 
-    <!-- 유저 이메일 -->
-    m.email, 
-    <!-- 유저 생일 -->
-    m.birthday, 
-    <!-- 상태 메시지 -->
-    p.status, 
-    <!-- 프로필 사진 -->
-    p.profile, 
-    <!-- 상위 지역명 -->
-    r.region_name,
-    <!-- 하위 지역명 -->
-    rs.regions_name,
-    <!-- mbti 성향 -->
-    mb.mbtir_name
-FROM member m 
-INNER JOIN 
-	crew_member cm ON cm.member_id = #{member_id} 
-INNER JOIN
-	crew c ON c.crew_idx = cm.crew_idx	
-INNER JOIN 
-    profile p ON m.user_id = p.user_id
-LEFT JOIN 
-    region_sub rs ON rs.regions_idx = p.regions_idx
-LEFT JOIN 
-    region r ON r.region_idx = rs.region_idx
-LEFT JOIN 
-    mbti_r mb ON mb.mbtir_idx = p.mbtir_idx
-WHERE 
-    m.user_id = #{member_id}
-AND
-	cm.status = 1; <!-- 크루원 가입상태 1:true인 경우 -->
-	    
-</select>
-
-<!-- 크루멤버 추방하기  status가 0: 추방, 1: 크루원 -->
-<update id="memberFire">
-	UPDATE crew_member SET status = 0, leave_date = #{param2} 
-		WHERE member_idx = #{param1} <!-- param1: member_idx -->
-</update>
 
 </mapper>

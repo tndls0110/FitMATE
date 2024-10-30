@@ -204,8 +204,8 @@
 
         div.comment_box button.mainbtn.minbtn {
             position: absolute;
-            top: 10%;
-            right: 12%; 
+            top: 20%;
+    		right: 40%;
         }
 
         div.body_content {

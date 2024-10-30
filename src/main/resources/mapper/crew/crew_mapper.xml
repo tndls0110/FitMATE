@@ -110,6 +110,35 @@ RC.content,
 <!--   대댓글 작성일   -->
 RC.date FROM recomment RC INNER JOIN profile P ON P.user_id = RC.recomment_id INNER JOIN member M ON M.user_id = RC.recomment_id WHERE comment_idx = #{comment_idx}
 </select>
+
+<!-- 댓글, 대댓글 한번에 가져오기(개선버전.... 좀더 수정해야함.) -->
+<!-- 
+SELECT 
+    comment_idx AS id, 
+    board_idx, 
+    comment_id AS user_id, 
+    content AS message, 
+    date, 
+    'comment' AS type
+FROM comment
+WHERE board_idx = #{boardId}
+
+UNION ALL
+
+SELECT 
+    recomment_idx AS id, 
+    comment_idx AS board_idx, 
+    recomment_id AS user_id, 
+    content AS message, 
+    date, 
+    'recomment' AS type
+FROM recomment
+WHERE comment_idx IN (SELECT comment_idx FROM comment WHERE board_idx = #{boardId})
+ORDER BY date;
+ -->
+
+
+
 <select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String"> SELECT * FROM crew_join WHERE join_id = #{currentId} </select>
 <insert id="joinCrew"> INSERT INTO crew_join(crew_idx, join_id, status) VALUES(#{param1}, #{param2}, #{param3}) </insert>
 <delete id="leaveCrew" parameterType="int"> DELETE FROM crew_join WHERE join_idx = #{join_idx} </delete>
