@@ -11,7 +11,7 @@ public class ReportDTO {
     private int board_idx;
     private int board_type;
     private int report_prog;
-    private LocalDateTime reported_date;
+    private LocalDateTime report_date;
 
     private int reportd_idx;
     private int admin_idx;
@@ -27,6 +27,9 @@ public class ReportDTO {
     private int category_idx;
     private String category_name;
     private int crew_idx;
+    private String crew_name;
+    private String reporter_nick;
+    private String reported_nick;
 
     public int getReport_idx() {
         return report_idx;
@@ -49,8 +52,8 @@ public class ReportDTO {
     public int getReport_prog() {
         return report_prog;
     }
-    public LocalDateTime getReported_date() {
-        return reported_date;
+    public LocalDateTime getReport_date() {
+        return report_date;
     }
     public int getReportd_idx() {
         return reportd_idx;
@@ -91,6 +94,15 @@ public class ReportDTO {
     public int getCrew_idx() {
         return crew_idx;
     }
+    public String getCrew_name() {
+        return crew_name;
+    }
+    public String getReporter_nick() {
+        return reporter_nick;
+    }
+    public String getReported_nick() {
+        return reported_nick;
+    }
 
     public void setReportr_con(String reportr_con) {
         this.reportr_con = reportr_con;
@@ -107,8 +119,8 @@ public class ReportDTO {
     public void setReportd_idx(int reportd_idx) {
         this.reportd_idx = reportd_idx;
     }
-    public void setReported_date(LocalDateTime reported_date) {
-        this.reported_date = reported_date;
+    public void setReport_date(LocalDateTime report_date) {
+        this.report_date = report_date;
     }
     public void setReport_prog(int report_prog) {
         this.report_prog = report_prog;
@@ -154,5 +166,14 @@ public class ReportDTO {
     }
     public void setCrew_idx(int crew_idx) {
         this.crew_idx = crew_idx;
+    }
+    public void setCrew_name(String crew_name) {
+        this.crew_name = crew_name;
+    }
+    public void setReporter_nick(String reporter_nick) {
+        this.reporter_nick = reporter_nick;
+    }
+    public void setReported_nick(String reported_nick) {
+        this.reported_nick = reported_nick;
     }
 }
