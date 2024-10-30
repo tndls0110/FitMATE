@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_common.css" />
     <link rel="stylesheet" type="text/css" href="resources/css/admin_board.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+    <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
     <script>
         var index = 2;
     </script>
@@ -25,7 +27,7 @@
                     <colgroup>
                         <col width="60px" />
                         <col width="auto" />
-                        <col width="100px" />
+                        <col width="120px" />
                         <col width="100px" />
                         <col width="100px" />
                         <col width="150px" />
@@ -54,16 +56,19 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="search">
-                <form>
+            <form>
+                <div class="search">
                     <div class="btn_flex">
                         <div class="width20p">
                             <select name="searchType" class="subbtn full">
-                                <option value="notice_cont" selected>내용</option>
-                                <option value="admin_name">작성자</option>
+                                <option value="subject" selected>게시글 내용</option>
+                                <option value="reported_id">작성자 ID</option>
+                                <option value="reported_nick">작성자 닉네임</option>
+                                <option value="reporter_id">신고자 ID</option>
+                                <option value="reporter_nick">신고자 닉네임</option>
                             </select>
                         </div>
-                        <div class="width80p">
+                        <div class="width70p">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
                                     <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
@@ -73,9 +78,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="width10p">
+                            <button type="button" onclick="location.href='admin_reportList.go'" class="textbtn full">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

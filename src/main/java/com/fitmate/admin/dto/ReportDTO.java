@@ -1,6 +1,7 @@
 package com.fitmate.admin.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ReportDTO {
 
@@ -19,6 +20,7 @@ public class ReportDTO {
     private LocalDateTime reportd_date;
     private String reportr_con;
     private String report_state;
+    private int report_cnt;
 
     private String subject;
     private String content;
@@ -30,6 +32,9 @@ public class ReportDTO {
     private String crew_name;
     private String reporter_nick;
     private String reported_nick;
+    private int file_cnt;
+    private String ori_filename;
+    private String new_filename;
 
     public int getReport_idx() {
         return report_idx;
@@ -52,8 +57,13 @@ public class ReportDTO {
     public int getReport_prog() {
         return report_prog;
     }
-    public LocalDateTime getReport_date() {
-        return report_date;
+    public String getReport_date() {
+        if (report_date == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return report_date.format(formatter);
+        }
     }
     public int getReportd_idx() {
         return reportd_idx;
@@ -64,8 +74,13 @@ public class ReportDTO {
     public String getReportd_con() {
         return reportd_con;
     }
-    public LocalDateTime getReportd_date() {
-        return reportd_date;
+    public String getReportd_date() {
+        if (reportd_date == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return reportd_date.format(formatter);
+        }
     }
     public String getReportr_con() {
         return reportr_con;
@@ -73,14 +88,22 @@ public class ReportDTO {
     public String getReport_state() {
         return report_state;
     }
+    public int getReport_cnt() {
+        return report_cnt;
+    }
     public String getSubject() {
         return subject;
     }
     public String getContent() {
         return content;
     }
-    public LocalDateTime getDate() {
-        return date;
+    public String getDate() {
+        if (date == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return date.format(formatter);
+        }
     }
     public int getStatus() {
         return status;
@@ -103,48 +126,60 @@ public class ReportDTO {
     public String getReported_nick() {
         return reported_nick;
     }
+    public int getFile_cnt() {
+        return file_cnt;
+    }
+    public String getOri_filename() {
+        return ori_filename;
+    }
+    public String getNew_filename() {
+        return new_filename;
+    }
 
-    public void setReportr_con(String reportr_con) {
-        this.reportr_con = reportr_con;
-    }
-    public void setReportd_date(LocalDateTime reportd_date) {
-        this.reportd_date = reportd_date;
-    }
-    public void setReportd_con(String reportd_con) {
-        this.reportd_con = reportd_con;
-    }
-    public void setAdmin_idx(int admin_idx) {
-        this.admin_idx = admin_idx;
-    }
-    public void setReportd_idx(int reportd_idx) {
-        this.reportd_idx = reportd_idx;
-    }
-    public void setReport_date(LocalDateTime report_date) {
-        this.report_date = report_date;
-    }
-    public void setReport_prog(int report_prog) {
-        this.report_prog = report_prog;
-    }
-    public void setBoard_type(int board_type) {
-        this.board_type = board_type;
-    }
-    public void setBoard_idx(int board_idx) {
-        this.board_idx = board_idx;
-    }
-    public void setReported_id(String reported_id) {
-        this.reported_id = reported_id;
-    }
-    public void setReportr_idx(int reportr_idx) {
-        this.reportr_idx = reportr_idx;
+    public void setReport_idx(int report_idx) {
+        this.report_idx = report_idx;
     }
     public void setReporter_id(String reporter_id) {
         this.reporter_id = reporter_id;
     }
-    public void setReport_idx(int report_idx) {
-        this.report_idx = report_idx;
+    public void setReportr_idx(int reportr_idx) {
+        this.reportr_idx = reportr_idx;
+    }
+    public void setReported_id(String reported_id) {
+        this.reported_id = reported_id;
+    }
+    public void setBoard_idx(int board_idx) {
+        this.board_idx = board_idx;
+    }
+    public void setBoard_type(int board_type) {
+        this.board_type = board_type;
+    }
+    public void setReport_prog(int report_prog) {
+        this.report_prog = report_prog;
+    }
+    public void setReport_date(LocalDateTime report_date) {
+        this.report_date = report_date;
+    }
+    public void setReportd_idx(int reportd_idx) {
+        this.reportd_idx = reportd_idx;
+    }
+    public void setAdmin_idx(int admin_idx) {
+        this.admin_idx = admin_idx;
+    }
+    public void setReportd_con(String reportd_con) {
+        this.reportd_con = reportd_con;
+    }
+    public void setReportd_date(LocalDateTime reportd_date) {
+        this.reportd_date = reportd_date;
+    }
+    public void setReportr_con(String reportr_con) {
+        this.reportr_con = reportr_con;
     }
     public void setReport_state(String report_state) {
         this.report_state = report_state;
+    }
+    public void setReport_cnt(int report_cnt) {
+        this.report_cnt = report_cnt;
     }
     public void setSubject(String subject) {
         this.subject = subject;
@@ -175,5 +210,14 @@ public class ReportDTO {
     }
     public void setReported_nick(String reported_nick) {
         this.reported_nick = reported_nick;
+    }
+    public void setFile_cnt(int file_cnt) {
+        this.file_cnt = file_cnt;
+    }
+    public void setOri_filename(String ori_filename) {
+        this.ori_filename = ori_filename;
+    }
+    public void setNew_filename(String new_filename) {
+        this.new_filename = new_filename;
     }
 }
