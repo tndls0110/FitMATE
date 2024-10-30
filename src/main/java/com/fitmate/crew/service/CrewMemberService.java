@@ -2,6 +2,7 @@ package com.fitmate.crew.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fitmate.crew.dao.CrewMemberDAO;
 import com.fitmate.crew.dto.CrewJoinDTO;
+import com.fitmate.crew.dto.CrewMemberProfileDTO;
+import com.fitmate.member.dto.MemberDTO;
 
 @Service
 public class CrewMemberService {
@@ -56,12 +59,34 @@ public class CrewMemberService {
 		if(row > 0 && status == 3) { 
 			row = crewmember_dao.crewMember(params); 
 		}
-		 
         
         logger.info("params Test : " + params);
         
         return row;
-		
 	}
+	
+	// 크루 멤버 프로필 상세보기
+	public CrewMemberProfileDTO memberDetail(String member_id) {
+		
+		return crewmember_dao.memberDetail(member_id);
+	}
+
+	// 크루멤버 추방
+	public int memberFire(String member_idx_) {
+		// 현재 날짜와 시간 가져오기
+        LocalDateTime localDate = LocalDateTime.now();
+        // 원하는 포맷으로 날짜와 시간을 String으로 변환
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String date = localDate.format(formatter);
+		
+		
+		int member_idx = Integer.parseInt(member_idx_);
+		
+		int row = crewmember_dao.memberFire(member_idx, date);
+		
+		return row;
+	}
+	
 	
 }
