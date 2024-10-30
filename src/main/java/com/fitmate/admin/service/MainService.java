@@ -39,8 +39,12 @@ public class MainService {
     }
 
     // 대시보드 > 공지사항 목록
-    public List<DashboardDTO> dashboardList() {
-        List<DashboardDTO> list = main_dao.dashboardList();
-        return main_dao.dashboardList();
+    public List<DashboardDTO> dashboardList1() {
+        return main_dao.dashboardList1();
+    }
+
+    // 대시보드 > 신고 목록
+    public List<DashboardDTO> dashboardList2() {
+        return main_dao.dashboardList2();
     }
 }

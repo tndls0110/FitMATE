@@ -152,13 +152,28 @@ table tfoot td{
     width: 936px;
 }
 
-.search .btn_flex .btn_flex.narrow{
+.btn_flex .btn_flex.narrow{
     margin: 0;
+}
+
+.btn_flex .btn_flex.narrow div{
+    position: relative;
+}
+
+.refresh{
+    color: #8a8a8a;
+    position: absolute;
+    top: 0;
+    right: -3px;
 }
 
 
 
 /* report_detail */
+
+.report_detail{
+    margin: 0 0 36px;
+}
 
 .report_detail th,
 .report_detail td{

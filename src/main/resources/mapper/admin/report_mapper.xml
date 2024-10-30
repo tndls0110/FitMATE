@@ -56,4 +56,22 @@
             FROM report r JOIN crew_board b ON r.board_idx = b.board_idx WHERE report_idx = #{param}
     </select>
 
+    <select id="reportStatus" resultType="com.fitmate.admin.dto.RegReportDTO">
+        SELECT report_prog, report_state FROM report_progress LIMIT 3 OFFSET 1
+    </select>
+
+    <select id="reportProgress" resultType="com.fitmate.admin.dto.ReportDTO">
+        SELECT d.reportd_idx, d.reportd_con, d.reportd_date, d.admin_idx,
+            (SELECT report_state FROM report_progress WHERE report_prog = d.report_prog) AS 'report_state'
+            FROM report_detail d WHERE d.report_idx = #{param}
+    </select>
+
+    <insert id="confirmReport" parameterType="map">
+        INSERT INTO report_detail (report_idx, reportd_con, admin_idx) VALUES (#{report_idx}, #{reportd_con}, #{admin_idx});
+    </insert>
+
+    <update id="updateReport" parameterType="map">
+        UPDATE report SET report_prog = #{report_prog} WHERE report_idx = #{report_idx}
+    </update>
+
 </mapper>
