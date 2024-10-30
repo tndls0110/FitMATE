@@ -1,6 +1,5 @@
 package com.fitmate.crew.controller;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fitmate.crew.dto.CrewJoinDTO;
+import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.crew.service.CrewMemberService;
 
 @Controller
@@ -57,6 +58,37 @@ public class CrewMemberController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("success", success);
         
+		return map;
+	}
+	
+	
+	// 2024-10-30 추가 - 크루원 프로필 상세보기
+	@RequestMapping(value = "/mycrew_memberDetail.go")
+	public String memberDetail(String id, Model model) {
+		
+		CrewMemberProfileDTO memberProfile = crewmember_service.memberDetail(id);
+		
+		model.addAttribute("profile", memberProfile);
+		
+		return "mycrew_memberDetail"; 
+	}
+	
+	
+	@PostMapping(value = "/crewMemberFire.ajax")
+	@ResponseBody
+	public Map<String, Object> memberFire(String member_idx){
+		boolean success = false;
+		
+		int row = crewmember_service.memberFire(member_idx); 
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(row > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		
 		return map;
 	}
 	
