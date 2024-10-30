@@ -10,4 +10,24 @@
         SELECT * FROM report;
     </select>
 
+    <!-- 공지사항 목록 -->
+    <select id="allCount" resultType="int">
+        SELECT CEIL(COUNT(notice_idx) / #{param1}) FROM notice
+    </select>
+
+    <select id="countIdx" resultType="int">
+        SELECT COUNT(notice_idx) FROM notice
+    </select>
+
+    <select id="list" resultType="com.fitmate.admin.dto.ReportDTO">
+        SELECT r.report_idx, b.subject, r.reporter_id, r.reported_id, r.report_date, r.report_prog,
+               (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
+            (SELECT COUNT(f.file_idx) FROM board_file f WHERE f.board_idx = b.board_idx) AS 'file_cnt',
+            (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
+            (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state'
+            FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
+            ORDER BY r.report_idx DESC LIMIT #{param1} OFFSET #{param2}
+    </select>
+
 </mapper>

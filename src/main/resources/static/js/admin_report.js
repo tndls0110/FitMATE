@@ -46,15 +46,21 @@ function listPrint(list, totalIdx, currentPage, offset) {
     for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
-        tags += '<td class="left">'+list[i].내용+'</td>';
-        tags += '<td>'+list[i].신고유형+'</td>';
-        tags += '<td>'+list[i].신고자+'</td>';
-        tags += '<td>'+list[i].작성자+'</td>';
-        tags += '<td>'+list[i].신고일시+'</td>';
-        if (list[i].상태 == 1){
-            tags += '<td><button class="mainbtn minbtn">게시중</button></td>';
-        } else {
-            tags += '<td><button class="subbtn minbtn">게시안함</button></td>';
+        tags += '<td class="left">'+list[i].subject+'</td>';
+        tags += '<td>'+list[i].reportr_con+'</td>';
+        tags += '<td>'+list[i].reporter_id+'<br />('+list[i].reporter_nick+')</td>';
+        tags += '<td>'+list[i].reported_id+'<br />('+list[i].reported_nick+')</td>';
+        tags += '<td>'+list[i].report_date+'</td>';
+        switch (list[i].report_prog) {
+            case 1:
+                tags += '<td><button class="mainbtn minbtn">'+list[i].report_state+'</button></td>';
+                break;
+            case 2:
+                tags += '<td><button class="cautionbtn minbtn">'+list[i].report_state+'</button></td>';
+                break;
+            default:
+                tags += '<td><button class="subbtn minbtn">'+list[i].report_state+'</button></td>';
+                break;
         }
         tags += '</tr>';
     }
