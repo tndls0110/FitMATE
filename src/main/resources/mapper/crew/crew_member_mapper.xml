@@ -109,6 +109,8 @@
         m.user_id = #{member_id}
         <if test="profileType != null and profileType.equals('1')">
             AND cm.status = 1
+            <!-- crew_idx값도 줘야 여러개의 크루에 가입했을 때 특정 값만 가져올 수 있음. -->
+            AND c.crew_idx = #{crew_idx}
         </if>
     </where>
 </select>

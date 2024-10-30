@@ -19,7 +19,7 @@ public interface CrewMemberDAO {
 
 	int crewMember(Map<String, String> params);
 	
-	CrewMemberProfileDTO memberDetail(String member_id, String profileType);
+	CrewMemberProfileDTO memberDetail(String member_id, String profileType, String crew_idx);
 
 	int memberFire(int member_idx, String date);
 

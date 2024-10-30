@@ -195,6 +195,8 @@
    // 신청중인 크루(1)이면, : 마지막에 WHERE문 추가 =>  crew테이블-crew_idx IN (SELECT crew_idx FROM crew_join테이블 WHERE join_id = sessionID) 
    // 내크루(0) 이면, : 마지막에 WHERE문 추가 => crew테이블-crew_idx IN (SELEC crew_idx FROM crew_member테이블 WHERE member_id = sessionID)
    
+   // 현재 유저아이디 => 세션으로 바꿔줘야함.
+   var currentUserId = 'member01';
 
    //0. 초기 크루목록 가져오기
    //0-1. 신청중인 크루 목록 가져오기
@@ -313,7 +315,7 @@
                      	
       
       // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI
-      header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '" class="recruit_detail">'
+      header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' +currentUserId+ '" class="recruit_detail">'
                + profile
                + '<div class="recruit_right">'
                   + '<div class="right_top">'
