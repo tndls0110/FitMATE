@@ -58,4 +58,16 @@ public class ScheduleController {
 
 		return "redirect:/schedule.go";
 	}
+
+
+	@GetMapping (value = "/crewplan_get.ajax")
+	@ResponseBody
+	public Map<String,Object> crewplan_get(String date) {
+		logger.info("컨트롤러에서 전달받은 date :{}",date);
+		Map<String,Object> crew = new HashMap<>();
+		//한 날짜에 crew plan은 여러 개 있을 수 있음
+		List<Map<String,Object>> crew_plans = s_service.crewplan_get(date);
+		crew.put("content", crew_plans);
+		return crew;
+	}
 }

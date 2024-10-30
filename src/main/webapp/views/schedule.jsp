@@ -57,6 +57,7 @@
 			float : right;
 		}
 
+
 		.crew_schedule_title { /*만약 크루 일정 없으면 display = none*/
 			width: 500px;
 			height: 30px;
@@ -255,8 +256,8 @@
 
 
 			<div id="schedule">
+				<div class="crew_schedule_title">크루 일정</div>
 				<div class="crew_schedule">
-					<div class="crew_schedule_title">크루 일정</div>
 
 					<div class="crew_schedule_content">
 						<div id = "top">
@@ -352,7 +353,7 @@
 				console.log('크루 일정:', event_day.crew_events);
 
 
-				// (개인일정 이벤트 만들기) AJAX 응답에서 날짜를 반복 -> 이벤트 객체 생성
+				// (개인일정 이벤트 달력) AJAX 응답에서 날짜를 반복 -> 이벤트 객체 생성
 				for (var dates of event_day.date) {
 					let event_Object = {
 						start: dates.date,
@@ -364,7 +365,7 @@
 				console.log('개인일정만 추가 event_create:', event_create); // 최종 이벤트 배열 확인
 
 
-				//(크루 일정 이벤트 만들기)
+				//(크루 일정 이벤트 달력)
 				for(var crew_event of event_day.crew_events){
 					let event_Object = {
 						start :	crew_event.plan_date,
@@ -387,10 +388,19 @@
 						center: '',
 						end: 'prev next'
 					},
-					events: event_create
+					events: event_create,
+					datesSet: function() {
+
+						setTimeout(change_css, 100);
+						// 달 변경 시 CSS 풀림 -> 해결 : css 불러오는데 시간이 부족했던 것이 문제였슴.......
+						// -> ★ 해결 안됐지만..추가한 거: 달 변경 시 CSS 적용하는 이벤트 추가 -> 달 바뀔 때마다 css 새로 적용 render은 초기에만 하면 되니까.. 앞에 와도 됨
+
+					}
+
 				});
-				calendar.render(); // 캘린더 렌더링 후 css를 해야하는 이유 : 랜더링-> 실제 코드를 적용하는 것 -> 랜더링 전 css 하면 .fc-event 요소들이 DOM에 존재하지 않기 때문에 CSS를 적용할 수 없음
-				change_css();
+				calendar.render();  //초기에만 랜더링을 하면 됨
+				// 캘린더 렌더링 후 css를 해야하는 이유 : 랜더링-> 실제 코드를 적용하는 것 -> 랜더링 전 css 하면 .fc-event 요소들이 DOM에 존재하지 않기 때문에 CSS를 적용할 수 없음
+				setTimeout(change_css, 100);
 			},
 			error: function(xhr, status, error) {
 				console.error('AJAX 오류:', status, error);
@@ -420,7 +430,6 @@
 		});
 
 
-
 		//처음 실행할 때 캘린더 안에 있는 날짜 기반으로 크루 일정 띄우기
 
 
@@ -429,9 +438,14 @@
 	function change_css(){
 		const events = document.querySelectorAll('.fc-event'); //.fc-event 요소들 모두 가져오기
 		// 이벤트 forEach로 분리
+		console.log('events:{}',events)
 		events.forEach(function (event) { //events 분리
+			//const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
 
-			const title = event.getElementsByClassName('fc-event-title')[0].textContent; // events에서 title만 가져오기
+			//★기존 클래스가 안지워져서 발생하는 문제..?
+			event.classList.remove('type-one', 'type-two'); //기존 클래스 만든 것 지우고 다시 추가
+			const titleElement = event.querySelector('.fc-event-title');
+			const title = titleElement ? titleElement.textContent.trim() : '';
 
 			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
 			if (title === '1') {
@@ -440,6 +454,12 @@
 				event.classList.add('type-two'); // 클래스 추가
 				//type-one과 type-two의 css 바꿔주기
 			}
+
+			//클래스 CSS 적용..?
+			$('.type-one').css({'background-color':'#5bc5bb'});
+			$('.type-two').css({'background-color' : 'orange'});
+
+
 		});
 	}
 
@@ -479,12 +499,64 @@
 
 	function get_crewdate(date){
 		//date 매개변수로 전달해서 내용 가져오기
-		//가져올 내용 - plan_start, plan_end, crew_name,plan_subject,
-
-
+		//가져올 내용 - plan_start, plan_end, crew_name,plan_subject,plan_place
+		$.ajax({
+			type : 'GET',
+			url : 'crewplan_get.ajax',
+			data : {'date' : date},
+			dateType : 'JSON',
+			success : function(crew){
+				console.log(crew);
+				draw_crewPlan(crew);
+			}
+		});
 	}
 
 
+	function draw_crewPlan(crew) {
+		var keySet = Object.keys(crew.content);
+		console.log('keySet:' + keySet);
+
+		/*console.log('crew', crew);
+		console.log('keySet', keySet);
+		console.log('키의 길이 : {}', keySet.length);
+		console.log('crew', crew.content);*/
+		//crew.content
+		//만약 key의 길이가 있으면 보여주고
+		console.log('keySet.length:',keySet.length);
+		if (keySet.length > 0) {
+			var content = '';
+			for (var key of keySet) {
+				console.log('key:' + key);
+				console.log('value:{}', crew.content[key]); //콘솔 찍을 때 + 하면 내용 자세하게 안 나옴, ,로 찍어야 자세하게 나옴..
+				//crew.content[key] 배열 자체를 key로 만들기
+				var crew_key = crew.content[key];
+
+				var crew_name = crew_key['name'];
+				var crew_plan_date = crew_key['plan_date'];
+				var crew_plan_subject = crew_key['plan_subject'];
+				var crew_plan_start = crew_key['plan_start'].substring(0,5);
+				var crew_plan_end = crew_key['plan_end'].substring(0,5);;
+				var crew_plan_place = crew_key['plan_place'];
+
+				console.log('crew_name:{}',crew_name);
+				content += '<div class="crew_schedule_content"> <div id = "top"> <div class="crew_schedule_time">';
+				content += crew_plan_start + '-'+ crew_plan_end+'</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">';
+				content += crew_plan_place+'</div></div></div><div class="crew_schedule_content_detail"> <div class="circle">●</div><div class="crew_name">';
+				content += crew_name +'</div><div class="crew_schedule_text">';
+				content += crew_plan_subject + '</div></div></div></div>';
+
+			}
+			$('.crew_schedule').html(content);
+
+		}else{//아니면 hidden하기...
+		$('.crew_schedule').html().remove();
+		$('.crew_schedule').css({'display' : 'hidden'});
+		console.log('값 있음');
+		}
+
+
+	}
 
 
 	function get_journal(date){
