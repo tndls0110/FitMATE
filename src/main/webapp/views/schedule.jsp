@@ -438,7 +438,12 @@
 				event.classList.add('type-one'); // 클래스 추가
 			} else if (title === '2') {
 				event.classList.add('type-two'); // 클래스 추가
+				//type-one과 type-two의 css 바꿔주기
 			}
+			$('.type-one').css({'background-color': '#5bc5bb'});
+			$('.type-two').css({'background-color': 'orange'});
+
+
 		});
 	}
 
