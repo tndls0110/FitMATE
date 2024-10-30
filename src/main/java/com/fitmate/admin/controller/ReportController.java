@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -43,6 +44,18 @@ public class ReportController {
 		page = "admin_reportDetail";
 		//main_controller.checkPermit(model, session);
 		model.addAttribute("info", report_service.detail(report_idx));
+		model.addAttribute("status", report_service.reportStatus());
+		model.addAttribute("progress", report_service.reportProgress(report_idx));
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_reportDetail.do")
+	public String confirmReport(@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_reportDetail.go?report_idx="+params.get("report_idx");
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		report_service.confirmReport(params, admin_idx);
 		return page;
 	}
 

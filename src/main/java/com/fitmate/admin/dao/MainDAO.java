@@ -17,5 +17,8 @@ public interface MainDAO {
     int getidx(String admin_id);
 
     // 대시보드 > 공지사항 목록
-    List<DashboardDTO> dashboardList();
+    List<DashboardDTO> dashboardList1();
+
+    // 대시보드 > 신고 목록
+    List<DashboardDTO> dashboardList2();
 }

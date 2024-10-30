@@ -68,20 +68,18 @@
                                 <option value="reporter_nick">신고자 닉네임</option>
                             </select>
                         </div>
-                        <div class="width70p">
+                        <div class="width80p">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
                                     <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
+                                    <button type="button" onclick="location.href='admin_reportList.go'" class="textbtn refresh">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
                                 </div>
                                 <div class="width20p">
                                     <input type="submit" onclick="pageCall(1)" value="검색" class="mainbtn full flex_right" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="width10p">
-                            <button type="button" onclick="location.href='admin_reportList.go'" class="textbtn full">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
                         </div>
                     </div>
                 </div>

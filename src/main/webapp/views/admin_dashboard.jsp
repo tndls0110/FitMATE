@@ -36,15 +36,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${notice}" var="list1">
+                    <c:forEach items="${notice}" var="notice">
                         <tr>
-                            <td class="left">${list1.notice_cont}</td>
-                            <td>${list1.notice_regdate}</td>
+                            <td class="left">${notice.notice_cont}</td>
+                            <td>${notice.notice_regdate}</td>
                             <td>
-                                <c:if test="${list1.notice_show == 1}">
+                                <c:if test="${notice.notice_show == 1}">
                                     <button class="mainbtn minbtn">게시중</button>
                                 </c:if>
-                                <c:if test="${list1.notice_show == 0}">
+                                <c:if test="${notice.notice_show == 0}">
                                     <button class="subbtn minbtn">게시안함</button>
                                 </c:if>
                             </td>
@@ -54,14 +54,48 @@
                 </table>
                 <button onclick="location.href='admin_notice.go'" class="mainbtn full">공지사항 더 보기</button>
             </div>
-            <div class="contents report"></div>
+            <div class="contents report">
+                <table>
+                    <colgroup>
+                        <col width="auto" />
+                        <col width="110px" />
+                        <col width="80px" />
+                        <col width="80px" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>내용</th>
+                        <th>신고유형</th>
+                        <th>신고일시</th>
+                        <th>처리상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${report}" var="report">
+                        <tr>
+                            <td class="left">${report.subject}</td>
+                            <td class="left">${report.reportr_con}</td>
+                            <td>${report.report_date}</td>
+                            <td>
+                                <c:if test="${report.report_prog == 1}">
+                                    <button class="cautionbtn minbtn">${report.report_state}</button>
+                                </c:if>
+                                <c:if test="${report.report_prog == 2}">
+                                    <button class="mainbtn minbtn">${report.report_state}</button>
+                                </c:if>
+                                <c:if test="${report.report_prog >=3}">
+                                    <button class="subbtn minbtn">${report.report_state}</button>
+                                </c:if>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <button onclick="location.href='admin_reportList.go'" class="mainbtn full">신고내역 더 보기</button></div>
         </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script>
-    var msg = '${msg}';
-</script>
 </html>

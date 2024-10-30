@@ -1,6 +1,7 @@
 package com.fitmate.admin.service;
 
 import com.fitmate.admin.dao.ReportDAO;
+import com.fitmate.admin.dto.RegReportDTO;
 import com.fitmate.admin.dto.ReportDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,5 +36,19 @@ public class ReportService {
 
     public ReportDTO detail(String report_idx) {
         return report_dao.detail(report_idx);
+    }
+
+    public List<RegReportDTO> reportStatus() {
+        return report_dao.reportStatus();
+    }
+
+    public List<ReportDTO> reportProgress(String report_idx) {
+        return report_dao.reportProgress(report_idx);
+    }
+
+    public void confirmReport(Map<String, String> params, int admin_idx) {
+        params.put("admin_idx", String.valueOf(admin_idx));
+        report_dao.confirmReport(params);
+        report_dao.updateReport(params);
     }
 }

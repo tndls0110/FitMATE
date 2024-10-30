@@ -37,13 +37,17 @@
                         <th>신고 번호</th>
                         <td>${info.report_idx}</td>
                         <th>신고자 아이디(닉네임)</th>
-                        <td>${info.reporter_id} (${info.reporter_nick})</td>
+                        <td>
+                            <a href="admin_userDetail.go?user_id=${info.reporter_id}" target="_blank">${info.reporter_id} (${info.reporter_nick})</a>
+                        </td>
                     </tr>
                     <tr>
                         <th>신고 내용</th>
                         <td>${info.reportr_con}</td>
                         <th>작성자 아이디(닉네임)</th>
-                        <td>${info.reported_id} (${info.reported_nick})</td>
+                        <td>
+                            <a href="admin_userDetail.go?user_id=${info.reported_id}" target="_blank">${info.reported_id} (${info.reported_nick})</a>
+                        </td>
                     </tr>
                     <tr>
                         <th>신고 게시글</th>
@@ -67,31 +71,71 @@
                 </tbody>
             </table>
             <div class="writer">
-                <form>
+                <form action="admin_reportDetail.do" method="post">
+                    <input type="hidden" name="report_idx" value="${info.report_idx}" />
                     <div class="btn_flex">
                         <div class="width20p">
-                            <select name="searchType" class="mainbtn full">
-                                <option value="notice_cont" selected>내용</option>
-                                <option value="admin_name">작성자</option>
+                            <select name="reportd_prog" class="mainbtn full">
+                                <option value="0" selected>처리 과정</option>
+                                <c:forEach items="${status}" var="status">
+                                    <option value="${status.report_prog}">${status.report_state}</option>
+                                </c:forEach>
                             </select>
                         </div>
                         <div class="width80p">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
-                                    <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
+                                    <input type="text" name="reportd_con" class="full flex_left" placeholder="비고 란에 들어갈 문구를 입력하세요." />
                                 </div>
                                 <div class="width20p">
-                                    <input type="submit" value="검색" class="mainbtn full flex_right" />
+                                    <input type="button" onclick="confirmReport()" value="처리 상태 변경" class="mainbtn full flex_right" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+            <table>
+                <colgroup>
+                    <col width="120px">
+                    <col width="120px">
+                    <col width="160px">
+                    <col width="120px">
+                    <col width="auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>신고처리번호</th>
+                        <th>신고처리상태</th>
+                        <th>신고처리일시</th>
+                        <th>신고처리자</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>없음</td>
+                        <td><button class="cautionbtn minbtn">${info.report_state}</button></td>
+                        <td>${info.report_date}</td>
+                        <td>시스템</td>
+                        <td class="left"></td>
+                    </tr>
+                    <c:forEach items="${progress}" var="progress">
+                        <tr>
+                            <td>${progress.reportd_idx}</td>
+                            <td>${progress.report_state}</td>
+                            <td>${progress.reportd_date}</td>
+                            <td>${progress.admin_idx}</td>
+                            <td class="left">${progress.reportd_con}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
+<script src="resources/js/admin_reportDetail.js"></script>
 </html>
