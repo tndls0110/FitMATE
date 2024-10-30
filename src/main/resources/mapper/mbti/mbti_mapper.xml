@@ -11,7 +11,7 @@
 
 	<select id="getQuestion" parameterType="int" resultType="Map"> <!-- idx 기반으로 질문 idx 및 질문 내용 가져와야함 -->
 		SELECT mbtiq_idx as 질문번호,mbtiq_con as 질문내용 FROM mbti_q where mbtiq_idx
-		= #{Qidx};
+		= #{Qidx}
 	</select>
 
 	<select id="getOption" parameterType="int" resultType="Map">  <!-- idx 기반으로 문항별 idx, 문항별 내용, 성향 idx, 성향 이름, 점수 idx, 점수 가져오기 -->
