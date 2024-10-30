@@ -13,7 +13,27 @@
     </select>
     
     
-    <insert id="">
-
+    <insert id="schedule_write"
+            useGeneratedKeys="true"
+            keyColumn="journal_idx"
+            keyProperty="journal_idx"
+            parameterType="com.fitmate.schedule.dto.ScheduleDTO">
+        INSERT into schedule (user_id,journal_cate,journal_content, date,journal_start, journal_end)
+        values(#{user_id},#{journal_cate},#{journal_content},#{date},#{journal_start},#{journal_end});
     </insert>
+
+    <insert id="filewrite">
+        INSERT INTO board_file (category_idx,ori_filename,new_filename,board_idx)
+        VALUES ('1',#{ori_filename}, #{new_filename}, #{idx})
+    </insert>
+
+    <select id="getCrewEvents" resultType="Map">
+        SELECT DISTINCT plan_date FROM crew_plan cp
+    </select>
+
+
+
+
+
+
 </mapper>
