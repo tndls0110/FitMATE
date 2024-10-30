@@ -155,7 +155,7 @@
             </p>
         </div>
 
-        <div class="list">
+        <div class="list crew_info">
             <h3 class="capt">크루 입단날짜</h3>
             <p>
                 <input type="text" class="full" name="statusMessage" value="${profile.join_date}" readonly/>
@@ -190,7 +190,7 @@
             </p>
         </div>
 
-        <div class="list">
+        <div class="list crew_info">
             <!-- 모달 (경고창, 확인창) -->
             <button id="memberFire" class="mainbtn full red">추방하기</button>
         </div>
@@ -223,23 +223,38 @@
 <script src="resources/js/common.js"></script>
 
 <script>
-    // 모달을 보여주는 함수 생략하고 직접 이벤트에서 사용
-    // 0: 크루장X, 1: 크루장O 
-    var leader_chk = 1; // 일단은 크루장인것으로...
-    var crew_id = '${profile.crew_id}';     // 가져온 크루장ID
-    
-    // member_id => 전달받은 member_id(크루원 ID) 값으로 수정필요. 
+	//어떤 프로필정보를 불러올 것인가..?
+	// 0: 일반회원 프로필, 1: 크루회원 프로필
+	var profileType = '${profileType}';
+	
+	// 확인하고자하는 멤버ID
     var member_id = 'member07';
-    
-    // 크루 추방을 위한 크루원목록 idx
-    var member_idx = '${profile.member_idx}';
-    
-    // 크루장이 아닌경우 추방하기 버튼 삭제
-    // 크루장이 자기자신의 정보를 보고 있는 경우에도 추방버튼 삭제
-    if(leader_chk !== 1 || member_id === crew_id) {
-        $('#memberFire').remove();
-    }    
-    
+
+	// 크루회원 프로필인 경우
+	if(profileType === "1"){
+	
+	    // 크루장 체크 => 0: 크루장X, 1: 크루장O 
+	    var leader_chk = 1; // 일단은 크루장인것으로...
+	    var crew_id = '${profile.crew_id}';     // 가져온 크루장ID
+	    
+	    // 크루 추방을 위한 크루원목록 idx
+	    var member_idx = '${profile.member_idx}';
+	    
+	    // 크루장이 아닌경우 추방하기 버튼 삭제
+	    // 크루장이 자기자신의 정보를 보고 있는 경우에도 추방버튼 삭제
+	    if(leader_chk !== 1 || member_id === crew_id) {
+	        $('#memberFire').remove();
+	    }    
+	}else{  // 일반회원 프로필인 경우 
+		// 크루프로필 정보 삭제 (추방하기버튼, 크루입단 날짜)
+		$('.crew_info').remove();
+		// 타이틀 변경 크루원 프로필보기 => 일반유저 프로필보기
+		$('h2.title').html('일반유저<span>프로필 보기</span>')
+	}
+
+	
+	
+	/* 모달관련 이벤트 및 함수모음 */    
     // 크루원추방하기 버튼을 클릭시 모달 보여주기
     $('#memberFire').on('click', function() {
         $('#confirmationModal').fadeIn(); // 모달 표시

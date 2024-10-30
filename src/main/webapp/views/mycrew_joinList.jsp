@@ -161,7 +161,7 @@
                     <button type="button" class="mainbtn minbtn order_by" id="order_desc">닉네임&nbsp;&nbsp;<i class="bi bi-sort-down"></i></button>
                     <button type="button" class="mainbtn minbtn order_by" id="order_asc">닉네임&nbsp;&nbsp;<i class="bi bi-sort-down-alt"></i></button>
                 	</div>
-				</div>
+				</div> 
             <div class="profile_body">
                 <div class="profile_list">
                 </div>
@@ -285,7 +285,9 @@
                         }
 
                         profile_info = '<div class="profile relative ' +index+ '">'
-                                        + '<i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>' // 나중에 프로필로 변경.
+                        				+ '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +join_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
+                                        	+ '<i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>' // 나중에 프로필로 변경.
+                                        + '</a>'
                                         + '<div class="width_50">' 
                                             + '<div class="profile_right">'
                                                 + '<div>'
@@ -312,6 +314,7 @@
                         // leader정보인 경우 수락/거절버튼 숨김
                         if (index === 0) { // 크루장인 경우
                             $('.leader_chk' + index).show(); // 크루장 표시
+                            $('#profile_detail_set').attr('href', 'mycrew_memberDetail.go?id=' +leader_id+ '&profileType=0'); // 크루장 표시
                         } else { // 나머지 경우 (신청자)
                             $('.leader_chk' + index).hide(); // 크루장 표시 숨김
                         }

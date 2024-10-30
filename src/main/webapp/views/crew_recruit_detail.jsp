@@ -204,8 +204,8 @@
 
         div.comment_box button.mainbtn.minbtn {
             position: absolute;
-            top: 20%;
-    		right: 40%;
+            top: 10%;
+    		right: 12%;
         }
 
         div.body_content {
@@ -358,7 +358,7 @@
                         + '<span><i class="bi bi-calendar-event">' + detail.create_date + '</i></span>'
                         + '</div>';
                 
-                body = '<div class="body_content">' + detail.crew_content + '</div>'
+                body = '<div class="body_content">' + detail.subject + '</div>'
                      + '<div class="line">'
                    	 + '<button class="mainbtn full" id="crew_btn" type="button"></button>'
                      + '</div>';
