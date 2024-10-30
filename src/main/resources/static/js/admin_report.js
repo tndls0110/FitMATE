@@ -1,4 +1,4 @@
-// 사용자 목록 출력
+// 신고 목록 출력
 let showPage = 1;
 let cnt = 10;
 let vPages = 10;
@@ -12,7 +12,7 @@ pageShow(showPage);
 function pageShow(page) {
     $.ajax({
         type: 'post',
-        url: 'user_list.ajax',
+        url: 'report_list.ajax',
         data: {
             'page': page,
             'cnt': cnt,
@@ -43,29 +43,19 @@ function pageShow(page) {
 
 function listPrint(list, totalIdx, currentPage, offset) {
     let tags = '';
-
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
-        tags += '<td class="left">';
-        tags += '<a href="admin_userDetail.go?user_id='+list[i].user_id+'">';
-        if (list[i].profile == '' || list[i].profile == null){
-            tags += '<i class="bi bi-person-circle"></i> ';
+        tags += '<td class="left">'+list[i].내용+'</td>';
+        tags += '<td>'+list[i].신고유형+'</td>';
+        tags += '<td>'+list[i].신고자+'</td>';
+        tags += '<td>'+list[i].작성자+'</td>';
+        tags += '<td>'+list[i].신고일시+'</td>';
+        if (list[i].상태 == 1){
+            tags += '<td><button class="mainbtn minbtn">게시중</button></td>';
         } else {
-            tags += '<div class="profile" style="background-image: url(\'/photo/'+list[i].profile+'\')"></div> ';
+            tags += '<td><button class="subbtn minbtn">게시안함</button></td>';
         }
-        tags += list[i].user_id+' ('+list[i].nick+')';
-        tags += '</a></td>';
-        tags += '<td>'+list[i].email+'</td>';
-        tags += '<td>'+list[i].name+'</td>';
-        tags += '<td>게시글 수</td>';
-        if (list[i].last_regdate == ""){
-            tags += '<td>이용내역 없음</td>';
-        } else {
-            tags += '<td>'+list[i].last_regdate+'</td>';
-        }
-        tags += '<td>이용상태</td>';
-        tags += '<td>잔여제재일</td>';
         tags += '</tr>';
     }
     document.getElementsByTagName('tbody')[0].innerHTML = tags;

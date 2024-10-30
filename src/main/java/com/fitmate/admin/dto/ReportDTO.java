@@ -17,8 +17,16 @@ public class ReportDTO {
     private int admin_idx;
     private String reportd_con;
     private LocalDateTime reportd_date;
-
     private String reportr_con;
+    private String report_state;
+
+    private String subject;
+    private String content;
+    private LocalDateTime date;
+    private int status;
+    private int category_idx;
+    private String category_name;
+    private int crew_idx;
 
     public int getReport_idx() {
         return report_idx;
@@ -58,6 +66,30 @@ public class ReportDTO {
     }
     public String getReportr_con() {
         return reportr_con;
+    }
+    public String getReport_state() {
+        return report_state;
+    }
+    public String getSubject() {
+        return subject;
+    }
+    public String getContent() {
+        return content;
+    }
+    public LocalDateTime getDate() {
+        return date;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public int getCategory_idx() {
+        return category_idx;
+    }
+    public String getCategory_name() {
+        return category_name;
+    }
+    public int getCrew_idx() {
+        return crew_idx;
     }
 
     public void setReportr_con(String reportr_con) {
@@ -99,5 +131,28 @@ public class ReportDTO {
     public void setReport_idx(int report_idx) {
         this.report_idx = report_idx;
     }
-
+    public void setReport_state(String report_state) {
+        this.report_state = report_state;
+    }
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public void setCategory_idx(int category_idx) {
+        this.category_idx = category_idx;
+    }
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+    public void setCrew_idx(int crew_idx) {
+        this.crew_idx = crew_idx;
+    }
 }
