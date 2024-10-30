@@ -11,12 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fitmate.crew.dto.CrewJoinDTO;
-import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.crew.service.CrewMemberService;
 
 @Controller
@@ -37,9 +35,9 @@ public class CrewMemberController {
 	// 크루 가입신청자 목록
 	@PostMapping(value = "/mycrew_joinList.ajax")
 	@ResponseBody
-	public List<CrewJoinDTO> joinList(String crew_idx){
+	public List<CrewJoinDTO> joinList(String crew_idx, Boolean order, String searchFilter, String searchKeyword){
 		
-		List<CrewJoinDTO> list = crewmember_service.joinList(crew_idx);
+		List<CrewJoinDTO> list = crewmember_service.joinList(crew_idx, order, searchFilter, searchKeyword);
 		
 		return list;
 	}
@@ -58,37 +56,6 @@ public class CrewMemberController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("success", success);
         
-		return map;
-	}
-	
-	
-	// 2024-10-30 추가 - 크루원 프로필 상세보기
-	@RequestMapping(value = "/mycrew_memberDetail.go")
-	public String memberDetail(String id, Model model) {
-		
-		CrewMemberProfileDTO memberProfile = crewmember_service.memberDetail(id);
-		
-		model.addAttribute("profile", memberProfile);
-		
-		return "mycrew_memberDetail"; 
-	}
-	
-	
-	@PostMapping(value = "/crewMemberFire.ajax")
-	@ResponseBody
-	public Map<String, Object> memberFire(String member_idx){
-		boolean success = false;
-		
-		int row = crewmember_service.memberFire(member_idx); 
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		if(row > 0) {
-			success = true;
-		}
-		
-		map.put("success", success);
-		
 		return map;
 	}
 	
