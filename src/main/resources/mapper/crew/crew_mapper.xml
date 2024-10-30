@@ -15,7 +15,7 @@ A.crew_idx,
 <!--    게시글idx    -->
 I.board_idx,
 <!--    크루소개글    -->
-CB.content AS crew_content,
+CB.subject,
 <!--    활동지역 시단위    -->
 R.region_name,
 <!--    활동지역 구단위    -->
@@ -56,7 +56,7 @@ A.crew_idx,
 <!--    게시글idx    -->
 I.board_idx,
 <!--    크루소개글    -->
-CB.content AS crew_content,
+CB.subject,
 <!--    활동지역 시단위    -->
 R.region_name,
 <!--    활동지역 구단위    -->

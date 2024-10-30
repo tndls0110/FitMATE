@@ -383,7 +383,7 @@
             + '</a>';
             
       // Content: 크루 소개글         
-      content = '<div class="recruit_content">' + item.crew_content + '</div>';
+      content = '<div class="recruit_content">' + item.subject + '</div>';
       
       // Info: 크루원 수, 활동지역
       info = '<div class="recruit_info">'

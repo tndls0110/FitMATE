@@ -77,8 +77,6 @@ public class CrewController {
 	}
 	
 	
-	
-	
 	// 1. 크루검색
 	@RequestMapping(value = "/crew_search")
 	public String crewSearch(Model model) {

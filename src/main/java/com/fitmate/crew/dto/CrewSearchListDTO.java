@@ -11,7 +11,7 @@ public class CrewSearchListDTO {
 	// 게시글idx
 	private int board_idx;
 	// 크루 소개글
-	private String crew_content;
+	private String subject;
 	// 활동지역 시단위
 	private String region_name;
 	// 활동지역 구단위 
@@ -113,11 +113,12 @@ public class CrewSearchListDTO {
 	public void setLeader_mbti(String leader_mbti) {
 		this.leader_mbti = leader_mbti;
 	}
-	public String getCrew_content() {
-		return crew_content;
+	public String getSubject() {
+		return subject;
 	}
-	public void setCrew_content(String crew_content) {
-		this.crew_content = crew_content;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
+	
 	
 }
