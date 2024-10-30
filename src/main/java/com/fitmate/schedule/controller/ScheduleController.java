@@ -23,12 +23,10 @@ public class ScheduleController {
 		return "schedule";
 	}
 
-	@GetMapping (value = "/get_jounalevents.ajax")
+	@GetMapping (value = "/get_totalevents.ajax")
 	@ResponseBody
 	public Map<String,Object> getEvents() {
-		Map<String,Object> event_day = new HashMap<String,Object>();
-		List<Map<String,Object>> events_day = s_service.getEvents();
-		event_day.put("date", events_day);
+		Map<String,Object> event_day =  s_service.getEvents();
 		return event_day;
 	}
 
@@ -48,14 +46,15 @@ public class ScheduleController {
 		return "schedule_write";
 	}
 
-	@PostMapping (value = "/schedule.go")
-	public String schedule_write(MultipartFile[] files, @RequestParam String content) {
+	@PostMapping (value = "/schedule_write.do")
+	public String schedule_write(MultipartFile[] files, @RequestParam Map<String,String> content) {
+		logger.info("schedule_write 컨트롤러 도착");
+
 		//세션으로 나중에 바꾸기
 		String id = "member01";
-
-		logger.info("files 길이 :",files.length);
-		s_service.schedule_write(files,id,content);
-
+		logger.info("content:{}",content);
+		logger.info("files 길이 :{}",files.length);
+		s_service.schedule_write(files,content,id);//순서 지키기
 
 		return "redirect:/schedule.go";
 	}

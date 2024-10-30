@@ -145,20 +145,20 @@
       margin: 123px 3px 4px 316px;
     }
 
-    #date{
+    #total_date{
       margin:  45px 0px 10px 0px;
     }
 
-    .cate{
+    #cate{
       padding: 13px;
       border: 1px solid #282b34;
       border-radius: 6px;
       background-color: #282b34;
       color: #e9ecef;
       font-size: 11px;
-      margin: 25px 0px -16px -19px;
+      margin: 25px 0px -17px -42px;
       height: 45px;
-      width: 100px;
+      width: 125px;
     }
     input[type="file"]{
       display: none;
@@ -223,11 +223,13 @@
       border: 1px solid #282b34;
     }
 
+    .preview{
+      margin-right: 10px;
+    }
+
     .image_total{
       display: flex;
-      margin-left: 0px;
-      margin-top: 25px;
-      margin-bottom: 22px;
+      margin : 25px 10px 22px 0px;
       border-radius: 3px;
     }
 
@@ -245,14 +247,14 @@
       height: 24px;
       margin : -26px -23px 0px 17px;
     }
-    .write{
+    #write{
       width: 404px;
       height: 50px;
       border-radius: 6px;
       background-color: rgba(4, 129, 135, 1);
       color: white;
       border: rgba(4, 129, 135, 1);
-      margin-top: 25px;
+      margin-top: 47px;
     }
 
     div.list{
@@ -283,8 +285,6 @@
       height: 100px;
     }
 
-
-
   </style>
 </head>
 <body>
@@ -293,31 +293,30 @@
   <!-- 운동일지는 nav1로, mbti만 nav5로 -->
   <div class="contents">
     <!-- class="full": width=100% -->
-    <form action="/schedule.go" method="POST" enctype="multipart/form-data">
+    <form action="/schedule_write.do" method="POST" enctype="multipart/form-data">
       <div class="list">
         <h3 class="capt">
           <div id = "category">
-            <select name="cate" class="cate">
+            <select name="cate" id ="cate" onchange = "onOptionChange(event)">
               <option value="default">크루/개인</option>
-              <option value="crew">크루</option>
-              <option value="individual">개인</option>
+              <option value="1">개인</option>
+              <option value="2">크루</option>
             </select>
           </div>
 
-          <div id = "date">
+          <div id = "total_date">
             <div class="date_title">날짜</div>
-            <p><input type="date" value = "2024-10-18"/></p>
+            <p><input type="date" name="date" id = "date" value = ""/></p>
             <div class="time_box">
               <div class="starttime_title">운동 시작 시간</div><div class="endtime_title">운동 종료 시간</div>
-              <div class="times"><input type = "time" class="start_time" value="09:00" onchange="onchange_check()"/><input type = "time"  class="end_time"value=""/></div>
+              <div class="times"><input type = "time" name="start_time" id ="start_time" value=""/><input type = "time" name="end_time"  id ="end_time" value=""/></div>
             </div>
           </div>
 
 
-
           <div class="journal">
             <div class="journal_name">일지</div>
-            <textarea id = "textarea" placeholder="최대 1000자까지 입력할 수 있습니다." onkeyup="word_count()"></textarea>
+            <textarea name="textarea" id = "textarea" placeholder="최대 1000자까지 입력할 수 있습니다." onkeyup="word_count()"></textarea>
             <div id="word_alert">1,000자를 초과하여 작성할 수 없습니다.</div>
             <div id = "words"><div class="count_words">0</div><div class="total_words">/1,000</div></div>
             <!--파일 버튼 커스텀 하는 법
@@ -332,9 +331,8 @@
             </div>
             <div class = "image_total">
             </div>
-
           </div>
-          <input type = "button" class = "write" value="작성하기">
+          <input type = "button" id = "write" value="작성하기">
         </h3>
       </div>
     </form>
@@ -347,35 +345,101 @@
 
 <script src="resources/js/common.js"></script>
 <script>
-  //이미지 미리보기
-  function readFile(input){
-    console.log(input.files);
-    var reader;
-    $('.image_total').empty(); //image div에 있는 내용 empty
 
-    //파일 분리하기
-    for(var file of input.files){
-    //파일 읽어오기
-      reader = new FileReader(); //파일 객체로부터 binary를 읽어올 수 있는 객체
-      reader.readAsDataURL(file); //파일 객체로부터 DATA URL을 읽어올 수 있음
-      reader.onload = function(e){ //파일 다 읽었으면 function 안의 내용 실행
-        $('.image_total').append('<img class="preview" src = "' + e.target.result+ '"/>');
-      }
+
+
+  //시간 찍어보기
+  //input 이벤트
+  //1. input 태그 내에서 변화하는 값을 알고 싶을 때 사용
+  //2. input 태그에 값을 입력할 때 실시간으로 값 반영
+  var start_time = '';
+  var end_time = '';
+  var change = '';
+  var date = '';
+  //날짜 찍어보기
+  document.getElementById('date').addEventListener('input',function(){
+    date = this.value;
+    console.log ("date : ", date);
+  });
+  //시작 시간
+  document.getElementById('start_time').addEventListener('input',function() {
+    start_time = this.value;
+    console.log("시작 시간:", start_time);
+  });
+
+  //끝나는 시간
+  document.getElementById('end_time').addEventListener('input',function(){
+    end_time = this.value;
+    console.log("끝난 시간:",end_time);
+  });
+
+  function onOptionChange(event){
+   change = event.target.value;
+    console.log('value : ' + change);
+    if(change == 1){
+      event.target.style.backgroundColor = 'rgba(4, 129, 135, 1)';
+    }else if(change == 2){
+      event.target.style.backgroundColor = 'orange';
+    }else if(change == 'default'){
+      event.target.style.backgroundColor = 'rgba(40, 43, 52, 1)';
+
     }
+
   }
 
-  function delete_img(input){
-    console.log(input);
-    console.log(input);
-  }
+  $('#write').click(function(){
+    console.log("시작 시간:", start_time);
+    console.log("끝난 시간:",end_time);
+    console.log('value : ' + change);
 
-  function onchange_check(){
-    var time_val = $('.start_time').attr('value');
-    console.log('time_val:{}',time_val);
-  }
+    //조건 별 alert
+    if(change == "default" || change == ""){
+      alert('크루/개인 카테고리를 선택해주세요!');
+    }else if(date == ""){
+      alert('운동한 날짜를 선택해주세요!');
+    }else if (start_time == ""){
+      alert('시작 시간을 선택해주세요!');
+    }else if (end_time == "") {
+      alert('끝난 시간을 선택해주세요!');
+    }else if (start_time > end_time) {
+      alert('종료 시간은 시작 시간보다 빠를 수 없습니다');
+    }else{
+      $('form').submit();
+    }
+  });
 
+  /*function write(){
+    //카테고리 선택되어야 하고.. 만약 default면 alert
+
+    //날짜 선택되어야 함
+    //
+    //파일은 선택 - 데려오지 말기
+  }
+*/
+
+
+
+
+
+    /*function write(event){
+    // 카테고리 바뀔 때 값
+    var tag_selected = change;
+    console.log('tag_selected : ' + change);
+
+    //날짜 찍어보기
+
+
+
+    });*/
+
+
+
+
+
+  //글자 체크 + 제한 + 내용 뽑아오기
+  var content='';
   function word_count(){
-    var content = document.getElementById('textarea').value;
+    content = document.getElementById('textarea').value;
     console.log('content:',content);
     var content_length = content.length;
     console.log('content_length:'+ content_length);
@@ -391,10 +455,41 @@
       $('#word_alert').css({'content-visibility' : 'visible'}); //attr 바꾸기
     }
 
-    if(content_length <= 996){
+    if(content_length <= 999){
       $('#word_alert').css({'content-visibility' : 'hidden'});
+      $('.count_words').css({'color' : 'rgba(4, 129, 135, 1)'});
     }
   }
 
+
+
+
+
+
+
+  //이미지 미리보기
+  function readFile(input){
+    console.log(input.files);
+    var reader;
+    $('.image_total').empty(); //image div에 있는 내용 empty
+
+    //파일 분리하기
+    for(var file of input.files){
+      //파일 읽어오기
+      reader = new FileReader(); //파일 객체로부터 binary를 읽어올 수 있는 객체
+      reader.readAsDataURL(file); //파일 객체로부터 DATA URL을 읽어올 수 있음
+      reader.onload = function(e){ //파일 다 읽었으면 function 안의 내용 실행
+        $('.image_total').append('<img class="preview" src = "' + e.target.result+ '"/>');
+      }
+    }
+  }
+
+
+
+
+  /* function delete_img(input){
+     console.log(input);
+     console.log(input);
+   }*/
 </script>
 </html>
