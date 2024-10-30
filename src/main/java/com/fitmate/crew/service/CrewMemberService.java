@@ -89,9 +89,9 @@ public class CrewMemberService {
 
 
 	// 일반회원, 크루 멤버 프로필 상세보기
-	public CrewMemberProfileDTO memberDetail(String member_id, String profileType) {
+	public CrewMemberProfileDTO memberDetail(String member_id, String profileType, String crew_idx) {
 		
-		return crewmember_dao.memberDetail(member_id, profileType);
+		return crewmember_dao.memberDetail(member_id, profileType, crew_idx);
 		
 	}
 

@@ -137,21 +137,63 @@ WHERE comment_idx IN (SELECT comment_idx FROM comment WHERE board_idx = #{boardI
 ORDER BY date;
  -->
 
+<!-- 크루 입단여부 체크. -->
+<select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String">
+	SELECT * FROM crew_join WHERE join_id = #{currentId}
+</select>
+
+<!-- 크루 입단신청 -->
+<insert id="joinCrew">
+	INSERT INTO crew_join(crew_idx, join_id, status) VALUES(#{param1}, #{param2}, #{param3}) 
+</insert>
+
+<!-- 크루 입단신청 취소 -->
+<delete id="leaveCrew" parameterType="int">
+	DELETE FROM crew_join WHERE join_idx = #{join_idx}
+</delete>
+
+<!-- 문의 댓글작성 -->
+<insert id="askWrite" parameterType="com.fitmate.crew.dto.AskWriteDTO">
+	INSERT INTO comment(board_idx, comment_id, content) VALUES(#{board_idx}, #{comment_id}, #{content})
+</insert>
+
+<!-- 답변 대댓글작성 -->
+<insert id="replyWrite" parameterType="com.fitmate.crew.dto.ReplyWriteDTO">
+	INSERT INTO recomment(comment_idx, recomment_id, content) VALUES(#{comment_idx}, #{recomment_id}, #{content})
+</insert>
 
 
-<select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String"> SELECT * FROM crew_join WHERE join_id = #{currentId} </select>
-<insert id="joinCrew"> INSERT INTO crew_join(crew_idx, join_id, status) VALUES(#{param1}, #{param2}, #{param3}) </insert>
-<delete id="leaveCrew" parameterType="int"> DELETE FROM crew_join WHERE join_idx = #{join_idx} </delete>
-<insert id="askWrite" parameterType="com.fitmate.crew.dto.AskWriteDTO"> INSERT INTO comment(board_idx, comment_id, content) VALUES(#{board_idx}, #{comment_id}, #{content}) </insert>
-<insert id="replyWrite" parameterType="com.fitmate.crew.dto.ReplyWriteDTO"> INSERT INTO recomment(comment_idx, recomment_id, content) VALUES(#{comment_idx}, #{recomment_id}, #{content}) </insert>
-<update id="comment_update" parameterType="hashmap"> UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx} </update>
-<update id="recomment_update" parameterType="hashmap"> UPDATE recomment SET content = #{content} WHERE recomment_idx = #{comment_idx} </update>
-<delete id="comment_delete" parameterType="hashmap"> DELETE FROM comment WHERE comment_idx = #{comment_idx} </delete>
-<delete id="recomment_delete" parameterType="hashmap"> DELETE FROM recomment WHERE recomment_idx = #{comment_idx} </delete>
-<insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO"> insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3); </insert>
-<insert id="crew_post_create" useGeneratedKeys="true" keyColumn="board_idx" keyProperty="board_idx" parameterType="com.fitmate.crew.dto.CrewBoardDTO"> insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1); </insert>
-<insert id="crew_idx"> insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx}); </insert>
-<insert id="crew_leaderjoin"> insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id}); </insert>
-<update id="crew_create_rewrite"> update crew_board set content = #{content} where board_idx = #{board_idx} and category_idx = 1 </update>
-<update id="crew_create_rewrite_region"> update crew set regions_idx = #{regions_idx} where crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx = #{board_idx} ) </update>
+
+
+
+<update id="comment_update" parameterType="hashmap">
+	UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx} 
+</update>
+<update id="recomment_update" parameterType="hashmap">
+UPDATE recomment SET content = #{content} WHERE recomment_idx = #{comment_idx} 
+</update>
+<delete id="comment_delete" parameterType="hashmap">
+ DELETE FROM comment WHERE comment_idx = #{comment_idx} 
+</delete>
+<delete id="recomment_delete" parameterType="hashmap">
+DELETE FROM recomment WHERE recomment_idx = #{comment_idx}
+</delete>
+<insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO">
+insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3);
+</insert>
+<insert id="crew_post_create" useGeneratedKeys="true" keyColumn="board_idx" keyProperty="board_idx" parameterType="com.fitmate.crew.dto.CrewBoardDTO">
+insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1); 
+</insert>
+<insert id="crew_idx">
+insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
+</insert>
+<insert id="crew_leaderjoin">
+insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id});
+</insert>
+<update id="crew_create_rewrite">
+update crew_board set content = #{content} where board_idx = #{board_idx} and category_idx = 1
+</update>
+<update id="crew_create_rewrite_region">
+update crew set regions_idx = #{regions_idx} where crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx = #{board_idx} )
+</update>
 </mapper>

@@ -204,8 +204,8 @@
 
         div.comment_box button.mainbtn.minbtn {
             position: absolute;
-            top: 10%;
-    		right: 12%;
+            top: 20%;
+    		right: 40%;
         }
 
         div.body_content {
@@ -231,18 +231,65 @@
         	height: auto;
         	margin: 0;
         }  
+        #crew_leader {
+            color: white;
+            position: absolute;
+            bottom: -22%;
+    		left: -15%;
+            border: 2px solid white;
+            border-radius: 10px;
+            background-color: #048187; 
+            font-size: 20px;
+        }
+        
+        #crew_leader_min{
+       	    color: white;
+		    position: absolute;
+		    top: 15%;
+		    left: 16%;
+		    border: 2px solid white;
+		    border-radius: 10px;
+		    background-color: #048187;
+		    font-size: 16px;
+		    z-index: 10;
+        }
         
     </style>
 </head>
 <body>
-
     <% String idx = request.getParameter("idx"); %>
+    
     <div class="container">
         <c:import url="layout/leftnav_1.jsp"></c:import>
 
         <div class="contents narrow">
-            <div class="recruit_header"></div>
-            <div class="recruit_body"></div>
+            <div class="recruit_header">
+            	<i class="bi bi-person-circle" style="font-size: 60px;"></i>
+                <div class="recruit_right">
+	                <h2 class="title">${recruitHead.crew_name}</h2>
+	                <span class="text_area"><span class="txt_opacity">크루장</span><span>&nbsp;&nbsp;${recruitHead.leader_name}</span><span>&nbsp;( ${recruitHead.leader_mbti} )</span></span>
+	                <a id="profile_detail_set" href="mycrew_memberDetail.go?id=${recruitHead.leader_id}&profileType=1&idx=${recruitHead.crew_idx}"> <!-- 크루회원 프로필 상세보기 이동. -->
+	                	<div id="crew_leader" class="leader_chk">
+	                		<i class="bi bi-star-fill"></i>
+	                	</div>
+                	</a>
+                </div>
+                <div class="recruit_info">
+	                <span><i class="bi bi-geo-alt-fill">${recruitHead.region_name} ${recruitHead.regions_name}</i></span> 
+	                <span><i class="bi bi-people-fill">${recruitHead.member_count}</i></span>
+	                <span><i class="bi bi-fonts">${recruitHead.board_count}개</i></span> 
+	                <span><i class="bi bi-calendar-event">${recruitHead.create_date}</i></span>
+                </div>
+            </div>
+            
+            
+            <div class="recruit_body">
+            	<div class="body_content">${recruitHead.subject}</div>
+	            <div class="line">
+	            	<button class="mainbtn full" id="crew_btn" type="button"></button>
+	            </div>
+            </div>
+            
 
             <div class="recruit_footer">
                 <div class="comment_ask" id="commentAskSection">
@@ -303,7 +350,7 @@
     // 문의하기에 현재 유저ID넣어주기.
     $('#currentUserId').val(currentUserId);
     // 크루 idx
-    var crew_idx = 0;
+    var crew_idx = ${recruitHead.crew_idx};
     
     if (board_idx != '' && board_idx != null) {
         detail(board_idx);                    
@@ -311,57 +358,70 @@
         modal.showAlert('모집게시글 idx를 받아오지 못했습니다.');
     }
 
-    var header = '';
-    var body = '';
+    
+    var join_idx = '${join_idx}';        // 크루 입단신청목록 idx
+    var crewLeaderId = '${recruitHead.leader_id}'; // 크루장의 ID정보
+    var leader_chk = 0; // 0:일반유저, 1: 크루장
+
+    
+ 	// 크루장 체크
+    if(crewLeaderId === currentUserId){
+		leader_chk = 1;
+    }
+    
+ 	// 현재 유저가 크루입단 신청중인지여부 (0: 신청전/ 1: 신청중/ 2: 신청거절/ 3: 신청수락)
+    var apv_status = ${approval_status};
+    console.log('apv_status : ' + apv_status);
+    
+    
+ 	// 크루장인지 확인하여 버튼 처리
+    if (leader_chk === 1) {
+    	// 크루장인 경우 comment_area 크기 변경
+    	$('div.comment_area').css({
+    		'max-height': 610
+    	})
+    	
+        $('#crew_btn').text('신청자 관리하기').attr('onclick', 'approv_manage(' + leader_chk + ',' + crew_idx + ');'); // 크루장일 경우 버튼 텍스트 변경
+        // approve_manage클릭시 크루입단 신청유저관리 페이지로 이동하도록..
+        $('#commentAskSection').hide(); // 크루장일 경우 문의하기 섹션 숨김
+    } else { // 크루장이 아닐경우
+		console.log('apv_status : ' + apv_status);
+		switch (apv_status) {
+		// 입단 신청 처리 -> 입단 신청버튼
+		case 0:
+		case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');'); 
+				$('#crew_btn').attr('class', 'mainbtn full');
+			break;
+		// 신청중상태 -> 입단 취소버튼	
+		case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ');');
+				$('#crew_btn').attr('class', 'subbtn full');
+			break;
+		// 이미 크루원인 유저 (추후 크루 탈퇴하기정도 넣어줄 수 있을 듯 함.)
+		default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');');
+				 $('#crew_btn').attr('class', 'mainbtn full');
+			break;
+		}
+    }
+    
+    
+    
     var footer = '';
+    
     
     function detail(idx) {
         $.ajax({
             url: 'crew_recruit_detail.ajax',
             type: 'GET',
-            data: { 'idx': board_idx,              // 게시글 및 댓글정보를 가져오기 위함.
-            		'currentId' : currentUserId    // 크루입단 신청여부를 파악하기 위함.
-           		  },
+            data: { 
+            	'idx': board_idx,              // 게시글 및 댓글정보를 가져오기 위함.
+          	},
             dataType: 'JSON',
             success: function(data) {
                 console.log('data : ', data);
                 
-                var detail = data.recruitDetail;
-                var join_idx = data.join_idx;        // 크루 입단신청목록 idx
-                var crewLeaderId = detail.leader_id; // Ajax로 가져온 크루장의 ID정보
-                
-                var leader_chk = 0; // 0:일반유저, 1: 크루장
-                
-                // 크루장 체크
-                if(crewLeaderId === currentUserId){
-					leader_chk = 1;
-                }
-                
-                // 현재 유저가 크루입단 신청중인지여부 (0: 신청전/ 1: 신청중/ 2: 신청거절/ 3: 신청수락)
-                var apv_status = data.approval_status;
-                console.log('apv_status : ' + apv_status);
-                
-                crew_idx = detail.crew_idx;
-                
                 // 신고하기 모달인지 수정/삭제 모달인지 요소선택.
                 var modal = '';
                 
-                header = '<i class="bi bi-person-circle" style="font-size: 60px;"></i>' 
-                        + '<div class="recruit_right">'
-                        + '<h2 class="title">' + detail.crew_name + '</h2>'
-                        + '<span class="text_area"><span class="txt_opacity">크루장</span><span>&nbsp;&nbsp;' + detail.leader_name + '</span><span>&nbsp;(' + detail.leader_mbti + ')</span></span>'
-                        + '</div>'
-                        + '<div class="recruit_info">'
-                        + '<span><i class="bi bi-geo-alt-fill">' + detail.region_name + ' ' + detail.regions_name + '</i></span>' 
-                        + '<span><i class="bi bi-people-fill">' + detail.member_count + '</i></span>'
-                        + '<span><i class="bi bi-fonts">' + detail.board_count + '개</i></span>' 
-                        + '<span><i class="bi bi-calendar-event">' + detail.create_date + '</i></span>'
-                        + '</div>';
-                
-                body = '<div class="body_content">' + detail.subject + '</div>'
-                     + '<div class="line">'
-                   	 + '<button class="mainbtn full" id="crew_btn" type="button"></button>'
-                     + '</div>';
                 
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data.commentAll).each(function(idx, item) {
@@ -369,7 +429,9 @@
 				
 				    footer += '<div class="comment_box">'
 				        + '<div class="comment">'
+				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
 				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+				        + '</a>'
 				        + '<div class="recruit_right">'
 				        + '<h2 class="title"></h2>'
 				        + '<span class="text_area">'
@@ -389,10 +451,15 @@
 		                }
 				        
 				        footer += '<div class="comment_box">'
+				        	+ '<div id="crew_leader_min" class="leader_chk">'
+	                		+ '<i class="bi bi-star-fill"></i>'
+	                		+ '</div>'
 				            + '<i class="bi bi-arrow-return-right absolute"></i>'
 				            + '<div class="content_right">'
 				            + '<div class="comment right">'
+				            + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item_reply.recomment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
 				            + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+				            + '</a>'
 				            + '<div class="recruit_right">'
 				            + '<h2 class="title"></h2>'
 				            + '<span class="text_area">'
@@ -449,38 +516,8 @@
 				    
 				});
                 
-                $('.recruit_header').empty().append(header);
-                $('.recruit_body').empty().append(body);
                 $('.comment_area').empty().append(footer);
                 
-                // 크루장인지 확인하여 버튼 처리
-                if (leader_chk === 1) {
-                	// 크루장인 경우 comment_area 크기 변경
-                	$('div.comment_area').css({
-                		'max-height': 610
-                	})
-                	
-                    $('#crew_btn').text('신청자 관리하기').attr('onclick', 'approv_manage(' + leader_chk + ',' + crew_idx + ');'); // 크루장일 경우 버튼 텍스트 변경
-                    // approve_manage클릭시 크루입단 신청유저관리 페이지로 이동하도록..
-                    $('#commentAskSection').hide(); // 크루장일 경우 문의하기 섹션 숨김
-                } else { // 크루장이 아닐경우
-					console.log('apv_status : ' + apv_status);
-					switch (apv_status) {
-					// 입단 신청 처리 -> 입단 신청버튼
-					case 0:
-					case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');'); 
-							$('#crew_btn').attr('class', 'mainbtn full');
-						break;
-					// 신청중상태 -> 입단 취소버튼	
-					case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ');');
-							$('#crew_btn').attr('class', 'subbtn full');
-						break;
-					// 이미 크루원인 유저 (추후 크루 탈퇴하기정도 넣어줄 수 있을 듯 함.)
-					default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');');
-							 $('#crew_btn').attr('class', 'mainbtn full');
-						break;
-					}
-                }
             },
             error: function(e) {
                 console.log(e);

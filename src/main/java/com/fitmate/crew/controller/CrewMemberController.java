@@ -63,7 +63,7 @@ public class CrewMemberController {
 	
 	// 크루원/일반회원 프로필 상세보기 
 	@RequestMapping(value = "/mycrew_memberDetail.go")
-	public String memberDetail(String id, String profileType, Model model) {
+	public String memberDetail(String id, String profileType, String idx, Model model) {
 		String profileType_; // 0:일반유저 프로필, 1: 크루원 프로필
 		
 		// 프로필 타입을 전달받지 못한경우 => profileType 기본값: 0(일반유저)
@@ -73,7 +73,7 @@ public class CrewMemberController {
 			profileType_ = profileType;     // 프로필 타입 1: 크루원 프로필
 		}
 		
-		CrewMemberProfileDTO memberProfile = crewmember_service.memberDetail(id, profileType_);
+		CrewMemberProfileDTO memberProfile = crewmember_service.memberDetail(id, profileType_, idx);
 		model.addAttribute("profile", memberProfile);
 		
 		logger.info("가져온 profile 정보 : ", memberProfile);
