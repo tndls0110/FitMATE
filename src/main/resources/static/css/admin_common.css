@@ -280,6 +280,13 @@ button{
     cursor: pointer;
 }
 
+input[type="submit"] i,
+input[type="button"] i,
+button i{
+    font-size: 18px;
+    vertical-align: middle;
+}
+
 .btn_flex{
     width: inherit;
     margin: 14px -8px;
@@ -363,6 +370,12 @@ button{
     border: 1px solid #e9ecef;
     background-color: #e9ecef;
     color: #474747;
+}
+
+.disabledbtn{
+    border: 1px solid #474747;
+    background-color: #474747;
+    color: #e9ecef;
 }
 
 .textbtn{

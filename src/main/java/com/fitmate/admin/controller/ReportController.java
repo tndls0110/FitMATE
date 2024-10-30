@@ -39,11 +39,10 @@ public class ReportController {
 
 	// 신고 상세보기
 	@RequestMapping (value = "/admin_reportDetail.go")
-	public String reportDetail(){
-		//main_controller.checkPermit(model, session);
-		//int admin_idx = (int) session.getAttribute("loginIdx");
-		int admin_idx = 1;
+	public String reportDetail(String report_idx, Model model, HttpSession session) {
 		page = "admin_reportDetail";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("info", report_service.detail(report_idx));
 		return page;
 	}
 

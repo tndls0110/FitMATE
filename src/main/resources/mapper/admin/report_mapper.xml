@@ -6,28 +6,54 @@
 <mapper namespace="com.fitmate.admin.dao.ReportDAO">
 
     <!-- 신고 목록 -->
-    <select id="getlist" resultType="com.fitmate.admin.dto.ReportDTO">
-        SELECT * FROM report;
-    </select>
-
-    <!-- 공지사항 목록 -->
     <select id="allCount" resultType="int">
-        SELECT CEIL(COUNT(notice_idx) / #{param1}) FROM notice
+        SELECT CEIL(COUNT(report_idx) / #{param1}) FROM report
     </select>
 
     <select id="countIdx" resultType="int">
-        SELECT COUNT(notice_idx) FROM notice
+        SELECT COUNT(report_idx) FROM report
     </select>
 
     <select id="list" resultType="com.fitmate.admin.dto.ReportDTO">
         SELECT r.report_idx, b.subject, r.reporter_id, r.reported_id, r.report_date, r.report_prog,
-               (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
-                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
+            (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
+            (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
             (SELECT COUNT(f.file_idx) FROM board_file f WHERE f.board_idx = b.board_idx) AS 'file_cnt',
             (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
             (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state'
             FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
+            <where>
+                <if test="param4 != null and !param4.equals('') and param3.equals('subject')">
+                    subject LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('reported_id')">
+                    reported_id LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('reported_nick')">
+                    (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('reporter_id')">
+                    reporter_id LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('reporter_nick')">
+                    (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{param4}, '%')
+                </if>
+            </where>
             ORDER BY r.report_idx DESC LIMIT #{param1} OFFSET #{param2}
+    </select>
+
+    <!-- 신고 내역 상세 보기 -->
+    <select id="detail" resultType="com.fitmate.admin.dto.ReportDTO">
+        SELECT r.report_idx, b.subject, r.reporter_id, r.reported_id, r.report_date, r.report_prog,
+            (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
+            (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
+            (SELECT COUNT(f.file_idx) FROM board_file f WHERE f.board_idx = b.board_idx) AS 'file_cnt',
+            (SELECT f.new_filename FROM board_file f WHERE f.board_idx = b.board_idx) AS 'new_filename',
+            (SELECT f.ori_filename FROM board_file f WHERE f.board_idx = b.board_idx) AS 'ori_filename',
+            (SELECT COUNT(report_idx) FROM report WHERE board_idx = b.board_idx) AS 'report_cnt',
+            (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
+            (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state'
+            FROM report r JOIN crew_board b ON r.board_idx = b.board_idx WHERE report_idx = #{param}
     </select>
 
 </mapper>

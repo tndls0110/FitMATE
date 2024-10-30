@@ -144,7 +144,8 @@ table tfoot td{
 /* search */
 
 .search{
-    margin-top: 28px;
+    width: 930px;
+    margin: 28px 0 0;
 }
 
 .btn_flex.full{
@@ -153,4 +154,30 @@ table tfoot td{
 
 .search .btn_flex .btn_flex.narrow{
     margin: 0;
+}
+
+
+
+/* report_detail */
+
+.report_detail th,
+.report_detail td{
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.report_detail th{
+    font-size: 12px;
+}
+
+.report_detail th.larger{
+    font-size: 16px;
+    border-bottom: 1px solid #848484;
+
+}
+
+.report_detail td img{
+    max-width: 300px;
+    max-height: 300px;
 }

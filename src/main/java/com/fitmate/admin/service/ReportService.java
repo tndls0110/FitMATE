@@ -33,4 +33,7 @@ public class ReportService {
         return result;
     }
 
+    public ReportDTO detail(String report_idx) {
+        return report_dao.detail(report_idx);
+    }
 }

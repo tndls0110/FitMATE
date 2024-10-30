@@ -46,17 +46,27 @@ function listPrint(list, totalIdx, currentPage, offset) {
     for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
-        tags += '<td class="left">'+list[i].subject+'</td>';
-        tags += '<td>'+list[i].reportr_con+'</td>';
-        tags += '<td>'+list[i].reporter_id+'<br />('+list[i].reporter_nick+')</td>';
-        tags += '<td>'+list[i].reported_id+'<br />('+list[i].reported_nick+')</td>';
+        tags += '<td class="left">';
+        if (list[i].file_cnt > 0){
+            tags += '<i class="bi bi-images"></i> ';
+        }
+        tags += '<a href="admin_reportDetail.go?report_idx='+list[i].report_idx+'">'+list[i].subject+'</a></td>';
+        tags += '<td>';
+        if (list[i].reportr_con.length > 8){
+            tags += list[i].reportr_con.substring(0,8) +'…';
+        } else {
+            tags += list[i].reportr_con;
+        }
+        tags += '</td>';
+        tags += '<td>'+list[i].reporter_id+'</td>';
+        tags += '<td>'+list[i].reported_id+'</td>';
         tags += '<td>'+list[i].report_date+'</td>';
         switch (list[i].report_prog) {
             case 1:
-                tags += '<td><button class="mainbtn minbtn">'+list[i].report_state+'</button></td>';
+                tags += '<td><button class="cautionbtn minbtn">'+list[i].report_state+'</button></td>';
                 break;
             case 2:
-                tags += '<td><button class="cautionbtn minbtn">'+list[i].report_state+'</button></td>';
+                tags += '<td><button class="mainbtn minbtn">'+list[i].report_state+'</button></td>';
                 break;
             default:
                 tags += '<td><button class="subbtn minbtn">'+list[i].report_state+'</button></td>';
