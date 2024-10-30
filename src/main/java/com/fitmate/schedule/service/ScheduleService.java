@@ -113,4 +113,10 @@ public class ScheduleService {
 		}
 		return success;
 	}
+
+	public List<Map<String, Object>> crewplan_get(String date) {
+		logger.info("컨트롤러에서 전달받은 date :{}",date);
+
+		return s_dao.crewplan_get(date);
+	}
 }

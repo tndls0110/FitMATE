@@ -30,6 +30,11 @@
     <select id="getCrewEvents" resultType="Map">
         SELECT DISTINCT plan_date FROM crew_plan cp
     </select>
+    
+    <select id="crewplan_get" resultType="Map">
+        SELECT DISTINCT cp.plan_date,cp.plan_start,cp.plan_end,cp.plan_subject,cp.plan_place,c.name
+            FROM crew_plan cp inner join crew c on cp.crew_idx = c.crew_idx WHERE plan_date = #{date}
+    </select>
 
 
 
