@@ -82,8 +82,9 @@
 		.contents{
 			margin: 32px -28px;
 		}
+
 		.journal {
-			margin: 20px 0px 10px 0px;
+			margin: 20px 0px 360px 0px;
 		}
 
 		.journal_content {
@@ -99,16 +100,23 @@
 			flex-direction: row;
 			padding: 10px 10px;
 			font-weight: bold; /*굵은 글씨*/
+			padding: 15px 21px;
 		}
 
 		.journal_time{
 			margin-left: 9px;
+			margin-top: 2px;
+		}
+
+
+		.journal_date{
+			margin-top: 2px;
 		}
 
 		.journal_start_end {
 			display: flex;
 			flex-direction: row;
-			margin-left: 110px;
+			margin-left: 159px;
 		}
 
 		.journal_start, .journal_end {
@@ -131,11 +139,8 @@
 			margin : 0px 6px 0px -19px;
 		}
 
-		.journal {
-			margin-bottom: 360px;
-		}
 		.journal_content{
-			margin: 0px 0px 332px 0px;
+			margin: 3px 0px 384px 0px;
 		}
 		.journal_text {
 			margin: 10px 10px;
@@ -203,6 +208,19 @@
 			position: relative;
 		}
 
+		#top{
+			display: flex;
+		}
+		.crew_place{
+			margin-left: 250px;
+			margin-top: 6px;
+			color : orange;
+			display: flex;
+		}
+
+		.place_icon{
+			margin-right: 5px;
+		}
 
 	</style>
 
@@ -241,7 +259,9 @@
 					<div class="crew_schedule_title">크루 일정</div>
 
 					<div class="crew_schedule_content">
-						<div class="crew_schedule_time">09:20-06:00</div>
+						<div id = "top">
+							<div class="crew_schedule_time">09:20-06:00</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">헬스장 이름</div></div>
+						</div>
 						<div class="crew_schedule_content_detail">
 							<div class="circle">●</div>
 							&nbsp;&nbsp;&nbsp;
@@ -322,13 +342,17 @@
 		// 1. 캘린더 - 이벤트 날짜 가져오기 (개인 일정)
 		$.ajax({
 			type: 'GET',
-			url: 'get_jounalevents.ajax',
+			url: 'get_totalevents.ajax',
+			//서비스 단에서 개인 일지 일정 + 크루 일정 따로 가져오기
 			data: {},
 			dataType: 'JSON',
 			success: function(event_day) {
 				console.log('event_day:', event_day);
+				console.log('개인 일지:', event_day.date);
+				console.log('크루 일정:', event_day.crew_events);
 
-				// (이벤트 만들기) AJAX 응답에서 날짜를 반복 -> 이벤트 객체 생성
+
+				// (개인일정 이벤트 만들기) AJAX 응답에서 날짜를 반복 -> 이벤트 객체 생성
 				for (var dates of event_day.date) {
 					let event_Object = {
 						start: dates.date,
@@ -337,7 +361,21 @@
 					event_create.push(event_Object); // 이벤트 배열에 추가
 				}
 
-				console.log('event_create:', event_create); // 최종 이벤트 배열 확인
+				console.log('개인일정만 추가 event_create:', event_create); // 최종 이벤트 배열 확인
+
+
+				//(크루 일정 이벤트 만들기)
+				for(var crew_event of event_day.crew_events){
+					let event_Object = {
+						start :	crew_event.plan_date,
+						title : '2' //크루 일정
+					};
+					event_create.push(event_Object);
+				}
+
+				console.log('전체 일정 추가 event_create:', event_create); // 최종 이벤트 배열 확인
+
+
 
 				// 캘린더 설정
 				var calendarEl = document.getElementById('calendar');
@@ -360,11 +398,13 @@
 
 		});
 
-		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
+
+		//오늘 날짜
 		date = $('#date').html();
 
 		console.log('오늘 날짜:', date);
 
+		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
 		$.ajax({
 			type : 'GET',
 			url : '/journal_get.ajax',
@@ -378,6 +418,12 @@
 				console.log(e);
 			}
 		});
+
+
+
+		//처음 실행할 때 캘린더 안에 있는 날짜 기반으로 크루 일정 띄우기
+
+
 	});
 
 	function change_css(){
@@ -398,7 +444,22 @@
 
 	// 날짜 뽑아오기
 	var date;
-	$('td[aria-labelledby]').each(function(event){
+
+	$('#calendar').on('click','td[aria-labelledby]',function(evt){
+			date = $(this).attr('data-date');
+			console.log('캘린더로부터 뽑아온 date : {}' + date);
+			$('#date').html(date);
+
+			//뽑은 날짜 기반으로 개인 일정 가져오기
+			get_journal(date);
+
+			//뽑은 날짜 기반으로 크루 일정 가져오기
+			get_crewdate(date);
+	});
+
+
+	//날짜 뽑아오기 수정하기 전
+	/*$('td[aria-labelledby]').each(function(event){
 
 		this.addEventListener('click',function(evt){
 
@@ -413,7 +474,17 @@
 			get_journal(date);
 
 		});
-	});
+	});*/
+
+	function get_crewdate(date){
+		//date 매개변수로 전달해서 내용 가져오기
+		//가져올 내용 - plan_start, plan_end, crew_name,plan_subject,
+
+
+	}
+
+
+
 
 	function get_journal(date){
 		$.ajax({
@@ -424,6 +495,8 @@
 			success: function (journal) {
 				console.log(journal);
 				draw_journal(journal);
+
+
 			},
 			error : function (e){
 				console.log(e);
@@ -446,8 +519,13 @@
 				//time에서 초 잘라내기
 				var start_time = j_data['time(journal_start)'].toString();
 				var s_time = start_time.substring(0, 5);
+				console.log('start_time:',start_time);
+
 				console.log('s_time:', s_time);
+
 				var end_time = j_data['time(journal_end)'].toString();
+				console.log('end_time:',end_time);
+
 				var e_time = end_time.substring(0, 5);
 				console.log('e_time:', e_time);
 
