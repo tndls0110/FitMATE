@@ -1,5 +1,6 @@
 package com.fitmate.schedule.dao;
 
+import com.fitmate.schedule.dto.ScheduleDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +12,10 @@ public interface ScheduleDAO {
     List<Map<String,Object>> getEvents();
     List<Map<String, Object>> getJournal(String date, String id);
 
-    int schedule_write(MultipartFile[] files, String content);
 
-    int file_write(MultipartFile[] files, String content);
+    int schedule_write(ScheduleDTO scheduleDTO);
+
+    int filewrite(int idx, String ori_filename, String new_filename);
+
+    List<Map<String, Object>> getCrewEvents();
 }
