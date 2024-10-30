@@ -164,7 +164,12 @@
 
     $('.name_b').html(login_id);
 
+
+
+
     let saved_scores = {}; //여기는 let scores = new scores();
+    //let saved_scores = {'잔근육매니아' : 0}; 이런식으로 저장됨
+
     var max;
     window.onload = function initialLoad() {
 
