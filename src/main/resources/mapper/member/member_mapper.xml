@@ -16,7 +16,7 @@
 
     <!-- 유저 회원 가입 -->
     <select id="getRegion" resultType="com.fitmate.admin.dto.RegCountyDTO">
-        SELECT region_idx, region_name FROM region;
+        SELECT region_idx, region_name FROM region WHERE region_show = 1;
     </select>
 
     <select id="checknick" resultType="int">
@@ -24,7 +24,7 @@
     </select>
 
     <select id="getRegion2" resultType="com.fitmate.admin.dto.RegCountyDTO">
-        SELECT regions_idx, regions_name FROM region_sub WHERE region_idx = #{region_idx} AND regions_show
+        SELECT regions_idx, regions_name FROM region_sub WHERE region_idx = #{region_idx} AND regions_show = 1
     </select>
 
     <insert id="join" parameterType="map">

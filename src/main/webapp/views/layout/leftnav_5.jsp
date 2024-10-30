@@ -17,9 +17,6 @@
 		<li>
 			<a href="mycrew">내 크루</a>
 		</li>
-		<li>
-			<a href="message_list.go">메시지</a>
-		</li>
 		<li class="active">
 			<a href="member_profile.go">마이 페이지</a>
 		</li>
