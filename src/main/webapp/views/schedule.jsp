@@ -100,16 +100,23 @@
 			flex-direction: row;
 			padding: 10px 10px;
 			font-weight: bold; /*굵은 글씨*/
+			padding: 15px 21px;
 		}
 
 		.journal_time{
 			margin-left: 9px;
+			margin-top: 2px;
+		}
+
+
+		.journal_date{
+			margin-top: 2px;
 		}
 
 		.journal_start_end {
 			display: flex;
 			flex-direction: row;
-			margin-left: 110px;
+			margin-left: 159px;
 		}
 
 		.journal_start, .journal_end {
@@ -201,6 +208,19 @@
 			position: relative;
 		}
 
+		#top{
+			display: flex;
+		}
+		.crew_place{
+			margin-left: 250px;
+			margin-top: 6px;
+			color : orange;
+			display: flex;
+		}
+
+		.place_icon{
+			margin-right: 5px;
+		}
 
 	</style>
 
@@ -239,7 +259,9 @@
 					<div class="crew_schedule_title">크루 일정</div>
 
 					<div class="crew_schedule_content">
-						<div class="crew_schedule_time">09:20-06:00</div>
+						<div id = "top">
+							<div class="crew_schedule_time">09:20-06:00</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">헬스장 이름</div></div>
+						</div>
 						<div class="crew_schedule_content_detail">
 							<div class="circle">●</div>
 							&nbsp;&nbsp;&nbsp;
@@ -376,11 +398,13 @@
 
 		});
 
-		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
+
+		//오늘 날짜
 		date = $('#date').html();
 
 		console.log('오늘 날짜:', date);
 
+		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
 		$.ajax({
 			type : 'GET',
 			url : '/journal_get.ajax',
@@ -394,6 +418,12 @@
 				console.log(e);
 			}
 		});
+
+
+
+		//처음 실행할 때 캘린더 안에 있는 날짜 기반으로 크루 일정 띄우기
+
+
 	});
 
 	function change_css(){
@@ -420,8 +450,11 @@
 			console.log('캘린더로부터 뽑아온 date : {}' + date);
 			$('#date').html(date);
 
-			//get_crewdate(date);
+			//뽑은 날짜 기반으로 개인 일정 가져오기
 			get_journal(date);
+
+			//뽑은 날짜 기반으로 크루 일정 가져오기
+			get_crewdate(date);
 	});
 
 
@@ -443,6 +476,16 @@
 		});
 	});*/
 
+	function get_crewdate(date){
+		//date 매개변수로 전달해서 내용 가져오기
+		//가져올 내용 - plan_start, plan_end, crew_name,plan_subject,
+
+
+	}
+
+
+
+
 	function get_journal(date){
 		$.ajax({
 			type: 'GET',
@@ -452,6 +495,8 @@
 			success: function (journal) {
 				console.log(journal);
 				draw_journal(journal);
+
+
 			},
 			error : function (e){
 				console.log(e);
