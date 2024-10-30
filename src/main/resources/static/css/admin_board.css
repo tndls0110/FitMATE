@@ -181,3 +181,9 @@ table tfoot td{
     max-width: 300px;
     max-height: 300px;
 }
+
+.report_detail td.caution{
+    text-align: center;
+    color: #C52424;
+    font-weight: 700;
+}

@@ -66,6 +66,28 @@
                     </c:if>
                 </tbody>
             </table>
+            <div class="writer">
+                <form>
+                    <div class="btn_flex">
+                        <div class="width20p">
+                            <select name="searchType" class="mainbtn full">
+                                <option value="notice_cont" selected>내용</option>
+                                <option value="admin_name">작성자</option>
+                            </select>
+                        </div>
+                        <div class="width80p">
+                            <div class="btn_flex narrow">
+                                <div class="width80p">
+                                    <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
+                                </div>
+                                <div class="width20p">
+                                    <input type="submit" value="검색" class="mainbtn full flex_right" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
