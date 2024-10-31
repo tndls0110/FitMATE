@@ -18,4 +18,10 @@ public interface ScheduleDAO {
     int filewrite(int idx, String ori_filename, String new_filename);
 
     List<Map<String, Object>> getCrewEvents();
+
+    List<Map<String, Object>> crewplan_get(String date);
+
+    List<Map<String,String>> getfile(String date,String id);
+
+    // getfile(int idx);
 }
