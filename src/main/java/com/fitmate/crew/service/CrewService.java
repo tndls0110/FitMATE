@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.AskWriteDTO;
@@ -134,15 +135,9 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 
 	
 	// 모집글 상세조회
-	@Transactional
-	public Map<String, Object> recruitDetail(String idx, String currentId) {
+	public boolean recruitDetail(String idx, String currentId, Model model) {
 		int board_idx = 0;
-		int comment_idx = 0;
-		CrewReplyDTO replyDTO = null;
-		
 		int approval_status = 0; // 크루입단 신청여부 (0: 신청전 / 1: 신청/ 2: 거절/ 3: 수락)
-		
-		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if(idx != null && !idx.equals("")) {
 			board_idx = Integer.parseInt(idx);
@@ -150,14 +145,45 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 		// 1. 모집게시글 내용가져오기
 		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
-		map.put("recruitDetail", recruitDetailDTO);
+		
+		// 2. 크루입단신청 여부 가져오기. 
+		CrewApprovalDTO approval = crew_dao.crewApproval(currentId);
+		
+		// 값이 존재하면.. 크루입단 신청여부만
+		if(approval != null && approval.isValid()) {
+			approval_status = approval.getStatus();
+			
+			logger.info("approval_status : " + approval_status);
+			model.addAttribute("join_idx", approval.getJoin_idx());
+		}else { // 값이 존재하지 않으면... 크루입단 신청전
+			approval_status = 0; // 신청전
+		}  
+		
+		model.addAttribute("recruitHead", recruitDetailDTO);
+		model.addAttribute("approval_status", approval_status);
+		
+		return true;
+	}
+	
+	// 모집글 댓글조회
+	@Transactional
+	public Map<String, Object> recruitDetail(String idx) {
+		int board_idx = 0;
+		int comment_idx = 0;
+		CrewReplyDTO replyDTO = null;
 		
 		
-		// 2. 댓글 내용가져오기
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(idx != null && !idx.equals("")) {
+			board_idx = Integer.parseInt(idx);
+		}
+		
+		// 1. 댓글 내용가져오기
 		List<CrewAskDTO> commentDTO = crew_dao.ask(board_idx);
 		
 		for (CrewAskDTO crewAskDTO : commentDTO) {
-			// 3. 댓글 idx로 대댓글 내용가져오기.
+			// 2. 댓글 idx로 대댓글 내용가져오기.
 			comment_idx = crewAskDTO.getComment_idx();
 			
 			replyDTO = crew_dao.reply(comment_idx);
@@ -168,19 +194,6 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 			}
 		}
 		
-		// 3. 크루입단신청 여부 가져오기. 
-		CrewApprovalDTO approval = crew_dao.crewApproval(currentId);
-		
-		// 값이 존재하면.. 크루입단 신청여부만
-		if(approval != null && approval.isValid()) {
-			approval_status = approval.getStatus();
-			map.put("approval_status", approval_status);
-			logger.info("approval_status : " + approval_status);
-			
-			map.put("join_idx", approval.getJoin_idx());
-		}else { // 값이 존재하지 않으면... 크루입단 신청전
-			approval_status = 0; // 신청전
-		}  
 		
 		map.put("commentAll", commentDTO);
 		
@@ -280,6 +293,9 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 		return crew_dao.leaveCrew(join_idx);
 	}
+
+
+
 
 	
 	
