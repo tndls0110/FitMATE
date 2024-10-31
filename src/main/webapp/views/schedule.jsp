@@ -668,7 +668,7 @@
 				<%--<c:forEach items = ${files}--%>
 				var journal_idx = j_data['journal_idx'];
 				content += j_data['date'] + '</div><div class="journal_time">';
-				content += '<div class="journal"><div class = "modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="delete_journal('+j_data['journal_idx']+','+'"'+j_data['user_id']+'"'+')"></i>수정하기</div> <div class="delete" onclick="update_journal(` + j_data['journal_idx'] + `, '` + j_data['user_id'] + `')"><i class="bi bi-trash"></i>삭제하기</div><div class="idx">` + j_data['journal_idx'] + `</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">;
+				content += '<div class="journal"><div class = "modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="update_journal('+j_data['journal_idx']+','+'"'+j_data['user_id']+'"'+')"></i>수정하기</div> <div class="delete" onclick="delete_journal(` + j_data['journal_idx'] + `, '` + j_data['user_id'] + `')"><i class="bi bi-trash"></i>삭제하기</div><div class="idx">` + j_data['journal_idx'] + `</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">;
 				content += e_time + '</div>';
 				content += '<div class="journal_start_end">';
 				if (j_data['journal_cate'] == 1) {
