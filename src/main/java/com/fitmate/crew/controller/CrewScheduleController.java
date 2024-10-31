@@ -1,5 +1,9 @@
 package com.fitmate.crew.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -7,10 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fitmate.crew.dto.CrewScheduleDTO;
+import com.fitmate.crew.dto.CrewScheduleMDTO;
 import com.fitmate.crew.service.CrewScheduleService;
 
 @Controller
@@ -71,8 +81,95 @@ public class CrewScheduleController {
 		
 		crewschedule_service.crew_plan_create(days,crew_id,crew_idx,date,start_time,end_time,place,content,subject);
 	       
-		return "index123";
+		return "index";
+	}
+	
+	@GetMapping(value="/crew_plan_events.ajax")
+	@ResponseBody
+	public Map<String,Object> crew_get_plan(@RequestParam String crew_idx){
+		// getCrewEvents
+		logger.info("크루 이벤트 아작스 실행");
+		logger.info("crew idx = "+crew_idx);
+		Map<String,Object> crew_plan =  crewschedule_service.crew_get_plan(crew_idx);
+		return crew_plan;
 	}
 
-
+	@GetMapping(value="/crew_plan_detail.ajax")
+	@ResponseBody
+	public Map<String,Object> crew_plan_detail(@RequestParam String date,String crew_idx){
+		// getCrewEvents
+		Map<String,Object> response = new HashMap<>();
+		logger.info("크루 플랜 디테일 아작스 실행");
+		logger.info("date = "+date);
+		logger.info("crew_idx = "+crew_idx);
+		 try {
+		        // 크루 플랜 세부 정보 가져오기
+			 	List<CrewScheduleDTO> crewPlan = crewschedule_service.crew_plan_detail(date, crew_idx);
+		        if (crewPlan != null && !crewPlan.isEmpty()) {
+		        	
+		        	
+		        	 List<Map<String, Object>> crewPlanDetails = new ArrayList<>();
+		        	for (CrewScheduleDTO crewScheduleDTO : crewPlan) {
+		        		/* 받아온 크루 일정 디테일 정보 확인
+		        		logger.info("크루 일정 가져온 값 = plan_idx: {}, crew_idx: {}, plan_date: {}, plan_place: {}, plan_subject: {}, plan_content: {}, plan_start: {}, plan_end: {}",
+		                        crewScheduleDTO.getPlan_idx(),
+		                        crewScheduleDTO.getCrew_idx(),
+		                        crewScheduleDTO.getPlan_date(),
+		                        crewScheduleDTO.getPlan_place(),
+		                        crewScheduleDTO.getPlan_subject(),
+		                        crewScheduleDTO.getPlan_content(),
+		                        crewScheduleDTO.getPlan_start(),
+		                        crewScheduleDTO.getPlan_end());
+		        		*/
+		        		
+		        		int planidx = crewScheduleDTO.getPlan_idx();
+		        		List<CrewScheduleMDTO> participants = crewschedule_service.crew_plan_members(planidx);
+		        		// 크루 일정 참가자 정보
+		        		// logger.info("크루 일정 참가자 가져온값 = {}",participants);
+		        		// 크루 플랜과 참가자 목록을 쌍으로 묶어 추가
+		                Map<String, Object> crewPlanDetail = new HashMap<>();
+		                crewPlanDetail.put("crewPlan", crewScheduleDTO);
+		                crewPlanDetail.put("participants", participants);
+		                crewPlanDetails.add(crewPlanDetail);
+		        	}
+	           
+		            response.put("crewPlanDetails", crewPlanDetails);
+		            response.put("status", "success");
+		        } else {
+		            response.put("status", "error");
+		            response.put("message", "크루 플랜을 찾을 수 없습니다.");
+		        }
+		    } catch (Exception e) {
+		        logger.error("크루 플랜 세부 정보 조회 중 오류 발생", e);
+		        response.put("status", "error");
+		        response.put("message", "내부 서버 오류입니다.");
+		    }
+		
+		return response;
+	}
+	
+	@PostMapping(value="/crew_plan_del.do")
+	public String crew_plan_del(@RequestParam Map<String,String> params) {
+		logger.info("삭제 실행");
+		logger.info("del {}",params);
+		String page = "redirect:/";
+		String plan_idx = params.get("plan_idx");
+		
+		crewschedule_service.crew_plan_del(plan_idx);
+		
+		return "index";
+	}
+	
+	@PostMapping(value="/crew_plan_join.do")
+	public String crew_plan_join(@RequestParam Map<String,String> params) {
+		logger.info("참가 실행");
+		logger.info("join {}",params);
+		String page = "redirect:/";
+		String plan_idx = params.get("plan_idx");
+		String user_id = params.get("user_id");
+		
+		crewschedule_service.crew_plan_join(plan_idx,user_id);
+		return "index";
+	}
+	
 }

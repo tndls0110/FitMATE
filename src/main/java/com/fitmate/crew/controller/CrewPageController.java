@@ -336,6 +336,14 @@ public class CrewPageController {
 			}
 		
 		
+		// 크루 메인페이지(대시보드) 가기
+		@GetMapping(value="/crew_main_page.go")
+		public String crew_main_page(@RequestParam String crew_idx) {
+			logger.info("크루 대시보드 실행");
+			logger.info("crew idx = "+crew_idx);
+			
+			return "crew_main_page";
+		}
 		
 		
 		
