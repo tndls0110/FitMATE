@@ -684,9 +684,8 @@
 				} else if (j_data['journal_cate'] == 2) {
 					content += '<div class="crew_tag">크루</div>';
 				}
+
 				//content 길이 제한
-
-
 				content += '<div class="journal_start">' + s_time + '</div>';
 				content += '<div class="journal_end">' + e_time + '</div><i class="bi bi-three-dots-vertical"></i></div></div>';
 				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>';
