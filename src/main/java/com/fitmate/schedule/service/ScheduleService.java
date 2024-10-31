@@ -2,6 +2,7 @@ package com.fitmate.schedule.service;
 
 import com.fitmate.schedule.dao.ScheduleDAO;
 import com.fitmate.schedule.dto.ScheduleDTO;
+import com.fitmate.schedule.dto.ScheduleFileDTO;
 import org.apache.tomcat.jni.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -31,9 +33,43 @@ public class ScheduleService {
 		return event_day;
 	}
 
-	public List<Map<String, Object>> getJournal(String date, String id) {
+	public Map<String,Object> getJournal(String date, String id) {
 		List<Map<String,Object>> journal_list = s_dao.getJournal(date,id);
-		return journal_list;
+
+		Map<String,Object> journal_total = new HashMap<>();
+		List<Map<String,String>> file = s_dao.getfile(date,id);
+		journal_total.put("content",journal_list);
+		journal_total.put("files",file);
+
+
+		/*if(!journal_list.isEmpty()){
+			//journal_list
+			logger.info("journal_list:{}",journal_list);
+			//그냥 가져와서 쓰면 안되나..?
+			*//*Map<String,Object> idx_entry = journal_list.get(5);*//*
+			*//*Set<String> key = idx_entry.keySet();
+			logger.info("key:{}",key);*//*
+			int idx = 0;
+			//list 분리
+			for(Map<String,Object> journal : journal_list){
+				logger.info("journal:{}",journal);
+				var keys = journal.keySet();
+				for(String key : keys){
+					logger.info("key:{}",key);
+
+					if(key.equals("journal_idx")){
+						idx = (int) journal.get(key);
+					}
+				}
+			}
+
+			logger.info("idx:{}",idx);
+
+
+
+		}*/
+		return journal_total;
+
 	}
 
 	public Boolean schedule_write(MultipartFile[] files, Map<String,String> content, String id) {
@@ -118,5 +154,18 @@ public class ScheduleService {
 		logger.info("컨트롤러에서 전달받은 date :{}",date);
 
 		return s_dao.crewplan_get(date);
+	}
+
+	public void delete_journal(int idx) {
+		//파일 정보 미리 저장
+		/*List<ScheduleFileDTO> file = s_dao.getfile(idx);*/
+
+		//글 삭제
+
+
+		//파일 삭제
+
+
+
 	}
 }

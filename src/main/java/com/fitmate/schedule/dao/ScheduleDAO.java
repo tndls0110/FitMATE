@@ -20,4 +20,8 @@ public interface ScheduleDAO {
     List<Map<String, Object>> getCrewEvents();
 
     List<Map<String, Object>> crewplan_get(String date);
+
+    List<Map<String,String>> getfile(String date,String id);
+
+    // getfile(int idx);
 }

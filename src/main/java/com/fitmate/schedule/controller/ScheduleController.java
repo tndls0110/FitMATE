@@ -34,9 +34,9 @@ public class ScheduleController {
 	@ResponseBody
 	public Map<String,Object> getJournal(String date) {
 		String id = "member01";
-		Map<String,Object> journal = new HashMap<String,Object>();
-			List<Map<String,Object>> journal_list =s_service.getJournal(date,id);
-			journal.put("content", journal_list);
+		Map<String,Object> journal = s_service.getJournal(date,id);
+			//글 idx 기반으로 file을 가져와야하는데.... 여기에서 글 idx
+
 		return journal;
 	}
 
@@ -54,6 +54,9 @@ public class ScheduleController {
 		String id = "member01";
 		logger.info("content:{}",content);
 		logger.info("files 길이 :{}",files.length);
+
+
+
 		s_service.schedule_write(files,content,id);//순서 지키기
 
 		return "redirect:/schedule.go";
@@ -65,9 +68,19 @@ public class ScheduleController {
 	public Map<String,Object> crewplan_get(String date) {
 		logger.info("컨트롤러에서 전달받은 date :{}",date);
 		Map<String,Object> crew = new HashMap<>();
-		//한 날짜에 crew plan은 여러 개 있을 수 있음
+
 		List<Map<String,Object>> crew_plans = s_service.crewplan_get(date);
+		//한 날짜에 crew plan은 여러 개 있을 수 있음
 		crew.put("content", crew_plans);
 		return crew;
+	}
+
+	@GetMapping (value = "/delete_journal.ajax")
+	@ResponseBody
+	public Map<String,Object> delete_journal(int idx) {
+		logger.info("받아온 idx : ", idx);
+		Map<String,Object> data = new HashMap<>();
+		s_service.delete_journal(idx);
+		return data;
 	}
 }
