@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,8 @@ import com.fitmate.crew.dao.CrewScheduleDAO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
 import com.fitmate.crew.dto.CrewScheduleDTO;
+import com.fitmate.crew.dto.CrewScheduleMDTO;
+import com.fitmate.schedule.dao.ScheduleDAO;
 
 @Service
 public class CrewScheduleService {
@@ -26,6 +30,8 @@ public class CrewScheduleService {
 	
 	// 크루원 목록 가져오기
 	@Autowired CrewPageDAO crewpage_dao;
+	// 크루 일정 가져오기
+	@Autowired ScheduleDAO s_dao;
 	
 	public void crew_plan_create(String[] days, String crew_id, String crew_idx, String date, String start_time,
 			String end_time, String place, String content, String subject) {
@@ -106,11 +112,11 @@ public class CrewScheduleService {
 		crewpage_dao.crew_lastdate_update(crewidx);
 		// 알람로직 실행하기
 		crew_plan_noti(crew_idx);
-		
-		
+	
 	}
-		// 일정작성시 해당 가입 크루원들에게 알람보내기
-		public void crew_plan_noti(String crew_idx) {
+	
+	// 일정작성시 해당 가입 크루원들에게 알람보내기
+	public void crew_plan_noti(String crew_idx) {
 		
 		CrewDTO crew = new CrewDTO();
 		int crewidx = Integer.parseInt(crew_idx);	
@@ -139,6 +145,34 @@ public class CrewScheduleService {
 			crewpage_dao.crew_notice_noti(member_id,board_idx,noti_content,noti_url,name);
 			}
 		
+	}
+	// 크루 계획 날짜 가져오기
+	public Map<String, Object> crew_get_plan(String crew_idx) {
+			Map<String,Object> event_day = new HashMap<>();
+			List<Map<String,Object>> crew_events = crewschedule_dao.crew_get_plan(crew_idx);
+			event_day.put("crew_events",crew_events);
+			return event_day;
+	}
+
+	public List<CrewScheduleDTO> crew_plan_detail(String date, String crew_idx) {
+		// 크루 일정들 가져오기
+		
+		return crewschedule_dao.crew_plan_detail(date,crew_idx);
+	}
+
+	public List<CrewScheduleMDTO> crew_plan_members(int planidx) {
+		// TODO Auto-generated method stub
+		return crewschedule_dao.crew_plan_members(planidx);
+	}
+
+	public int crew_plan_del(String plan_idx) {
+		return crewschedule_dao.crew_plan_del(plan_idx);
+		
+	}
+
+	public int crew_plan_join(String plan_idx, String user_id) {
+		// TODO Auto-generated method stub
+		return crewschedule_dao.crew_plan_join(plan_idx,user_id);
 	}
 
 }
