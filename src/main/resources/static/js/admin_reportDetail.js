@@ -6,3 +6,12 @@ function confirmReport() {
         document.getElementsByTagName('form')[0].submit();
     }
 }
+
+// 처리 완료시 작성 폼 감추기
+hideWriter();
+function hideWriter() {
+    if (report_prog > 2){
+        console.log(report_prog);
+        document.getElementsByClassName('writer')[0].classList.add('hide');
+    }
+}

@@ -22,6 +22,7 @@ public class ReportDTO {
     private String reportr_con;
     private String report_state;
     private int report_cnt;
+    private int report_cntdupl;
 
     private String subject;
     private String content;
@@ -94,6 +95,9 @@ public class ReportDTO {
     }
     public int getReport_cnt() {
         return report_cnt;
+    }
+    public int getReport_cntdupl() {
+        return report_cntdupl;
     }
     public String getSubject() {
         return subject;
@@ -187,6 +191,9 @@ public class ReportDTO {
     }
     public void setReport_cnt(int report_cnt) {
         this.report_cnt = report_cnt;
+    }
+    public void setReport_cntdupl(int report_cntdupl) {
+        this.report_cntdupl = report_cntdupl;
     }
     public void setSubject(String subject) {
         this.subject = subject;

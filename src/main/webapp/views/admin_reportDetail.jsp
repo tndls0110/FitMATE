@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         var index = 2;
+        var report_prog = '${info.report_prog}';
     </script>
 </head>
 <body>
@@ -35,7 +36,18 @@
                 <tbody>
                     <tr>
                         <th>신고 번호</th>
-                        <td>${info.report_idx}</td>
+                        <td>
+                            ${info.report_idx}&nbsp;&nbsp;
+                            <c:if test="${info.report_prog == 1}">
+                                <button class="cautionbtn minbtn">${info.report_state}</button>
+                            </c:if>
+                            <c:if test="${info.report_prog == 2}">
+                                <button class="mainbtn minbtn">${info.report_state}</button>
+                            </c:if>
+                            <c:if test="${info.report_prog > 3}">
+                                <button class="subbtn minbtn">${info.report_state}</button>
+                            </c:if>
+                        </td>
                         <th>신고자 아이디(닉네임)</th>
                         <td>
                             <a href="admin_userDetail.go?user_id=${info.reporter_id}" target="_blank">${info.reporter_id} (${info.reporter_nick})</a>
@@ -63,8 +75,13 @@
                     </tr>
                     <c:if test="${info.report_cnt > 1}">
                         <tr>
-                            <td colspan="4" class="caution">
-                                <p>이 글은 총 ${info.report_cnt}회 신고되었습니다.</p>
+                            <th></th>
+                            <td colspan="3" class="caution">
+                                <p>
+                                    <a href="admin_reportList.go?searchType=board_idx&keywords=${info.board_idx}" target="_blank" class="caution">
+                                        이 글은 동일한 신고 사유로 인해 ${info.report_cntdupl}회, 총 ${info.report_cnt}회 신고되었습니다.
+                                    </a>
+                                </p>
                             </td>
                         </tr>
                     </c:if>
@@ -73,6 +90,9 @@
             <div class="writer">
                 <form action="admin_reportDetail.do" method="post">
                     <input type="hidden" name="report_idx" value="${info.report_idx}" />
+                    <input type="hidden" name="board_idx" value="${info.board_idx}" />
+                    <input type="hidden" name="reportr_idx" value="${info.reportr_idx}" />
+                    <input type="hidden" name="reported_id" value="${info.reported_id}" />
                     <div class="btn_flex">
                         <div class="width20p">
                             <select name="report_prog" class="mainbtn full">

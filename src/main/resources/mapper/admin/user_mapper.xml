@@ -16,7 +16,8 @@
 
     <select id="userList" resultType="com.fitmate.member.dto.MemberDTO">
         SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.profile,
-            (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate'
+            (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate',
+            (SELECT COUNT(board_idx) FROM crew_board WHERE board_id = m.user_id AND category_idx IN (2, 3, 4)) AS 'board_cnt'
             FROM member m JOIN profile p ON m.user_id = p.user_id
             <where>
                 <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
