@@ -11,7 +11,12 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<style>
-
+		hr {
+			margin-top: 27px;
+			background:gray;
+			height:1px;
+			border:0;
+		}
 		/*전체 페이지에 스크롤 없애는 법*/
 		html, body {
 			overflow: hidden; /* 스크롤 숨기기 */
@@ -27,8 +32,6 @@
 			margin-left: 4px;
 			float : left;
 		}
-
-
 
 		.calendar {
 			width: 412px;
@@ -85,15 +88,13 @@
 		}
 
 		.journal {
-			margin: 20px 0px 360px 0px;
+			margin: 0px 2px 38px 0px;
 		}
 
 		.journal_content {
-			border-radius: 5px 5px 0px 0px;
+			border-radius: 6px 6px 6px 6px;
 			width: 500px;
-			height: 150px;
 			background-color: rgba(40, 43, 52, 1);
-			margin: 10px 0px;
 		}
 
 		.journal_datetime {
@@ -117,14 +118,18 @@
 		.journal_start_end {
 			display: flex;
 			flex-direction: row;
-			margin-left: 159px;
+			margin-left: 120px;
 		}
 
+		.bi-three-dots-vertical{
+			font-size: 19px;
+			margin-right: 28px;
+		}
 		.journal_start, .journal_end {
 			background-color: rgba(54, 57, 64, 1);
 			border-radius: 5px;
 			padding: 5px 5px;
-			margin:0px 5px;;
+			margin:0px 5px;
 		}
 
 		.crew_tag {
@@ -140,20 +145,27 @@
 			margin : 0px 6px 0px -19px;
 		}
 
-		.journal_content{
-			margin: 3px 0px 384px 0px;
-		}
+
 		.journal_text {
 			margin: 10px 10px;
 			width: 430px;
+			padding: 0px 0px 35px 8px;
 			/*긴 단어가 영역 넘어가면 줄 바꿈되도록 하기*/
 			word-wrap: break-word;
 		}
 
+		.prev_icon{
+			margin: 0px -47px 25px 15px;
+			font-size: 32px;
+		}
+		.next_icon{
+			margin: -242px -23px -16px 398px;
+			font-size: 32px;
+		}
 		.journal_image {
-			width: 500px;
-			height: 419px;
-			background-color: lightgray;
+			display: flex;
+			max-width: 500px;
+			margin-right: 14px;
 		}
 
 		.crew_schedule_content {
@@ -215,12 +227,47 @@
 		.crew_place{
 			margin-left: 250px;
 			margin-top: 6px;
-			color : orange;
+			color : white;
 			display: flex;
+			font-weight: 300;
 		}
 
 		.place_icon{
 			margin-right: 5px;
+		}
+		.crew_schedule_text{
+			margin-left: 20px;
+		}
+
+		.journal_image_list{
+			width: 1000px;
+			display: flex;
+			overflow: hidden;
+		}
+
+		.idx{
+			visibility : hidden;
+		}
+
+		.modal_body {
+			width: 180px;
+			background-color: rgba(233, 236, 239, 1);
+			height: 112px;
+			border-radius: 6px;
+			margin: 0px 0px -133px 247px;
+			position: relative;
+
+		}
+
+		.update,.delete{
+			color : rgba(40, 43, 52, 1);
+			text-align: center;
+			padding: 15px;
+			font-weight: 700;
+		}
+
+		.bi-trash,.bi-pencil-square{
+			color : rgba(40, 43, 52, 1);
 		}
 
 	</style>
@@ -251,6 +298,7 @@
 
 				<div class="journal_write_button" onclick="write_go()">일지 작성하기</div>
 
+
 			</div>
 
 
@@ -259,7 +307,7 @@
 				<div class="crew_schedule_title">크루 일정</div>
 				<div class="crew_schedule">
 
-					<div class="crew_schedule_content">
+					<%--<div class="crew_schedule_content">
 						<div id = "top">
 							<div class="crew_schedule_time">09:20-06:00</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">헬스장 이름</div></div>
 						</div>
@@ -270,10 +318,12 @@
 							&nbsp;&nbsp;&nbsp;
 							<div class="crew_schedule_text">모임장소에서 하체 운동</div>
 						</div>
-					</div>
-				</div>
+					</div>--%>
 
+				</div>
+				<hr/>
 				<div id = "journal_total">
+
 			<%--	<div class="journal">
 					<div class="journal_content">
 						<div class="journal_datetime">
@@ -422,7 +472,10 @@
 			dataType : 'JSON',
 			success : function(journal){
 				console.log('journal 가져오기 성공:',journal);
-				draw_journal(journal);
+
+				setTimeout(function() {
+					draw_journal(journal);
+				}, 100);
 			},
 			error : function(e){
 				console.log(e);
@@ -431,7 +484,19 @@
 
 
 		//처음 실행할 때 캘린더 안에 있는 날짜 기반으로 크루 일정 띄우기
-
+		$.ajax({
+			type : 'GET',
+			url : 'crewplan_get.ajax',
+			data : {'date' : date},
+			dataType : 'JSON',
+			success : function(crew){
+				console.log('크루 일정 가져오기 성공:',crew);
+				draw_crewPlan(crew);
+			},
+			error : function(e){
+				console.log(e);
+			}
+		});
 
 	});
 
@@ -534,9 +599,9 @@
 
 				var crew_name = crew_key['name'];
 				var crew_plan_date = crew_key['plan_date'];
-				var crew_plan_subject = crew_key['plan_subject'];
+				var crew_plan_subject = crew_key['plan_subject'].substring(0,10);
 				var crew_plan_start = crew_key['plan_start'].substring(0,5);
-				var crew_plan_end = crew_key['plan_end'].substring(0,5);;
+				var crew_plan_end = crew_key['plan_end'].substring(0,5);
 				var crew_plan_place = crew_key['plan_place'];
 
 				console.log('crew_name:{}',crew_name);
@@ -558,7 +623,6 @@
 
 	}
 
-
 	function get_journal(date){
 		$.ajax({
 			type: 'GET',
@@ -568,8 +632,6 @@
 			success: function (journal) {
 				console.log(journal);
 				draw_journal(journal);
-
-
 			},
 			error : function (e){
 				console.log(e);
@@ -592,19 +654,20 @@
 				//time에서 초 잘라내기
 				var start_time = j_data['time(journal_start)'].toString();
 				var s_time = start_time.substring(0, 5);
-				console.log('start_time:',start_time);
+				console.log('start_time:', start_time);
 
 				console.log('s_time:', s_time);
 
 				var end_time = j_data['time(journal_end)'].toString();
-				console.log('end_time:',end_time);
+				console.log('end_time:', end_time);
 
 				var e_time = end_time.substring(0, 5);
 				console.log('e_time:', e_time);
 
-
-
-				content += '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
+				//이미지 분리하기 - 이미지도 받아와야할 듯
+				<%--<c:forEach items = ${files}--%>
+				var journal_idx = j_data['journal_idx'];
+				content += '<div class="journal"><div class = "modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="delete_journal('+j_data['journal_idx']+','+j_data['user_id']+')"></i>수정하기</div> <div class="delete" onclick="update_journal('+j_data['journal_idx']+','+j_data['user_id']+')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">'+j_data['journal_idx']+'</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
 				content += '<div class="journal_start_end">';
@@ -613,15 +676,45 @@
 				} else if (j_data['journal_cate'] == 2) {
 					content += '<div class="crew_tag">크루</div>';
 				}
+				//content 길이 제한
 
 
 				content += '<div class="journal_start">' + s_time + '</div>';
-				content += '<div class="journal_end">' + e_time + '</div> </div></div>';
-				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>'
+				content += '<div class="journal_end">' + e_time + '</div><i class="bi bi-three-dots-vertical"></i></div></div>';
+				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>';
 
 				/*if(j_data['journal']) 사진 나중에 추가하기*/
-				content += '<div class="journal_image"></div></div>';
 
+
+				//사진 몇장인지에 따라서 image 추가되게 하기
+				var files = journal.files;
+				console.log('files:',files);
+
+				if(files.length > 0){
+						content += '<div class = "journal_image_list">';
+					for(var file of files){
+						if(j_data['journal_idx'] == file.board_idx){
+							console.log('file:',file);
+							console.log('journal_idx:',j_data['journal_idx']);
+							console.log('file.board_idx:',file.board_idx);
+
+								var ori_filename = file.ori_filename;
+							 	var new_filename = file.new_filename;
+
+								 //'<div class="prev_icon"><i class="bi bi-caret-left-fill"></i></div>'+
+								 content +='<img width="500px" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/>';
+							//	+'<div class="next_icon"><i class="bi bi-caret-right-fill"></i></div>';
+						}
+					}
+					content +='</div>';
+
+
+
+
+				}
+				content +=	'</div></div></div>';
+
+				$('.journal').css({'margin':'18px 2px 530px 0px'});
 			}
 		}
 		console.log('content: ', content);
@@ -632,6 +725,26 @@
 		location.href = "schedule_write.go";
 	}
 
+	function delete_journal(idx){
+		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
+		$.ajax({
+			type : 'GET',
+			url : 'delete_journal.ajax',
+			data : {'idx':idx},
+			dataType : 'JSON',
+			success : function(data){
+				console.log('success :', data.success);
+			}, error(e){
+				console.log(e);
+			}
+		})
+
+
+	}
+
+	function update_journal(idx){
+		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정수정
+	}
 
 
 </script>
