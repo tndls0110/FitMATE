@@ -361,6 +361,7 @@
     date = this.value;
     console.log ("date : ", date);
   });
+
   //시작 시간
   document.getElementById('start_time').addEventListener('input',function() {
     start_time = this.value;
@@ -407,31 +408,6 @@
       $('form').submit();
     }
   });
-
-  /*function write(){
-    //카테고리 선택되어야 하고.. 만약 default면 alert
-
-    //날짜 선택되어야 함
-    //
-    //파일은 선택 - 데려오지 말기
-  }
-*/
-
-
-
-
-
-    /*function write(event){
-    // 카테고리 바뀔 때 값
-    var tag_selected = change;
-    console.log('tag_selected : ' + change);
-
-    //날짜 찍어보기
-
-
-
-    });*/
-
 
 
 

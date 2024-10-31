@@ -32,5 +32,7 @@ public interface ScheduleDAO {
 
     int check_file(int idx);
 
+    List<Map<String, Object>> getJournal_detail(int idx);
+
     // getfile(int idx);
 }

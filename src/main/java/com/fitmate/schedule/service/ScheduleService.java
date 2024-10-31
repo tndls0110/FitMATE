@@ -193,4 +193,9 @@ public class ScheduleService {
 
 		return updated_rows;
 	}
+
+	public List<Map<String, Object>> getJournal_detail(int idx) {
+
+		return s_dao.getJournal_detail(idx);
+	}
 }

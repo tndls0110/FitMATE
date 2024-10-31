@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,5 +90,12 @@ public class ScheduleController {
 			data.put("success",success);
 		}
 		return data;
+	}
+
+	@GetMapping (value = "/update_journal.go")
+	public String update_journal(int idx, Model model){
+		List<Map<String,Object>> journal_detail = s_service.getJournal_detail(idx);
+		model.addAttribute("journal",journal_detail);
+		return "schedule_update";
 	}
 }
