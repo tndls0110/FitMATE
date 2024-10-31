@@ -29,7 +29,7 @@
                         <col width="auto" />
                         <col width="auto" />
                         <col width="100px" />
-                        <col width="100px" />
+                        <col width="60px" />
                         <col width="150px" />
                         <col width="80px" />
                         <col width="80px" />
@@ -73,6 +73,9 @@
                             <div class="btn_flex narrow">
                                 <div class="width80p">
                                     <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
+                                    <button type="button" onclick="location.href='admin_userList.go'" class="textbtn refresh">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
                                 </div>
                                 <div class="width20p">
                                     <input type="submit" onclick="pageCall(1)" value="검색" class="mainbtn full flex_right" />

@@ -24,8 +24,17 @@
     </select>
     
     <!-- 대시보드 > 공지사항 목록 -->
-    <select id="dashboardList" resultType="com.fitmate.admin.dto.DashboardDTO">
-        SELECT notice_cont, notice_regdate, notice_show FROM notice ORDER BY notice_idx DESC LIMIT 10 OFFSET 1
+    <select id="dashboardList1" resultType="com.fitmate.admin.dto.DashboardDTO">
+        SELECT notice_cont, notice_regdate, notice_show FROM notice ORDER BY notice_idx DESC LIMIT 10 OFFSET 0
+    </select>
+
+    <!-- 대시보드 > 신고 목록 -->
+    <select id="dashboardList2" resultType="com.fitmate.admin.dto.DashboardDTO">
+        SELECT r.report_idx, r.report_date, r.report_prog,
+            (SELECT reportr_con FROM report_reason WHERE reportr_idx = r.reportr_idx) AS 'reportr_con',
+            (SELECT subject FROM crew_board WHERE board_idx = r.board_idx) AS 'subject',
+            (SELECT report_state FROM report_progress WHERE report_prog = r.report_prog) AS 'report_state'
+            FROM report r ORDER BY r.report_idx DESC LIMIT 10 OFFSET 0
     </select>
 
 </mapper>

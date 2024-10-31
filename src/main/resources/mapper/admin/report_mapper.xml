@@ -38,22 +38,61 @@
                 <if test="param4 != null and !param4.equals('') and param3.equals('reporter_nick')">
                     (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{param4}, '%')
                 </if>
+                <if test="param4 != null and !param4.equals('') and param3.equals('board_idx')">
+                    r.board_idx = #{param4}
+                </if>
             </where>
             ORDER BY r.report_idx DESC LIMIT #{param1} OFFSET #{param2}
     </select>
 
     <!-- 신고 내역 상세 보기 -->
     <select id="detail" resultType="com.fitmate.admin.dto.ReportDTO">
-        SELECT r.report_idx, b.subject, r.reporter_id, r.reported_id, r.report_date, r.report_prog,
+        SELECT r.report_idx, b.subject, r.board_idx, r.reporter_id, r.reported_id, r.report_date, r.report_prog, r.reportr_idx,
             (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
             (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
             (SELECT COUNT(f.file_idx) FROM board_file f WHERE f.board_idx = b.board_idx) AS 'file_cnt',
             (SELECT f.new_filename FROM board_file f WHERE f.board_idx = b.board_idx) AS 'new_filename',
             (SELECT f.ori_filename FROM board_file f WHERE f.board_idx = b.board_idx) AS 'ori_filename',
             (SELECT COUNT(report_idx) FROM report WHERE board_idx = b.board_idx) AS 'report_cnt',
+            (SELECT COUNT(report_idx) FROM report WHERE board_idx = b.board_idx AND reportr_idx = r.reportr_idx) AS 'report_cntdupl',
             (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
             (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state'
             FROM report r JOIN crew_board b ON r.board_idx = b.board_idx WHERE report_idx = #{param}
     </select>
+
+    <select id="reportStatus" resultType="com.fitmate.admin.dto.RegReportDTO">
+        SELECT report_prog, report_state FROM report_progress LIMIT 3 OFFSET 1
+    </select>
+
+    <select id="reportProgress" resultType="com.fitmate.admin.dto.ReportDTO">
+        SELECT d.reportd_idx, d.reportd_con, d.reportd_date, d.admin_idx, d.report_prog,
+            (SELECT admin_name FROM admin WHERE admin_idx = d.admin_idx) AS 'admin_name',
+            (SELECT report_state FROM report_progress WHERE report_prog = d.report_prog) AS 'report_state'
+            FROM report_detail d WHERE d.report_idx = #{param}
+    </select>
+
+    <select id="getSameReport" resultType="String">
+        SELECT report_idx FROM report WHERE board_idx = #{board_idx} AND reportr_idx = #{reportr_idx}
+    </select>
+
+    <insert id="confirmReport" parameterType="map">
+        INSERT INTO report_detail (report_idx, report_prog, reportd_con, admin_idx) VALUES (#{report_idx}, #{report_prog}, #{reportd_con}, #{admin_idx});
+    </insert>
+
+    <update id="updateReport" parameterType="map">
+        UPDATE report SET report_prog = #{report_prog} WHERE report_idx = #{report_idx}
+    </update>
+
+    <update id="blind" parameterType="map">
+        UPDATE crew_board SET status = 4 WHERE board_idx = #{board_idx}
+    </update>
+
+    <select id="getCnt" parameterType="map">
+        SELECT DISTINCT reportr_idx, board_idx FROM report WHERE reported_id = #{reported_id} AND report_prog = #{report_prog}
+    </select>
+
+    <insert id="restrict">
+        INSERT INTO restriction (user_id, cleared_date) VALUES (#{param1}, #{param2});
+    </insert>
 
 </mapper>

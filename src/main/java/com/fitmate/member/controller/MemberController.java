@@ -15,6 +15,7 @@ import com.fitmate.member.service.MemberService;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,24 @@ import java.util.Map;
 public class MemberController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired MemberService member_service;
+	String page = "";
 
 	// 세션 체크
-	String page = "";
 	public void checkPermit(Model model, HttpSession session) {
 		if (session.getAttribute("loginId") == null) {
 			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
 			page = "member_login";
+		}
+	}
+
+	// 크루 이용 가능 여부 체크
+	public void checkPermitCrew(Model model, HttpSession session) {
+		String user_id = (String) session.getAttribute("loginId");
+		LocalDateTime cleared_date = member_service.getPermit(user_id);
+		LocalDateTime now = LocalDateTime.now();
+		if (cleared_date.isBefore(now)) {
+			model.addAttribute("msg", user_id+"님은 "+cleared_date+"까지 크루 기능을 이용하실 수 없습니다.");
+			page = "schedule";
 		}
 	}
 
@@ -45,7 +57,7 @@ public class MemberController {
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
-				page = "index";
+				page = "schedule";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -140,6 +152,7 @@ public class MemberController {
 	public String update(Model model, HttpSession session) {
 		page = "member_update";
 		checkPermit(model, session);
+		checkPermitCrew(model, session);
 		String user_id = (String) session.getAttribute("loginId");
 
 		// 프로필 불러오기

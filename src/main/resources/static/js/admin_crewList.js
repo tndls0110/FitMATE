@@ -1,6 +1,6 @@
 // 크루 목록 출력
 var showPage = 1;
-var cnt = 10;
+var cnt = 15;
 var vPages = 10;
 
 const searchParams = new URLSearchParams(window.location.search);

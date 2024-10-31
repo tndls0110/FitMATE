@@ -8,7 +8,7 @@
 }
 
 .mainbtn.full.heightDouble{
-    padding: 25px 0;
+    padding: 19px 0;
 }
 
 .counterContainer{
@@ -152,13 +152,32 @@ table tfoot td{
     width: 936px;
 }
 
-.search .btn_flex .btn_flex.narrow{
+.btn_flex .btn_flex.narrow{
     margin: 0;
+}
+
+.btn_flex .btn_flex.narrow div{
+    position: relative;
+}
+
+.refresh{
+    color: #8a8a8a;
+    position: absolute;
+    top: 3px;
+    right: -2px;
+}
+
+.refresh i{
+    font-size: 14px;
 }
 
 
 
 /* report_detail */
+
+.report_detail{
+    margin: 0 0 36px;
+}
 
 .report_detail th,
 .report_detail td{
@@ -182,8 +201,8 @@ table tfoot td{
     max-height: 300px;
 }
 
-.report_detail td.caution{
-    text-align: center;
+.report_detail td.caution,
+.report_detail a.caution{
     color: #C52424;
     font-weight: 700;
 }

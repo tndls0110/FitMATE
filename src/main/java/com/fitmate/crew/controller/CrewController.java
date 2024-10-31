@@ -49,7 +49,7 @@ public class CrewController {
 		logger.info("regions_idx {}",regions_idx);
 		logger.info("content {}",content);
 		*/
-		return "index";
+		return "index123";
 	}
 	
 	// 지역 상위 정보 가져오기
@@ -73,7 +73,7 @@ public class CrewController {
 	public String crew_create_rewrite(@RequestParam int regions_idx,@RequestParam String content,@RequestParam int board_idx) {
 		 crew_service.crew_create_rewrite(regions_idx,content,board_idx);
 		
-		return "index";
+		return "index123";
 	}
 	
 	

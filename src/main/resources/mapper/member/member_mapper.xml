@@ -74,4 +74,9 @@
         UPDATE member SET pw = #{pw} WHERE user_id = #{user_id}
     </update>
 
+    <!-- 크루 이용 가능 여부 체크 -->
+    <select id="getPermit" resultType="java.time.LocalDateTime">
+        SELECT cleared_date FROM restriction WHERE user_id = #{param} ORDER BY restr_idx DESC LIMIT 1
+    </select>
+
 </mapper>

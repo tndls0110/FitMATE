@@ -6,6 +6,10 @@
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<script>
+			var state = '${state}';
+			var msg = '${msg}';
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -39,8 +43,4 @@
 	</body>
 	<script src="resources/js/common.js"></script>
 	<script src="resources/js/member_login.js"></script>
-	<script>
-		var state = '${state}';
-		var msg = '${msg}';
-	</script>
 </html>
