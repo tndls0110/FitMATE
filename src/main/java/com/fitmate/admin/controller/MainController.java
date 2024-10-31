@@ -80,7 +80,8 @@ public class MainController {
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
 		//checkPermit(model, session);
-		model.addAttribute("notice", main_service.dashboardList());
+		model.addAttribute("notice", main_service.dashboardList1());
+		model.addAttribute("report", main_service.dashboardList2());
 		return page;
 	}
 

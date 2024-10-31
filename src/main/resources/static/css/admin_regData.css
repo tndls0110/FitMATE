@@ -49,7 +49,7 @@
 .noDesc.narrow li input[type=submit],
 .noDesc.narrow li input[type=button],
 .noDesc.narrow li button{
-    padding: 15px;
+    padding: 9px;
 }
 
 input.subbtn,

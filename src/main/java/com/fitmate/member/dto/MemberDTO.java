@@ -21,6 +21,8 @@ public class MemberDTO {
     private int mbtir_idx;
     private String mbtir_name;
     private LocalDateTime last_regdate;
+    private int board_cnt;
+    private int reported_cnt;
 
     public String getUser_id() {
         return user_id;
@@ -72,6 +74,12 @@ public class MemberDTO {
             return last_regdate.format(formatter);
         }
     }
+    public int getBoard_cnt() {
+        return board_cnt;
+    }
+    public int getReported_cnt() {
+        return reported_cnt;
+    }
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
@@ -117,5 +125,11 @@ public class MemberDTO {
     }
     public void setLast_regdate(LocalDateTime last_regdate) {
         this.last_regdate = last_regdate;
+    }
+    public void setBoard_cnt(int board_cnt) {
+        this.board_cnt = board_cnt;
+    }
+    public void setReported_cnt(int reported_cnt) {
+        this.reported_cnt = reported_cnt;
     }
 }

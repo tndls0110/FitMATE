@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -159,4 +160,8 @@ public class MemberService {
 		member_dao.updatepw(user_id, pw);
 	}
 
+	// 크루 이용 가능 여부 체크
+	public LocalDateTime getPermit(String user_id) {
+		return member_dao.getPermit(user_id);
+	}
 }

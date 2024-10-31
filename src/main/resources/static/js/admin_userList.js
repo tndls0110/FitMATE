@@ -1,6 +1,6 @@
 // 사용자 목록 출력
 let showPage = 1;
-let cnt = 10;
+let cnt = 15;
 let vPages = 10;
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -58,7 +58,7 @@ function listPrint(list, totalIdx, currentPage, offset) {
         tags += '</a></td>';
         tags += '<td>'+list[i].email+'</td>';
         tags += '<td>'+list[i].name+'</td>';
-        tags += '<td>게시글 수</td>';
+        tags += '<td>'+list[i].board_cnt+' 건</td>';
         if (list[i].last_regdate == ""){
             tags += '<td>이용내역 없음</td>';
         } else {
