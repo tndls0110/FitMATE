@@ -6,6 +6,12 @@
 		<title>FitMATE</title>
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<script>
+			var msg = '${msg}';
+			if (msg != ''){
+				modal.showAlert(msg);
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container">
