@@ -53,6 +53,9 @@
         SELECT count(*) FROM board_file where board_idx = #{idx} AND category_idx = '1';
     </select>
 
+    <select id="getJournal_detail" resultType="map">
+        SELECT * FROM schedule s where journal_idx = #{idx};
+    </select>
 
 
 

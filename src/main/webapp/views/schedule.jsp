@@ -675,9 +675,7 @@
 				<%--<c:forEach items = ${files}--%>
 				var journal_idx = j_data['journal_idx'];
 
-				content += '<div class="journal" value="' + journal_idx + '"><div class="modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="update_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
-
-
+				content += '<div class="journal" value="' + journal_idx + '"><div class="modal_body"><div class="update" onclick="update_journal(' + j_data['journal_idx'] + ')"><i class="bi bi-pencil-square"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
 				content += '<div class="journal_start_end">';
@@ -753,12 +751,22 @@
 				console.log(e);
 			}
 		})
-
-
 	}
 
-	function update_journal(idx){
-		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정수정
+	function update_journal(idx) {
+		// 클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정 수정
+		$.ajax({
+			type: 'GET',
+			url: '/update_journal.go',
+			data: { "idx": idx },
+			dataType: 'JSON',
+			success: function(data) {
+				console.log("update 성공", data);
+			},
+			error: function(e) {
+				console.error("AJAX 요청 실패:", e); // 오류 정보 출력
+			}
+		});
 	}
 
 
