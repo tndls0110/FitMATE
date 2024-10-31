@@ -19,8 +19,19 @@ public interface CrewMemberDAO {
 
 	int crewMember(Map<String, String> params);
 	
-	CrewMemberProfileDTO memberDetail(String member_id, String profileType, String crew_idx);
+	/*
+	 * CrewMemberProfileDTO memberDetail(String member_id, String profileType,
+	 * String crew_idx);
+	 */
 
 	int memberFire(int member_idx, String date);
+
+	List<CrewMemberProfileDTO> memberList(Map<String, Object> map);
+	
+	// 크루원 프로필 상세보기
+	CrewMemberProfileDTO crewMemberDetail(String member_id, String crew_idx);
+
+	// 일반회원 프로필 상세보기
+	CrewMemberProfileDTO userMemberDetail(String member_id);
 
 }
