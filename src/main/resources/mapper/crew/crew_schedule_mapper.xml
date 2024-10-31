@@ -46,12 +46,16 @@ WHERE
     cp.plan_idx = #{param1};  
 </select>
 
+<delete id="crew_party_del">
+	delete from crew_party where plan_idx = #{param1}
+</delete>
+
 <delete id="crew_plan_del">
 	delete from crew_plan where plan_idx = #{param1}
 </delete>
 
 <insert id="crew_plan_join">
-	insert into crew_party (plan_idx,party_id) values ()#{param1},#{param2})
+	insert into crew_party (plan_idx,party_id) values (#{param1},#{param2})
 </insert>
 
 </mapper>

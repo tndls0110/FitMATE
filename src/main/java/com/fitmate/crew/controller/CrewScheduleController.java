@@ -154,10 +154,11 @@ public class CrewScheduleController {
 		logger.info("del {}",params);
 		String page = "redirect:/";
 		String plan_idx = params.get("plan_idx");
+		String crew_idx = params.get("crew_idx");
 		
-		crewschedule_service.crew_plan_del(plan_idx);
+		crewschedule_service.crew_plan_del(plan_idx,crew_idx);
 		
-		return "index";
+		return "index123";
 	}
 	
 	@PostMapping(value="/crew_plan_join.do")
@@ -169,7 +170,7 @@ public class CrewScheduleController {
 		String user_id = params.get("user_id");
 		
 		crewschedule_service.crew_plan_join(plan_idx,user_id);
-		return "index";
+		return "index123";
 	}
 	
 }

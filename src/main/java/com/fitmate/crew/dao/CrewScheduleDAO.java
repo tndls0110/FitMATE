@@ -23,4 +23,6 @@ public interface CrewScheduleDAO {
 
 	int crew_plan_del(String plan_idx);
 
+	int crew_party_del(String plan_idx);
+
 }
