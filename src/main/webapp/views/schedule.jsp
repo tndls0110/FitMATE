@@ -725,12 +725,12 @@
 		location.href = "schedule_write.go";
 	}
 
-	function delete_journal(idx){
+	function delete_journal(idx,user_id){
 		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
 		$.ajax({
 			type : 'GET',
 			url : 'delete_journal.ajax',
-			data : {'idx':idx},
+			data : {'idx':idx , 'id' : user_id},
 			dataType : 'JSON',
 			success : function(data){
 				console.log('success :', data.success);
