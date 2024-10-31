@@ -1,6 +1,5 @@
 package com.fitmate.crew.controller;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -72,7 +71,7 @@ public class CrewScheduleController {
 		
 		crewschedule_service.crew_plan_create(days,crew_id,crew_idx,date,start_time,end_time,place,content,subject);
 	       
-		return "index";
+		return "index123";
 	}
 
 
