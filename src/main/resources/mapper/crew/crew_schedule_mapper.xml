@@ -12,4 +12,46 @@
 	value (#{crew_idx},#{plan_date},#{plan_place},#{plan_content},#{plan_subject},#{plan_start},#{plan_end})
 </insert>
 
+<select id="crew_get_plan" resultType="Map">
+        SELECT DISTINCT plan_date FROM crew_plan cp where crew_idx = #{param1}
+    </select>
+
+<select id="crew_plan_detail" resultType="com.fitmate.crew.dto.CrewScheduleDTO">
+SELECT 
+    plan_idx, 
+    crew_idx, 
+    plan_date, 
+    plan_place, 
+    plan_content, 
+    plan_subject, 
+    plan_start, 
+    plan_end
+FROM 
+    crew_plan
+WHERE 
+    plan_date = #{param1} AND crew_idx = #{param2}
+</select>
+
+<select id="crew_plan_members" resultType="com.fitmate.crew.dto.CrewScheduleMDTO">
+SELECT 
+    cp.party_id,
+   	cp.plan_idx,
+   	cp.party_idx, 
+    p.profile          
+FROM 
+    crew_party cp
+JOIN 
+    profile p ON cp.party_id = p.user_id  
+WHERE 
+    cp.plan_idx = #{param1};  
+</select>
+
+<delete id="crew_plan_del">
+	delete from crew_plan where plan_idx = #{param1}
+</delete>
+
+<insert id="crew_plan_join">
+	insert into crew_party (plan_idx,party_id) values ()#{param1},#{param2})
+</insert>
+
 </mapper>
