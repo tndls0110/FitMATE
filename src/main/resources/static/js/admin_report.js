@@ -1,6 +1,6 @@
 // 신고 목록 출력
 let showPage = 1;
-let cnt = 10;
+let cnt = 15;
 let vPages = 10;
 
 const searchParams = new URLSearchParams(window.location.search);

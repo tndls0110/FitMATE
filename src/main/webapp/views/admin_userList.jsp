@@ -29,7 +29,7 @@
                         <col width="auto" />
                         <col width="auto" />
                         <col width="100px" />
-                        <col width="100px" />
+                        <col width="60px" />
                         <col width="150px" />
                         <col width="80px" />
                         <col width="80px" />

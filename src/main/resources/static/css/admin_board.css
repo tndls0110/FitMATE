@@ -201,8 +201,8 @@ table tfoot td{
     max-height: 300px;
 }
 
-.report_detail td.caution{
-    text-align: center;
+.report_detail td.caution,
+.report_detail a.caution{
     color: #C52424;
     font-weight: 700;
 }

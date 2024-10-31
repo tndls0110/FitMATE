@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,19 @@ public class ReportService {
 
     public void confirmReport(Map<String, String> params, int admin_idx) {
         params.put("admin_idx", String.valueOf(admin_idx));
-        report_dao.confirmReport(params);
-        report_dao.updateReport(params);
+        List<String> list = report_dao.getSameReport(params.get("board_idx"), params.get("reportr_idx"));
+        for (String report : list) {
+            params.put("report_idx", report);
+            report_dao.confirmReport(params);
+            report_dao.updateReport(params);
+            if (params.get("report_prog").equals("3")) {
+                report_dao.blind(params);
+            }
+        }
+        if (report_dao.getCnt(params).size() % 3 == 0){
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime clearDate = now.plusHours(1);
+            report_dao.restrict(params.get("reported_id"), clearDate);
+        }
     }
 }
