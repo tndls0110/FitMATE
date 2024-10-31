@@ -254,7 +254,7 @@
 			background-color: rgba(233, 236, 239, 1);
 			height: 112px;
 			border-radius: 6px;
-			margin: 0px 0px -133px 247px;
+			margin: 0px 0px -133px 272px;
 			position: relative;
 
 		}
@@ -270,6 +270,13 @@
 			color : rgba(40, 43, 52, 1);
 		}
 
+		.crew_schedule_content_none{
+			border-radius: 6px;
+			width: 500px;
+			background-color: rgba(40, 43, 52, 1);
+			padding: 37px 36px 36px 183px;
+			margin-top: 10px;
+		}
 	</style>
 
 </head>
@@ -473,9 +480,8 @@
 			success : function(journal){
 				console.log('journal 가져오기 성공:',journal);
 
-				setTimeout(function() {
 					draw_journal(journal);
-				}, 100);
+
 			},
 			error : function(e){
 				console.log(e);
@@ -615,8 +621,9 @@
 			$('.crew_schedule').html(content);
 
 		}else{//아니면 hidden하기...
-		$('.crew_schedule').html().remove();
-		$('.crew_schedule').css({'display' : 'hidden'});
+			var content = '<div class = "crew_schedule_content_none">스케줄 없음</div>';
+			$('.crew_schedule').html(content);
+			$('.crew_schedule').css({'display' : 'hidden'});
 		console.log('값 있음');
 		}
 
@@ -630,7 +637,7 @@
 			data: {'date': date},
 			dataType: 'JSON',
 			success: function (journal) {
-				console.log(journal);
+				console.log('journal 가져오기 성공',journal);
 				draw_journal(journal);
 			},
 			error : function (e){
@@ -667,8 +674,11 @@
 				//이미지 분리하기 - 이미지도 받아와야할 듯
 				<%--<c:forEach items = ${files}--%>
 				var journal_idx = j_data['journal_idx'];
+
+				content += '<div class="journal" value="' + journal_idx + '"><div class="modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="update_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
+
+
 				content += j_data['date'] + '</div><div class="journal_time">';
-				content += '<div class="journal"><div class = "modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="update_journal('+j_data['journal_idx']+','+'"'+j_data['user_id']+'"'+')"></i>수정하기</div> <div class="delete" onclick="delete_journal(` + j_data['journal_idx'] + `, '` + j_data['user_id'] + `')"><i class="bi bi-trash"></i>삭제하기</div><div class="idx">` + j_data['journal_idx'] + `</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">;
 				content += e_time + '</div>';
 				content += '<div class="journal_start_end">';
 				if (j_data['journal_cate'] == 1) {
@@ -727,6 +737,7 @@
 
 	function delete_journal(idx,user_id){
 		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
+		var i = idx;
 		$.ajax({
 			type : 'GET',
 			url : 'delete_journal.ajax',
@@ -734,6 +745,10 @@
 			dataType : 'JSON',
 			success : function(data){
 				console.log('success :', data.success);
+				if(data.success){
+
+					$('.journal[value="' + idx + '"]').remove();
+				}
 			}, error(e){
 				console.log(e);
 			}
