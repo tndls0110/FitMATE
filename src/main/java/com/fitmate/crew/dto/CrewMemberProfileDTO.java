@@ -28,7 +28,7 @@ public class CrewMemberProfileDTO {
 	// 프로필 상태메시지
     private String status;
 	// 상위 지역명
-    private String region_name;
+    private String region_name;	
  	// 하위 지역명
     private String regions_name;
  	// mbti 성향
@@ -37,6 +37,14 @@ public class CrewMemberProfileDTO {
     
     
     
+	@Override
+	public String toString() {
+		return "CrewMemberProfileDTO [crew_name=" + crew_name + ", crew_id=" + crew_id + ", member_idx=" + member_idx
+				+ ", join_date=" + join_date + ", user_id=" + user_id + ", nick=" + nick + ", email=" + email
+				+ ", birthday=" + birthday + ", profile=" + profile + ", status=" + status + ", region_name="
+				+ region_name + ", regions_name=" + regions_name + ", mbtir_name=" + mbtir_name + "]";
+	}
+
 	public String getCrew_name() {
 		return crew_name;
 	}
@@ -61,6 +69,8 @@ public class CrewMemberProfileDTO {
 	        return join_date.format(formatter);
 	    }
 	}
+	
+	
 	
 	public void setJoin_date(LocalDateTime join_date) {
 		this.join_date = join_date;

@@ -77,8 +77,6 @@ public class CrewController {
 	}
 	
 	
-	
-	
 	// 1. 크루검색
 	@RequestMapping(value = "/crew_search")
 	public String crewSearch(Model model) {
@@ -106,7 +104,9 @@ public class CrewController {
 	
 	// 3. 크루 모집글 상세조회
 	@RequestMapping(value="/crew_recruit_detail.go")
-	public String recruitDetail() {
+	public String recruitDetail(String idx, String id, Model model) {
+		// 크루 모집글 정보 + 크루 가입여부 체크
+		crew_service.recruitDetail(idx, id, model);
 		
 		return "crew_recruit_detail";
 	}
@@ -114,10 +114,10 @@ public class CrewController {
 	// 3-1. 크루 모집글 상세정보 조회
 	@GetMapping(value = "/crew_recruit_detail.ajax")
 	@ResponseBody 
-	public Map<String, Object> recruitDetail(String idx, String currentId){
+	public Map<String, Object> recruitDetail(String idx){
 		
-		// 크루정보 및 댓글 정보 가져오기. + 현재유저의 크루 입단여부 확인하기.
-		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx, currentId);
+		// 크루정보 및 댓글 정보 가져오기.
+		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx);
 		
 		return recruitDetail; 
 	}

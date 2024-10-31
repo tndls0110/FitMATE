@@ -4,21 +4,36 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewMemberDAO">
-<select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+<select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 
 		A.*, 
 		B.nick,
 		C.profile
 	FROM crew_join A 
 	INNER JOIN member B ON B.user_id = A.join_id
-	INNER JOIN profile C ON C.user_id = A.join_id 	
-	WHERE A.crew_idx = #{crew_idx} AND A.status = 1 
-	ORDER BY A.date ASC 
+	INNER JOIN profile C ON C.user_id = A.join_id
+	<where>
+	A.crew_idx = #{crew_idx} AND A.status = 1 
+	<!--    searchFilter(1='크루원닉네임 검색'/ 2='크루원ID 검색')    -->
+	<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
+		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
+		AND A.join_id LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	</where>
+	<choose>
+		<when test="orderBy != null and orderBy != ''">
+			ORDER BY B.nick ${orderBy}
+		</when>
+		<otherwise>
+			ORDER BY A.date DESC
+		</otherwise>
+	</choose>
 </select>
-
-<select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="int">
+<!-- 크루 가입신청 목록을 위한 크루 및 크루장정보 가져오기 -->
+<select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 
-		A.crew_idx,
 		A.name AS crew_name,
 		A.crew_id AS leader_id,
 		B.nick,
@@ -29,9 +44,45 @@
 	WHERE A.crew_idx = #{crew_idx}	
 </select>
 
+<!-- 크루장을 포함한 크루원 목록 가져오기 -->
+<select id="memberList" resultType="com.fitmate.crew.dto.CrewMemberProfileDTO" parameterType="map">
+	SELECT
+		<!-- 크루명 --> 
+		A.name AS crew_name,
+		<!-- 크루장 id -->
+		A.crew_id,
+		<!-- 일반유저 id -->
+		CM.member_id AS user_id,
+		B.nick,
+		C.profile
+	FROM crew A
+	INNER JOIN crew_member CM ON CM.crew_idx = A.crew_idx
+	INNER JOIN member B ON B.user_id = CM.member_id
+	INNER JOIN profile C ON C.user_id = CM.member_id
+	<where>
+	A.crew_idx = #{crew_idx} AND A.status = 1 
+	<!--    searchFilter(1='크루원닉네임 검색'/ 2='크루원ID 검색')    -->
+	<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
+		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
+		AND B.member_id LIKE CONCAT('%', #{searchKeyword}, '%') 
+	</if>
+	</where>
+	<choose>
+		<when test="orderBy != null and orderBy != ''">
+			ORDER BY B.nick ${orderBy}
+		</when>
+		<otherwise>
+			ORDER BY B.nick ASC
+		</otherwise>
+	</choose>
+</select>
+
+
 <update id="joinApproval" parameterType="map">
 	UPDATE crew_join SET 
-		status = 3,
+		status = #{status},
 		date = #{date}
 		WHERE join_idx = #{join_idx}
 		AND status = 1
@@ -43,53 +94,53 @@
 		VALUES(#{crew_idx}, #{join_id}, #{date}, 1)
 </insert>
 
-<!-- 2024.10.30 추가 -->
-<select id="memberDetail" parameterType="String" resultType="com.fitmate.crew.dto.CrewMemberProfileDTO">
-SELECT
-	<!-- 크루명 -->
-	c.name AS crew_name,
-	<!-- 크루장ID -->
-	c.crew_id,
-	<!-- 크루원목록 idx --> 
-	cm.member_idx,
-	<!-- 크루원 입단날짜 -->
-	cm.join_date,
-	<!-- 유저ID -->
-    m.user_id,
-    <!-- 유저 닉네임 --> 
-    m.nick, 
-    <!-- 유저 이메일 -->
-    m.email, 
-    <!-- 유저 생일 -->
-    m.birthday, 
-    <!-- 상태 메시지 -->
-    p.status, 
-    <!-- 프로필 사진 -->
-    p.profile, 
-    <!-- 상위 지역명 -->
-    r.region_name,
-    <!-- 하위 지역명 -->
-    rs.regions_name,
-    <!-- mbti 성향 -->
-    mb.mbtir_name
-FROM member m 
-INNER JOIN 
-	crew_member cm ON cm.member_id = #{member_id} 
-INNER JOIN
-	crew c ON c.crew_idx = cm.crew_idx	
-INNER JOIN 
-    profile p ON m.user_id = p.user_id
-LEFT JOIN 
-    region_sub rs ON rs.regions_idx = p.regions_idx
-LEFT JOIN 
-    region r ON r.region_idx = rs.region_idx
-LEFT JOIN 
-    mbti_r mb ON mb.mbtir_idx = p.mbtir_idx
-WHERE 
-    m.user_id = #{member_id}
-AND
-	cm.status = 1; <!-- 크루원 가입상태 1:true인 경우 -->
-	    
+<!-- 크루원 프로필 -->
+<select id="crewMemberDetail" parameterType="String" resultType="com.fitmate.crew.dto.CrewMemberProfileDTO">
+    SELECT
+        m.user_id,
+        m.nick,
+        m.email,
+        m.birthday,
+        p.status,
+        p.profile,
+        r.region_name,
+        rs.regions_name,
+        mb.mbtir_name,
+        c.name AS crew_name,
+        c.crew_id,
+        cm.member_idx,
+        cm.join_date
+    FROM member m
+    INNER JOIN profile p ON m.user_id = p.user_id
+    LEFT JOIN region_sub rs ON rs.regions_idx = p.regions_idx
+    LEFT JOIN region r ON r.region_idx = rs.region_idx
+    LEFT JOIN mbti_r mb ON mb.mbtir_idx = p.mbtir_idx
+    LEFT JOIN crew_member cm ON cm.member_id = m.user_id
+    LEFT JOIN crew c ON c.crew_idx = cm.crew_idx
+    WHERE m.user_id = #{member_id}
+    AND cm.status = 1
+    AND c.crew_idx = #{crew_idx}
+</select>
+
+<!-- 일반회원 프로필 -->
+<select id="userMemberDetail" parameterType="String" resultType="com.fitmate.crew.dto.CrewMemberProfileDTO">
+    SELECT
+        m.user_id,
+        m.nick,
+        m.email,
+        m.birthday,
+        p.status,
+        p.profile,
+        r.region_name,
+        rs.regions_name,
+        mb.mbtir_name
+    FROM member m
+    INNER JOIN profile p ON m.user_id = p.user_id
+    LEFT JOIN region_sub rs ON rs.regions_idx = p.regions_idx
+    LEFT JOIN region r ON r.region_idx = rs.region_idx
+    LEFT JOIN mbti_r mb ON mb.mbtir_idx = p.mbtir_idx
+    WHERE
+        m.user_id = #{member_id}
 </select>
 
 <!-- 크루멤버 추방하기  status가 0: 추방, 1: 크루원 -->
