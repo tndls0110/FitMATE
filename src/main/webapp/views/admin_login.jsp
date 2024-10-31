@@ -10,6 +10,9 @@
         var index = -1;
         var state = '${state}';
         var msg = '${msg}';
+        if (msg != ''){
+            modal.showAlert(msg);
+        }
     </script>
 </head>
 <body>

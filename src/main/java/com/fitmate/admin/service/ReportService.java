@@ -60,7 +60,7 @@ public class ReportService {
         }
         if (report_dao.getCnt(params).size() % 3 == 0){
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime clearDate = now.plusHours(1);
+            LocalDateTime clearDate = now.plusDays(7);
             report_dao.restrict(params.get("reported_id"), clearDate);
         }
     }
