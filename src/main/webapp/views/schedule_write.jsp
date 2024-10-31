@@ -293,7 +293,7 @@
   <!-- 운동일지는 nav1로, mbti만 nav5로 -->
   <div class="contents">
     <!-- class="full": width=100% -->
-    <form action="/schedule_write.do" method="POST" enctype="multipart/form-data">
+    <form action="schedule_write.do" method="POST" enctype="multipart/form-data">
       <div class="list">
         <h3 class="capt">
           <div id = "category">
