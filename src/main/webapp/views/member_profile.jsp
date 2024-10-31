@@ -65,7 +65,7 @@
 						<c:if test="${list.mbtir_name != null}">
 							<td>
 								<p>${list.mbtir_name}</p>
-								<p><button class="subbtn minbtn">다시 검사하기</button></p>
+								<p><button onclick="location.href='mbtiQ.go'" class="subbtn minbtn">다시 검사하기</button></p>
 							</td>
 						</c:if>
 					</tr>

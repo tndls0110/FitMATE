@@ -45,7 +45,7 @@ public class MemberController {
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
-				page = "index";
+				page = "schedule";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
