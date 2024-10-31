@@ -147,7 +147,7 @@
         	<div class="contents narrow">
             	<h2 class="title subject"></h2>
                 <div class="list relative">
-				   <h3 class="capt">가입신청자 검색</h3>
+				   <h3 class="capt">크루원 검색</h3>
 				   <p>
 				      <select name="searchFilter" id="searchFilter">
 				         <option value="" selected>검색기준</option>
@@ -180,11 +180,10 @@
     
     // Ajax로 부터 반환받은 정보
     var crew_name; // 크루명
-    var join_idx; // 신청 idx (1: 신청중/ 2: 신청거절/ 3: 신청수락)
     var nick; // 크루장 또는 신청자 닉네임
     var profile; // 크루장 또는 신청자 프로필
     var leader_id; // 크루장 ID
-    var join_id; // 신청자 ID
+    var user_id; // 크루원 ID
     
     // 동적 HTML에 append하기 위한 변수 
     var profile_info;
@@ -202,8 +201,8 @@
  	// 검색 키워드
  	var searchKeyword;
  	
-    // 1. 크루 가입신청자 목록 불러오기
-    joinList();
+    // 1. 크루원 목록 불러오기
+    crew_memberList();
     
     // 2. 검색한 경우
     function search() {
@@ -217,15 +216,15 @@
           searchFilter = $('#searchFilter').val();
           searchKeyword = $('.searchKeyword').val();
           // 2-2. 목록 불러오기 함수   
-          joinList();
+          crew_memberList();
        }
     }
     
     
-    // 크루 가입신청자 목록 불러오기 함수
-    function joinList(){
+    // 크루원 목록 불러오기 함수
+    function crew_memberList(){
         $.ajax({
-            url: 'mycrew_joinList.ajax',
+            url: 'mycrew_memberList.ajax',
             method: 'POST',
             data: {
                 'crew_idx': crew_idx,
@@ -240,40 +239,46 @@
                 // 프로필 목록을 비워주기.
                 $('.profile_list').empty();
 
+                console.log('list : ', list);
+                
                 $.each(list, function(index, data) {
                     // 멤버수 체크하기. (크루장은 인원수에서 제외하기 때문에 index값과 동일.)
                     memberCount = index;
-                    
-                    console.log('data : ', data);
-                    console.log('crew_idx : ', data.crew_idx);
-                    
+                 	
                  	// 크루명
                     crew_name = data.crew_name;
-                    // 신청 idx
-                    join_idx = data.join_idx;
-                    // 크루장 또는 신청자 닉네임
+                    // 크루장 또는 크루원 닉네임
                     nick = data.nick;
                     // 크루장 또는 신청자 프로필
                     profile = data.profile;
-                    // 신청자 ID
-                    join_id = data.join_id;
-                 	
-                 	
+                    // 크루원 ID
+                    user_id = data.user_id;
+	                // 크루장 id 
+                    leader_id = data.crew_id;
+                    
+                    console.log('data : ', data);
+                    console.log('leader_id : ', leader_id);
+                    console.log('user_id : ', user_id);
+                    
                     // 크루장인지 여부체크 - 맨처음 한번만 체크.
                     if (index === 0) {
-                    	// 크루장 id 
-                        leader_id = data.leader_id;
-						
-                        id = leader_id;	
-                    	
                         if (leader_id === currentUserId) {
                             leader_chk = 1;    
                         }            
-                    }else{
-                    	id = join_id;
                     }
                     
-                    console.log('leader_chk2 입니다 : ' + leader_chk);
+                    // 크루장인 경우
+                    if(leader_id === user_id){
+                    	id = leader_id;	
+                    }else{
+                    	id = user_id;
+                    }
+                 	
+                 	
+                    console.log('id : ', id);
+                    console.log('user_id : ', user_id);
+                    console.log('leader_id12314 : ' + leader_id);
+                    console.log('leader_chk_f : ' + leader_chk);
                     
                     // 크루장이 아니라면... 권한이 없으므로 => mycrew페이지로 이동. 
                     if (leader_chk !== 1) {
@@ -281,13 +286,16 @@
                      	// 이전 페이지로 이동
                         /* window.history.back(); */
                     } else {
+                    	
                         // 맨 처음 title세팅
                         if (index === 0) {
-                            $('.title.subject').html(crew_name + '<span>가입 신청자 목록</span>');
+                            $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
                         }
-
+                        
+                        console.log('id ? : ' + id);
+                        
                         profile_info = '<div class="profile relative ' +id+ '">'
-                        				+ '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
+                        				+ '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
                                         	+ '<i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>' // 나중에 프로필로 변경.
                                         + '</a>'
                                         + '<div class="width_50">' 
@@ -304,32 +312,25 @@
                                         + '</div>'
                                         + '<div class="btn_set">'; // btn_set 추가
                                         
-                        if (index !== 0) { // 크루장이 아닌 경우에만 버튼 표시
-                            profile_info += '<button type="button" class="mainbtn" id="approv' + join_idx + '" data-join_idx="' + join_idx + '" data-join_id="' + id + '" data-status="3">수락</button>'
-                                            + '<button type="button" class="subbtn" id="reject' + join_idx + '" data-join_idx="' + join_idx + '" data-join_id="' + id + '" data-status="2">거절</button>';
-                        }
 
                         profile_info += '</div></div>';
                         
-                        
-                     	// 크루장인 경우
-                     	// leader정보인 경우 수락/거절버튼 숨김
-                        if(index === 0){
+                        // 크루장인 경우
+                        if(leader_id === user_id){
                         	$('.profile_list').prepend(profile_info);
-                        	$('.leader_chk' + index).show(); // 크루장 표시
-                            $('#profile_detail_set').attr('href', 'mycrew_memberDetail.go?id=' +leader_id+ '&profileType=1&idx=' +crew_idx ); // 크루장 표시
+    	                    $('.leader_chk' + index).show(); // 크루장 표시
+    	                    $('#profile_detail_set').attr('href', );  // 크루장 표시
                         }else{
                         	$('.profile_list').append(profile_info);
-                        	$('.leader_chk' + index).hide(); // 크루장 표시 숨김
+                        	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
                         }
-                     	
-                    }			
+                    }
                     
                 });	
                 
-                // 회원수가 1명도 없는 경우 '크루에 가입신청한 멤버가 없습니다.' 이미지 띄우기.
+                // 회원수가 1명도 없는 경우 '크루에 멤버가 없습니다.' 이미지 띄우기.
                 if(memberCount < 1){
-                    $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 가입신청한 멤버가 없습니다.</h2></div>');
+                    $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
                 }
             },
             error: function(e) {
@@ -337,7 +338,6 @@
             }
         });	
     }
-    
     
     
     // 닉네임 오름차순/내림차순 버튼 클릭이벤트
@@ -349,7 +349,7 @@
         $('.profile_list > *:not(.profile.relative.' +leader_id+ ')').remove(); // 기존 프로필 목록 비우기
         
         // 새 리스트 불러오기.
-        joinList();
+        crew_memberList();
 
         // 버튼 상태 업데이트
         if (order) {
@@ -361,39 +361,5 @@
         }
     });
     
-    // 수락 및 거절 버튼 클릭 이벤트
-    $(document).on('click', '[id^="approv"], [id^="reject"]', function() {
-        var join_idx = $(this).data('join_idx');
-        var join_id = $(this).data('join_id');
-        var status = $(this).data('status'); // 3이면 수락, 2이면 거절
-
-        console.log('join_idx', join_idx);
-        // AJAX 요청
-        $.ajax({
-            url: 'join_approval.ajax', // 동일한 URL로 처리
-            method: 'POST',
-            data: {
-                join_idx: join_idx,
-                crew_idx: crew_idx, 
-                join_id: join_id,
-                status: status
-            },
-            success: function(data) {
-                if (status === 3) {
-                    console.log('수락 성공:', data.success);
-                } else if (status === 2) {
-                    console.log('거절 성공:', data.success);
-                }
-                joinList(); // 수락 또는 거절 후 목록 갱신
-            },
-            error: function(error) {
-                if (status === 3) {
-                    console.log('수락 실패:', error);
-                } else if (status === 2) {
-                    console.log('거절 실패:', error);
-                }
-            }
-        });
-    });
 </script>
 </html>

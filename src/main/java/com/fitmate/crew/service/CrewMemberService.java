@@ -50,7 +50,7 @@ public class CrewMemberService {
 			map.put("orderBy", orderBy);
 		}
 		
-		// 크루 및 크루장정보
+		// 크루 및 크루장정보 (크루장정보는 join테이블에 존재하지 않기때문에 따로 불러오기)
 		CrewJoinDTO profileDTO = crewmember_dao.profileInfo(map); 
 		// 크루 가입신청자목록
 		List<CrewJoinDTO> list = crewmember_dao.joinList(map);
@@ -88,12 +88,25 @@ public class CrewMemberService {
 	}
 
 
-	// 일반회원, 크루 멤버 프로필 상세보기
-	public CrewMemberProfileDTO memberDetail(String member_id, String profileType, String crew_idx) {
+	// 크루 멤버 프로필 상세보기
+	public CrewMemberProfileDTO memberDetail(String member_id, String idx) {
 		
-		return crewmember_dao.memberDetail(member_id, profileType, crew_idx);
+		String crew_idx = idx;
+		logger.info("idx idx2 : ", crew_idx);
+		logger.info("idx idx2 : ", idx);
+		logger.info("profileY : ", idx);
+		
+		return crewmember_dao.crewMemberDetail(member_id, crew_idx);
 		
 	}
+	
+	// 일반 회원 프로필 상세보기
+	public CrewMemberProfileDTO memberDetail(String member_id) {
+		
+		return crewmember_dao.userMemberDetail(member_id);
+	}
+	
+	
 
 	// 크루멤버 추방
 	public int memberFire(String member_idx_) {
@@ -112,4 +125,42 @@ public class CrewMemberService {
 		return row;
 	}
 
+	
+	// 크루원 목록 가져오기
+	public List<CrewMemberProfileDTO> memberList(String crew_idx_, Boolean order, String searchFilter_, String searchKeyword){
+		
+		int crew_idx = Integer.parseInt(crew_idx_);
+		
+		// 파라미터들을 담아서 전달할 Map 생성
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(searchFilter_ != null && searchKeyword != null) {
+			int searchFilter = Integer.parseInt(searchFilter_);
+			map.put("searchFilter", searchFilter);
+			map.put("searchKeyword", searchKeyword);
+		}
+		map.put("crew_idx", crew_idx);
+		
+		// 정렬 초기값
+		String orderBy = "";
+		
+		// 정렬값이 있는경우
+		if(order != null) {
+			// true: ASC, false: DESC
+			if(order) {
+				orderBy = "ASC"; 
+			}else {
+				orderBy = "DESC";
+			}
+			map.put("orderBy", orderBy);
+		}
+		
+		// 크루원 목록
+		List<CrewMemberProfileDTO> list = crewmember_dao.memberList(map);
+		
+		
+		return list; 
+	}
+
+	
 }
