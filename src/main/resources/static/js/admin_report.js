@@ -50,7 +50,13 @@ function listPrint(list, totalIdx, currentPage, offset) {
         if (list[i].file_cnt > 0){
             tags += '<i class="bi bi-images"></i> ';
         }
-        tags += '<a href="admin_reportDetail.go?report_idx='+list[i].report_idx+'">'+list[i].subject+'</a></td>';
+        tags += '<a href="admin_reportDetail.go?report_idx='+list[i].report_idx+'">';
+        if (list[i].subject.length > 28){
+            tags += list[i].subject.substring(0,28) +'…';
+        } else {
+            tags += list[i].subject;
+        }
+        tags += '</a></td>';
         tags += '<td>';
         if (list[i].reportr_con.length > 8){
             tags += list[i].reportr_con.substring(0,8) +'…';

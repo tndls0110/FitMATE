@@ -16,6 +16,7 @@ public class ReportDTO {
 
     private int reportd_idx;
     private int admin_idx;
+    private String admin_name;
     private String reportd_con;
     private LocalDateTime reportd_date;
     private String reportr_con;
@@ -70,6 +71,9 @@ public class ReportDTO {
     }
     public int getAdmin_idx() {
         return admin_idx;
+    }
+    public String getAdmin_name() {
+        return admin_name;
     }
     public String getReportd_con() {
         return reportd_con;
@@ -165,6 +169,9 @@ public class ReportDTO {
     }
     public void setAdmin_idx(int admin_idx) {
         this.admin_idx = admin_idx;
+    }
+    public void setAdmin_name(String admin_name) {
+        this.admin_name = admin_name;
     }
     public void setReportd_con(String reportd_con) {
         this.reportd_con = reportd_con;

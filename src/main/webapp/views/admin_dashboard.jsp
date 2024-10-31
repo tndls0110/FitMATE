@@ -73,7 +73,9 @@
                     <tbody>
                     <c:forEach items="${report}" var="report">
                         <tr>
-                            <td class="left">${report.subject}</td>
+                            <td class="left">
+                                <a href="admin_reportDetail.go?report_idx=${report.report_idx}">${report.subject}</a>
+                            </td>
                             <td class="left">${report.reportr_con}</td>
                             <td>${report.report_date}</td>
                             <td>

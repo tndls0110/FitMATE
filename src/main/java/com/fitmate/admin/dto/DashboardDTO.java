@@ -5,9 +5,11 @@ import java.time.format.DateTimeFormatter;
 
 public class DashboardDTO {
 
+
     private String notice_cont;
     private LocalDateTime notice_regdate;
     private int notice_show;
+    private int report_idx;
     private String subject;
     private String reportr_con;
     private int report_prog;
@@ -16,8 +18,8 @@ public class DashboardDTO {
 
     public String getNotice_cont() {
         String con = notice_cont;
-        if (con.length() > 50) {
-            con = con.substring(0, 50);
+        if (con.length() > 18) {
+            con = con.substring(0, 18);
             con += "…";
         }
         return con;
@@ -29,10 +31,13 @@ public class DashboardDTO {
     public int getNotice_show() {
         return notice_show;
     }
+    public int getReport_idx() {
+        return report_idx;
+    }
     public String getSubject() {
         String con = subject;
-        if (con.length() > 50) {
-            con = con.substring(0, 50);
+        if (con.length() > 19) {
+            con = con.substring(0, 19);
             con += "…";
         }
         return con;
@@ -67,6 +72,9 @@ public class DashboardDTO {
     }
     public void setReportr_con(String reportr_con) {
         this.reportr_con = reportr_con;
+    }
+    public void setReport_idx(int report_idx) {
+        this.report_idx = report_idx;
     }
     public void setSubject(String subject) {
         this.subject = subject;

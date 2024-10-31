@@ -61,13 +61,14 @@
     </select>
 
     <select id="reportProgress" resultType="com.fitmate.admin.dto.ReportDTO">
-        SELECT d.reportd_idx, d.reportd_con, d.reportd_date, d.admin_idx,
+        SELECT d.reportd_idx, d.reportd_con, d.reportd_date, d.admin_idx, d.report_prog,
+            (SELECT admin_name FROM admin WHERE admin_idx = d.admin_idx) AS 'admin_name',
             (SELECT report_state FROM report_progress WHERE report_prog = d.report_prog) AS 'report_state'
             FROM report_detail d WHERE d.report_idx = #{param}
     </select>
 
     <insert id="confirmReport" parameterType="map">
-        INSERT INTO report_detail (report_idx, reportd_con, admin_idx) VALUES (#{report_idx}, #{reportd_con}, #{admin_idx});
+        INSERT INTO report_detail (report_idx, report_prog, reportd_con, admin_idx) VALUES (#{report_idx}, #{report_prog}, #{reportd_con}, #{admin_idx});
     </insert>
 
     <update id="updateReport" parameterType="map">
