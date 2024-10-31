@@ -4,6 +4,7 @@ import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.member.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -36,4 +37,6 @@ public interface MemberDAO {
     // 비밀번호 변경
     void updatepw(String user_id, String pw);
 
+    // 크루 이용 가능 여부 체크
+    LocalDateTime getPermit(String user_id);
 }
