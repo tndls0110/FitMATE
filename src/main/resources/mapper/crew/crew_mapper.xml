@@ -31,7 +31,16 @@ MB.nick AS leader_nick,
 <!--    크루장 프로필사진    -->
 P.profile AS leader_profile,
 <!--    크루장 mbti    -->
-M.mbtir_name AS leader_mbti FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id INNER JOIN profile P ON A.crew_id = P.user_id INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx INNER JOIN crew_board CB ON CB.board_idx = I.board_idx INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx INNER JOIN region R ON R.region_idx = RS.region_idx INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+M.mbtir_name AS leader_mbti 
+FROM crew A 
+INNER JOIN member MB ON A.crew_id = MB.user_id 
+INNER JOIN profile P ON A.crew_id = P.user_id 
+INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
+INNER JOIN crew_board CB ON CB.board_idx = I.board_idx 
+INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx 
+INNER JOIN region R ON R.region_idx = RS.region_idx 
+INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
 <where>
 CB.category_idx =1
 <!--  AND A.status = 1  -->
