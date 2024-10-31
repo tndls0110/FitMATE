@@ -209,13 +209,16 @@ select{
 input[type="text"],
 input[type="password"],
 textarea,
-input[type="date"],
+input[type="date"]{
+    padding: 8px 12px;
+}
+
 select{
-    padding: 14px;
+    padding: 7px 12px;
 }
 
 input[type="file"]{
-    padding: 12px;
+    padding: 6px;
 }
 
 input[type="text"].caution,
@@ -273,7 +276,7 @@ input[type="submit"],
 input[type="button"],
 button{
     margin: 0;
-    padding: 15px 24px;
+    padding: 9px 16px;
     border-radius: 4px;
     font-size: 14px;
     font-weight: 700;

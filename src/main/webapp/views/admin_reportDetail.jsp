@@ -75,8 +75,8 @@
                     <input type="hidden" name="report_idx" value="${info.report_idx}" />
                     <div class="btn_flex">
                         <div class="width20p">
-                            <select name="reportd_prog" class="mainbtn full">
-                                <option value="0" selected>처리 과정</option>
+                            <select name="report_prog" class="mainbtn full">
+                                <option value="0">처리 과정</option>
                                 <c:forEach items="${status}" var="status">
                                     <option value="${status.report_prog}">${status.report_state}</option>
                                 </c:forEach>
@@ -115,7 +115,7 @@
                 <tbody>
                     <tr>
                         <td>없음</td>
-                        <td><button class="cautionbtn minbtn">${info.report_state}</button></td>
+                        <td><button class="cautionbtn minbtn">신고</button></td>
                         <td>${info.report_date}</td>
                         <td>시스템</td>
                         <td class="left"></td>
@@ -123,9 +123,16 @@
                     <c:forEach items="${progress}" var="progress">
                         <tr>
                             <td>${progress.reportd_idx}</td>
-                            <td>${progress.report_state}</td>
+                            <td>
+                                <c:if test="${progress.report_prog == 2}">
+                                    <button class="mainbtn minbtn">${progress.report_state}</button>
+                                </c:if>
+                                <c:if test="${progress.report_prog != 2}">
+                                    <button class="subbtn minbtn">${progress.report_state}</button>
+                                </c:if>
+                            </td>
                             <td>${progress.reportd_date}</td>
-                            <td>${progress.admin_idx}</td>
+                            <td>${progress.admin_name}</td>
                             <td class="left">${progress.reportd_con}</td>
                         </tr>
                     </c:forEach>

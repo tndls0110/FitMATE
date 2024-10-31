@@ -12,6 +12,7 @@
 
 .contents_flex .contents{
     margin: 0 8px;
+    min-height: 525px;
 }
 
 .contents.notice{
