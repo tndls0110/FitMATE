@@ -26,7 +26,8 @@ public class ScheduleController {
 	@GetMapping (value = "/get_totalevents.ajax")
 	@ResponseBody
 	public Map<String,Object> getEvents() {
-		Map<String,Object> event_day =  s_service.getEvents();
+		String id = "member01";
+		Map<String,Object> event_day =  s_service.getEvents(id);
 		return event_day;
 	}
 
@@ -67,9 +68,10 @@ public class ScheduleController {
 	@ResponseBody
 	public Map<String,Object> crewplan_get(String date) {
 		logger.info("컨트롤러에서 전달받은 date :{}",date);
+		String id = "member01";
 		Map<String,Object> crew = new HashMap<>();
 
-		List<Map<String,Object>> crew_plans = s_service.crewplan_get(date);
+		List<Map<String,Object>> crew_plans = s_service.crewplan_get(id,date);
 		//한 날짜에 crew plan은 여러 개 있을 수 있음
 		crew.put("content", crew_plans);
 		return crew;
@@ -78,9 +80,14 @@ public class ScheduleController {
 	@GetMapping (value = "/delete_journal.ajax")
 	@ResponseBody
 	public Map<String,Object> delete_journal(int idx) {
-		logger.info("받아온 idx : ", idx);
+		logger.info("받아온 idx :{}", idx);
+		boolean success = false;
 		Map<String,Object> data = new HashMap<>();
-		s_service.delete_journal(idx);
+		int updated_rows = s_service.delete_journal(idx);
+		if(updated_rows > 0) {
+			success = true;
+			data.put("success",success);
+		}
 		return data;
 	}
 }
