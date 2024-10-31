@@ -9,7 +9,7 @@
     </select>
 
     <select id="getJournal" resultType="Map">
-        SELECT journal_cate, journal_content, date,time(journal_start) , time(journal_end) FROM schedule where user_id = #{id} AND date = #{date};
+        SELECT user_id,journal_idx, journal_cate, journal_content, date,time(journal_start) , time(journal_end) FROM schedule where user_id = #{id} AND date = #{date} ORDER BY time(journal_start) ASC;
     </select>
     
     
@@ -30,7 +30,15 @@
     <select id="getCrewEvents" resultType="Map">
         SELECT DISTINCT plan_date FROM crew_plan cp
     </select>
+    
+    <select id="crewplan_get" resultType="Map">
+        SELECT DISTINCT cp.plan_date,cp.plan_start,cp.plan_end,cp.plan_subject,cp.plan_place,c.name
+            FROM crew_plan cp inner join crew c on cp.crew_idx = c.crew_idx WHERE plan_date = #{date}
+    </select>
 
+    <select id="getfile" resultType="Map">
+        SELECT * from board_file b inner join schedule s2 on b.board_idx = s2.journal_idx where date = #{date} AND user_id = #{id} AND category_idx = 1;
+    </select>
 
 
 
