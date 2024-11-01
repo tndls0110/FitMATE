@@ -1,5 +1,6 @@
 package com.fitmate.crew.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class CrewBoardDTO {
@@ -7,9 +8,10 @@ public class CrewBoardDTO {
 	private	String board_id;
 	private	String subject;
 	private	String content;
-	private	Date date;
+	private	LocalDateTime date;
 	private	int status;
 	private	int category_idx;
+	private String nick;
 	public int getBoard_idx() {
 		return board_idx;
 	}
@@ -34,10 +36,10 @@ public class CrewBoardDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	public int getStatus() {
@@ -52,6 +54,14 @@ public class CrewBoardDTO {
 	public void setCategory_idx(int category_idx) {
 		this.category_idx = category_idx;
 	}
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+	
+	
 	
 	
 }

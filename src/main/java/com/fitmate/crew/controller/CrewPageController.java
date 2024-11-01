@@ -1,5 +1,6 @@
 package com.fitmate.crew.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fitmate.admin.dto.RegReportDTO;
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.crew.service.CrewPageService;
 
 @Controller
@@ -345,8 +347,59 @@ public class CrewPageController {
 			return "crew_main_page";
 		}
 		
+		// 크루 메인페이지 한줄게시글 목록 가져오기
+		@GetMapping(value = "/crew_main_oneboard.ajax")
+		@ResponseBody 
+		public List<CrewBoardDTO> crew_main_oneboard(@RequestParam Map<String,String> params,HttpSession session,Model model){
+			
+			logger.info("params : " + params);
+			String crewidx = params.get("crew_idx");			
+			// 문자열인 크루idx를 int로 형변환
+			int crew_idx = Integer.parseInt(crewidx);			
+			List<CrewBoardDTO> oneboardlist = crewpage_service.crew_main_oneboard(crew_idx);			
+	
+			logger.info("oneboardlist : "+oneboardlist);
+			return oneboardlist; 
+		}	
 		
+		// 크루 메인페이지 최신 공지사항 가져오기
+				@GetMapping(value = "/crew_main_notice.ajax")
+				@ResponseBody 
+				public CrewBoardDTO crew_main_notice(@RequestParam Map<String,String> params,HttpSession session,Model model){
+					
+					logger.info("params : " + params);
+					String crewidx = params.get("crew_idx");			
+					// 문자열인 크루idx를 int로 형변환
+					int crew_idx = Integer.parseInt(crewidx);			
+					CrewBoardDTO oneboardlist = crewpage_service.crew_main_notice(crew_idx);			
+			
+					logger.info("oneboardlist : "+oneboardlist);
+					
+					return oneboardlist; 
+				}	
 		
+				
+		// 크루 메인페이지 크루원 목록 가져오기
+		@GetMapping(value = "/crew_main_crewmember.ajax")
+		@ResponseBody 
+		public List<CrewMemberProfileDTO> crew_main_crewmember(@RequestParam Map<String,String> params,HttpSession session,Model model){
+					
+			logger.info("params : " + params);
+			String crewidx = params.get("crew_idx");			
+			// 문자열인 크루idx를 int로 형변환
+			int crew_idx = Integer.parseInt(crewidx);			
+			List<CrewMemberProfileDTO> oneboardlist = crewpage_service.crew_main_crewmember(crew_idx);			
+			// 크루원 목록 열개 가져오기
+			List<CrewMemberProfileDTO> limitedMembers = new ArrayList<>();
+			
+			for (int i = 0; i < Math.min(10, oneboardlist.size()); i++) {
+		        limitedMembers.add(oneboardlist.get(i));
+		    }
+			
+			logger.info("oneboardlist : "+limitedMembers);
+			return limitedMembers; 
+		}			
+				
 		
 		//  카카오 api test code
 		@GetMapping(value="/kakao")

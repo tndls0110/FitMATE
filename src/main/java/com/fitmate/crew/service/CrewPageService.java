@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +32,7 @@ import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewFileDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.member.dto.MemberDTO;
 
 @Service
@@ -281,6 +289,46 @@ public class CrewPageService {
 			// 다음 리포트 dto로 신고 인서트 시키기 
 			crewpage_dao.report_do(report_dto);
 		
+	}
+
+	// 크루 메인 페이지 한줄게시글 목록 가져오기
+	public List<CrewBoardDTO> crew_main_oneboard(int crew_idx) {
+		
+		List<CrewBoardDTO> beforelist =	crewpage_dao.crew_oneboard_list(crew_idx);
+		List<CrewBoardDTO> afterlist = new ArrayList<CrewBoardDTO>();
+		
+		 	DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	        // 오늘 날짜 가져오기
+	        LocalDate today = LocalDate.now();
+
+	        // 한줄게시글에서 10개 가져오기
+	        for (int i = 0; i < Math.min(10, beforelist.size()); i++) {
+	        	
+	        	CrewBoardDTO board = beforelist.get(i);
+	        	if(board.getSubject().length()>15) {
+	        		 String shortenedSubject = board.getSubject().substring(0, 15); // 20자까지만 잘라서
+	        		 shortenedSubject += "...";
+	        		 board.setSubject(shortenedSubject); // 잘라낸 제목 저장
+	        	}
+	        	
+	            afterlist.add(board); // 수정된 게시글을 추가
+	        }
+
+		
+		return afterlist;
+	}
+	
+	// 크루 메인페이지 최신 공지사항 가져오기
+	public CrewBoardDTO crew_main_notice(int crew_idx) {
+		
+		return crewpage_dao.crew_main_notice(crew_idx);
+	}
+
+	public List<CrewMemberProfileDTO> crew_main_crewmember(int crew_idx) {
+		
+		return crewpage_dao.crew_main_crewmember(crew_idx);
 	}
 	
 
