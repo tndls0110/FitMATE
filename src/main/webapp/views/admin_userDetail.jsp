@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <th class="left">게시글 수</th>
-                    <td class="left">게시글 수</td>
+                    <td class="left">${member.board_cnt}</td>
                 </tr>
                 <tr>
                     <th class="left">마지막 활동일시</th>
@@ -79,11 +79,18 @@
                 </tr>
                 <tr>
                     <th class="left">이용 상태</th>
-                    <td class="left">작성 예정</td>
+                    <td class="left">
+                        <c:if test="${!member.restrict_state}">
+                            <button class="mainbtn minbtn">이용중</button>
+                        </c:if>
+                        <c:if test="${member.restrict_state}">
+                            <button class="cautionbtn minbtn">이용제재</button>
+                        </c:if>
+                    </td>
                 </tr>
                 <tr>
-                    <th class="left">남은 제재 일수</th>
-                    <td class="left">작성 예정</td>
+                    <th class="left">제재 종료일</th>
+                    <td class="left">${member.cleared_date_String}</td>
                 </tr>
             </table>
             <button onclick="location.href='admin_userList.go'" class="mainbtn full">목록으로 돌아가기</button>
