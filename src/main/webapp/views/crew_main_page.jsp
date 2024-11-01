@@ -192,12 +192,12 @@
 		}
 
 		.type-one {
-			background-color: #5bc5bb; /* 제목이 '1'인 경우의 배경색 */
+			background-color: orange; /* 제목이 '1'인 경우의 배경색 */
 			color: white; /* 텍스트 색상 */
 		}
 
 		.type-two {
-			background-color: #5bc5bb; /* 제목이 '2'인 경우의 배경색 */
+			background-color: orange; /* 제목이 '2'인 경우의 배경색 */
 			color: black; /* 텍스트 색상 */
 		}
 
@@ -278,6 +278,85 @@
 	margin: 15px 0;
 }
 
+
+ 
+ .custom-table tr {
+    border-bottom: 1px solid #ddd; /* 구분선 스타일 */
+}
+ .custom-table {
+            width: 95%;
+            border-collapse: collapse;
+            
+           
+            border-radius: 8px;
+            overflow: hidden; 
+        }
+
+        .custom-table th, .custom-table td {
+            
+            padding: 12px;
+            text-align: left;
+             
+        }
+
+        .custom-table td {
+            background-color: #282b34; 
+            
+            color: white; 
+        }
+        
+		.custom-table td.title {
+            width: 60%; /* 제목 열 70% */
+        }
+
+        .custom-table td.author {
+            width: 15%; /* 작성자 열 15% */
+        }
+
+        .custom-table td.date {
+            width: 25%; /* 작성일 열 15% */
+        }
+
+	 	.relative-button {
+		    position: relative; 
+		    left: 290px; 
+		    right: 200px;
+		    top: 0px;
+		}
+	
+	.writebtn.relative-button,
+	.mainbtn.relative-button,
+	.minbtn.relative-button {
+	    /* 기존 클래스의 스타일을 여기에 추가 */
+	    
+	}
+	
+	.profile-list {
+    position: relative; /* 부모 요소를 기준으로 위치를 설정 */
+    display: inline-block; /* 수평 배치 */
+    float: right;
+}
+	
+	.profile-icon {
+    display: inline; /* 각 아이콘을 인라인으로 설정 */
+    margin-right: -0.5px; /* 아이콘 간의 간격 */
+    
+}
+
+.profile-img {
+    width: 10px; /* 이미지 크기 조정 */
+    height: 10px; /* 이미지 크기 조정 */
+    border-radius: 50%; /* 동그란 형태 */
+    object-fit: cover; /* 비율에 맞게 잘림 */
+    border: 1px solid #ddd; /* 선택적으로 테두리 추가 */
+}
+
+
+.contents.crew_contents {
+    overflow-y: auto;
+    max-height: 200px;
+}
+	
 	</style>
 
 </head>
@@ -286,19 +365,28 @@
 <div class="container">
 	<c:import url="layout/leftnav_1.jsp"></c:import>
 	<!-- 운동일지는 nav1로, mbti만 nav5로 -->
+	
 	<div class="contents crew_contents">
-		<p>크루이름 대시보드</p>
+	 
+             <p style="display: inline; margin-right: 10px;">크루이름 대시보드</p>
+           <div id="profileList" class="profile-list" style="display: inline;">
+            <!-- 프로필 사진을 여기에 추가 -->
+          
+            <!-- 추가 프로필 사진 -->
+        </div>
+		
 		<input type="hidden" id="crew_idx" name="crew_idx" value="6">
 		<input type="hidden" id="crew_id" name="crew_id" value="크루장id">
 		<input type="hidden" id="user_id" name="user_id" value="member02">
-		
 		<div class="list" style="margin:15px 0;"> <!-- 공지사항 시작 -->
-		 <p><input type="text" class="full" name="id" value="최근 공지사항 입니다" readonly/></p>
+		 <p>
+		 <input type="text" class="full" name="crew_notice" value="" readonly/>
+		 <button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()">더보기</button>
+		 </p>
 		</div> <!-- 공지사항 끝 -->
 		
 		<div id="calendar_related">
 			<div class="contents">
-
 				<!-- 달력 -->
 				<div class="calendar">
 					<div class="title_calendar crew">
@@ -312,24 +400,20 @@
 
 			<div id="schedule">
 				<div class="crew_schedule">
-					<div class="crew_schedule_title">크루 한줄게시글</div>
-
+					<div class="crew_schedule_title">크루 한줄게시글
+					<button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()">더보기</button>
+					</div>
+						
 					<div class="crew_schedule_content">
-						<div id = "top">
-							<div class="crew_schedule_time">09:20-06:00</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">헬스장 이름</div></div>
-						</div>
-						<div class="crew_schedule_content_detail">
-							<div class="circle">●</div>
-							&nbsp;&nbsp;&nbsp;
-							<div class="crew_name">${crew_name}</div>
-							&nbsp;&nbsp;&nbsp;
-							<div class="crew_schedule_text">모임장소에서 하체 운동</div>
-						</div>
+					
+						<table id="postTable" class="custom-table">
+					           
+					            <!-- AJAX로 가져온 한줄 게시글 데이터가 여기 들어갑니다 -->
+					       
+					    </table>
 					</div>
 				</div>
-		
-			
-		
+
 			</div>
 		
 		</div>
@@ -337,7 +421,7 @@
 		<div class="list custom-photolist"> <!-- 사진 시작 -->
 		 
 		 <p><input style="margin-top: 10px;" type="text" class="full" name="photostart" value="사진게시글자리" readonly/></p>
-		<div class="list custom_photo">
+		<div class="list custom_photo"> <!-- 사진 넣는 공간 -->
 		<span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span><span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span>
 		</div>
 		
@@ -378,11 +462,10 @@
 var userId = document.getElementById('user_id').value;
 // 크루장 판단하기 
 const isCrewLeader = true;
+var crewIdx = $('#crew_idx').val();
 
 	document.addEventListener('DOMContentLoaded', function() {
 		let event_create = []; // 이벤트 배열 초기화
-
-
 		// 1. 캘린더 - 이벤트 날짜 가져오기 (개인 일정)
 		$.ajax({
 			type: 'GET',
@@ -398,7 +481,7 @@ const isCrewLeader = true;
 				for(var crew_event of event_day.crew_events){
 					let event_Object = {
 						start :	crew_event.plan_date,
-						title : '1' //크루 일정
+						title : '2' //크루 일정
 					};
 					event_create.push(event_Object);
 				}
@@ -415,8 +498,14 @@ const isCrewLeader = true;
 						center: '',
 						end: 'prev next'
 					},
-					events: event_create
+					events: event_create,
+					datesSet: function() {
+						setTimeout(change_css, 100);
+						// 달 변경 시 CSS 풀림 -> 해결 : css 불러오는데 시간이 부족했던 것이 문제였슴.......
+						// -> ★ 해결 안됐지만..추가한 거: 달 변경 시 CSS 적용하는 이벤트 추가 -> 달 바뀔 때마다 css 새로 적용 render은 초기에만 하면 되니까.. 앞에 와도 됨
+					}
 				});
+				
 				calendar.render(); // 캘린더 렌더링 후 css를 해야하는 이유 : 랜더링-> 실제 코드를 적용하는 것 -> 랜더링 전 css 하면 .fc-event 요소들이 DOM에 존재하지 않기 때문에 CSS를 적용할 수 없음
 				change_css();
 			},
@@ -426,7 +515,91 @@ const isCrewLeader = true;
 
 		});
 
+		// 2 번째 아작스 한줄게시글 목록 가져오기
+		 $.ajax({
+		        type: 'GET',
+		        url: 'crew_main_oneboard.ajax', // 데이터 가져올 API URL
+		        data: { crew_idx: $('#crew_idx').val() },
+		        dataType: 'json',
+		        success: function(data) {
+		            // 받아온 데이터가 배열이라고 가정
+		            console.log(data);
+		            data.forEach(function(post) {
+		            	// 오늘 날짜 가져오기
+		                const today = new Date();
+		                const postDate = new Date(post.date); // 게시글 날짜
 
+		                // 날짜 비교: 오늘 날짜와 같은지 확인
+		                let displayDate;
+
+		                if (postDate.toDateString() === today.toDateString()) {
+		                    // 오늘 날짜라면 시간만 표시
+		                    displayDate = postDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		                } else {
+		                    // 오늘이 아니면 날짜만 표시
+		                    displayDate = postDate.toLocaleDateString(); // 기본 포맷으로 날짜 표시
+		                }
+		            	
+		                // 각 게시글에 대한 행 추가
+		                $('#postTable').append(
+		                		'<tr>' +
+		                        '<td class="title">' + post.subject + '</td>' +
+		                        '<td class="author">' + post.nick + '</td>' +
+		                        '<td class="date">' + displayDate + '</td>' +
+		                    '</tr>'
+		                );
+		            });
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('AJAX 오류:', status, error);
+		        }
+		    }); // 2번쨰 아작스 한줄게시글 목록 가져오기 end
+		  
+		    // 3번째 아작스 최신 공지사항 목록 한개 가져오기
+		    $.ajax({
+		        type: 'GET',
+		        url: 'crew_main_notice.ajax', // 데이터 가져올 API URL
+		        data: { crew_idx: $('#crew_idx').val() },
+		        dataType: 'json',
+		        success: function(data) {
+		            // 받아온 데이터가 배열이라고 가정
+		            console.log(data);
+		            var subjectValue = data.subject;
+		            $('input[name="crew_notice"]').val(subjectValue);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('AJAX 오류:', status, error);
+		        }
+		    }); // 3번째 아작스 최신 공지사항 목록 한개 가져오기 end 
+			
+		    // 4번째 아작스 크루원 목록가져오기
+		    $.ajax({
+		        type: 'GET',
+		        url: 'crew_main_crewmember.ajax', // 데이터 가져올 API URL
+		        data: { crew_idx: $('#crew_idx').val() },
+		        dataType: 'json',
+		        success: function(data) {
+		            // 받아온 데이터가 배열이라고 가정
+		            console.log(data);
+		            data.forEach(function(member) {
+		            	const imageUrl = member.image; // 프로필 이미지 URL
+		                const profileUrl = 'mycrew_memberDetail.go?id=' + member.user_id + '&profileType=1&idx=' + crewIdx;
+		                console.log(member);
+		                // 각 게시글에 대한 행 추가
+		             $('#profileList').append(
+		                  '<span class="profile-icon" style="position: relative;">' +
+		                  '<a href="' + profileUrl + '">' + // 클릭 시 프로필 페이지로 이동
+		                  '<img src="' + imageUrl + '" class="profile-img" alt=" ">' +
+		                  '</a>' +
+		                  '</span>'
+		               );
+		            });
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('AJAX 오류:', status, error);
+		        }
+		    }); // 4번쨰 아작스 크루원 목록 가져오기 end
+		
 		//오늘 날짜
 		date = $('#date').html();
 
@@ -443,8 +616,8 @@ const isCrewLeader = true;
 			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
 			if (title === '1') {
 				event.classList.add('type-one'); // 클래스 추가
-			} else if (title === '1') {
-				event.classList.add('type-one'); // 클래스 추가
+			} else if (title === '2') {
+				event.classList.add('type-two'); // 클래스 추가
 			}
 		});
 	} // change_css()
@@ -481,7 +654,7 @@ const isCrewLeader = true;
 	        method: 'GET',
 	        data: { 
 	            date: date,
-	            crew_idx: $('#crew_idx').val()	
+	            crew_idx: $('#crew_idx').val()	// 컨트롤러에 건내줄 crew_idx 값
 	        },
 	        success: function(response) {
 	            // 기존 내용 초기화
@@ -581,7 +754,6 @@ const isCrewLeader = true;
 	    });
 	} // function get_crewplan(date)
 	
-		
 	function draw_journal(journal){
 		var keySet = Object.keys(journal.content);
 		console.log('journal.length :', keySet.length);
@@ -627,13 +799,27 @@ const isCrewLeader = true;
 		console.log('content: ', content);
 		$('#journal_total').html(content);
 	} // function draw_journal(journal)
+
+	
+
 	
 	// 크루일정 작성하러 가기
 	function crew_plan_write(){
 		var crewIdx = $('#crew_idx').val();
 		location.href = "crew_schedule_write.go?crew_idx=" + crewIdx;
 	}
-
+	
+	// 크루 한줄게시글 보러 가기
+	function crew_oneboard_go(){
+		var crewIdx = $('#crew_idx').val();
+		location.href = "crew_oneboard.go?crew_idx=" + crewIdx;
+	}
+	
+	// 크루 공지사항 보러 가기
+	function crew_notice_go(){
+		var crewIdx = $('#crew_idx').val();
+		location.href = "crew_page_notice.go?crew_idx=" + crewIdx;
+	}
 
 
 </script>
