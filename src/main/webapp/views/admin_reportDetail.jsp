@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_board.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        var index = 2;
+        var index = 1;
         var report_prog = '${info.report_prog}';
     </script>
 </head>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_regData.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        var index = 8;
+        var index = 7;
     </script>
 </head>
 <body>

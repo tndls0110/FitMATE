@@ -10,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
     <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
     <script>
-        var index = 5;
+        var index = 4;
     </script>
 </head>
 <body>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_board.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        var index = 4;
+        var index = 3;
     </script>
 </head>
 <body>
