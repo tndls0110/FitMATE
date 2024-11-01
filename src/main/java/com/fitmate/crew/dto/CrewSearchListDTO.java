@@ -33,8 +33,26 @@ public class CrewSearchListDTO {
 	// 크루 생성일
 	private Date create_date;
 	
+	// 크루원 목록 idx
+	private int member_idx;
+	
+	// 가입신청 idx
+	private int join_idx;
 	
 	
+	
+	public int getMember_idx() {
+		return member_idx;
+	}
+	public void setMember_idx(int member_idx) {
+		this.member_idx = member_idx;
+	}
+	public int getJoin_idx() {
+		return join_idx;
+	}
+	public void setJoin_idx(int join_idx) {
+		this.join_idx = join_idx;
+	}
 	public Date getCreate_date() {
 		return create_date;
 	}
