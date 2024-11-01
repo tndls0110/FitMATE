@@ -254,7 +254,7 @@
 			background-color: rgba(233, 236, 239, 1);
 			height: 112px;
 			border-radius: 6px;
-			margin: 0px 0px -133px 247px;
+			margin: 0px 0px -133px 272px;
 			position: relative;
 
 		}
@@ -270,7 +270,20 @@
 			color : rgba(40, 43, 52, 1);
 		}
 
+		.crew_schedule_content_none{
+			border-radius: 6px;
+			width: 500px;
+			background-color: rgba(40, 43, 52, 1);
+			padding: 37px 36px 36px 183px;
+			margin-top: 10px;
+		}
 	</style>
+	<script>
+		var msg = '${msg}';
+		if (msg != ''){
+			modal.showAlert(msg);
+		}
+	</script>
 
 </head>
 
@@ -307,64 +320,13 @@
 				<div class="crew_schedule_title">크루 일정</div>
 				<div class="crew_schedule">
 
-					<%--<div class="crew_schedule_content">
-						<div id = "top">
-							<div class="crew_schedule_time">09:20-06:00</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">헬스장 이름</div></div>
-						</div>
-						<div class="crew_schedule_content_detail">
-							<div class="circle">●</div>
-							&nbsp;&nbsp;&nbsp;
-							<div class="crew_name">${crew_name}</div>
-							&nbsp;&nbsp;&nbsp;
-							<div class="crew_schedule_text">모임장소에서 하체 운동</div>
-						</div>
-					</div>--%>
+
 
 				</div>
 				<hr/>
 				<div id = "journal_total">
 
-			<%--	<div class="journal">
-					<div class="journal_content">
-						<div class="journal_datetime">
-							<div class="journal_date">2024-10-14</div>
-							&nbsp;&nbsp;&nbsp;
-							<!--<div class="journal_time">09:20</div>-->
-							<div class="journal_start_end">
-								<div class="crew_tag">크루</div>
-								&nbsp;&nbsp;&nbsp;
-								<div class="journal_start">시작 시간</div>
-								&nbsp;&nbsp;&nbsp;
-								<div class="journal_end">끝난 시간</div>
-							</div>
-						</div>
-						<div class="journal_text">내 그대를 생각함은 항상 그대가 앉아 있는 배경에서 해가 지고
-							바람이 부는 일처럼 사소한 일일 것이나</div>
 
-						<div class="journal_image"></div>
-					</div>
-
-				</div>--%>
-			<%--	<div class="journal">
-					<div class="journal_content">
-						<div class="journal_datetime">
-							<div class="journal_date">2024-10-14</div>
-							&nbsp;&nbsp;&nbsp;
-							<div class="journal_time">09:20</div>
-							<div class="journal_start_end">
-								<div class="individual_tag">개인</div>
-								&nbsp;&nbsp;&nbsp;
-								<div class="journal_start">시작 시간</div>
-								&nbsp;&nbsp;&nbsp;
-								<div class="journal_end">끝난 시간</div>
-							</div>
-						</div>
-						<div class="journal_text">내 그대를 생각함은 항상 그대가 앉아 있는 배경에서 해가 지고
-							바람이 부는 일처럼 사소한 일일 것이나</div>
-
-						<div class="journal_image"></div>
-					</div>
-				</div>--%>
 			</div>
 
 			</div>
@@ -473,9 +435,8 @@
 			success : function(journal){
 				console.log('journal 가져오기 성공:',journal);
 
-				setTimeout(function() {
 					draw_journal(journal);
-				}, 100);
+
 			},
 			error : function(e){
 				console.log(e);
@@ -615,8 +576,9 @@
 			$('.crew_schedule').html(content);
 
 		}else{//아니면 hidden하기...
-		$('.crew_schedule').html().remove();
-		$('.crew_schedule').css({'display' : 'hidden'});
+			var content = '<div class = "crew_schedule_content_none">스케줄 없음</div>';
+			$('.crew_schedule').html(content);
+			$('.crew_schedule').css({'display' : 'hidden'});
 		console.log('값 있음');
 		}
 
@@ -630,7 +592,7 @@
 			data: {'date': date},
 			dataType: 'JSON',
 			success: function (journal) {
-				console.log(journal);
+				console.log('journal 가져오기 성공',journal);
 				draw_journal(journal);
 			},
 			error : function (e){
@@ -664,11 +626,11 @@
 				var e_time = end_time.substring(0, 5);
 				console.log('e_time:', e_time);
 
-				//이미지 분리하기 - 이미지도 받아와야할 듯
-				<%--<c:forEach items = ${files}--%>
+
+
 				var journal_idx = j_data['journal_idx'];
+				content += '<div class="journal" value="' + journal_idx + '"><div class="modal_body"><div class="update" onclick="update_journal(' + j_data['journal_idx'] + ')"><i class="bi bi-pencil-square"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
-				content += '<div class="journal"><div class = "modal_body"><div class="update"><i class="bi bi-pencil-square" onclick="delete_journal('+j_data['journal_idx']+','+'"'+j_data['user_id']+'"'+')"></i>수정하기</div> <div class="delete" onclick="update_journal(` + j_data['journal_idx'] + `, '` + j_data['user_id'] + `')"><i class="bi bi-trash"></i>삭제하기</div><div class="idx">` + j_data['journal_idx'] + `</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">;
 				content += e_time + '</div>';
 				content += '<div class="journal_start_end">';
 				if (j_data['journal_cate'] == 1) {
@@ -676,14 +638,13 @@
 				} else if (j_data['journal_cate'] == 2) {
 					content += '<div class="crew_tag">크루</div>';
 				}
+
 				//content 길이 제한
-
-
 				content += '<div class="journal_start">' + s_time + '</div>';
 				content += '<div class="journal_end">' + e_time + '</div><i class="bi bi-three-dots-vertical"></i></div></div>';
 				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>';
 
-				/*if(j_data['journal']) 사진 나중에 추가하기*/
+
 
 
 				//사진 몇장인지에 따라서 image 추가되게 하기
@@ -727,6 +688,7 @@
 
 	function delete_journal(idx,user_id){
 		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
+		var i = idx;
 		$.ajax({
 			type : 'GET',
 			url : 'delete_journal.ajax',
@@ -734,16 +696,30 @@
 			dataType : 'JSON',
 			success : function(data){
 				console.log('success :', data.success);
+				if(data.success){
+
+					$('.journal[value="' + idx + '"]').remove();
+				}
 			}, error(e){
 				console.log(e);
 			}
 		})
-
-
 	}
 
-	function update_journal(idx){
-		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정수정
+	function update_journal(idx) {
+		// 클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정 수정
+		$.ajax({
+			type: 'GET',
+			url: '/update_journal.ajax',
+			data: {'idx': idx},
+			dataType: 'JSON',
+			success: function(data) {
+				console.log("update 성공", data);
+			},
+			error: function(e) {
+				console.error("AJAX 요청 실패:", e); // 오류 정보 출력
+			}
+		});
 	}
 
 
