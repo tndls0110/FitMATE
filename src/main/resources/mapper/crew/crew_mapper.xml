@@ -4,8 +4,15 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewDAO">
-<select id="placeFilter" resultType="map"> SELECT A.region_name, B.regions_idx, B.regions_name FROM region A INNER JOIN region_sub B ON A.region_idx = B.region_idx </select>
-<select id="mbtiFilter" resultType="map"> SELECT mbtir_idx, mbtir_name FROM mbti_r </select>
+<select id="placeFilter" resultType="map">
+	SELECT A.region_name, B.regions_idx, B.regions_name FROM region A INNER JOIN region_sub B ON A.region_idx = B.region_idx 
+</select>
+
+<select id="mbtiFilter" resultType="map">
+	SELECT mbtir_idx, mbtir_name FROM mbti_r
+</select>
+
+<!-- 크루검색의 크루목록 가져오기 -->
 <select id="crewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="com.fitmate.crew.dto.CrewSearchConditionDTO">
 SELECT
 <!--    크루명    -->
@@ -43,17 +50,28 @@ INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx
 LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
 <where>
 CB.category_idx =1
-<!--  AND A.status = 1  -->
+AND
+CB.status = 1
 <!--    searchFilter(1='크루이름 검색'/ 2='크루장닉네임 검색')    -->
-<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')"> AND A.name LIKE CONCAT('%', #{searchKeyword}, '%') </if>
-<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')"> AND MB.nick LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
+AND A.name LIKE CONCAT('%', #{searchKeyword}, '%')
+</if>
+<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
+AND MB.nick LIKE CONCAT('%', #{searchKeyword}, '%')
+</if>
 <!--    regions_idx(활동지역) -> WHERE 크루-운동지역idx    -->
-<if test="regions_idx != 0"> AND A.regions_idx = #{regions_idx} </if>
+<if test="regions_idx != 0">
+AND A.regions_idx = #{regions_idx}
+</if>
 <!--    mbtiFilter(운동성향) -> WHERE 프로필-운동성향idx OR MBTI-운동성향idx    -->
-<if test="mbtiFilter != 0"> AND P.mbtir_idx = #{mbtiFilter} </if>
+<if test="mbtiFilter != 0">
+AND P.mbtir_idx = #{mbtiFilter}
+</if>
 </where>
 LIMIT #{limit} OFFSET #{offset}
 </select>
+	
+<!-- 모집게시글 상세보기 -->
 <select id="recruitDetail" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="int">
 SELECT
 <!--    크루명    -->
@@ -83,18 +101,130 @@ P.profile AS leader_profile,
 <!--    크루장 mbti    -->
 M.mbtir_name AS leader_mbti,
 <!--   전체 게시글 수   -->
-BC.board_count FROM crew A INNER JOIN member MB ON A.crew_id = MB.user_id INNER JOIN profile P ON A.crew_id = P.user_id INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx INNER JOIN crew_board CB ON CB.board_idx = I.board_idx INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx INNER JOIN region R ON R.region_idx = RS.region_idx INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+BC.board_count FROM crew A
+INNER JOIN member MB ON A.crew_id = MB.user_id 
+INNER JOIN profile P ON A.crew_id = P.user_id 
+INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
+INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
+INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx 
+INNER JOIN region R ON R.region_idx = RS.region_idx 
+INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
+LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
 <where>
 category_idx =1
+AND
+CB.status = 1
 <if test="board_idx != 0"> AND CB.board_idx = #{board_idx} </if>
 </where>
 </select>
+
+
+<!-- 가입신청중인 크루목록 -->
+<select id="joincrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="String">
+SELECT
+<!-- 가입신청 idx -->
+A.join_idx,
+<!--    크루명    -->
+C.name AS crew_name,
+<!--    크루idx    -->
+C.crew_idx,
+<!--    게시글idx    -->
+I.board_idx,
+<!--    크루소개글    -->
+CB.subject,
+<!--    활동지역 시단위    -->
+R.region_name,
+<!--    활동지역 구단위    -->
+RS.regions_name,
+<!--    크루원 수    -->
+MC.member_count,
+<!--    크루장 ID    -->
+C.crew_id AS leader_id,
+<!--    크루장 이름    -->
+MB.name AS leader_name,
+<!--   크루장 닉네임   -->
+MB.nick AS leader_nick,
+<!--    크루장 프로필사진    -->
+P.profile AS leader_profile,
+<!--    크루장 mbti    -->
+M.mbtir_name AS leader_mbti 
+FROM crew_join A
+INNER JOIN crew C ON C.crew_idx = A.crew_idx        
+INNER JOIN member MB ON A.join_id = MB.user_id 
+INNER JOIN profile P ON A.join_id = P.user_id 
+INNER JOIN crew_idx I ON C.crew_idx = I.crew_idx 
+INNER JOIN crew_board CB ON CB.board_idx = I.board_idx 
+INNER JOIN region_sub RS ON RS.regions_idx = C.regions_idx 
+INNER JOIN region R ON R.region_idx = RS.region_idx 
+INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
+WHERE
+A.join_id = #{userId}  <!-- 현재 유저ID로 신청중인 크루목록 가져오기. -->
+AND
+A.status = 1           <!-- 신청중인 모집게시글목록만 가져오기 -->
+AND
+CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
+</select>
+
+<!-- 내가속해있는 크루목록 -->
+<select id="mycrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="String">
+SELECT
+<!-- 크루원 목록 idx -->
+A.member_idx,
+<!--    크루명    -->
+C.name AS crew_name,
+<!--    크루idx    -->
+C.crew_idx,
+<!--    게시글idx    -->
+I.board_idx,
+<!--    크루소개글    -->
+CB.subject,
+<!--    활동지역 시단위    -->
+R.region_name,
+<!--    활동지역 구단위    -->
+RS.regions_name,
+<!--    크루원 수    -->
+MC.member_count,
+<!--    크루장 ID    -->
+C.crew_id AS leader_id,
+<!--    크루장 이름    -->
+MB.name AS leader_name,
+<!--   크루장 닉네임   -->
+MB.nick AS leader_nick,
+<!--    크루장 프로필사진    -->
+P.profile AS leader_profile,
+<!--    크루장 mbti    -->
+M.mbtir_name AS leader_mbti 
+FROM crew_member A
+INNER JOIN crew C ON C.crew_idx = A.crew_idx        
+INNER JOIN member MB ON A.member_id = MB.user_id 
+INNER JOIN profile P ON A.member_id = P.user_id 
+INNER JOIN crew_idx I ON C.crew_idx = I.crew_idx 
+INNER JOIN crew_board CB ON CB.board_idx = I.board_idx 
+INNER JOIN region_sub RS ON RS.regions_idx = C.regions_idx 
+INNER JOIN region R ON R.region_idx = RS.region_idx 
+INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
+WHERE
+A.member_id = #{userId}  <!-- 현재 유저ID로 활동중인 크루목록 가져오기. -->
+AND
+A.status = 1           <!-- 정상적으로 활동허가를 받은 크루목록만 가져오기 -->
+AND
+CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
+
+</select>
+
+
+
+<!-- 댓글가져오기 -->
 <select id="ask" resultType="com.fitmate.crew.dto.CrewAskDTO" parameterType="int">
 SELECT
 <!--   댓글idx   -->
 C.comment_idx,
 <!--   댓글ID   -->
 C.comment_id,
+<!-- 댓글 게시여부 -->
+C.status,
 <!--   댓글 작성자 프로필   -->
 P.profile,
 <!--   댓글 작성자 닉네임   -->
@@ -102,8 +232,13 @@ M.nick,
 <!--   댓글 내용   -->
 C.content,
 <!--   댓글 작성일   -->
-C.date FROM comment C INNER JOIN profile P ON P.user_id = C.comment_id INNER JOIN member M ON M.user_id = C.comment_id WHERE board_idx = #{board_idx}
+C.date FROM comment C 
+INNER JOIN profile P ON P.user_id = C.comment_id 
+INNER JOIN member M ON M.user_id = C.comment_id 
+WHERE board_idx = #{board_idx}
 </select>
+
+<!-- 대댓글 가져오기 -->
 <select id="reply" resultType="com.fitmate.crew.dto.CrewReplyDTO" parameterType="int">
 SELECT
 <!--   대댓글idx   -->
@@ -117,7 +252,10 @@ M.nick,
 <!--   대댓글 내용   -->
 RC.content,
 <!--   대댓글 작성일   -->
-RC.date FROM recomment RC INNER JOIN profile P ON P.user_id = RC.recomment_id INNER JOIN member M ON M.user_id = RC.recomment_id WHERE comment_idx = #{comment_idx}
+RC.date FROM recomment RC 
+INNER JOIN profile P ON P.user_id = RC.recomment_id 
+INNER JOIN member M ON M.user_id = RC.recomment_id 
+WHERE comment_idx = #{comment_idx}
 </select>
 
 <!-- 댓글, 대댓글 한번에 가져오기(개선버전.... 좀더 수정해야함.) -->
@@ -163,7 +301,7 @@ ORDER BY date;
 
 <!-- 문의 댓글작성 -->
 <insert id="askWrite" parameterType="com.fitmate.crew.dto.AskWriteDTO">
-	INSERT INTO comment(board_idx, comment_id, content) VALUES(#{board_idx}, #{comment_id}, #{content})
+	INSERT INTO comment(board_idx, comment_id, content, status) VALUES(#{board_idx}, #{comment_id}, #{content}, 1)
 </insert>
 
 <!-- 답변 대댓글작성 -->
@@ -172,21 +310,38 @@ ORDER BY date;
 </insert>
 
 
-
-
-
+<!-- 댓글수정 -->
 <update id="comment_update" parameterType="hashmap">
-	UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx} 
+	UPDATE comment SET content = #{content} 
+	WHERE comment_idx = #{comment_idx} 
+	AND status = 1      <!-- 정상 댓글인 경우에만 내용 수정가능. --> 
 </update>
+
+<!-- 대 댓글수정 -->
 <update id="recomment_update" parameterType="hashmap">
-UPDATE recomment SET content = #{content} WHERE recomment_idx = #{comment_idx} 
+	UPDATE recomment SET content = #{content} WHERE recomment_idx = #{comment_idx} 
 </update>
-<delete id="comment_delete" parameterType="hashmap">
- DELETE FROM comment WHERE comment_idx = #{comment_idx} 
-</delete>
+
+<!-- 댓글 삭제 -->
+<update id="comment_delete" parameterType="hashmap">
+	 UPDATE comment SET status = 2 
+	 WHERE comment_idx = #{comment_idx};
+</update>
+
+<!-- 대댓글 삭제 -->
 <delete id="recomment_delete" parameterType="hashmap">
 DELETE FROM recomment WHERE recomment_idx = #{comment_idx}
 </delete>
+
+<!-- 크루탈퇴 status 0: 추방, 1: 크루원 -->
+<delete id="memberExit" parameterType="int">
+	DELETE FROM crew_member 
+		WHERE member_idx = #{member_idx}
+		AND status = 1        <!-- 추방된 회원은 탈퇴하지 못하도록 처리. --> 
+</delete>
+
+
+
 <insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO">
 insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3);
 </insert>
