@@ -1,6 +1,6 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.If"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> -->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -8,349 +8,356 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>크루검색 페이지</title>
+<title>내 크루</title>
 <link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-   
-   h2.capt{
-      margin: 1% 0;
-   }
-   
-   div.recruitArea, div.approvalArea{
-      overflow-y: scroll;
-      overflow-x: hidden;
-      width: 98%;
-      height: 45%;
-      margin: 0 auto%;
-      
-      display: flex;
-      flex-wrap: wrap;
-   }
-   
-   div.recruit{
-      width: 40%;
-      height: 200px;
-      margin: 1% 1%;
-      padding: 3% 2%;
-      background-color: #282b34;
-      flex: 1 1 40%;
-      /* align-content: left; */ 
-      position: relative;
-   }
-   
-   div.recruit_odd{
-      width: 48%;
-      height: 200px;
-      margin: 1% 1%;
-      padding: 3% 2%;
-      background-color: #282b34;
-      /* align-content: left; */
-      position: relative; 
-      
-   }
-   
-   .recruit_left{
-      display: inline-block;
-       width: 15%;
-       aspect-ratio: 1;
-       border: 1px solid black;
-       border-radius: 50%;
-   }
-   
-   .recruit_right{
-      width: 80%;
-      display: inline-block;
-      position: absolute;
-      top: 0%;
-      left: 20%;
-   }
-   
-   div.recruit_content{
-      margin: 5% 2%;
-      height: 20%;
-        /* 줄바꿈 방지 */
-        white-space: nowrap; 
-        /* 영역을 넘어가는 경우 숨김처리.  */
-      overflow: hidden;
-      /* 숨겨지는 부분에 말줄임표(...)표시 */
-        text-overflow: ellipsis;
-   }
-   
-   div.recruit_info{
-      margin: 5% 2%;
-      height: 20%;
-      display: flex;
-      flex-wrap: wrap;
-      /* justify-content: space-evenly; */
-      position: relative;
-   }
-   
-   span.cnt{
-      width: 20%;
-      white-space: nowrap; 
-        /* 영역을 넘어가는 경우 숨김처리.  */
-      overflow: hidden;
-      /* 숨겨지는 부분에 말줄임표(...)표시 */
-        text-overflow: ellipsis;
-   }
-   
-   span.rgn{
-      width: 80%;
-      white-space: nowrap; 
-        /* 영역을 넘어가는 경우 숨김처리.  */
-      overflow: hidden;
-      /* 숨겨지는 부분에 말줄임표(...)표시 */
-        text-overflow: ellipsis;
-   }
-   
-   .text_area{
-      display: inline-block;
-      width: 100%;
-      /* 영역을 넘어가는 경우 숨김처리.  */
-      overflow: hidden;
-      /* 숨겨지는 부분에 말줄임표(...)표시 */
-        text-overflow: ellipsis;
-        /* 줄바꿈 방지 */
-        white-space: nowrap;
-        margin: 1%;
-   }
-   
-   
-   .button_area{
-      position: absolute;
-      top: 0%;
-      right: 0%;
-   }
-   
-   .member_button{
-      position: absolute;
-      top: 7%;
-      right: 3%;
-      aspect-ratio: 1;
-      background-color: #282b34;
-      color: white;
-      border: none;
-      margin: 0;
-      padding: 0;
-   }
-   
-   a.recruit_detail{
-      display: block;
-      width: 80%;
-      position: relative;
-      margin-bottom: 5%;
-      height: 40%;
-   }
-   
-   div.right_top, div.right_bottom{
-      width: 100%;
-   }
-   
-   i.bi.bi-plus-lg{
-      position: absolute;
-      top: 45%;
-      left: 38%;
-   }
-   
-   a.crew_create{
-      display: block;
-      width: 100%;
-      height: 100%;
-   }
-   
-   
+h2.capt {
+	margin: 1% 0;
+}
+
+div.recruitArea, div.approvalArea {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 98%;
+	height: 45%;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+div.recruit, div.recruit_odd {
+	width: 48%;
+	height: 200px;
+	margin: 1% 1%;
+	padding: 3% 2%;
+	background-color: #282b34;
+	position: relative;
+}
+
+.recruit_left {
+	display: inline-block;
+	width: 15%;
+	aspect-ratio: 1;
+	border: 1px solid black;
+	border-radius: 50%;
+}
+
+.recruit_right {
+	width: 80%;
+	display: inline-block;
+	position: absolute;
+	top: 0%;
+	left: 20%;
+}
+
+div.recruit_content {
+	margin: 5% 2%;
+	height: 20%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+div.recruit_info {
+	margin: 5% 2%;
+	height: 20%;
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+}
+
+span.cnt, span.rgn {
+	width: 20%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+span.rgn {
+	width: 35%;
+}
+
+.text_area {
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin: 1%;
+}
+
+.button_area {
+	position: absolute;
+	top: 77%;
+	right: 3%;
+}
+
+.member_button {
+	position: absolute;
+	top: 7%;
+	right: 3%;
+	aspect-ratio: 1;
+	background-color: #282b34;
+	color: white;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+a.recruit_detail {
+	display: block;
+	width: 80%;
+	position: relative;
+	margin-bottom: 5%;
+	height: 40%;
+}
+
+div.right_top, div.right_bottom {
+	width: 100%;
+}
+
+i.bi.bi-plus-lg {
+	position: absolute;
+	top: 45%;
+	left: 38%;
+}
+
+a.crew_create {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+#no_approvalArea {
+	text-align: center;
+	margin: auto;
+}
+
+.modal_cancel_request, .modal_leave_crew, .modal_container.min {
+	width: 190px;
+	height: auto;
+	margin: 0;
+}
 </style>
 </head>
 
 <body>
-   <div class="container">
-      <c:import url="layout/leftnav_3.jsp"></c:import>
+	<div class="container">
+		<c:import url="layout/leftnav_3.jsp"></c:import>
+		<div class="contents">
+			<div class="area">
+				<h2 class="capt">신청중인 크루</h2>
+				<div class="approvalArea"></div>
 
-      <!-- 넓은 화면으로 작성할 시 class="contents" -->
-      <!-- 좁은 화면으로 작성할 시 class="contents narrow" -->
-      <div class="contents">
-         <div class="area">
-            <h2 class="capt">신청중인 크루</h3>
-            <div class="approvalArea">
-            </div>
-            
-            <!-- 크루모집 영역 -->
-            <h2 class="capt">내 크루</h3>
-            <div class="recruitArea">
-            </div>
-         </div>   
-      </div>
-      
-   </div>
+				<h2 class="capt">내 크루</h2>
+				<div class="recruitArea"></div>
+			</div>
+		</div>
+	</div>
 </body>
+
+<!-- 모달 div모음 -->
 <c:import url="layout/modal.jsp"></c:import>
+
+<!-- 신청취소 모달 -->
+<div class="modal modal_cancel_request">
+	<div class="modal_container min">
+		<button class="btn_cancel_request subbtn full">
+			<i class="bi bi-x-lg">신청 취소</i>
+		</button>
+		<button class="btn_cancel mainbtn full">창 닫기</button>
+	</div>
+</div>
+
+<!-- 탈퇴하기 모달 -->
+<div class="modal modal_leave_crew">
+	<div class="modal_container min">
+		<button class="btn_leave_crew subbtn full">
+			<i class="bi bi-exclamation-circle-fill" style="color: red">탈퇴하기</i>
+		</button>
+		<button class="btn_cancel mainbtn full">창 닫기</button>
+	</div>
+</div>
+
 <script src="resources/js/common.js"></script>
 <script>
-   
    // 0: 신청중인 크루, 1: 내 크루
-   var info_chk = 0;
-   
-   // 신청중인 크루(1)이면, : 마지막에 WHERE문 추가 =>  crew테이블-crew_idx IN (SELECT crew_idx FROM crew_join테이블 WHERE join_id = sessionID) 
-   // 내크루(0) 이면, : 마지막에 WHERE문 추가 => crew테이블-crew_idx IN (SELEC crew_idx FROM crew_member테이블 WHERE member_id = sessionID)
-   
-   // 현재 유저아이디 => 세션으로 바꿔줘야함.
-   var currentUserId = 'member01';
+   var currentUserId = 'member01'; // 현재 유저아이디 => 세션으로 바꿔줘야함.
+   var leader_chk = 0; // 크루장여부 체크 (0: 크루원, 1: 크루장)
+   var cntApproval = 0; // 신청중인 크루 Count
+   var cntRecruit = 0; // 내 크루 Count
 
-   //0. 초기 크루목록 가져오기
-   //0-1. 신청중인 크루 목록 가져오기
-   crewList();
+   // 버튼 변수
+   var leader_button = '';
+   var member_button = '';
    
-   //0-2. 내 크루 목록 가져오기
-   crewList();
+   // 모달 변수 modal_cancel_request: 신청취소모달, modal_leave_crew: 탈퇴모달
+   var modal_chk = '';
+   
+   // 신청중인 크루 목록 가져오기
+   $('div.approvalArea').empty();
+   crewList(0);
+   
+   // 내 크루 목록 가져오기
+   $('div.recruitArea').empty();
+   crewList(1);
 
-   // 크루목록 데이터 불러오기 함수
-   function crewList() {
+   // 크루 목록 데이터 불러오기 함수
+   function crewList(info_chk) {
       $.ajax({
-         url : 'mycrew.ajax',
-         type : 'GET',
-         data : {
-            'info_chk' : info_chk
-         },
-         dataType : 'JSON',
-         success : function(list) {
-            
-            // 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
-            var cnt = 1;
-            var whereAdd = '';
-            
-            if (info_chk == 0){
-               whereAdd = $('div.approvalArea');    
-               info_chk = 1;
-            }else{
-               whereAdd = $('div.recruitArea');
-               info_chk = 0;
-            }
-             
-            $('div.recruitArea').empty();
-            
-            $(list).each(function(idx, item) { // 데이터 =item
-               
-               console.log('cnt : ' + cnt);
-            
-               // Controller에서 받아온 크루원 모집게시글 추가.
-               recruitAdd(item, cnt, whereAdd);      
-               
-               cnt++;
+         url: 'mycrew.ajax',
+         type: 'GET',
+         data: { 'info_chk': info_chk }, // info_chk 0: 신청중인 크루, 1: 내 크루
+         dataType: 'JSON',
+         success: function(list) {
+            $(list).each(function(idx, item) { // 데이터 = item
+               recruitAdd(item, info_chk); // Controller에서 받아온 크루원 모집게시글 추가.
             });
             
-            // 내크루영역이라면, 크루생성영역 추가.
-            if(info_chk == 0){
-               if(cnt % 2 == 1){
-                  whereAdd.append('<div class="recruit"><a href="#" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
-               }else{
-                  whereAdd.append('<div class="recruit_odd"><a href="#" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
+            // 신청중인 크루가 없을 경우 '신청중인 크루가 없습니다.'
+            if (info_chk == 0) {
+               if ($('div.approvalArea').text().trim() === '') {
+                  $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
                }
+            } else {
+               // 내 크루 영역 마지막에 크루 생성 영역 추가.
+               if (cntRecruit % 2 == 1) {
+                  $('div.recruitArea').append('<div class="recruit"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
+               } else {
+                  $('div.recruitArea').append('<div class="recruit_odd"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
+               }	
             } 
-            
-            // 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. 
-            if(list == null || list == ''){
-               modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
-            }
-
-             /* [...버튼]
-             크루장인 경우에만 ...버튼을통해 모집글 수정 or 삭제가능..?   삭제는 빼야될듯..? 크루생성과 크루모집글생성을 합쳤기 때문에...
-             크루장인지 확인은.. sessionId와 크루장 id 비교..? OR sessionName와 크루장이름 비교 */
          },
-         error : function(e) {
-            console.log(e); // 에러가 보이지 않도록 추후 처리필요?
+         error: function(e) {
             modal.showAlert('크루 목록가져오기 실패');
          }
-         // Ajax 요청전 함수.
-         /* ,
-         beforeSend : function() {
-            //데이터가 로드 중임을 나타내는 flag.
-            _scrollchk = true;
-            //skeleton 그리는함수로 DOM에 추가.
-            // Sekeleton Screen
-            // 최종 콘텐츠가 제자리에 로드되기 전에 페이지 구조의 윤곽을 나타내는 연한배경, 선 및 텍스트로 구성됨.
-            document.getElementById('list').appendChild(skeleton.show());
-            //loading animation 보여주기. (스피너 로딩)
-            $(".loading").show();
-
-         }, */
-         // Ajax 요청후 함수. 
-         /* complete : function() {
-            //데이터가 로드 중임을 나타내는 flag.
-            _scrollchk = false;
-            //loading animation과 skeleton을 DOM에서 삭제. 태그의 hidden과 같다
-            $(".loading").hide();
-            skeleton.hide();
-         } */
       });
    }
    
-   function recruitAdd(item, cnt, whereAdd){
-      var header = '';
-      var content = '';
-      var info = '';
-      var profile = ''; // 프로필 사진
-      var leader_button = ''; // 크루장에게 보이는 버튼
-      var member_button = ''; // 크루원에게 보이는 버튼
-      
-      // profile: 프로필사진 (프로필 사진이 없을경우 기본 프로필 적용.)
-      if(profile == null || item.leader_profile == ''){
-         profile = '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>';                     
-      }else{
-         profile = '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>';
-      }
-      
-      // sessionID or sessionName을 체크하여 크루장일 경우 버튼추가 (크루 신청관리, 크루 정보수정)  
-      leader_button = '<div class="button_area">'
-                   + '<button class="mainbtn minbtn">크루 신청관리</button>&nbsp;&nbsp;'
-                    + '<button class="subbtn minbtn">크루 정보수정</button>'
-                  + '</div>';
-      
-       /* member_button = '<div class="member_button">' 
-                    + '<button type="button" class="member_button">︙</button>'
-                   +'</div>'; */   
-                   
-       member_button = '<button type="button" class="member_button"><i class="bi bi-three-dots-vertical" style="font-size:23px"></i></button>'; 
-                     	
+   function recruitAdd(item, info_chk) {
+	   
+	   // 크루장인지 크루원인지 체크
+	   if(currentUserId === item.leader_id){
+		   leader_chk = 1;	   
+	   }else{
+		   leader_chk = 0;
+	   }
+	   
+	   
+      var profile = item.leader_profile ? '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>' 
+                                         : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
       
       // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI
-      header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' +currentUserId+ '" class="recruit_detail">'
-               + profile
-               + '<div class="recruit_right">'
-                  + '<div class="right_top">'
-                     + '<h4 class="text_area">' + item.crew_name + '</h4>'
-                     + '<br/>'
-                     + '<span class="text_area">'
-                  + '</div>'
-                  + '<div class="right_bottom">'
-                     + '<span>' + item.leader_nick + '</span>'
-                     + '<span> (' + item.leader_mbti + ')</span>'
-                  + '</div>'
-                  + '</span>'
-               + '</div>'
-            + '</a>'
-            + member_button;
-            
+      var header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' + currentUserId + '" class="recruit_detail">'
+                   + profile
+                   + '<div class="recruit_right">'
+                      + '<div class="right_top">'
+                         + '<h4 class="text_area">' + item.crew_name + '</h4>'
+                         + '<br/>'
+                         + '<span class="text_area"></span>'
+                      + '</div>'
+                      + '<div class="right_bottom">'
+                         + '<span>' + item.leader_nick + '</span>'
+                         + '<span> (' + item.leader_mbti + ')</span>'
+                      + '</div>'
+                   + '</div>'
+                + '</a>';
+      
       // Content: 크루 소개글         
-      content = '<div class="recruit_content">' + item.subject + '</div>';
+      var content = '<div class="recruit_content">' + item.subject + '</div>';
       
       // Info: 크루원 수, 활동지역
-      info = '<div class="recruit_info">'
-               + '<span class="cnt"><i class="bi bi-people-fill"></i>&nbsp;&nbsp;' + item.member_count + ' </span>'
-               + '<span class="rgn"><i class="bi bi-geo-alt-fill"></i>&nbsp;&nbsp;' + item.region_name + ' ' + item.regions_name + '</span>'
-               + leader_button
-           +'</div>';
-      
-      
-      // 홀수번째 게시글은 왼쪽정렬
-      if(cnt % 2 == 1){
-         whereAdd.append('<div class="recruit_odd">' + header + content + info + '</div>');
-      }else{
-         whereAdd.append('<div class="recruit">' + header + content + info + '</div>');
-      }
-      
-   }
-</script>
+      var info = '<div class="recruit_info">'
+                   + '<span class="cnt"><i class="bi bi-people-fill"></i>&nbsp;&nbsp;' + item.member_count + ' </span>'
+                   + '<span class="rgn"><i class="bi bi-geo-alt-fill"></i>&nbsp;&nbsp;' + item.region_name + ' ' + item.regions_name + '</span>'
+               + '</div>';
 
+		
+      
+   	  // 신청중인 크루 영역이라면
+      if (info_chk === 0) {     
+    	  // 신청취소 버튼 => crew_join테이블 크루idx와 신청자ID(내ID) 사용. status=1 DELETE      추후 가입신청 idx있으면 좋음.join_idx
+    	  modal_chk = '.modal_cancel_request';
+          member_button = member_button = '<button type="button" class="member_button" onclick="my_modal(this, \'' + modal_chk + '\', ' + item.crew_idx + ', \'' + item.member_id + '\')"><i class="bi bi-three-dots-vertical" style="font-size:23px"></i></button>';     
+          
+         if (cntApproval % 2 == 1) {
+            $('div.approvalArea').append('<div class="recruit">' + header + member_button + content + info + '</div>');
+         } else {
+            $('div.approvalArea').append('<div class="recruit_odd">' + header + member_button + content + info + '</div>');
+         }
+         
+         cntApproval++; // 신청중인 크루 Count 증가
+         
+      } else {
+    	// 크루장이면 리더버튼 세팅 OR 크루원,신청자이면 멤버버튼 세팅
+         if(leader_chk === 1){
+        	 leader_button = '<div class="button_area">'
+        	 		// 크루 신청관리 => crew_join페이지 이동. 크루idx만 있으면 될듯?
+        	       + '<button type="button" class="mainbtn minbtn" onclick="location.href=\'mycrew_joinList.go?idx=' + item.crew_idx + '\'">크루 정보수정</button>&nbsp;&nbsp'
+        	       // 크루정보 수정페이지 => crew_idx랑 board_idx정도 넘겨주면될 듯?
+        	       + '<button type="button" class="subbtn minbtn" onclick="location.href=\'crew_create_rewrite.go?idx=' + item.crew_idx + '&board_idx=' + item.board_idx + '\'">크루 정보수정</button>'
+        	       + '</div>';	 
+         }else{
+        	// 탈퇴하기 버튼 => crew_member테이블 크루idx와 크루원ID(내ID) 사용.          추후 크루원 목록. member_idx값을 가져올 수 있으면 좋음.
+        	 modal_chk = '.modal_leave_crew';
+        	 member_button = '<button type="button" class="member_button" onclick="my_modal(this, \'' + modal_chk + '\', ' + item.crew_idx + ', \'' + item.member_id + '\')"><i class="bi bi-three-dots-vertical" style="font-size:23px"></i></button>'; 
+         } 
+    	 
+    	 
+         if (cntRecruit % 2 == 1) {
+            $('div.recruitArea').append('<div class="recruit">' + header + member_button + content + info + leader_button + '</div>');
+         } else {
+            $('div.recruitArea').append('<div class="recruit_odd">' + header + member_button + content + info + leader_button + '</div>');
+         }
+     	
+         cntRecruit++; // 내 크루 Count 증가
+      }
+   	  
+      // Append후 변수 초기화
+      member_button = '';
+      leader_button = '';
+   }
+
+   // 멤버 버튼 클릭 시 모달 표시 함수
+   function my_modal(obj, modal_chk) {
+	// 이미 열려 있는 모달이 있는지 체크
+    if ($('.modal:visible').length) {
+        return; // 이미 열려있다면 아무 것도 하지 않음
+    }
+	
+ 	// add버튼 위치좌표		
+	var offset = $(obj).offset();
+    
+	// 스크롤 위치를 고려하여 top 값 조정
+    var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
+    $(modal_chk).css({
+        top: offset.top - scrollTop, // 스크롤 위치 추가
+        left: offset.left
+    });
+	
+	$(modal_chk).fadeIn(); // 모달표시
+     
+   }
+   
+   // 모달 닫기 버튼 클릭 시 모달 숨기기
+   $('.btn_cancel').on('click', function() {
+      $(this).closest('.modal').hide();
+   });
+
+   // 신청 취소하기 버튼 클릭 시
+   $('.btn_cancel_request').on('click', function() {
+      // 여기에 신청 취소 로직 추가
+      alert("신청이 취소되었습니다.");
+      $('.modal_cancel_request').hide(); // 모달 숨기기
+   });
+
+   // 탈퇴하기 버튼 클릭 시
+   $('.btn_leave_crew').on('click', function() {
+      // 여기에 탈퇴하기 로직 추가
+      alert("크루에서 탈퇴하였습니다.");
+      $('.modal_leave_crew').hide(); // 모달 숨기기
+   });
+   
+</script>
 </html>

@@ -325,7 +325,7 @@
 		    <button class="btn_update subbtn full"><i class="bi bi-pencil">수정하기</i></button>
 		    <button class="btn_delete subbtn full"><i class="bi bi-trash">삭제하기</i></button>
 		    <button class="btn_save subbtn full" hidden><i class="bi bi-floppy2-fill">저장하기</i></button>
-		    <button class="btn_cancel mainbtn full">취소</button>
+		    <button class="btn_cancel mainbtn full">창 닫기</button>
 	    </div>
 	</div>
 	
@@ -334,7 +334,7 @@
 	    <div class="modal_container min">
 	        <div class="modal_footer">
 	            <button class="btn_report subbtn full"><i class="bi bi-exclamation-circle-fill" style="color:red">신고하기</i></button>
-	            <button class="btn_cancel mainbtn full">취소</button>
+	            <button class="btn_cancel mainbtn full">창 닫기</button>
 	        </div>
 	    </div>
 	</div>
