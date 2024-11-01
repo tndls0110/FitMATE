@@ -228,10 +228,11 @@
     }
 
     .image_total{
-      display: flex;
       margin : 25px 10px 22px 0px;
       border-radius: 3px;
+      display: flex;
     }
+
 
     .bi-trash::before {
       z-index: 10;
@@ -245,7 +246,7 @@
       border-radius: 3px;
       width: 24px;
       height: 24px;
-      margin : -26px -23px 0px 17px;
+      margin : -27px -25px 0px 2px;
     }
     #write{
       width: 404px;
@@ -288,35 +289,36 @@
   </style>
 </head>
 <body>
+
 <div class="container">
   <c:import url="layout/leftnav_1.jsp"></c:import>
   <!-- 운동일지는 nav1로, mbti만 nav5로 -->
   <div class="contents">
     <!-- class="full": width=100% -->
-    <form action="schedule_write.do" method="POST" enctype="multipart/form-data">
+    <form action="schedule_update.do" method="POST" enctype="multipart/form-data">
       <div class="list">
         <h3 class="capt">
           <div id = "category">
             <select name="cate" id ="cate" onchange = "onOptionChange(event)">
               <option value="default">크루/개인</option>
-              <option value="1">개인</option>
-              <option value="2">크루</option>
+
+              <option value="1" name = "option" <c:if test = "${journal.journal_cate eq '1'}"> selected</c:if>>개인</option>
+              <option value="2" name = "option"<c:if test = "${journal.journal_cate eq '2'}"> selected</c:if>>크루</option>
             </select>
           </div>
 
           <div id = "total_date">
             <div class="date_title">날짜</div>
-            <p><input type="date" name="date" id = "date" value = ""/></p>
+            <p><input type="date" name="date" id = "date" value = "${journal.date}"/></p>
             <div class="time_box">
               <div class="starttime_title">운동 시작 시간</div><div class="endtime_title">운동 종료 시간</div>
-              <div class="times"><input type = "time" name="start_time" id ="start_time" value=""/><input type = "time" name="end_time"  id ="end_time" value=""/></div>
+              <div class="times"><input type = "time" name="start_time" id ="start_time" value="${journal.journal_start}"/><input type = "time" name="end_time"  id ="end_time" value="${journal.journal_end}"/></div>
             </div>
           </div>
 
-
           <div class="journal">
             <div class="journal_name">일지</div>
-            <textarea name="textarea" id = "textarea" placeholder="최대 1000자까지 입력할 수 있습니다." onkeyup="word_count()"></textarea>
+            <textarea name="textarea" id = "textarea" placeholder="최대 1000자까지 입력할 수 있습니다." onkeyup="word_count()">${journal.journal_content}</textarea>
             <div id="word_alert">1,000자를 초과하여 작성할 수 없습니다.</div>
             <div id = "words"><div class="count_words">0</div><div class="total_words">/1,000</div></div>
             <!--파일 버튼 커스텀 하는 법
@@ -330,9 +332,17 @@
               <input type="file" id="file" name="files" multiple="multiple" onchange="readFile(this)">
             </div>
             <div class = "image_total">
+                <c:forEach items="${file}" var = "files">
+                  <c:if test="${files.size()>0}">
+                    <div class="image" data-file-idx = "${files.file_idx}">
+                     <div class="image_delete" onclick="delete_img(${files.file_idx})"><i class="bi bi-trash"></i></div>
+                     <img width = "100px" class = "preview" src="/photo/${files.new_filename}" alt="${files.ori_filename}"/>
+                    </div>
+                  </c:if>
+                </c:forEach>
+              </div>
             </div>
-          </div>
-          <input type = "button" id = "write" value="작성하기">
+          <input type = "button" id = "update" value="수정하기"/>
         </h3>
       </div>
     </form>
@@ -345,8 +355,229 @@
 
 <script src="resources/js/common.js"></script>
 <script>
-  var data = ${journal};
-  console.log('받아온 값 :', data);
+  //처음에 값 받아온 거 넣어주기
+  var start_time = '${journal.journal_start}';
+  var end_time = '${journal.journal_end}';
+  var change = '${journal.journal_cate}';
+  var date = '${journal.date}';
+
+  console.log("시작 시간:", start_time);
+  console.log("끝난 시간:",end_time);
+  console.log('value : ' + change);
+
+
+
+  document.getElementById('date').addEventListener('input',function(){
+    date = this.value;
+    console.log ("date : ", date);
+  });
+
+  //시작 시간
+  document.getElementById('start_time').addEventListener('input',function() {
+    start_time = this.value;
+    console.log("시작 시간:", start_time);
+  });
+
+  //끝나는 시간
+  document.getElementById('end_time').addEventListener('input',function(){
+    end_time = this.value;
+    console.log("끝난 시간:",end_time);
+  });
+
+
+
+  document.getElementById('update').addEventListener('click',update);
+
+
+
+
+  function onOptionChange(event){
+    change = event.target.value;
+    console.log('value : ' + change);
+    if(change == 1){
+      event.target.style.backgroundColor = 'rgba(4, 129, 135, 1)';
+    }else if(change == 2){
+      event.target.style.backgroundColor = 'orange';
+    }else if(change == 'default'){
+      event.target.style.backgroundColor = 'rgba(40, 43, 52, 1)';
+
+    }
+  }
+
+
+
+
+  //만약에 값이 중간에 바뀌면.. this.value로 다시 넣어주기
+  function update(){
+
+    //alert
+    console.log("시작 시간:", start_time);
+    console.log("끝난 시간:",end_time);
+    console.log('value : ' + change);
+
+    //조건 별 alert
+    if(change == "default" || change == ""){
+      alert('크루/개인 카테고리를 선택해주세요!');
+    }else if(date == ""){
+      alert('운동한 날짜를 선택해주세요!');
+    }else if (start_time == ""){
+      alert('시작 시간을 선택해주세요!');
+    }else if (end_time == "") {
+      alert('끝난 시간을 선택해주세요!');
+    }else if (start_time > end_time) {
+      alert('종료 시간은 시작 시간보다 빠를 수 없습니다');
+    }
+    //ajax로 전달할 param 만들기
+    var param = {id : "${journal.user_id}"}
+    $('form').find('input, select, textarea').each(function(idx, item) {
+      console.log("아이템:", item);
+      console.log("아이템0:", item[0]);
+
+      var name = $(item).attr('name'); //name 속성 뽑아오기 -> 안되고 있음...
+      console.log("이름:", name);
+
+
+      if (name == 'option') {
+        if ($(item)[0].defaultSelected != $(item[0].selected)) {
+          console.log("아이템0:", item[0]);
+
+          param[$(item).attr('name')] = $(item).val();
+        }
+      }else if(name == 'files'){
+        /*$.ajax({
+          type : 'POST',
+          url : 'file_write.ajax',
+          data : {},
+          dataType: 'JSON'
+
+        });*/
+      }else{
+        if($(item)[0].defaultValue != $(item)[0].value){
+          param[$(item).attr('name')] = $(item).val();
+        }
+      }
+    });
+    console.log('param:',param);
+  }
+
+
+  console.log('받아온 값 :', '${journal}');
+  console.log('받아온 값 :', '${file}');
+  /*console.log('받아온 파일 길이 :', '${file.size()}');*/
+
+
+  <c:forEach items="${file}" var = "files">
+  console.log('받아온 파일 분리:', '${files}');
+  </c:forEach>
+
+
+  console.log('date 받아온 값 :', '${journal.date}'); //journal안의 값 가져오기..
+
+
+
+  //페이지 첫 로딩 때 크루, 개인 태그 색깔 넣는 것..+ 들어가있는 글자수 세기 => 나중에 추가하기
+
+
+
+
+
+  //글자 체크 + 제한 + 내용 뽑아오기
+  var content='';
+  function word_count(){
+    content = document.getElementById('textarea').value;
+    console.log('content:',content);
+    var content_length = content.length;
+    console.log('content_length:'+ content_length);
+    $('.count_words').html(content_length);
+
+
+    //만약 text_area 안의 content_length가 너무 길면...
+    if(content_length > 1000){
+      console.log('content substring:',content.substring(0,1000));
+      $('#textarea').val(content.substring(0,1000)); //value값 변경하기
+      $('.count_words').css({'color' : 'red'});
+      $('.count_words').html(content_length);
+      $('#word_alert').css({'content-visibility' : 'visible'}); //attr 바꾸기
+    }
+
+    if(content_length <= 999){
+      $('#word_alert').css({'content-visibility' : 'hidden'});
+      $('.count_words').css({'color' : 'rgba(4, 129, 135, 1)'});
+    }
+  }
+
+  //이미지 미리보기
+  function readFile(input){
+    console.log(input.files);
+    var reader;
+
+
+    //파일 분리하기
+    for(var file of input.files){
+      //파일 읽어오기
+      reader = new FileReader(); //파일 객체로부터 binary를 읽어올 수 있는 객체
+      reader.readAsDataURL(file); //파일 객체로부터 DATA URL을 읽어올 수 있음
+      reader.onload = function(e){ //파일 다 읽었으면 function 안의 내용 실행
+        $('.image_total').append('<img class="preview" src = "' + e.target.result+ '"/>');
+      }
+    }
+  }
+
+
+  function delete_img(file_idx){
+    const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
+
+    //만약 값이 있으면 remove
+    console.log("img:",img);
+
+    if(img){
+      img.remove();
+    }
+
+    $.ajax({
+      type : 'GET',
+      url : 'delete_img.ajax',
+      data : {"file_idx":file_idx},
+      dataType : 'JSON',
+      success : function(data){
+        console.log(data);
+        console.log("삭제 성공 : ",data.success);
+
+      },error : function(e){
+        console.log(e);
+      }
+    })
+  }
+
+
+
+  //글자 체크 + 제한 + 내용 뽑아오기
+  var content='';
+  function word_count(){
+    content = document.getElementById('textarea').value;
+    console.log('content:',content);
+    var content_length = content.length;
+    console.log('content_length:'+ content_length);
+    $('.count_words').html(content_length);
+
+
+    //만약 text_area 안의 content_length가 너무 길면...
+    if(content_length > 1000){
+      console.log('content substring:',content.substring(0,1000));
+      $('#textarea').val(content.substring(0,1000)); //value값 변경하기
+      $('.count_words').css({'color' : 'red'});
+      $('.count_words').html(content_length);
+      $('#word_alert').css({'content-visibility' : 'visible'}); //attr 바꾸기
+    }
+
+    if(content_length <= 999){
+      $('#word_alert').css({'content-visibility' : 'hidden'});
+      $('.count_words').css({'color' : 'rgba(4, 129, 135, 1)'});
+    }
+  }
+
+
+
 
 
 </script>
