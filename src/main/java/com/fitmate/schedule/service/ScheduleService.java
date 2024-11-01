@@ -3,18 +3,16 @@ package com.fitmate.schedule.service;
 import com.fitmate.schedule.dao.ScheduleDAO;
 import com.fitmate.schedule.dto.ScheduleDTO;
 import com.fitmate.schedule.dto.ScheduleFileDTO;
-import org.apache.tomcat.jni.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Key;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -23,10 +21,10 @@ public class ScheduleService {
 	@Autowired ScheduleDAO s_dao;
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-	public Map<String,Object> getEvents() {
+	public Map<String,Object> getEvents(String id) {
 		Map<String,Object> event_day = new HashMap<>();
-		List<Map<String,Object>> crew_events = s_dao.getCrewEvents();
-		List<Map<String,Object>> date  = s_dao.getEvents();
+		List<Map<String,Object>> crew_events = s_dao.getCrewEvents(id);
+		List<Map<String,Object>> date  = s_dao.getEvents(id);
 		event_day.put("date",date);
 		event_day.put("crew_events",crew_events);
 
@@ -150,22 +148,54 @@ public class ScheduleService {
 		return success;
 	}
 
-	public List<Map<String, Object>> crewplan_get(String date) {
+	public List<Map<String, Object>> crewplan_get(String date,String id) {
 		logger.info("컨트롤러에서 전달받은 date :{}",date);
-
-		return s_dao.crewplan_get(date);
+		return s_dao.crewplan_get(id,date);
 	}
 
-	public void delete_journal(int idx) {
-		//파일 정보 미리 저장
-		/*List<ScheduleFileDTO> file = s_dao.getfile(idx);*/
+	public int delete_journal(int idx) {
+		logger.info("idx:{}",idx);
+		//파일 정보 미리 저장 //파일이 있는지 보는 방법
 
-		//글 삭제
+		//1.파일이 있는지 확인하기..
+		int file_exists =s_dao.check_file(idx);
+		int updated_rows = 0;
+		if(file_exists>0){
 
+			//2. 파일이 있으면 파일 저장하고 진행
+			List<ScheduleFileDTO> file = s_dao.getcurrentfile(idx);
+				//파일 저장 성공했는지 확인
+				if(!file.isEmpty()){ //file이 비어있지 않으면
+					//글 삭제
+					updated_rows = s_dao.deleteContent(idx);
 
-		//파일 삭제
+					if(updated_rows>0){
+					//파일 삭제
+						//파일 DTO 분리
+						for (ScheduleFileDTO fileDTO : file) {
+							//1. 삭제하고 싶은 위치 지정 => 새로운 이름 기반
+							File files = new File("C:/upload/"+ fileDTO.getNew_filename());
+							//2. 만약 파일이 있으면 file 삭제 => DB는 이미 on deleteCascade로 삭제된 상태
+							if(files.exists()){
+								boolean success = files.delete();//파일 삭제
+								logger.info("success:{}",success);
+							}
+						}
 
+					}
+				}
 
+			//3. 파일 없으면 그냥 삭제
+		}else{
+			updated_rows = s_dao.deleteContent(idx);
+			logger.info("글만 삭제:{}",updated_rows);
+		}
 
+		return updated_rows;
+	}
+
+	public List<Map<String, Object>> getJournal_detail(int idx) {
+		logger.info("서비스에서 받은 idx:{}",idx);
+		return s_dao.getJournal_detail(idx);
 	}
 }
