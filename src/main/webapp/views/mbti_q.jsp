@@ -610,60 +610,8 @@
 			}
 		}
 
-
-
-
-
-
-
-
-
-
-		//scores는 분리가 안됨..
-		//map 형태로 만들어주기..
-		// 	var entries = Object.entries(scores);
-		// 	console.log('entries:',entries);
-		// 	for (var entry of entries){
-		// 		console.log('entry:',entry);
-		// 		for(var key_val of entry){
-		// 			new Map
-		//
-		// 			let input = document.createElement('input');
-		// 			input.type = 'hidden';
-		// 			// input.name = key_val[0];
-		// 			// input.type = key_val[1];
-		// 			console.log('key_val:',key_val);
-		// 		}
-		//}
-		//$('form').submit();
-
 		console.log('mbti_r.go에 값 보내기 성공 1');
 
-
-
-
-
-
-		// ==========================================================================
-		//location.href = 'mbti_r/'+scores+'.go';
-
-
-		// 	$.ajax({
-		// 		type : 'POST',
-		// 		url : '/mbti_r.ajax',
-		// 		data : scores,
-		// 		dataType : 'JSON', //응답 받을 때 JSON으로 받는다
-		// 		success : function (url){
-		// 			console.log('url 생성 성공');
-		// 			console.log('전달한 url 값 : ', url.redirectURL);
-		// 			location.href = encodeURIComponent(url.redirectURL);
-		//
-		//
-		// 		},
-		// 		error : function (e){
-		// 			console.log(e);
-		// 		}
-		// 	});
 	}
 
 	//$(요소 선택).load(url, data, 콜백함수)
