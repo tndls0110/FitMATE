@@ -330,6 +330,7 @@
               <input type="file" id="file" name="files" multiple="multiple" onchange="readFile(this)">
             </div>
             <div class = "image_total">
+
             </div>
           </div>
           <input type = "button" id = "write" value="작성하기">
@@ -356,7 +357,8 @@
   var end_time = '';
   var change = '';
   var date = '';
-  //날짜 찍어보기
+
+  //날짜 바뀔 때마다
   document.getElementById('date').addEventListener('input',function(){
     date = this.value;
     console.log ("date : ", date);
@@ -374,6 +376,11 @@
     console.log("끝난 시간:",end_time);
   });
 
+
+
+
+
+
   function onOptionChange(event){
    change = event.target.value;
     console.log('value : ' + change);
@@ -385,7 +392,6 @@
       event.target.style.backgroundColor = 'rgba(40, 43, 52, 1)';
 
     }
-
   }
 
   $('#write').click(function(){

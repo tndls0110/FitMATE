@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -153,6 +154,7 @@ public class ScheduleService {
 		return s_dao.crewplan_get(id,date);
 	}
 
+	//일지 삭제
 	public int delete_journal(int idx) {
 		logger.info("idx:{}",idx);
 		//파일 정보 미리 저장 //파일이 있는지 보는 방법
@@ -194,8 +196,21 @@ public class ScheduleService {
 		return updated_rows;
 	}
 
-	public List<Map<String, Object>> getJournal_detail(int idx) {
+	public void getJournal_detail(int idx, Model model) {
 		logger.info("서비스에서 받은 idx:{}",idx);
-		return s_dao.getJournal_detail(idx);
+
+		//해당 idx를 가진 file들 가져오기
+		model.addAttribute("journal",s_dao.getJournal_detail(idx));
+		model.addAttribute("file",s_dao.currentfile(idx));
+	}
+
+
+	public boolean delete_img(int file_idx) {
+		int deleted = s_dao.delete_img(file_idx);
+		boolean success = false;
+		if(deleted>0){
+			success = true;
+		}
+		return success;
 	}
 }
