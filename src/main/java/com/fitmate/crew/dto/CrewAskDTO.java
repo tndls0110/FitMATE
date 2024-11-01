@@ -16,7 +16,16 @@ public class CrewAskDTO {
 	private String content;
 	// 작성일시
 	private LocalDateTime date;
+	// 댓글 게시여부 (1: 정상게시, 2: 본인이 삭제, 3: 운영자가 제재)
+	private int status; 
 	
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public String getCreate_date() {
         if (date == null) {
             return "";

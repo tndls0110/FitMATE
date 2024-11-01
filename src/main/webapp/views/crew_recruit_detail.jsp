@@ -426,7 +426,6 @@
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data.commentAll).each(function(idx, item) {
 				    console.log('item : ', item.content);
-				
 				    footer += '<div class="comment_box">'
 				        + '<div class="comment">'
 				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
@@ -438,10 +437,18 @@
 				        + '<span>&nbsp;&nbsp;' + item.nick + '</span></br>'
 				        + '<span>&nbsp;' + item.date + '</span>'
 				        + '</span>'
-				        + '</div>'
-				        + '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.content + '</textarea></div>'
 				        + '</div>';
-				
+				        
+			        console.log(item.status);
+					if(item.status === 1){   // 정상게시 댓글인경우
+				    footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.content + '</textarea></div></div>'; 
+				        
+					}else if(item.status === 2){ // 본인이 삭제한 댓글인경우
+						footer += '<div class="comment_txt"><div id="comment_del" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;삭제된 문의글입니다.</i></div></div></div>';
+					}else if(item.status === 3){ // 운영자가 제재한 경우
+						footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div></div>';	
+					}
+					
 				    // 대댓글이 존재하는 경우
 				    if (item.recomment_chk === 1) {
 				        var item_reply = item.replyDTO;
@@ -482,8 +489,8 @@
 					            	+ '</div>'
 					            	+ '</div>'
 					            	+ '</div>';
-				    } else { // 대댓글이 존재하지 않고, 크루장인 경우 답변하기 버튼추가  
-				        if (leader_chk === 1) {
+				    } else { // 대댓글이 존재하지 않고 정상게시된 댓글일 때, 유저가 크루장인 경우 답변하기 버튼추가  
+				        if (leader_chk === 1 && item.status === 1) {
 				            footer += '<button class="mainbtn minbtn" '
 				                + 'data-comment-idx="' + item.comment_idx + '" '
 				                + 'data-id="' + currentUserId + '" '
@@ -492,11 +499,11 @@
 				    }
 					
                 modal = '';
-             	// 내 댓글인경우 대댓글 수정/삭제 모달추가.
-			    if(item.comment_id === currentUserId){
+             	// 정상적인 내 댓글인경우 대댓글 수정/삭제 모달추가.
+			    if(item.comment_id === currentUserId && item.status === 1){
 			    	modal = '.modal_edit_delete'; 
-			    }else{
-			    	// 내 댓글이 아니고, 크루장인경우 신고하기 모달추가.
+			    }else if(item.comment_id !== currentUserId && item.status === 1){
+			    	// 정상적인 상태의 댓글이고 내가 쓴 댓글이 아니고, 내가 크루장인경우 신고하기 모달추가. 
 			    	if(leader_chk === 1){
 			    		modal = '.modal_report';					    		
 			    	}
@@ -536,8 +543,9 @@
             },
             success: function(data) {
                 if (data.success) {
-                	location.href = 'crew_recruit_detail.go?idx=' + board_idx;
-                	/* $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(join_idx)'); */ 
+                	/* location.href = 'crew_recruit_detail.go?idx=' + board_idx; */
+                	// 주소창 그대로 새로고침.
+             	    location.reload();
                 } else {
                     modal.showAlert('입단 신청 실패');
                 }
@@ -558,7 +566,9 @@
             },
             success: function(data) {
                 if (data.success) {
-                	location.href = 'crew_recruit_detail.go?idx=' + board_idx; 
+                	/* location.href = 'crew_recruit_detail.go?idx=' + board_idx; */
+                	// 주소창 그대로 새로고침.
+             	    location.reload();
                 } else {
                     modal.showAlert('입단 취소 실패');
                 }
@@ -810,7 +820,9 @@
    				
    				if(data.report_chk === '0'){
 	   				// 저장 또는 삭제 버튼을 누르면 새로고침.
-	   				location.href = data.page + board_idx;
+	   				/* location.href = data.page + board_idx; */
+   					// 주소창 그대로 새로고침.
+             	    location.reload();
    				}else{
    					// 폼 생성
    			        var form = $('<form>', {
