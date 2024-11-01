@@ -56,7 +56,24 @@ public class UserService {
 
 	// 사용자 조회
 	public MemberDTO userDetail(String user_id) {
-		return user_dao.userDetail(user_id);
+		MemberDTO member = user_dao.userDetail(user_id);
+		LocalDateTime cleared_date = member.getCleared_date();
+		LocalDateTime now = LocalDateTime.now();
+		if (cleared_date != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			String clearedDate = cleared_date.format(formatter);
+			if (cleared_date.isAfter(now)) {
+				member.setRestrict_state(true);
+				member.setCleared_date_String(clearedDate);
+			} else {
+				member.setRestrict_state(false);
+				member.setCleared_date_String("해제");
+			}
+		} else {
+			member.setRestrict_state(false);
+			member.setCleared_date_String("없음");
+		}
+		return member;
 	}
 
 	// 크루 목록
