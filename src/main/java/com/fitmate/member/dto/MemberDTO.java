@@ -23,6 +23,9 @@ public class MemberDTO {
     private LocalDateTime last_regdate;
     private int board_cnt;
     private int reported_cnt;
+    private LocalDateTime cleared_date;
+    private String cleared_date_String;
+    private boolean restrict_state;
 
     public String getUser_id() {
         return user_id;
@@ -80,6 +83,15 @@ public class MemberDTO {
     public int getReported_cnt() {
         return reported_cnt;
     }
+    public LocalDateTime getCleared_date() {
+        return cleared_date;
+    }
+    public String getCleared_date_String() {
+        return cleared_date_String;
+    }
+    public boolean getRestrict_state() {
+        return restrict_state;
+    }
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
@@ -131,5 +143,14 @@ public class MemberDTO {
     }
     public void setReported_cnt(int reported_cnt) {
         this.reported_cnt = reported_cnt;
+    }
+    public void setCleared_date(LocalDateTime cleared_date) {
+        this.cleared_date = cleared_date;
+    }
+    public void setCleared_date_String(String cleared_date_String) {
+        this.cleared_date_String = cleared_date_String;
+    }
+    public void setRestrict_state(boolean restrict_state) {
+        this.restrict_state = restrict_state;
     }
 }

@@ -17,7 +17,8 @@
     <select id="userList" resultType="com.fitmate.member.dto.MemberDTO">
         SELECT m.user_id, m.nick, m.name, m.email, m.birthday, p.profile,
             (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate',
-            (SELECT COUNT(board_idx) FROM crew_board WHERE board_id = m.user_id AND category_idx IN (2, 3, 4)) AS 'board_cnt'
+            (SELECT COUNT(board_idx) FROM crew_board WHERE board_id = m.user_id AND category_idx IN (2, 3, 4)) AS 'board_cnt',
+            (SELECT cleared_date FROM restriction WHERE user_id = m.user_id) AS 'cleared_date'
             FROM member m JOIN profile p ON m.user_id = p.user_id
             <where>
                 <if test="param4 != null and !param4.equals('') and param3.equals('user_id')">
@@ -43,7 +44,8 @@
         (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = p.regions_idx) AS 'region_name',
         (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = p.regions_idx) AS 'regions_name',
         (SELECT mb.mbtir_name FROM mbti_r mb WHERE mb.mbtir_idx = p.mbtir_idx) AS 'mbtir_name',
-        (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate'
+        (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) AS 'last_regdate',
+        (SELECT cleared_date FROM restriction WHERE user_id = m.user_id) AS 'cleared_date'
         FROM member m JOIN profile p ON m.user_id = p.user_id WHERE m.user_id = #{param}
     </select>
 

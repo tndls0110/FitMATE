@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,26 @@ public class UserService {
 		result.put("totalIdx", totalIdx);
 		result.put("currentPage", page);
 		result.put("offset", offset);
-		result.put("list", user_dao.userList(offset, limit, opt, keyword));
+		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword);
+		for (MemberDTO member : list) {
+			LocalDateTime cleared_date = member.getCleared_date();
+			LocalDateTime now = LocalDateTime.now();
+			if (cleared_date != null) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+				String clearedDate = cleared_date.format(formatter);
+				if (cleared_date.isAfter(now)) {
+					member.setRestrict_state(true);
+					member.setCleared_date_String(clearedDate);
+				} else {
+					member.setRestrict_state(false);
+					member.setCleared_date_String("해제");
+				}
+			} else {
+				member.setRestrict_state(false);
+				member.setCleared_date_String("없음");
+			}
+		}
+		result.put("list", list);
 		return result;
 	}
 

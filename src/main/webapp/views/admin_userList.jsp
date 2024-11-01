@@ -43,7 +43,7 @@
                         <th>게시글 수</th>
                         <th>마지막 이용일</th>
                         <th>이용상태</th>
-                        <th>잔여제재일</th>
+                        <th>제재해제일</th>
                     </tr>
                     </thead>
                     <tfoot>
