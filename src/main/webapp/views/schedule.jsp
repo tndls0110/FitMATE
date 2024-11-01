@@ -249,7 +249,7 @@
 			visibility : hidden;
 		}
 
-		.modal_body {
+		.model_body {
 			width: 180px;
 			background-color: rgba(233, 236, 239, 1);
 			height: 112px;
@@ -291,51 +291,47 @@
 <div class="container">
 	<c:import url="layout/leftnav_1.jsp"></c:import>
 	<!-- 운동일지는 nav1로, mbti만 nav5로 -->
-	<div class="contents">
-		<p>Hello, FitMATE!</p>
-		<div id="calendar_related">
+		<div class="contents">
+			<p>Hello, FitMATE!</p>
+			<div id="calendar_related">
 
 
-			<div class="contents">
+				<div class="contents">
 
-				<!-- 달력 -->
-				<div class="calendar">
-					<div class="title_calendar">
-						<p>일정 보기</p>
-						<div id="date"></div>
-						<button class="writebtn mainbtn minbtn">일정 작성</button>
+					<!-- 달력 -->
+					<div class="calendar">
+						<div class="title_calendar">
+							<p>일정 보기</p>
+							<div id="date"></div>
+							<button class="writebtn mainbtn minbtn">일정 작성</button>
+						</div>
+						<div id="calendar"></div>
 					</div>
-					<div id="calendar"></div>
-				</div>
 
 
-				<div class="journal_write_button" onclick="write_go()">일지 작성하기</div>
-
-
-			</div>
-
-
-
-			<div id="schedule">
-				<div class="crew_schedule_title">크루 일정</div>
-				<div class="crew_schedule">
-
+					<div class="journal_write_button" onclick="write_go()">일지 작성하기</div>
 
 
 				</div>
-				<hr/>
-				<div id = "journal_total">
 
 
-			</div>
 
+				<div id="schedule">
+					<div class="crew_schedule_title">크루 일정</div>
+					<div class="crew_schedule">
+
+
+
+					</div>
+					<hr/>
+					<div id = "journal_total">
+
+
+				</div>
+
+				</div>
 			</div>
 		</div>
-
-
-
-
-	</div>
 
 	<c:import url="layout/modal.jsp"></c:import>
 </body>
@@ -629,9 +625,15 @@
 
 
 				var journal_idx = j_data['journal_idx'];
-				content += '<div class="journal" value="' + journal_idx + '"><div class="modal_body"><div class="update" onclick="update_journal(' + j_data['journal_idx'] + ')"><i class="bi bi-pencil-square"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
+				console.log("idx:",journal_idx);
+
+				content += '<form action="update_journal.go" method="get">';
+				content += '<input type="hidden" name="idx" value="' + journal_idx + '">';
+				content += '<div class="model_body"><div class="update" type="button" onclick="update_journal()"><i class="bi bi-pencil-square"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
+				content += '</form>'
+
 				content += '<div class="journal_start_end">';
 				if (j_data['journal_cate'] == 1) {
 					content += '<div class="individual_tag">개인</div>';
@@ -706,20 +708,8 @@
 		})
 	}
 
-	function update_journal(idx) {
-		// 클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 수정 수정
-		$.ajax({
-			type: 'GET',
-			url: '/update_journal.ajax',
-			data: {'idx': idx},
-			dataType: 'JSON',
-			success: function(data) {
-				console.log("update 성공", data);
-			},
-			error: function(e) {
-				console.error("AJAX 요청 실패:", e); // 오류 정보 출력
-			}
-		});
+	function update_journal() {
+		$('form').submit();
 	}
 
 

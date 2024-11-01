@@ -92,11 +92,19 @@ public class ScheduleController {
 		return data;
 	}
 
-	@GetMapping (value = "/update_journal.ajax")
+	@GetMapping (value = "/update_journal.go")
 	public String update_journal(int idx, Model model){
 		logger.info("컨트롤러에 전달된 idx:{}",idx);
-		List<Map<String,Object>> journal_detail = s_service.getJournal_detail(idx);
-		model.addAttribute("journal",journal_detail);
+		s_service.getJournal_detail(idx,model);
 		return "schedule_update";
+	}
+
+	@GetMapping (value = "delete_img.ajax")
+	@ResponseBody
+	public Map<String,Object> delete_img(int file_idx){
+		Map<String,Object> data = new HashMap<>();
+		boolean success = s_service.delete_img(file_idx);
+		data.put("success",success);
+		return data;
 	}
 }
