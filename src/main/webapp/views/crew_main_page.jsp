@@ -197,7 +197,7 @@
 		}
 
 		.type-two {
-			background-color: orange; /* 제목이 '2'인 경우의 배경색 */
+			background-color: #5bc5bb; /* 제목이 '2'인 경우의 배경색 */
 			color: black; /* 텍스트 색상 */
 		}
 
@@ -398,7 +398,7 @@ const isCrewLeader = true;
 				for(var crew_event of event_day.crew_events){
 					let event_Object = {
 						start :	crew_event.plan_date,
-						title : '2' //크루 일정
+						title : '1' //크루 일정
 					};
 					event_create.push(event_Object);
 				}
@@ -443,8 +443,8 @@ const isCrewLeader = true;
 			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
 			if (title === '1') {
 				event.classList.add('type-one'); // 클래스 추가
-			} else if (title === '2') {
-				event.classList.add('type-two'); // 클래스 추가
+			} else if (title === '1') {
+				event.classList.add('type-one'); // 클래스 추가
 			}
 		});
 	} // change_css()
@@ -457,9 +457,6 @@ const isCrewLeader = true;
 			console.log('캘린더로부터 뽑아온 date : {}' + date);
 			$('#date').html(date);
 
-			//뽑은 날짜 기반으로 개인 일정 가져오기
-			//	get_journal(date);
-			
 			// 뽑은 날짜 기반으로 일정 상세보기 모델창 띄우기
 			  openModal(date);
 			
@@ -478,8 +475,6 @@ const isCrewLeader = true;
 	}
 	
 
-	
-	
 	function get_crewplan(date) {
 	    $.ajax({
 	        url: 'crew_plan_detail.ajax', // API 엔드포인트
@@ -612,8 +607,6 @@ const isCrewLeader = true;
 				var e_time = end_time.substring(0, 5);
 				console.log('e_time:', e_time);
 
-
-
 				content += '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
@@ -624,14 +617,11 @@ const isCrewLeader = true;
 					content += '<div class="crew_tag">크루</div>';
 				}
 
-
 				content += '<div class="journal_start">' + s_time + '</div>';
 				content += '<div class="journal_end">' + e_time + '</div> </div></div>';
 				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>'
-
 				/*if(j_data['journal']) 사진 나중에 추가하기*/
 				content += '<div class="journal_image"></div></div>';
-
 			}
 		}
 		console.log('content: ', content);
