@@ -78,4 +78,77 @@
         SELECT COUNT(report_idx) FROM report WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
     </select>
 
+    <!-- 대시보드 > 차트 -->
+    <select id="getDataMember" parameterType="int" resultType="int">
+        SELECT COUNT(user_id) FROM member
+        <where>
+            <if test="param == 4">
+                regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+            </if>
+            <if test="param == 3">
+                regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+            </if>
+            <if test="param == 2">
+                regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+            </if>
+            <if test="param == 1">
+                regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
+            </if>
+        </where>
+    </select>
+
+    <select id="getDataBoard" parameterType="int" resultType="int">
+        SELECT COUNT(board_idx) FROM crew_board
+            <where>
+                <if test="param == 4">
+                    date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+                </if>
+                <if test="param == 3">
+                    date BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+                </if>
+                <if test="param == 2">
+                    date BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+                </if>
+                <if test="param == 1">
+                    date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
+                </if>
+            </where>
+    </select>
+
+    <select id="getDataCrew" parameterType="int" resultType="int">
+        SELECT COUNT(crew_idx) FROM crew
+        <where>
+            <if test="param == 4">
+                create_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+            </if>
+            <if test="param == 3">
+                create_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+            </if>
+            <if test="param == 2">
+                create_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+            </if>
+            <if test="param == 1">
+                create_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
+            </if>
+        </where>
+    </select>
+
+    <select id="getDataReport" parameterType="int" resultType="int">
+        SELECT COUNT(report_idx) FROM report
+        <where>
+            <if test="param == 4">
+                report_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+            </if>
+            <if test="param == 3">
+                report_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+            </if>
+            <if test="param == 2">
+                report_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+            </if>
+            <if test="param == 1">
+                report_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
+            </if>
+        </where>
+    </select>
+
 </mapper>

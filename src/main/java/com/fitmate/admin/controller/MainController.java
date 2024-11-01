@@ -86,4 +86,12 @@ public class MainController {
 		return page;
 	}
 
+	@RequestMapping (value = "getData.ajax")
+	@ResponseBody
+	public Map<String, Object> getData(int i) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("cnt", main_service.getData(i));
+		return result;
+	}
+
 }

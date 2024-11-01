@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MainService {
@@ -62,5 +64,15 @@ public class MainService {
         dto.setData_report_today(main_dao.dashboardList3_9());
         dto.setData_report_thisweek(main_dao.dashboardList3_10());
         return dto;
+    }
+
+    // 대시보드 > 차트
+    public Map<String, Integer> getData(int i) {
+        Map<String, Integer> list = new HashMap<String, Integer>();
+        list.put("member", main_dao.getDataMember(i));
+        list.put("board", main_dao.getDataBoard(i));
+        list.put("crew", main_dao.getDataCrew(i));
+        list.put("report", main_dao.getDataReport(i));
+        return list;
     }
 }
