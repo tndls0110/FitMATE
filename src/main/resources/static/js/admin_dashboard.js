@@ -1,10 +1,21 @@
 google.charts.load('current', {
     'packages':['corechart']
 });
+
 google.charts.setOnLoadCallback(drawVisualization);
+
+var chartData = [
+    ['날짜', '회원', '게시글', '크루', '신고'],
+    ['', 0, 0, 0, 0],
+    ['', 0, 0, 0, 0],
+    ['', 0, 0, 0, 0],
+    ['', 0, 0, 0, 0]
+];
+getChartData();
+
 function drawVisualization() {
     var data = google.visualization.arrayToDataTable(
-        getChartData()
+        chartData
     );
     var options = {
         width: '100%',
@@ -72,21 +83,34 @@ function drawVisualization() {
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
 }
+
 function getChartData() {
-    var chartData = [];
-    chartData.push(['날짜', '회원', '게시글', '크루', '신고']);
-    for (let i = 4; i > -1; i--) {
-        let date = calculateDate(i);
-        console.log(date);
-        chartData.push([date, 3, 4, 2, 1]);
+    for (let i = 1; i < 5; i++) {
+        let today = new Date();
+        today.setDate(today.getDate() - i);
+        //calculateDate(today, i);
+        getData(i);
     }
-    return chartData;
 }
-function calculateDate(i) {
-    let today = new Date();
-    today.setDate(today.getDate() - i);
-    let month = (today.getMonth() + 1).toString(); // 월은 0부터 시작하므로 +1 필요
-    let day = today.getDate().toString();
-    let date = month + '/' + day;
-    return date;
+
+function calculateDate(today, i) {
+    chartData[i][0] = (today.getMonth() + 1).toString() + '/' + today.getDate().toString();
+}
+
+function getData(i) {
+    $.ajax({
+        type: 'post',
+        url: 'getData.ajax',
+        data: {
+            'i': i
+        },
+        dataType: 'json',
+        success: function(data) {
+            chartData[i][2] = data.cnt.member;
+            chartData[i][3] = data.cnt.board;
+            chartData[i][4] = data.cnt.crew;
+            chartData[i][5] = data.cnt.report;
+        },
+        error: function(e) {}
+    });
 }

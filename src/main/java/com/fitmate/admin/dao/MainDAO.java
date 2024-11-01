@@ -33,4 +33,10 @@ public interface MainDAO {
     int dashboardList3_8();
     int dashboardList3_9();
     int dashboardList3_10();
+
+    // 대시보드 > 차트
+    int getDataMember(int i);
+    int getDataBoard(int i);
+    int getDataCrew(int i);
+    int getDataReport(int i);
 }

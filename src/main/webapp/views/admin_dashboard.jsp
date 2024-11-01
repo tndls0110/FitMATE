@@ -134,7 +134,7 @@
                                 <c:if test="${report.report_prog == 2}">
                                     <button class="mainbtn minbtn">${report.report_state}</button>
                                 </c:if>
-                                <c:if test="${report.report_prog >=3}">
+                                <c:if test="${report.report_prog >= 3}">
                                     <button class="subbtn minbtn">${report.report_state}</button>
                                 </c:if>
                             </td>
