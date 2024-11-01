@@ -21,4 +21,16 @@ public interface MainDAO {
 
     // 대시보드 > 신고 목록
     List<DashboardDTO> dashboardList2();
+
+    // 대시보드 > 증감 데이터 목록
+    int dashboardList3_1();
+    int dashboardList3_2();
+    int dashboardList3_3();
+    int dashboardList3_4();
+    int dashboardList3_5();
+    int dashboardList3_6();
+    int dashboardList3_7();
+    int dashboardList3_8();
+    int dashboardList3_9();
+    int dashboardList3_10();
 }

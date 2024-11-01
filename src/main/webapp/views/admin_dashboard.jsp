@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_board.css" />
     <link rel="stylesheet" type="text/css" href="resources/css/admin_dashboard.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         var index = 0;
     </script>
@@ -19,6 +20,54 @@
         <c:import url="layout/admin_header.jsp" />
         <div class="title">
             <h2>대시보드</h2>
+        </div>
+        <div class="contents_flex">
+            <div class="contents chart">
+                <div id="chart_div"></div>
+            </div>
+            <div class="contents summary">
+                <table>
+                    <colgroup>
+                        <col width="150px" />
+                        <col width="auto" />
+                        <col width="auto" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>증감 항목</th>
+                        <th>오늘</th>
+                        <th>일주일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="left">회원 수</td>
+                        <td>${data.data_member_today}명</td>
+                        <td>${data.data_member_thisweek}명</td>
+                    </tr>
+                    <tr>
+                        <td class="left">크루 수</td>
+                        <td>${data.data_crew_today}개</td>
+                        <td>${data.data_crew_thisweek}개</td>
+                    </tr>
+                    <tr>
+                        <td class="left">한 줄 게시글</td>
+                        <td>${data.data_textboard_today}건</td>
+                        <td>${data.data_textboard_thisweek}건</td>
+                    </tr>
+                    <tr>
+                        <td class="left">사진 게시글</td>
+                        <td>${data.data_photoboard_today}건</td>
+                        <td>${data.data_photoboard_thisweek}건</td>
+                    </tr>
+                    <tr>
+                        <td class="left">신고 회수</td>
+                        <td>${data.data_report_today}회</td>
+                        <td>${data.data_report_thisweek}회</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="contents_flex">
             <div class="contents notice">
@@ -93,11 +142,13 @@
                     </c:forEach>
                     </tbody>
                 </table>
-                <button onclick="location.href='admin_reportList.go'" class="mainbtn full">신고내역 더 보기</button></div>
+                <button onclick="location.href='admin_reportList.go'" class="mainbtn full">신고내역 더 보기</button>
+            </div>
         </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
+<script src="resources/js/admin_dashboard.js"></script>
 </html>
