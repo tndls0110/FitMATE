@@ -286,7 +286,9 @@ ORDER BY date;
 
 <!-- 크루 입단여부 체크. -->
 <select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String">
-	SELECT * FROM crew_join WHERE join_id = #{currentId}
+	SELECT * FROM crew_join 
+	WHERE join_id = #{currentId}
+	AND crew_idx = #{crew_idx}
 </select>
 
 <!-- 크루 입단신청 -->

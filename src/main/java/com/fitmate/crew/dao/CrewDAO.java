@@ -59,7 +59,7 @@ public interface CrewDAO {
 	// 답변 대댓글 삭제
 	int recomment_delete(HashMap<String, Object> info);
 	// 크루입단신청여부 확인 => 모집게시글에 사용
-	CrewApprovalDTO crewApproval(String currentId);
+	CrewApprovalDTO crewApproval(String idx, String currentId);
 	// 크루 입단신청
 	int joinCrew(int crew_idx_, String join_id, int status);
 	// 크루 입단신청 취소

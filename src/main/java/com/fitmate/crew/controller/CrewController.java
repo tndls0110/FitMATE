@@ -107,9 +107,9 @@ public class CrewController {
 	
 	// 3. 크루 모집글 상세조회
 	@RequestMapping(value="/crew_recruit_detail.go")
-	public String recruitDetail(String idx, String id, Model model) {
+	public String recruitDetail(String board_idx, String id, String crew_idx, Model model) {
 		// 크루 모집글 정보 + 크루 가입여부 체크
-		crew_service.recruitDetail(idx, id, model);
+		crew_service.recruitDetail(board_idx, id, crew_idx, model);
 		
 		return "crew_recruit_detail";
 	}

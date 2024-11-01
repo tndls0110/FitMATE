@@ -165,7 +165,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
 		
 		// 2. 크루입단신청 여부 가져오기. 
-		CrewApprovalDTO approval = crew_dao.crewApproval(currentId);
+		CrewApprovalDTO approval = crew_dao.crewApproval(idx, currentId);
 		
 		// 값이 존재하면.. 크루입단 신청여부만
 		if(approval != null && approval.isValid()) {
@@ -185,7 +185,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	
 	// 모집글 댓글조회
 	@Transactional
-	public Map<String, Object> recruitDetail(String idx) {
+	public Map<String, Object> recruitDetail(String board_idx_, String id, String crew_idx, Model model) {
 		int board_idx = 0;
 		int comment_idx = 0;
 		CrewReplyDTO replyDTO = null;
@@ -193,8 +193,8 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if(idx != null && !idx.equals("")) {
-			board_idx = Integer.parseInt(idx);
+		if(board_idx_ != null && !board_idx_.equals("")) {
+			board_idx = Integer.parseInt(board_idx_);
 		}
 		
 		// 1. 댓글 내용가져오기

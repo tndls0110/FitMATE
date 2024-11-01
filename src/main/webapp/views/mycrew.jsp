@@ -349,7 +349,7 @@ a.crew_create {
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
       
       // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI
-      var header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' + currentUserId + '" class="recruit_detail">'
+      var header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' + currentUserId + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">'
                    + profile
                    + '<div class="recruit_right">'
                       + '<div class="right_top">'
