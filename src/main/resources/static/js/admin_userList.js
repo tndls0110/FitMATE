@@ -64,8 +64,12 @@ function listPrint(list, totalIdx, currentPage, offset) {
         } else {
             tags += '<td>'+list[i].last_regdate+'</td>';
         }
-        tags += '<td>이용상태</td>';
-        tags += '<td>잔여제재일</td>';
+        if (!list[i].restrict_state){
+            tags += '<td><button class="mainbtn minbtn">이용중</button></td>';
+        } else {
+            tags += '<td><button class="cautionbtn minbtn">이용제재</button></td>';
+        }
+        tags += '<td>'+list[i].cleared_date_String+'</td>';
         tags += '</tr>';
     }
     document.getElementsByTagName('tbody')[0].innerHTML = tags;

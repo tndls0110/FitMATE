@@ -45,7 +45,7 @@ public class MemberController {
 			String clearedDate = cleared_date.format(formatter);
 			if (cleared_date.isAfter(now)) {
 				model.addAttribute("msg", user_id+"님은 "+clearedDate+"까지 크루 기능을 이용하실 수 없습니다.");
-				page = "index123";
+				page = "schedule";
 			}
 		} else {
 			checkPermit(model, session);
