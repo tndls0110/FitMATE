@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 
 public class DashboardDTO {
 
-
     private String notice_cont;
     private LocalDateTime notice_regdate;
     private int notice_show;
@@ -15,6 +14,16 @@ public class DashboardDTO {
     private int report_prog;
     private String report_state;
     private LocalDateTime report_date;
+    private int data_member_today;
+    private int data_member_thisweek;
+    private int data_crew_today;
+    private int data_crew_thisweek;
+    private int data_textboard_today;
+    private int data_textboard_thisweek;
+    private int data_photoboard_today;
+    private int data_photoboard_thisweek;
+    private int data_report_today;
+    private int data_report_thisweek;
 
     public String getNotice_cont() {
         String con = notice_cont;
@@ -60,6 +69,36 @@ public class DashboardDTO {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
         return report_date.format(formatter);
     }
+    public int getData_member_today() {
+        return data_member_today;
+    }
+    public int getData_member_thisweek() {
+        return data_member_thisweek;
+    }
+    public int getData_crew_today() {
+        return data_crew_today;
+    }
+    public int getData_crew_thisweek() {
+        return data_crew_thisweek;
+    }
+    public int getData_textboard_today() {
+        return data_textboard_today;
+    }
+    public int getData_textboard_thisweek() {
+        return data_textboard_thisweek;
+    }
+    public int getData_photoboard_today() {
+        return data_photoboard_today;
+    }
+    public int getData_photoboard_thisweek() {
+        return data_photoboard_thisweek;
+    }
+    public int getData_report_today() {
+        return data_report_today;
+    }
+    public int getData_report_thisweek() {
+        return data_report_thisweek;
+    }
 
     public void setNotice_cont(String notice_cont) {
         this.notice_cont = notice_cont;
@@ -87,5 +126,35 @@ public class DashboardDTO {
     }
     public void setReport_date(LocalDateTime report_date) {
         this.report_date = report_date;
+    }
+    public void setData_member_today(int data_member_today) {
+        this.data_member_today = data_member_today;
+    }
+    public void setData_member_thisweek(int data_member_thisweek) {
+        this.data_member_thisweek = data_member_thisweek;
+    }
+    public void setData_crew_today(int data_crew_today) {
+        this.data_crew_today = data_crew_today;
+    }
+    public void setData_crew_thisweek(int data_crew_thisweek) {
+        this.data_crew_thisweek = data_crew_thisweek;
+    }
+    public void setData_textboard_today(int data_textboard_today) {
+        this.data_textboard_today = data_textboard_today;
+    }
+    public void setData_textboard_thisweek(int data_textboard_thisweek) {
+        this.data_textboard_thisweek = data_textboard_thisweek;
+    }
+    public void setData_photoboard_today(int data_photoboard_today) {
+        this.data_photoboard_today = data_photoboard_today;
+    }
+    public void setData_photoboard_thisweek(int data_photoboard_thisweek) {
+        this.data_photoboard_thisweek = data_photoboard_thisweek;
+    }
+    public void setData_report_today(int data_report_today) {
+        this.data_report_today = data_report_today;
+    }
+    public void setData_report_thisweek(int data_report_thisweek) {
+        this.data_report_thisweek = data_report_thisweek;
     }
 }

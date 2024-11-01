@@ -47,4 +47,20 @@ public class MainService {
     public List<DashboardDTO> dashboardList2() {
         return main_dao.dashboardList2();
     }
+
+    // 대시보드 > 증감 데이터 목록
+    public DashboardDTO dashboardList3() {
+        DashboardDTO dto = new DashboardDTO();
+        dto.setData_member_today(main_dao.dashboardList3_1());
+        dto.setData_member_thisweek(main_dao.dashboardList3_2());
+        dto.setData_crew_today(main_dao.dashboardList3_3());
+        dto.setData_crew_thisweek(main_dao.dashboardList3_4());
+        dto.setData_textboard_today(main_dao.dashboardList3_5());
+        dto.setData_textboard_thisweek(main_dao.dashboardList3_6());
+        dto.setData_photoboard_today(main_dao.dashboardList3_7());
+        dto.setData_photoboard_thisweek(main_dao.dashboardList3_8());
+        dto.setData_report_today(main_dao.dashboardList3_9());
+        dto.setData_report_thisweek(main_dao.dashboardList3_10());
+        return dto;
+    }
 }

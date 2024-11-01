@@ -12,7 +12,16 @@
 
 .contents_flex .contents{
     margin: 0 8px;
-    min-height: 525px;
+    min-height: 250px;
+    padding: 14px 24px 24px;
+}
+
+.contents.chart{
+    width: 620px;
+}
+
+.contents.summary{
+    width: 330px;
 }
 
 .contents.notice{
@@ -25,4 +34,8 @@
 
 .contents_flex table {
     margin: 0 0 20px;
+}
+
+h1{
+    margin: 0;
 }

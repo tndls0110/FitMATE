@@ -37,4 +37,45 @@
             FROM report r ORDER BY r.report_idx DESC LIMIT 10 OFFSET 0
     </select>
 
+    <!-- 대시보드 > 증감 데이터 목록 -->
+    <select id="dashboardList3_1" resultType="int">
+        SELECT COUNT(user_id) FROM member WHERE regdate >= CURDATE()
+    </select>
+
+    <select id="dashboardList3_2" resultType="int">
+        SELECT COUNT(user_id) FROM member WHERE regdate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
+    <select id="dashboardList3_3" resultType="int">
+        SELECT COUNT(crew_idx) FROM crew WHERE create_date >= CURDATE()
+    </select>
+
+    <select id="dashboardList3_4" resultType="int">
+        SELECT COUNT(crew_idx) FROM crew WHERE create_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
+    <select id="dashboardList3_5" resultType="int">
+        SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND crew_board.date >= CURDATE()
+    </select>
+
+    <select id="dashboardList3_6" resultType="int">
+        SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND crew_board.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
+    <select id="dashboardList3_7" resultType="int">
+        SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND crew_board.date >= CURDATE()
+    </select>
+
+    <select id="dashboardList3_8" resultType="int">
+        SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND crew_board.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
+    <select id="dashboardList3_9" resultType="int">
+        SELECT COUNT(report_idx) FROM report WHERE report_date >= CURDATE()
+    </select>
+
+    <select id="dashboardList3_10" resultType="int">
+        SELECT COUNT(report_idx) FROM report WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
 </mapper>
