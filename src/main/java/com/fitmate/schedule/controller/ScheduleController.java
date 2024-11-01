@@ -92,8 +92,9 @@ public class ScheduleController {
 		return data;
 	}
 
-	@GetMapping (value = "/update_journal.go")
+	@GetMapping (value = "/update_journal.ajax")
 	public String update_journal(int idx, Model model){
+		logger.info("컨트롤러에 전달된 idx:{}",idx);
 		List<Map<String,Object>> journal_detail = s_service.getJournal_detail(idx);
 		model.addAttribute("journal",journal_detail);
 		return "schedule_update";
