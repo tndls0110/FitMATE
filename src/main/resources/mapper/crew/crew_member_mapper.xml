@@ -31,6 +31,7 @@
 		</otherwise>
 	</choose>
 </select>
+
 <!-- 크루 가입신청 목록을 위한 크루 및 크루장정보 가져오기 -->
 <select id="profileInfo" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 

@@ -1,5 +1,7 @@
 package com.fitmate.crew.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +135,22 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 	}
 
+	
+	// 내 크루 목록조회
+	public List<CrewSearchListDTO> mycrewList(String info_chk, String userId) {
+
+		List<CrewSearchListDTO> list = null;
+		
+		// info_chk 0:신청중인 크루목록, 1: 내크루 목록 
+		if(info_chk.equals("0")) {
+			list = crew_dao.joincrewList(userId);
+		}else if(info_chk.equals("1")){
+			list = crew_dao.mycrewList(userId);
+		}
+		
+		return list;
+	}
+	
 	
 	// 모집글 상세조회
 	public boolean recruitDetail(String idx, String currentId, Model model) {
@@ -274,7 +292,8 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		}
 		
 	}
-
+	
+	// 크루 입단신청하기
 	public int joinCrew(String crew_idx_, String join_id) {
 		
 		int crew_idx = Integer.parseInt(crew_idx_);
@@ -284,7 +303,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		return crew_dao.joinCrew(crew_idx, join_id, status);
 	}
 
-
+	// 입단신청 취소하기.
 	public int leaveCrew(String join_idx_) {
 
 		int join_idx = Integer.parseInt(join_idx_);
@@ -294,9 +313,17 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		return crew_dao.leaveCrew(join_idx);
 	}
 
-
-
-
+	// 크루 탈퇴
+	public int memberExit(String member_idx_) {
+		
+		int member_idx = Integer.parseInt(member_idx_);
+		
+		int row = crew_dao.memberExit(member_idx);
+		
+		return row;
+	}
 	
+
+
 	
 }

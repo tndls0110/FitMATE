@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,12 +152,31 @@ public class CrewController {
 		
 		int row = crew_service.leaveCrew(join_idx);
 		
-		// Insert에 성공했을 때 
+		// delete에 성공했을 때 
 		if(row > 0) {
 			success = true;
 		}
 		
 		map.put("success", success);
+		return map;
+	}
+	
+	// 크루 탈퇴
+	@PostMapping(value = "/memberExit.ajax")
+	@ResponseBody
+	public Map<String, Object> memberExit(String member_idx){
+		boolean success = false;
+		
+		int row = crew_service.memberExit(member_idx); 
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(row > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		
 		return map;
 	}
 	
@@ -182,13 +204,11 @@ public class CrewController {
    // 2. 내 크루 목록조회
    @GetMapping(value = "/mycrew.ajax")
    @ResponseBody 
-   public List<CrewSearchListDTO> myCrewList( @RequestParam Map<String, String> params){
-      
-      logger.info("params2 : " + params);
-      
-      List<CrewSearchListDTO> recruitList = crew_service.crewList(params);
-      
-      logger.info("list2 : ", recruitList);
+   public List<CrewSearchListDTO> myCrewList(String info_chk, HttpSession session){
+	  // String userId = session.getAttribute("sessionId");
+	  String userId = "member01";
+	   
+      List<CrewSearchListDTO> recruitList = crew_service.mycrewList(info_chk, userId);
       
       return recruitList; 
    }
