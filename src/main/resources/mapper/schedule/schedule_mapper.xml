@@ -57,6 +57,12 @@
         SELECT * FROM schedule s where journal_idx = #{idx};
     </select>
 
-
+    <select id="currentfile" resultType="map">
+        SELECT * FROM board_file where board_idx =#{idx} AND category_idx = '1';
+    </select>
+    
+    <delete id="delete_img">
+        DELETE FROM board_file WHERE file_idx = #{fileIdx}
+    </delete>
 
 </mapper>
