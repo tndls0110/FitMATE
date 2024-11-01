@@ -11,6 +11,7 @@ import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewFileDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
+import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.member.dto.MemberDTO;
 
 @Mapper
@@ -59,6 +60,10 @@ public interface CrewPageDAO {
 	String board_reported_id(String board_idx);
 
 	int report_do(ReportDTO report_dto);
+
+	CrewBoardDTO crew_main_notice(int crew_idx);
+
+	List<CrewMemberProfileDTO> crew_main_crewmember(int crew_idx);
 
 	
 	
