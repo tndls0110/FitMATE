@@ -22,7 +22,6 @@ function pageShow(page) {
         dataType: 'json',
         success: function(data) {
             listPrint(data.list, data.totalIdx, data.currentPage, data.offset);
-
             $('#pagination').twbsPagination({
                 startPage: data.page,
                 totalPages: data.totalPages,
@@ -31,11 +30,10 @@ function pageShow(page) {
                     pageShow(page);
                 }
             });
-
-            $('.page-item.first a').html('<i class="bi bi-chevron-bar-left"></i>');
-            $('.page-item.prev a').html('<i class="bi bi-chevron-left"></i>');
-            $('.page-item.next a').html('<i class="bi bi-chevron-right"></i>');
-            $('.page-item.last a').html('<i class="bi bi-chevron-bar-right"></i>');
+            document.getElementsByClassName('first')[0].children[0].innerHTML = '<i class="bi bi-chevron-bar-left"></i>';
+            document.getElementsByClassName('prev')[0].children[0].innerHTML = '<i class="bi bi-chevron-left"></i>';
+            document.getElementsByClassName('next')[0].children[0].innerHTML = '<i class="bi bi-chevron-right"></i>';
+            document.getElementsByClassName('last')[0].children[0].innerHTML = '<i class="bi bi-chevron-bar-right"></i>';
         },
         error: function(e) {}
     });

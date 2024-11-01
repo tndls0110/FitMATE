@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_dashboard.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        var index = 1;
+        var index = 0;
     </script>
 </head>
 <body>

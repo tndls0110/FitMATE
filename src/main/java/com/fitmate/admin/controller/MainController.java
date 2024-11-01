@@ -51,7 +51,7 @@ public class MainController {
 			case "pass":
 				session.setAttribute("loginIdx", main_service.getidx(admin_id));
 				session.setAttribute("permit", "all");
-				page = "admin_dashboard";
+				page = "redirect:/admin_dashboard.go";
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -68,7 +68,7 @@ public class MainController {
 	}
 
 	// 로그아웃
-	@RequestMapping (value = "/admin_logout.go")
+	@RequestMapping (value = "/admin_logout.do")
 	public String logout(Model model, HttpSession session) {
 		session.removeAttribute("loginIdx");
 		session.removeAttribute("permit");
