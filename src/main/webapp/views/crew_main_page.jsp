@@ -23,14 +23,14 @@
 		/* 오른쪽 크루일정 위치 ? */
 		#calendar_related {
 			width: 500px;
-			height: 800px;
+			height: 555px;
 			margin-left: 4px;
 			float : left;
 		}
 
 		.calendar .writebtn {
 		    position: absolute;
-		    top: 60px; /* 원하는 위치 조정 */
+		    top: 40px; /* 원하는 위치 조정 */
 		    right: 16px; /* 오른쪽 여백 */
 		    cursor: pointer; 
 		}
@@ -55,10 +55,10 @@
 
 		#schedule {
 			width: 475px;
-			height: 680px;
-			overflow-y: scroll;
+			height: 550px;
+			overflow-y: hidden;
 			overflow-x: hidden;
-			margin: -925px  -414px 9px 0px;
+			margin: -960px  -400px 9px 0px;
 			float : right;
 		}
 
@@ -76,7 +76,7 @@
 
 		.crew_schedule_content { /*만약 크루 일정 없으면 append x*/
 			width: 500px;
-			height: 100px;
+			height: 490px;
 			margin-top: 5px;
 			margin-bottom: 10px;
 			border-radius: 5px;
@@ -197,7 +197,7 @@
 		}
 
 		.type-two {
-			background-color: orange; /* 제목이 '2'인 경우의 배경색 */
+			background-color: #5bc5bb; /* 제목이 '2'인 경우의 배경색 */
 			color: black; /* 텍스트 색상 */
 		}
 
@@ -260,7 +260,23 @@
 	
 	}
 
+.custom-photolist {
+    margin-top: 10px;
+    
+}
 
+.crew{
+	padding: 5px 20px 0;
+	margin: 3px 0 15px;
+}
+
+.crew_contents{
+	
+}
+
+.crew_list{
+	margin: 15px 0;
+}
 
 	</style>
 
@@ -270,31 +286,33 @@
 <div class="container">
 	<c:import url="layout/leftnav_1.jsp"></c:import>
 	<!-- 운동일지는 nav1로, mbti만 nav5로 -->
-	<div class="contents">
+	<div class="contents crew_contents">
 		<p>크루이름 대시보드</p>
 		<input type="hidden" id="crew_idx" name="crew_idx" value="6">
 		<input type="hidden" id="crew_id" name="crew_id" value="크루장id">
 		<input type="hidden" id="user_id" name="user_id" value="member02">
+		
+		<div class="list" style="margin:15px 0;"> <!-- 공지사항 시작 -->
+		 <p><input type="text" class="full" name="id" value="최근 공지사항 입니다" readonly/></p>
+		</div> <!-- 공지사항 끝 -->
+		
 		<div id="calendar_related">
-
 			<div class="contents">
 
 				<!-- 달력 -->
 				<div class="calendar">
-					<div class="title_calendar">
+					<div class="title_calendar crew">
 						<p>크루 일정 보기</p>
-						<div id="date" style="font-size: 20px;"></div>
+						<div id="date" style="font-size: 20px; margin: 20px 0 15px"></div>
 						<button class="writebtn mainbtn minbtn" onclick="crew_plan_write()">일정 작성</button>
 					</div>
 					<div id="calendar"></div>
 				</div>
 			</div>
 
-
-
 			<div id="schedule">
 				<div class="crew_schedule">
-					<div class="crew_schedule_title">크루 일정</div>
+					<div class="crew_schedule_title">크루 한줄게시글</div>
 
 					<div class="crew_schedule_content">
 						<div id = "top">
@@ -309,18 +327,26 @@
 						</div>
 					</div>
 				</div>
-
-				<div id = "journal_total">
+		
+			
 		
 			</div>
-
-			</div>
+		
 		</div>
-
-</div>
-
+		
+		<div class="list custom-photolist"> <!-- 사진 시작 -->
+		 
+		 <p><input style="margin-top: 10px;" type="text" class="full" name="photostart" value="사진게시글자리" readonly/></p>
+		<div class="list custom_photo">
+		<span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span><span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span>
+		</div>
+		
+		</div> <!-- <div class="list custom-photolist"> 사진 끝 -->		
 
 	</div>
+
+</div>
+		
 
 <!-- 모달창 -->
 <div class="modal" id="scheduleModal">
@@ -348,7 +374,10 @@
 
 
 <script>
+// 세션아이디 구분하기
 var userId = document.getElementById('user_id').value;
+// 크루장 판단하기 
+const isCrewLeader = true;
 
 	document.addEventListener('DOMContentLoaded', function() {
 		let event_create = []; // 이벤트 배열 초기화
@@ -369,7 +398,7 @@ var userId = document.getElementById('user_id').value;
 				for(var crew_event of event_day.crew_events){
 					let event_Object = {
 						start :	crew_event.plan_date,
-						title : '2' //크루 일정
+						title : '1' //크루 일정
 					};
 					event_create.push(event_Object);
 				}
@@ -414,8 +443,8 @@ var userId = document.getElementById('user_id').value;
 			// 제목에 따라 다른 클래스 추가 -> 1 = 일지 2 = 크루
 			if (title === '1') {
 				event.classList.add('type-one'); // 클래스 추가
-			} else if (title === '2') {
-				event.classList.add('type-two'); // 클래스 추가
+			} else if (title === '1') {
+				event.classList.add('type-one'); // 클래스 추가
 			}
 		});
 	} // change_css()
@@ -428,9 +457,6 @@ var userId = document.getElementById('user_id').value;
 			console.log('캘린더로부터 뽑아온 date : {}' + date);
 			$('#date').html(date);
 
-			//뽑은 날짜 기반으로 개인 일정 가져오기
-			//	get_journal(date);
-			
 			// 뽑은 날짜 기반으로 일정 상세보기 모델창 띄우기
 			  openModal(date);
 			
@@ -448,10 +474,7 @@ var userId = document.getElementById('user_id').value;
 	    $('#scheduleModal').css('display', 'none'); // 모달 닫기
 	}
 	
-	// 크루장 판단하기 
-	const isCrewLeader = true;
-	
-	
+
 	function get_crewplan(date) {
 	    $.ajax({
 	        url: 'crew_plan_detail.ajax', // API 엔드포인트
@@ -584,8 +607,6 @@ var userId = document.getElementById('user_id').value;
 				var e_time = end_time.substring(0, 5);
 				console.log('e_time:', e_time);
 
-
-
 				content += '<div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
@@ -596,14 +617,11 @@ var userId = document.getElementById('user_id').value;
 					content += '<div class="crew_tag">크루</div>';
 				}
 
-
 				content += '<div class="journal_start">' + s_time + '</div>';
 				content += '<div class="journal_end">' + e_time + '</div> </div></div>';
 				content += '<div class="journal_text">' + j_data['journal_content'] + '</div>'
-
 				/*if(j_data['journal']) 사진 나중에 추가하기*/
 				content += '<div class="journal_image"></div></div>';
-
 			}
 		}
 		console.log('content: ', content);
