@@ -195,7 +195,7 @@ public class ScheduleService {
 	}
 
 	public List<Map<String, Object>> getJournal_detail(int idx) {
-
+		logger.info("서비스에서 받은 idx:{}",idx);
 		return s_dao.getJournal_detail(idx);
 	}
 }
