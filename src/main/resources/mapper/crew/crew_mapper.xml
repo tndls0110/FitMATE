@@ -150,20 +150,30 @@ P.profile AS leader_profile,
 M.mbtir_name AS leader_mbti 
 FROM crew_join A
 INNER JOIN crew C ON C.crew_idx = A.crew_idx        
-INNER JOIN member MB ON A.join_id = MB.user_id 
-INNER JOIN profile P ON A.join_id = P.user_id 
+INNER JOIN member MB ON MB.user_id= C.crew_id 
+INNER JOIN profile P ON P.user_id = C.crew_id
 INNER JOIN crew_idx I ON C.crew_idx = I.crew_idx 
 INNER JOIN crew_board CB ON CB.board_idx = I.board_idx 
 INNER JOIN region_sub RS ON RS.regions_idx = C.regions_idx 
 INNER JOIN region R ON R.region_idx = RS.region_idx 
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
-LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
+LEFT JOIN ( 
+    SELECT crew_idx, COUNT(member_idx) AS member_count 
+    FROM crew_member 
+    GROUP BY crew_idx 
+) MC ON MC.crew_idx = C.crew_idx
 WHERE
 A.join_id = #{userId}  <!-- 현재 유저ID로 신청중인 크루목록 가져오기. -->
 AND
 A.status = 1           <!-- 신청중인 모집게시글목록만 가져오기 -->
 AND
 CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
+AND A.date = (         <!-- status상관없이 가장 최근 날짜의 신청만 가져오기...하나의 크루에대해 여러번의 입단신청을한경우를 고려하였음. -->
+        SELECT MAX(date) 
+        FROM crew_join 
+        WHERE join_id = #{userId} 
+        AND crew_idx = C.crew_idx
+    )  
 </select>
 
 <!-- 내가속해있는 크루목록 -->
@@ -197,8 +207,8 @@ P.profile AS leader_profile,
 M.mbtir_name AS leader_mbti 
 FROM crew_member A
 INNER JOIN crew C ON C.crew_idx = A.crew_idx        
-INNER JOIN member MB ON A.member_id = MB.user_id 
-INNER JOIN profile P ON A.member_id = P.user_id 
+INNER JOIN member MB ON MB.user_id= C.crew_id 
+INNER JOIN profile P ON P.user_id = C.crew_id
 INNER JOIN crew_idx I ON C.crew_idx = I.crew_idx 
 INNER JOIN crew_board CB ON CB.board_idx = I.board_idx 
 INNER JOIN region_sub RS ON RS.regions_idx = C.regions_idx 
@@ -214,81 +224,39 @@ CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
 
 </select>
 
-
-
-<!-- 댓글가져오기 -->
-<select id="ask" resultType="com.fitmate.crew.dto.CrewAskDTO" parameterType="int">
+<!-- 댓글, 대댓글 한번에 가져오기 -->
+<select id="comment" resultType="com.fitmate.crew.dto.CrewCommentDTO" parameterType="int">
 SELECT
-<!--   댓글idx   -->
-C.comment_idx,
-<!--   댓글ID   -->
-C.comment_id,
-<!-- 댓글 게시여부 -->
-C.status,
-<!--   댓글 작성자 프로필   -->
-P.profile,
-<!--   댓글 작성자 닉네임   -->
-M.nick,
-<!--   댓글 내용   -->
-C.content,
-<!--   댓글 작성일   -->
-C.date FROM comment C 
-INNER JOIN profile P ON P.user_id = C.comment_id 
-INNER JOIN member M ON M.user_id = C.comment_id 
-WHERE board_idx = #{board_idx}
-</select>
-
-<!-- 대댓글 가져오기 -->
-<select id="reply" resultType="com.fitmate.crew.dto.CrewReplyDTO" parameterType="int">
-SELECT
-<!--   대댓글idx   -->
-RC.recomment_idx,
-<!--   대댓글ID   -->
-RC.recomment_id,
-<!--   대댓글 작성자 프로필   -->
-P.profile,
-<!--   대댓글 작성자 닉네임   -->
-M.nick,
-<!--   대댓글 내용   -->
-RC.content,
-<!--   대댓글 작성일   -->
-RC.date FROM recomment RC 
-INNER JOIN profile P ON P.user_id = RC.recomment_id 
-INNER JOIN member M ON M.user_id = RC.recomment_id 
-WHERE comment_idx = #{comment_idx}
-</select>
-
-<!-- 댓글, 대댓글 한번에 가져오기(개선버전.... 좀더 수정해야함.) -->
-<!-- 
-SELECT 
-    comment_idx AS id, 
-    board_idx, 
-    comment_id AS user_id, 
-    content AS message, 
-    date, 
-    'comment' AS type
-FROM comment
-WHERE board_idx = #{boardId}
-
-UNION ALL
-
-SELECT 
-    recomment_idx AS id, 
-    comment_idx AS board_idx, 
-    recomment_id AS user_id, 
-    content AS message, 
-    date, 
-    'recomment' AS type
-FROM recomment
-WHERE comment_idx IN (SELECT comment_idx FROM comment WHERE board_idx = #{boardId})
-ORDER BY date;
- -->
+    C.comment_idx,
+    C.comment_id,
+    C.content AS comment_content,
+    C.date AS comment_date,
+    C.status AS comment_status,
+    M.nick AS comment_nick,
+    P.profile AS comment_profile,
+    RC.recomment_idx,
+    RC.recomment_id,
+    RC.content AS recomment_content,
+    RC.date AS recomment_date,
+    M2.nick AS recomment_nick,
+    P2.profile AS recomment_profile
+FROM comment C
+LEFT JOIN recomment RC ON C.comment_idx = RC.comment_idx
+LEFT JOIN member M ON M.user_id = C.comment_id 
+LEFT JOIN profile P ON P.user_id = C.comment_id
+LEFT JOIN member M2 ON M2.user_id = RC.recomment_id 
+LEFT JOIN profile P2 ON P2.user_id = RC.recomment_id
+WHERE C.board_idx = #{board_idx}
+ORDER BY C.comment_idx;	
+</select> 
 
 <!-- 크루 입단여부 체크. -->
 <select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String">
 	SELECT * FROM crew_join 
-	WHERE join_id = #{currentId}
+	WHERE join_id = #{currentUserId}
 	AND crew_idx = #{crew_idx}
+	ORDER BY date DESC <!-- 최근 날짜부터정렬 -->
+	LIMIT 1;  <!-- 가장 최근status만 가져오기 -->                                                   
 </select>
 
 <!-- 크루 입단신청 -->

@@ -277,8 +277,7 @@ a.crew_create {
 
 <script src="resources/js/common.js"></script>
 <script>
-   // 0: 신청중인 크루, 1: 내 크루
-   var currentUserId = 'member01'; // 현재 유저아이디 => 세션으로 바꿔줘야함.
+   var currentUserId = '${sessionScope.loginId}';
    var leader_chk = 0; // 크루장여부 체크 (0: 크루원, 1: 크루장)
    var cntApproval = 0; // 신청중인 크루 Count
    var cntRecruit = 0; // 내 크루 Count
@@ -344,12 +343,13 @@ a.crew_create {
 		   leader_chk = 0;
 	   }
 	   
+	   console.log('dqweItem:'+item.leader_nick);
 	   
       var profile = item.leader_profile ? '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>' 
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
       
       // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI
-      var header = '<a href="crew_recruit_detail.go?idx=' + item.board_idx + '&id=' + currentUserId + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">'
+      var header = '<a href="crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">'
                    + profile
                    + '<div class="recruit_right">'
                       + '<div class="right_top">'

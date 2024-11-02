@@ -6,13 +6,12 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.fitmate.crew.dto.CrewBoardDTO;
 import com.fitmate.crew.dto.AskWriteDTO;
 import com.fitmate.crew.dto.CrewApprovalDTO;
-import com.fitmate.crew.dto.CrewAskDTO;
+import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewCommentDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
-import com.fitmate.crew.dto.CrewReplyDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.dto.ReplyWriteDTO;
@@ -42,10 +41,8 @@ public interface CrewDAO {
 	
 	// 모집게시글 상세보기
 	CrewSearchListDTO recruitDetail(int board_idx);
-	// 문의 댓글 정보 가져오기
-	List<CrewAskDTO> ask(int board_idx);
-	// 답변 대댓글 정보 가져오기
-	CrewReplyDTO reply(int comment_idx);
+	// 댓글, 대댓글 정보 가져오기
+	List<CrewCommentDTO> comment(int board_idx);	
 	// 문의 댓글 작성하기
 	int askWrite(AskWriteDTO askWriteDTO);
 	// 답변 대댓글 작성하기
@@ -59,7 +56,7 @@ public interface CrewDAO {
 	// 답변 대댓글 삭제
 	int recomment_delete(HashMap<String, Object> info);
 	// 크루입단신청여부 확인 => 모집게시글에 사용
-	CrewApprovalDTO crewApproval(String idx, String currentId);
+	CrewApprovalDTO crewApproval(String crew_idx, String currentUserId);
 	// 크루 입단신청
 	int joinCrew(int crew_idx_, String join_id, int status);
 	// 크루 입단신청 취소

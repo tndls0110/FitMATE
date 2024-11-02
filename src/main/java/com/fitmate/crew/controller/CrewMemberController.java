@@ -1,8 +1,12 @@
 package com.fitmate.crew.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,16 +22,55 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fitmate.crew.dto.CrewJoinDTO;
 import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.crew.service.CrewMemberService;
+import com.fitmate.member.service.MemberService;
 
 @Controller
 public class CrewMemberController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired CrewMemberService crewmember_service;
+	@Autowired MemberService member_service;
+	
+	String page = "";
+	
+	/* checkPermit(model, session);를 써서 세션ID와 크루이용가능여부 전부 체크. */
+	// 세션 체크
+	public void checkPermit(Model model, HttpSession session) {
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}
+	}
+	
+	// 크루 이용 가능 여부 체크
+	public void checkPermitCrew(Model model, HttpSession session) {
+		if (session.getAttribute("loginId") != null) {
+			String user_id = (String) session.getAttribute("loginId");
+			LocalDateTime cleared_date = member_service.getPermit(user_id);
+			LocalDateTime now = LocalDateTime.now();
+			if (cleared_date != null){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분");
+				String clearedDate = cleared_date.format(formatter);
+				if (cleared_date.isAfter(now)) {
+					model.addAttribute("msg", user_id+"님은 "+clearedDate+"까지 크루 기능을 이용하실 수 없습니다.");
+					page = "schedule";
+				}
+			}
+		} else {
+			checkPermit(model, session);
+		}
+	}
+	
+	
+	
+	
+	
+	
 	
 	// 크루 가입신청자 목록
 	@GetMapping(value = "/mycrew_joinList.go")
-	public String joinList(String idx, Model model) {
+	public String joinList(String idx, Model model, HttpSession session) {
+		checkPermit(model, session);
 		int crew_idx = Integer.parseInt(idx); 
 		model.addAttribute("crew_idx", crew_idx);
 		
@@ -46,7 +89,8 @@ public class CrewMemberController {
 	
 	// 크루원 목록
 	@GetMapping(value = "/mycrew_memberList.go")
-	public String memberList(String idx, Model model) {
+	public String memberList(String idx, Model model, HttpSession session) {
+		checkPermit(model, session);
 		int crew_idx = 0;
 		
 		if (idx != null && !idx.isEmpty()) {
@@ -72,7 +116,7 @@ public class CrewMemberController {
 	// 크루 입단승인/거절
 	@PostMapping(value = "/join_approval.ajax")
 	@ResponseBody
-	public Map<String, Object> joinApprov(@RequestParam Map<String, String> params){
+	public Map<String, Object> joinApproval(@RequestParam Map<String, String> params){
 		boolean success = false;
 		
 		int row = crewmember_service.joinApproval(params);
@@ -88,7 +132,12 @@ public class CrewMemberController {
 	
 	// 크루원/일반회원 프로필 상세보기 (id : 보고자하는 멤버ID, idx : crew_idx)
 	@RequestMapping(value = "/mycrew_memberDetail.go")
-	public String memberDetail(String id, String profileType, String idx, Model model) {
+	public String memberDetail(String id, String profileType, String idx, Model model, HttpSession session) {
+		checkPermit(model, session);
+		//세션ID가져오기
+		String user_id = (String) session.getAttribute("loginId");
+		// 추후 해당 크루의 크루장인지 확인하여 아니라면.. 일반유저 프로필이 나오도록 한번더 처리.
+		
 		String profileType_; // 0:일반유저 프로필, 1: 크루원 프로필
 		CrewMemberProfileDTO memberProfile = null;		
 		

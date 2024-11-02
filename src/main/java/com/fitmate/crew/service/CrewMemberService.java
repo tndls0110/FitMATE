@@ -63,17 +63,18 @@ public class CrewMemberService {
 
 	@Transactional
 	public int joinApproval(Map<String, String> params) {
-		// 현재 날짜와 시간 가져오기
-        LocalDateTime date = LocalDateTime.now();
-        // 원하는 포맷으로 날짜와 시간을 String으로 변환
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String formattedDate = date.format(formatter);
-		
-        // map에 date 추가.
-        params.put("date", formattedDate);
-        
-        logger.info("params Test : " + params);
+		/*
+		 * // 현재 날짜와 시간 가져오기 LocalDateTime date = LocalDateTime.now(); // 원하는 포맷으로 날짜와
+		 * 시간을 String으로 변환
+		 * 
+		 * DateTimeFormatter formatter =
+		 * DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); String formattedDate =
+		 * date.format(formatter);
+		 * 
+		 * // map에 date 추가. params.put("date", formattedDate);
+		 * 
+		 * logger.info("params Test : " + params);
+		 */
         
         int status = Integer.parseInt(params.get("status"));
 		

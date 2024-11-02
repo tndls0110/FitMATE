@@ -1,11 +1,12 @@
 package com.fitmate.crew.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +22,51 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitmate.crew.dto.CrewCommentDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
+import com.fitmate.member.service.MemberService;
 
 @Controller
 public class CrewController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired CrewService crew_service;
+	@Autowired MemberService member_service;
+	
+	String page = "";
+	
+	/* checkPermit(model, session);를 써서 세션ID와 크루이용가능여부 전부 체크. */
+	// 세션 체크
+	public void checkPermit(Model model, HttpSession session) {
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}
+	}
+	
+	// 크루 이용 가능 여부 체크
+	public void checkPermitCrew(Model model, HttpSession session) {
+		if (session.getAttribute("loginId") != null) {
+			String user_id = (String) session.getAttribute("loginId");
+			LocalDateTime cleared_date = member_service.getPermit(user_id);
+			LocalDateTime now = LocalDateTime.now();
+			if (cleared_date != null){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분");
+				String clearedDate = cleared_date.format(formatter);
+				if (cleared_date.isAfter(now)) {
+					model.addAttribute("msg", user_id+"님은 "+clearedDate+"까지 크루 기능을 이용하실 수 없습니다.");
+					page = "schedule";
+				}
+			}
+		} else {
+			checkPermit(model, session);
+		}
+	}
+	
+	
+	
+	
 		
 	@RequestMapping(value="/crew_create.go")
 	public String crew_create() {
@@ -80,9 +118,12 @@ public class CrewController {
 	}
 	
 	
-	// 1. 크루검색
+	// 크루검색
 	@RequestMapping(value = "/crew_search")
-	public String crewSearch(Model model) {
+	public String crewSearch(Model model, HttpSession session) {
+		page = "crew_search";
+		checkPermit(model, session);
+		
 		// 1-1. 필터 - 지역정보/MBTI정보 가져오기
 		List<Map> placeFilter = crew_service.placeFilter();
 		model.addAttribute("placeFilter", placeFilter);
@@ -90,10 +131,10 @@ public class CrewController {
 		List<Map> mbtiFilter = crew_service.mbtiFilter();
 		model.addAttribute("mbtiFilter", mbtiFilter);
 
-		return "crew_search";
+		return page;
 	}
 
-	// 2. 크루 모집글 목록조회
+	// 크루 모집글 목록조회
 	@GetMapping(value = "/crew_search.ajax")
 	@ResponseBody 
 	public List<CrewSearchListDTO> crewSearchList( @RequestParam Map<String, String> params){
@@ -105,24 +146,27 @@ public class CrewController {
 		return recruitList; 
 	}
 	
-	// 3. 크루 모집글 상세조회
+	// 크루 모집글 상세조회
 	@RequestMapping(value="/crew_recruit_detail.go")
-	public String recruitDetail(String board_idx, String id, String crew_idx, Model model) {
-		// 크루 모집글 정보 + 크루 가입여부 체크
-		crew_service.recruitDetail(board_idx, id, crew_idx, model);
+	public String recruitDetail(String board_idx, String crew_idx, HttpSession session, Model model) {
+		page = "crew_recruit_detail";
+				
+		checkPermit(model, session);
+		//세션ID가져오기
+		String user_id = (String) session.getAttribute("loginId");
 		
-		return "crew_recruit_detail";
+		// 크루 모집글 정보 + 크루 가입여부 체크
+		crew_service.recruitDetail(board_idx, user_id, crew_idx, model);
+		
+		return page;
 	}
 	
-	// 3-1. 크루 모집글 상세정보 조회
+	// 크루 모집글 - 댓글,대댓글 가져오기
 	@GetMapping(value = "/crew_recruit_detail.ajax")
 	@ResponseBody 
-	public Map<String, Object> recruitDetail(String idx){
+	public List<CrewCommentDTO> recruitDetail(String board_idx, HttpSession session){
 		
-		// 크루정보 및 댓글 정보 가져오기.
-		Map<String, Object> recruitDetail = crew_service.recruitDetail(idx);
-		
-		return recruitDetail; 
+		return crew_service.recruitDetail(board_idx); 
 	}
 	
 	// 크루 입단 신청
@@ -181,54 +225,59 @@ public class CrewController {
 	}
 	
 	
-	// 3-2. 크루 모집글 - 문의댓글/답변대댓글 내용저장
+	// 크루 모집글 - 문의댓글/답변대댓글 내용저장
 	@PostMapping(value="/crew_recruit_detail.do")
-	public String commentWrite(@RequestParam Map<String, String> params) {
-		
+	public String commentWrite(@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		// 이동할 페이지
 		String board_idx = params.get("board_idx");
+		
+		page = "redirect:/crew_recruit_detail.go?idx=" + board_idx;
+		checkPermit(model, session);
 		
 		// 댓글 또는 대댓글작성.
 		crew_service.commentWrite(params);
 		
-		return "redirect:/crew_recruit_detail.go?idx=" + board_idx;
+		return page;
 	}
 	
-   // 1. 내 크루 페이지
+   // 내 크루 페이지
    @RequestMapping(value = "/mycrew")
-   public String myCrew(Model model) {
-      return "mycrew";
+   public String myCrew(Model model, HttpSession session) {
+	  page = "mycrew";
+	  checkPermit(model, session);
+	  
+	  logger.info("session : ", session); 
+	  logger.info("model : ", model); 
+      return page;
    }
    
    
-   // 2. 내 크루 목록조회
+   // 내 크루 목록조회
    @GetMapping(value = "/mycrew.ajax")
    @ResponseBody 
    public List<CrewSearchListDTO> myCrewList(String info_chk, HttpSession session){
-	  // String userId = session.getAttribute("sessionId");
-	  String userId = "member01";
+	 //세션ID가져오기
+	 String user_id = (String) session.getAttribute("loginId");
 	   
-      List<CrewSearchListDTO> recruitList = crew_service.mycrewList(info_chk, userId);
+      List<CrewSearchListDTO> recruitList = crew_service.mycrewList(info_chk, user_id);
       
       return recruitList; 
    }
    
-   // 3. Comment 모달 - 댓글 수정/삭제/신고 이벤트 처리
+   // Comment 모달 - 댓글 수정/삭제/신고 이벤트 처리
    @PostMapping(value = "/comment_event.ajax")
    @ResponseBody
    public Map<String, Object> comment_event(@RequestBody String json_info) throws Exception {
-	   // 이동할 페이지 (기본값 : 모집게시글 상세페이지)
-	   String page = "crew_recruit_detail.go?idx="; 
 	   // 신고페이지로 이동인지 확인하기 위함. (1인경우 신고페이지에 넘겨줄 데이터가 존재함을 의미.)
 	   String report_chk = "0"; 
 
 	   //String 을 Map 을 바꿔주기위해 라이브러리 사용.
 	   ObjectMapper mapper = new ObjectMapper();
 	   HashMap<String, Object> info = mapper.readValue(json_info, new TypeReference<HashMap<String, Object>>(){});
-	   logger.info("info : " + info);
 	   
 	   Map<String, Object> map = new HashMap<String, Object>();
 	   
+	   // 수정 or 삭제 or 신고를 구분하기 위한 변수
 	   String event = (String) info.get("event");
 	   
 	   if(event.equals("report")) {
@@ -237,7 +286,6 @@ public class CrewController {
 		   String comment_id = (String) info.get("comment_id");
 		  
 		   report_chk = "1";
-		   page = "crew_report.go"; 
 		   map.put("comment_idx", comment_idx); // 신고대상 댓글idx 
 		   map.put("comment_id", comment_id); // 신고대상 댓글id 
 		   map.put("board_type", "2"); // 댓글신고유형
@@ -248,7 +296,6 @@ public class CrewController {
 	   		
 	   map.put("success", "성공");
 	   map.put("report_chk", report_chk);
-	   map.put("page", page);
 	   return map;
    }
 

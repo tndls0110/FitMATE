@@ -4,16 +4,33 @@
 >
 
 <mapper namespace="com.fitmate.crew.dao.CrewMemberDAO">
+
+<!-- 크루가입신청자 목록 -->
 <select id="joinList" resultType="com.fitmate.crew.dto.CrewJoinDTO" parameterType="map">
 	SELECT 
-		A.*, 
-		B.nick,
-		C.profile
-	FROM crew_join A 
-	INNER JOIN member B ON B.user_id = A.join_id
-	INNER JOIN profile C ON C.user_id = A.join_id
-	<where>
-	A.crew_idx = #{crew_idx} AND A.status = 1 
+    A.*,
+    B.nick,                  
+    C.profile                 
+FROM 
+    crew_join A               
+INNER JOIN member B ON B.user_id = A.join_id  
+INNER JOIN profile C ON C.user_id = A.join_id  
+INNER JOIN (
+    SELECT 
+        crew_idx,            
+        join_id,             
+        MAX(date) AS max_date  <!-- 각 크루와 사용자에 대해 가장 최근 신청 날짜 -->
+    FROM 
+        crew_join           
+    GROUP BY 
+        crew_idx,           <!-- 크루 인덱스 기준으로 그룹화 -->
+        join_id             <!-- 사용자 ID 기준으로 그룹화 -->
+) AS A2 ON A.crew_idx = A2.crew_idx     
+             AND A.join_id = A2.join_id     
+             AND A.date = A2.max_date       
+	<where> 
+    A.crew_idx = #{crew_idx}   
+    AND A.status = 1           
 	<!--    searchFilter(1='크루원닉네임 검색'/ 2='크루원ID 검색')    -->
 	<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
 		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
@@ -80,19 +97,23 @@
 	</choose>
 </select>
 
-
-<update id="joinApproval" parameterType="map">
-	UPDATE crew_join SET 
+<!-- 크루입단승인/거절 -->
+<!-- 로그형식으로 남기기위해 UPDATE가 아닌 INSERT사용. -->
+<insert id="joinApproval" parameterType="map">
+	INSERT INTO crew_join(crew_idx, join_id, status) 
+	VALUES(#{crew_idx},#{join_id},#{status})
+	
+	<!-- UPDATE crew_join SET 
 		status = #{status},
 		date = #{date}
 		WHERE join_idx = #{join_idx}
 		AND status = 1
-		AND crew_idx = #{crew_idx}
-</update>
+		AND crew_idx = #{crew_idx} -->
+</insert>
 
 <insert id="crewMember" parameterType="map">
 	INSERT INTO crew_member(crew_idx, member_id, join_date, status)
-		VALUES(#{crew_idx}, #{join_id}, #{date}, 1)
+		VALUES(#{crew_idx}, #{join_id}, CURRENT_TIMESTAMP(), 1)
 </insert>
 
 <!-- 크루원 프로필 -->

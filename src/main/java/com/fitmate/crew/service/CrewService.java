@@ -1,7 +1,5 @@
 package com.fitmate.crew.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +14,11 @@ import org.springframework.ui.Model;
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.AskWriteDTO;
 import com.fitmate.crew.dto.CrewApprovalDTO;
-import com.fitmate.crew.dto.CrewAskDTO;
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewCommentDTO;
 import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewIdxDTO;
 import com.fitmate.crew.dto.CrewMemberDTO;
-import com.fitmate.crew.dto.CrewReplyDTO;
 import com.fitmate.crew.dto.CrewSearchConditionDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.dto.ReplyWriteDTO;
@@ -153,19 +150,19 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	
 	
 	// 모집글 상세조회
-	public boolean recruitDetail(String idx, String currentId, Model model) {
+	public boolean recruitDetail(String board_idx_, String currentUserId, String crew_idx, Model model) {
 		int board_idx = 0;
 		int approval_status = 0; // 크루입단 신청여부 (0: 신청전 / 1: 신청/ 2: 거절/ 3: 수락)
 		
-		if(idx != null && !idx.equals("")) {
-			board_idx = Integer.parseInt(idx);
+		if(board_idx_ != null && !board_idx_.equals("")) {
+			board_idx = Integer.parseInt(board_idx_);
 		}
 		
 		// 1. 모집게시글 내용가져오기
 		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
 		
 		// 2. 크루입단신청 여부 가져오기. 
-		CrewApprovalDTO approval = crew_dao.crewApproval(idx, currentId);
+		CrewApprovalDTO approval = crew_dao.crewApproval(crew_idx, currentUserId);
 		
 		// 값이 존재하면.. 크루입단 신청여부만
 		if(approval != null && approval.isValid()) {
@@ -185,38 +182,18 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	
 	// 모집글 댓글조회
 	@Transactional
-	public Map<String, Object> recruitDetail(String board_idx_, String id, String crew_idx, Model model) {
+	public List<CrewCommentDTO> recruitDetail(String board_idx_) {
 		int board_idx = 0;
-		int comment_idx = 0;
-		CrewReplyDTO replyDTO = null;
-		
-		
-		Map<String, Object> map = new HashMap<String, Object>();
 		
 		if(board_idx_ != null && !board_idx_.equals("")) {
 			board_idx = Integer.parseInt(board_idx_);
 		}
 		
-		// 1. 댓글 내용가져오기
-		List<CrewAskDTO> commentDTO = crew_dao.ask(board_idx);
-		
-		for (CrewAskDTO crewAskDTO : commentDTO) {
-			// 2. 댓글 idx로 대댓글 내용가져오기.
-			comment_idx = crewAskDTO.getComment_idx();
-			
-			replyDTO = crew_dao.reply(comment_idx);
-			// 대댓글이 존재하면, 댓글DTO에 삽입. (List -> DTO -> DTO)
-			if(replyDTO != null && replyDTO.isValid()) {
-				crewAskDTO.setRecomment_chk(1);
-				crewAskDTO.setReplyDTO(replyDTO);
-			}
-		}
+		// 댓글, 대댓글 가져오기
+		List<CrewCommentDTO> commentDTO = crew_dao.comment(board_idx);
 		
 		
-		map.put("commentAll", commentDTO);
-		
-		
-		return map;
+		return commentDTO;
 	}
 
 
@@ -265,7 +242,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		
 		int success = 0;
 		
-		// update, delete, report
+		// 수정 or 삭제
 		String event = (String) info.get("event");
 		// 0: 댓글, 1: 대댓글
 		int content_chk = (int) info.get("content_chk");
