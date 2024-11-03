@@ -1,20 +1,46 @@
-google.charts.load('current', {
-    'packages':['corechart']
-});
+var data;
+var chart;
+var chartData = [];
 
-google.charts.setOnLoadCallback(drawVisualization);
+getData();
 
-var chartData = [
-    ['날짜', '회원', '게시글', '크루', '신고'],
-    ['', 0, 0, 0, 0],
-    ['', 0, 0, 0, 0],
-    ['', 0, 0, 0, 0],
-    ['', 0, 0, 0, 0]
-];
-getChartData();
+function getData() {
+    $.ajax({
+        type: 'post',
+        url: 'admin_getDashboardData.ajax',
+        data: {},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data.cnt);
+            for (let i = 0; i < 5 ; i++) {
+                chartData.push([getChartDate(4-i), data.cnt[i].member, data.cnt[i].board, data.cnt[i].crew, data.cnt[i].report]);
+            }
+            console.log(chartData);
+
+            google.charts.load('current', {
+                'packages':['corechart']
+            });
+
+            google.charts.setOnLoadCallback(drawVisualization);
+        },
+        error: function(e) {}
+    });
+}
+
+function getChartDate(i) {
+    let today = new Date();
+    today.setDate(today.getDate() - i);
+    return (today.getMonth() + 1).toString() + '/' + today.getDate().toString();
+}
 
 function drawVisualization() {
-    var data = google.visualization.arrayToDataTable(
+    data = new google.visualization.DataTable();
+    data.addColumn('string', '날짜');
+    data.addColumn('number', '회원');
+    data.addColumn('number', '게시글');
+    data.addColumn('number', '크루');
+    data.addColumn('number', '신고');
+    data.addRows(
         chartData
     );
     var options = {
@@ -80,37 +106,6 @@ function drawVisualization() {
             }
         }
     };
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
-}
-
-function getChartData() {
-    for (let i = 1; i < 5; i++) {
-        let today = new Date();
-        today.setDate(today.getDate() - i);
-        //calculateDate(today, i);
-        getData(i);
-    }
-}
-
-function calculateDate(today, i) {
-    chartData[i][0] = (today.getMonth() + 1).toString() + '/' + today.getDate().toString();
-}
-
-function getData(i) {
-    $.ajax({
-        type: 'post',
-        url: 'getData.ajax',
-        data: {
-            'i': i
-        },
-        dataType: 'json',
-        success: function(data) {
-            chartData[i][2] = data.cnt.member;
-            chartData[i][3] = data.cnt.board;
-            chartData[i][4] = data.cnt.crew;
-            chartData[i][5] = data.cnt.report;
-        },
-        error: function(e) {}
-    });
 }

@@ -14,6 +14,14 @@ public interface RegDataDAO {
     // 헬스 MBTI 질문 관리
     List<RegMBTIDTO> regMbtiQuestion();
     int insertMbtiQuestion(RegMBTIDTO dto);
+    List<RegMBTIDTO> regMbtisub(int mbtiq_idx);
+    List<RegMBTIDTO> getMbtiQScore(int mbtisub_idx);
+    int regMbtiQuestionSubInsertRow(RegMBTIDTO dto);
+    int regMbtiQuestionSubInsertScr(RegMBTIDTO dto);
+    int admin_regMbtiq_sub_updateQuestion(Map<String, String> params);
+    int admin_regMbtiq_sub_updateScore(Map<String, String> params);
+    int admin_regMbtiq_sub_deleteRow(Map<String, String> params);
+    int admin_regMbtiq_sub_deleteQuestion(Map<String, String> params);
 
     // 헬스 MBTI 결과 관리
     List<RegMBTIDTO> regMbtiResult();

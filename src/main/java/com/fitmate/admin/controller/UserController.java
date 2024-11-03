@@ -31,10 +31,10 @@ public class UserController {
 
 	@RequestMapping (value = "/user_list.ajax")
 	@ResponseBody
-	public Map<String, Object> userList(String page, String cnt, String opt, String keyword) {
+	public Map<String, Object> userList(String page, String cnt, String opt, String keyword, String sortType1, String sortType2) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		return user_service.userList(pageInt, cntInt, opt, keyword);
+		return user_service.userList(pageInt, cntInt, opt, keyword, sortType1, sortType2);
 	}
 
 	// 사용자 조회
@@ -56,10 +56,10 @@ public class UserController {
 
 	@RequestMapping (value = "/crew_list.ajax")
 	@ResponseBody
-	public Map<String, Object> crewList(String page, String cnt, String opt, String keyword) {
+	public Map<String, Object> crewList(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		return user_service.crewList(pageInt, cntInt, opt, keyword);
+		return user_service.crewList(pageInt, cntInt, opt, keyword, sortType);
 	}
 
 	// 크루 조회

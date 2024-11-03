@@ -34,6 +34,18 @@
                     m.email LIKE CONCAT('%', #{param4}, '%')
                 </if>
             </where>
+            <if test="param5 != null and !param5.equals('') and param5.equals('asc')">
+                ORDER BY (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id)
+            </if>
+            <if test="param5 != null and !param5.equals('') and param5.equals('desc')">
+                ORDER BY (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) DESC
+            </if>
+            <if test="param6 != null and !param6.equals('') and param6.equals('asc')">
+                ORDER BY (SELECT cleared_date FROM restriction WHERE user_id = m.user_id)
+            </if>
+            <if test="param6 != null and !param6.equals('') and param6.equals('desc')">
+                ORDER BY (SELECT cleared_date FROM restriction WHERE user_id = m.user_id) DESC
+            </if>
             LIMIT #{param2} OFFSET #{param1}
     </select>
 
@@ -76,7 +88,13 @@
                 m.nick LIKE CONCAT('%', #{param4}, '%')
             </if>
         </where>
-        ORDER BY c.crew_idx DESC LIMIT #{param2} OFFSET #{param1}
+        <if test="param5 != null and !param5.equals('') and param5.equals('asc')">
+            ORDER BY c.last_date
+        </if>
+        <if test="param5 != null and !param5.equals('') and param5.equals('desc')">
+            ORDER BY c.last_date DESC
+        </if>
+        LIMIT #{param2} OFFSET #{param1}
     </select>
 
     <!-- 크루 조회 -->

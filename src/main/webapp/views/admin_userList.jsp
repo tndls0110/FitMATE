@@ -41,9 +41,21 @@
                         <th>이메일</th>
                         <th>이름</th>
                         <th>게시글 수</th>
-                        <th>마지막 이용일</th>
+                        <form>
+                            <th>
+                                <input type="hidden" name="sortType1" value="desc" />
+                                <button type="submit" onclick="pageShow(1)" class="ankerbtn">
+                                    마지막 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
+                                </button>
+                            </th>
+                        </form>
                         <th>이용상태</th>
-                        <th>제재해제일</th>
+                        <form>
+                            <th>
+                                <input type="hidden" name="sortType2" value="desc" />
+                                <button type="submit" onclick="pageShow(1)" class="ankerbtn">제재해제일</button>
+                            </th>
+                        </form>
                     </tr>
                     </thead>
                     <tfoot>

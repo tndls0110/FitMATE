@@ -4,7 +4,6 @@ import com.fitmate.admin.dao.RegDataDAO;
 import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.admin.dto.RegMBTIDTO;
 import com.fitmate.admin.dto.RegReportDTO;
-import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,74 @@ public class RegDataService {
         dto.setAdmin_idx(admin_idx);
         regData_dao.insertMbtiQuestion(dto);
         return dto.getMbtiq_idx();
+    }
+
+    public List<RegMBTIDTO> regMbtisub(String mbtiq_idx) {
+        int mbtiqIdx = Integer.parseInt(mbtiq_idx);
+        List<RegMBTIDTO> score = regData_dao.regMbtisub(mbtiqIdx);
+        for (RegMBTIDTO dto : score) {
+            dto.setRegMBTIDTO(regData_dao.getMbtiQScore(dto.getMbtisub_idx()));
+        }
+        return score;
+    }
+
+    public boolean regMbtiQuestionSubInsertRow(String mbtiq_idx, int admin_idx) {
+        boolean success = false;
+        int mbtiqIdx= Integer.parseInt(mbtiq_idx);
+        RegMBTIDTO dto = new RegMBTIDTO();
+        dto.setMbtiq_idx(mbtiqIdx);
+        dto.setMbtisub_con("");
+        dto.setAdmin_idx(admin_idx);
+        if (regData_dao.regMbtiQuestionSubInsertRow(dto) == 1){
+            List<RegMBTIDTO> list = regData_dao.regMbtiResult();
+            int sum = 0;
+            for (RegMBTIDTO resultIdx : list) {
+                dto.setMbtir_idx(resultIdx.getMbtir_idx());
+                if (regData_dao.regMbtiQuestionSubInsertScr(dto) == 1){
+                    sum++;
+                }
+            }
+            if (sum == list.size()){
+                success = true;
+            }
+        }
+        return success;
+    }
+
+    public boolean admin_regMbtiq_sub_updateQuestion(Map<String, String> params, int admin_idx) {
+        boolean success = false;
+        params.put("admin_idx", String.valueOf(admin_idx));
+        if (regData_dao.admin_regMbtiq_sub_updateQuestion(params) == 1){
+            success = true;
+        }
+        return success;
+    }
+
+    public boolean admin_regMbtiq_sub_updateScore(Map<String, String> params, int admin_idx) {
+        boolean success = false;
+        params.put("admin_idx", String.valueOf(admin_idx));
+        if (regData_dao.admin_regMbtiq_sub_updateScore(params) == 1){
+            success = true;
+        }
+        return success;
+    }
+
+    public boolean admin_regMbtiq_sub_deleteRow(Map<String, String> params, int admin_idx) {
+        boolean success = false;
+        params.put("admin_idx", String.valueOf(admin_idx));
+        if (regData_dao.admin_regMbtiq_sub_deleteRow(params) == 1){
+            success = true;
+        }
+        return success;
+    }
+
+    public boolean admin_regMbtiq_sub_deleteQuestion(Map<String, String> params, int admin_idx) {
+        boolean success = false;
+        params.put("admin_idx", String.valueOf(admin_idx));
+        if (regData_dao.admin_regMbtiq_sub_deleteQuestion(params) == 1){
+            success = true;
+        }
+        return success;
     }
 
     // 헬스 MBTI 결과 관리
@@ -77,10 +144,7 @@ public class RegDataService {
     }
 
     public void regMbtiResultDetail(MultipartFile[] files, Map<String, String> params, int admin_idx) {
-        logger.info("img at service: "+files.toString());
         params.put("admin_idx", Integer.toString(admin_idx));
-        logger.info("params: {}", params);
-        logger.info(String.valueOf(regData_dao.updateMbtiResult(params)));
         switch (params.get("reg_type")){
             case "update":
                 // 정보 입력
@@ -99,15 +163,12 @@ public class RegDataService {
                     // 새 파일 업로드
                     logger.info("img before iterator: "+files.toString());
                     for (MultipartFile file : files) {
-                        logger.info("img at iterator: "+files.toString());
-                        logger.info("img at iterator: "+file);
                         if (file.getOriginalFilename().lastIndexOf(".") < 0) {
                             regData_dao.insertImg(params.get("mbtir_idx"), "");
                             break;
                         } else {
                             try {
                                 String ori_filename = file.getOriginalFilename();
-                                logger.info("img name at iterator: "+ori_filename);
                                 String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
                                 String new_filename = UUID.randomUUID().toString()+ext;
                                 byte[] arr = file.getBytes();

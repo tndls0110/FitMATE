@@ -6,6 +6,28 @@ var vPages = 10;
 const searchParams = new URLSearchParams(window.location.search);
 var searchType = searchParams.get('searchType');
 var keywords = searchParams.get('keywords');
+let sortType = searchParams.get('sortType');
+
+sorterChanger();
+
+function sorterChanger() {
+    let sort = document.getElementsByName('sortType')[0];
+    let btn = document.getElementsByClassName('ankerbtn')[0];
+    switch (sortType){
+        case '':
+            sort.value = 'desc';
+            btn.innerHTML = '마지막 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            break;
+        case 'asc':
+            sort.value = '';
+            btn.innerHTML = '마지막 이용일시 <i class="bi bi-caret-up-fill" style="font-size: 14px;"></i>';
+            break;
+        case 'desc' :
+            sort.value = 'asc';
+            btn.innerHTML = '마지막 이용일시 <i class="bi bi-caret-down-fill" style="font-size: 14px;"></i>';
+            break;
+    }
+}
 
 pageShow(showPage);
 

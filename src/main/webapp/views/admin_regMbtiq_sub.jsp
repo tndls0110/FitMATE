@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>FitMATE</title>
     <link rel="stylesheet" type="text/css" href="resources/css/admin_common.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/admin_board.css" />
     <link rel="stylesheet" type="text/css" href="resources/css/admin_regData.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
@@ -33,22 +34,58 @@
                 <a href="admin_regMbtir_detail.go?mbtir_idx=1">결과 상세</a>
             </li>
         </ul>
-        <div class="contents narrow">
+        <div class="contents">
             <p>
                 <select class="full bg_dark" onchange="onOptionChange(event)">
                     <c:forEach items="${mbtiq}" var="mbtiq">
-                        <option name="mbtiq" value="${mbtiq.mbtir_idx}">${mbtiq.mbtiq_con}</option>
+                        <option name="mbtiq" value="${mbtiq.mbtiq_idx}">${mbtiq.mbtiq_con}</option>
                     </c:forEach>
                 </select>
             </p>
-            <form action="admin_updateMbtiq.do" method="post">
-                <!-- 문항 들어가는 지점 -->
+            <form>
+                <table class="full">
+                    <colgroup>
+                        <col style="width:310px;" />
+                        <c:forEach items="${mbtir}" var="mbtir">
+                            <col style="width:auto;" />
+                        </c:forEach>
+                        <col style="width:40px;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>질문</th>
+                        <c:forEach items="${mbtir}" var="mbtir">
+                            <th>${mbtir.mbtir_name}(점)</th>
+                        </c:forEach>
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${mbtisub}" var="mbtisub">
+                        <tr>
+                            <td>
+                                <input type="text" name="mbtisub_idx_${mbtisub.mbtisub_idx}" value="${mbtisub.mbtisub_con}" onblur="updateQuestion(${mbtisub.mbtisub_idx})" />
+                            </td>
+                            <c:forEach items="${mbtisub.regMBTIDTO}" var="score">
+                                <td>
+                                    <input type="text" name="mbtiscr_idx_${score.mbtiscr_idx}" value="${score.mbtiscr_scr}" onblur="updateScore(${score.mbtiscr_idx})" />
+                                </td>
+                            </c:forEach>
+                            <td>
+                                <button onclick='deleteRow(${mbtisub.mbtisub_idx});' class="disabledbtn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
                 <ul class="noDesc">
                     <li>
-                        <p><input type="button" value="수정하기" class="full mainbtn" onclick="regData('update')" /></p>
-                    </li>
-                    <li>
-                        <p><input type="button" value="삭제하기" class="full subbtn" onclick="regData('delete')" /></p>
+                        <p>
+                            <input type="button" value="세부 항목 추가하기" class="mainbtn" onclick="insertRow()" />
+                            <input type="button" value="질문 삭제하기" class="subbtn" onclick="deleteQuestion()" />
+                        </p>
                     </li>
                 </ul>
             </form>
@@ -58,5 +95,5 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script src="resources/js/admin_regData.js"></script>
+<script src="resources/js/admin_regMbtiQ.js"></script>
 </html>

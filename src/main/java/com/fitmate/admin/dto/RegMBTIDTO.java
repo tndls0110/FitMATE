@@ -1,5 +1,7 @@
 package com.fitmate.admin.dto;
 
+import java.util.List;
+
 public class RegMBTIDTO {
 
     private int mbtiq_idx;
@@ -9,6 +11,7 @@ public class RegMBTIDTO {
     private int mbtisub_idx;
     private String mbtisub_con;
 
+    private List<RegMBTIDTO> regMBTIDTO;
     private int mbtiscr_idx;
     private int mbtiscr_scr;
 
@@ -37,6 +40,7 @@ public class RegMBTIDTO {
     public String getMbtisub_con() {
         return mbtisub_con;
     }
+    public List<RegMBTIDTO> getRegMBTIDTO() { return regMBTIDTO; }
     public int getMbtiscr_idx() {
         return mbtiscr_idx;
     }
@@ -83,6 +87,7 @@ public class RegMBTIDTO {
     public void setMbtisub_con(String mbtisub_con) {
         this.mbtisub_con = mbtisub_con;
     }
+    public void setRegMBTIDTO(List<RegMBTIDTO> regMBTIDTO) { this.regMBTIDTO = regMBTIDTO; }
     public void setMbtiscr_idx(int mbtiscr_idx) {
         this.mbtiscr_idx = mbtiscr_idx;
     }

@@ -44,7 +44,14 @@
                             <th>자주 모이는 지역</th>
                             <th>크루원 수</th>
                             <th>생성일시</th>
-                            <th>마지막 이용일시</th>
+                            <form>
+                                <th>
+                                    <input type="hidden" name="sortType" value="desc" />
+                                    <button type="submit" onclick="pageShow(1)" class="ankerbtn">
+                                        마지막 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
+                                    </button>
+                                </th>
+                            </form>
                             <th>이용 상태</th>
                         </tr>
                     </thead>

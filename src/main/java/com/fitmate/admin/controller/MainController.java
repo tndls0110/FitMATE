@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -86,11 +88,15 @@ public class MainController {
 		return page;
 	}
 
-	@RequestMapping (value = "getData.ajax")
+	@RequestMapping (value = "admin_getDashboardData.ajax")
 	@ResponseBody
-	public Map<String, Object> getData(int i) {
+	public Map<String, Object> getData() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("cnt", main_service.getData(i));
+		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
+		for (int i = 0; i < 5; i++) {
+			list.add(main_service.getData(i));
+		}
+		result.put("cnt", list);
 		return result;
 	}
 

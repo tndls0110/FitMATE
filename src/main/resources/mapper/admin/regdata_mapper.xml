@@ -15,6 +15,40 @@
         INSERT INTO mbti_q (mbtiq_con, admin_idx) VALUES (#{mbtiq_con}, #{admin_idx})
     </insert>
 
+    <select id="regMbtisub" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtisub_idx, mbtisub_con FROM mbti_q_sub WHERE mbtiq_idx = #{mbtiq_idx} AND mbtisub_show = 1
+    </select>
+
+    <select id="getMbtiQScore" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT scr.mbtiscr_idx, scr.mbtisub_idx, scr.mbtir_idx, scr.mbtiscr_scr
+            FROM mbti_q_subscr scr JOIN mbti_r r ON scr.mbtir_idx = r.mbtir_idx WHERE scr.mbtisub_idx = #{mbtisub_idx} and r.mbtir_show = 1
+    </select>
+
+    <insert id="regMbtiQuestionSubInsertRow" parameterType="com.fitmate.admin.dto.RegMBTIDTO"
+            useGeneratedKeys="true" keyColumn="mbtisub_idx" keyProperty="mbtisub_idx">
+        INSERT INTO mbti_q_sub (mbtiq_idx, mbtisub_con, admin_idx) VALUES (#{mbtiq_idx}, #{mbtisub_con}, #{admin_idx});
+    </insert>
+
+    <insert id="regMbtiQuestionSubInsertScr" parameterType="com.fitmate.admin.dto.RegMBTIDTO">
+        INSERT INTO mbti_q_subscr (mbtisub_idx, mbtir_idx, admin_idx) VALUES (#{mbtisub_idx}, #{mbtir_idx}, #{admin_idx});
+    </insert>
+
+    <update id="admin_regMbtiq_sub_updateQuestion" parameterType="map">
+        UPDATE mbti_q_sub SET mbtisub_con = #{mbtisub_con}, admin_idx = #{admin_idx} WHERE mbtisub_idx = #{mbtisub_idx}
+    </update>
+
+    <update id="admin_regMbtiq_sub_updateScore" parameterType="map">
+        UPDATE mbti_q_subscr SET mbtiscr_scr = #{mbtiscr_scr}, admin_idx = #{admin_idx} WHERE mbtiscr_idx = #{mbtiscr_idx}
+    </update>
+
+    <update id="admin_regMbtiq_sub_deleteRow" parameterType="map">
+        UPDATE mbti_q_sub SET mbtisub_show = 0, admin_idx = #{admin_idx} WHERE mbtisub_idx = #{mbtisub_idx}
+    </update>
+
+    <update id="admin_regMbtiq_sub_deleteQuestion" parameterType="map">
+        UPDATE mbti_q SET mbtiq_show = 0, admin_idx = #{admin_idx} WHERE mbtiq_idx = #{mbtiq_idx}
+    </update>
+
     <!-- 헬스 MBTI 결과 관리 -->
     <select id="regMbtiResult" resultType="com.fitmate.admin.dto.RegMBTIDTO">
         SELECT mbtir_idx, mbtir_name FROM mbti_r WHERE mbtir_show = 1
@@ -44,7 +78,6 @@
     </update>
 
     <update id="deleteMbtiResult" parameterType="map">
-
         UPDATE mbti_r SET mbtir_show = 0, admin_idx = #{admin_idx} WHERE mbtir_idx = #{mbtir_idx}
     </update>
 

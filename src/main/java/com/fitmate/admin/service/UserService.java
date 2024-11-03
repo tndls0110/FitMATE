@@ -20,7 +20,7 @@ public class UserService {
 	@Autowired UserDAO user_dao;
 
 	// 사용자 목록
-	public Map<String, Object> userList(int page, int cnt, String opt, String keyword) {
+	public Map<String, Object> userList(int page, int cnt, String opt, String keyword, String sortType1, String sortType2) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
 		int totalPages = user_dao.userAllCount(cnt);
@@ -31,7 +31,7 @@ public class UserService {
 		result.put("totalIdx", totalIdx);
 		result.put("currentPage", page);
 		result.put("offset", offset);
-		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword);
+		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword, sortType1, sortType2);
 		for (MemberDTO member : list) {
 			LocalDateTime cleared_date = member.getCleared_date();
 			LocalDateTime now = LocalDateTime.now();
@@ -77,7 +77,7 @@ public class UserService {
 	}
 
 	// 크루 목록
-	public Map<String, Object> crewList(int page, int cnt, String opt, String keyword) {
+	public Map<String, Object> crewList(int page, int cnt, String opt, String keyword, String sortType) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
 		int totalPages = user_dao.crewAllCount(cnt);
@@ -88,7 +88,7 @@ public class UserService {
 		result.put("totalIdx", totalIdx);
 		result.put("currentPage", page);
 		result.put("offset", offset);
-		result.put("list", user_dao.crewList(offset, limit, opt, keyword));
+		result.put("list", user_dao.crewList(offset, limit, opt, keyword, sortType));
 		return result;
 	}
 

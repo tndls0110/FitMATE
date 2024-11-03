@@ -8,9 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -46,7 +48,60 @@ public class RegDataController {
 		page = "admin_regMbtiq_sub";
 		//main_controller.checkPermit(model, session);
 		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
+		model.addAttribute("mbtir", regData_service.regMbtiResult());
+		model.addAttribute("mbtisub", regData_service.regMbtisub(mbtiq_idx));
 		return page;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_insertRow.ajax")
+	@ResponseBody
+	public Map<String, Object> regMbtiQuestionSubInsertRow (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		result.put("status", regData_service.regMbtiQuestionSubInsertRow(params.get("mbtiq_idx"), admin_idx));
+		return result;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_updateQuestion.ajax")
+	@ResponseBody
+	public Map<String, Object> admin_regMbtiq_sub_updateQuestion (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		result.put("status", regData_service.admin_regMbtiq_sub_updateQuestion(params, admin_idx));
+		return result;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_updateScore.ajax")
+	@ResponseBody
+	public Map<String, Object> admin_regMbtiq_sub_updateScore (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		result.put("status", regData_service.admin_regMbtiq_sub_updateScore(params, admin_idx));
+		return result;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_deleteRow.ajax")
+	@ResponseBody
+	public Map<String, Object> admin_regMbtiq_sub_deleteRow (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		logger.info("params: {}", params);
+		result.put("status", regData_service.admin_regMbtiq_sub_deleteRow(params, admin_idx));
+		return result;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_deleteQuestion.ajax")
+	@ResponseBody
+	public Map<String, Object> admin_regMbtiq_sub_deleteQuestion (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		result.put("status", regData_service.admin_regMbtiq_sub_deleteQuestion(params, admin_idx));
+		return result;
 	}
 
 	// 헬스 MBTI 결과 관리
