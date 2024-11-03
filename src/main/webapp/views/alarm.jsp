@@ -458,7 +458,7 @@
         read.style.opacity = "0.7";
         round.style.visibility ="hidden"; //jquery에서는 .html이지만 js에서는.innerHTML을 사용해야함
 
-
+        get_unread_count();
 
         console.log("idx",idx);
         console.log("url",url);

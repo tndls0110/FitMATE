@@ -426,7 +426,7 @@
 		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
 		$.ajax({
 			type : 'GET',
-			url : '/journal_get.ajax',
+			url : 'journal_get.ajax',
 			data : {'date' : date},
 			dataType : 'JSON',
 			success : function(journal){

@@ -34,7 +34,7 @@
 	</select>
 
 	<select id="mbtiRGet" parameterType="String" resultType="map">
-		SELECT mbtir_con, mbtir_exc,mbtir_rou FROM mbti_r where mbtir_name = #{max_mbti};
+		SELECT mbtir_con, mbtir_exc,mbtir_rou,mbtir_img FROM mbti_r where mbtir_name = #{max_mbti};
 	</select>
 	
 	<select id="create_totalScore" resultType="String">
