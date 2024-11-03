@@ -45,9 +45,9 @@
 			success : function (data){
 				console.log(data.exists);
 				if(data.exists == 'exist'){
-					$('.notify_new').style.visibility = "visible";
+					$('.notify_new').css({'visibility' : 'visible'});
 				}else if(data.exists == 'none'){
-					$('.notify_new').style.visibility = "hidden";
+					$('.notify_new').css({'visibility' : 'hidden'});
 				}
 			},error : function (e){
 				console.log(e);

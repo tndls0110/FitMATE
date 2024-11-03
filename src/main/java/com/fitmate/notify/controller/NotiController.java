@@ -57,5 +57,17 @@ public class NotiController {
 		String id = "member01";
 		Map<String, Object> data = new HashMap<>();
 		String exists = n_Service.checkUnreadAlarm(id);
+		data.put("exists", exists);
+		return data;
+	}
+
+	@GetMapping (value = "/unread_count.ajax")
+	@ResponseBody
+	public Map<String, Object> unreadCount () {
+		String id = "member01";
+		Map<String, Object> data = new HashMap<>();
+		int unread = n_Service.unread_count(id);
+		data.put("count",unread);
+		return data;
 	}
 }

@@ -198,7 +198,7 @@
         #count_unread_alarm{
             width: 399px;
             height: 10px;
-            margin: 16px 10px 0px 518px;
+            margin: 16px 10px 0px 490px;
             color: white;
             opacity: 50%;
         }
@@ -259,7 +259,7 @@
             <div class="tab" name = "all" onclick="get_alarm(0,event)">전체 알림</div> <div class="tab"  name = "admin" onclick="get_alarm(1,event)">관리자 알림</div><div class="tab" name = "crew" onclick="get_alarm(2,event)">크루 알림</div>
         </div>
 
-        <div id="count_unread_alarm"><div class="show_unread_alarm">안 읽은 알림 10건</div></div>
+        <div id="count_unread_alarm"><div class="show_unread_alarm"></div></div>
         <div id = alarm_box>
 
            <%-- <div class="admin_alarm">
@@ -312,7 +312,6 @@
         idx = 0;
         var initialize = true;
         get_alarm(idx,initialize); //처음 로딩에도 idx = 0으로 잡아줘야 오류 안남
-
     }
 
 
@@ -418,6 +417,8 @@
                 console.log(read_opacity);
                 console.log(unread_icon);
 
+                get_unread_count();
+
             },
             error : function(e){
                 console.log(e);
@@ -478,6 +479,23 @@
             }
         })
 
+    }
+
+    function get_unread_count(){
+        $.ajax({
+            type : 'GET',
+            url : 'unread_count.ajax',
+            data : {},
+            dataType : 'JSON',
+            success : function(data){
+                console.log("안읽은 알림 :", data.count);
+                var count = '안 읽은 알림 '+data.count+'건';
+                $('.show_unread_alarm').html(count);
+
+            },error : function (e){
+                console.log(e);
+            }
+        })
     }
 </script>
 </html>

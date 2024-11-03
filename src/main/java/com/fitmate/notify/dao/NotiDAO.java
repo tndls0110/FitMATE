@@ -18,4 +18,5 @@ public interface NotiDAO {
     int auto_delete(LocalDate thirtyDaysAgo);
 
     int checkUnreadAlarm(String id);
+
 }

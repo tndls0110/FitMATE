@@ -23,4 +23,10 @@
     <delete id="auto_delete">
         DELETE FROM noti where notis_date = #{thirtyDaysAgo};
     </delete>
+
+    <select id="checkUnreadAlarm" resultType="int">
+        SELECT count(*) FROM noti n2 where notir_id = #{id} AND notis_check = 0;
+    </select>
+
+
 </mapper>
