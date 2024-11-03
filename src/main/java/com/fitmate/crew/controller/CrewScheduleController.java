@@ -54,7 +54,7 @@ public class CrewScheduleController {
 		*/
 			return "crew_schedule_write";
 		}
-	
+	// 크루 일정 작성하기
 	@PostMapping(value="/crew_schedule_write.do")
 	public String crew_schedule_write(@RequestParam(value = "day", required = false) String[] days,
 			 String crew_id,
@@ -80,10 +80,11 @@ public class CrewScheduleController {
 	    }
 		
 		crewschedule_service.crew_plan_create(days,crew_id,crew_idx,date,start_time,end_time,place,content,subject);
-	       
-		return "index";
+	    // 크루 페이지 redirect로 바꿔주기
+		return "kakao_map";
 	}
 	
+	// 크루 일정 날짜 가져오기
 	@GetMapping(value="/crew_plan_events.ajax")
 	@ResponseBody
 	public Map<String,Object> crew_get_plan(@RequestParam String crew_idx){
@@ -93,7 +94,8 @@ public class CrewScheduleController {
 		Map<String,Object> crew_plan =  crewschedule_service.crew_get_plan(crew_idx);
 		return crew_plan;
 	}
-
+	
+	// 크루 일정 상세 정보 가져오기
 	@GetMapping(value="/crew_plan_detail.ajax")
 	@ResponseBody
 	public Map<String,Object> crew_plan_detail(@RequestParam String date,String crew_idx){
@@ -158,7 +160,7 @@ public class CrewScheduleController {
 		
 		crewschedule_service.crew_plan_del(plan_idx,crew_idx);
 		
-		return "index123";
+		return "kakao_map";
 	}
 	
 	@PostMapping(value="/crew_plan_join.do")
@@ -170,7 +172,7 @@ public class CrewScheduleController {
 		String user_id = params.get("user_id");
 		
 		crewschedule_service.crew_plan_join(plan_idx,user_id);
-		return "index123";
+		return "kakao_map";
 	}
 	
 }
