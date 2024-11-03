@@ -50,7 +50,7 @@
 					</div>
 					<div class="list">
 						<h3 class="capt">생년월일 <span class="required">(필수)</span></h3>
-						<p><input type="date" class="full" name="birthday" value="${list.birthday}" maxlength="20" /></p>
+						<p><input type="date" class="full" name="birthday" value="${list.birthday}" /></p>
 						<h3 class="msg caution fill_birth hide">생년월일은 필수 항목입니다.</h3>
 					</div>
 					<div class="list">

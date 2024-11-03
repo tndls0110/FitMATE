@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_dashboard.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="resources/js/admin_dashboard.js"></script>
     <script>
         var index = 0;
     </script>
@@ -150,5 +151,4 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script src="resources/js/admin_dashboard.js"></script>
 </html>

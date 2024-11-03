@@ -11,16 +11,12 @@ function getData() {
         data: {},
         dataType: 'json',
         success: function(data) {
-            console.log(data.cnt);
             for (let i = 0; i < 5 ; i++) {
                 chartData.push([getChartDate(4-i), data.cnt[i].member, data.cnt[i].board, data.cnt[i].crew, data.cnt[i].report]);
             }
-            console.log(chartData);
-
             google.charts.load('current', {
                 'packages':['corechart']
             });
-
             google.charts.setOnLoadCallback(drawVisualization);
         },
         error: function(e) {}

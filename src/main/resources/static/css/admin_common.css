@@ -8,7 +8,7 @@
 /* common */
 
 html{
-	font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     box-sizing: border-box;
 }
 
@@ -134,12 +134,12 @@ p.detail{
 }
 
 span.min{
-	color: #848484;
-	font-size: 0.8em;
-	font-weight: 400;
-	
-	display: inline-block;
-	margin-bottom: 0;
+    color: #848484;
+    font-size: 0.8em;
+    font-weight: 400;
+
+    display: inline-block;
+    margin-bottom: 0;
 }
 
 a{
@@ -149,7 +149,7 @@ a{
 }
 
 .curser{
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .align_left{
@@ -254,7 +254,7 @@ h3.msg.pass{
 }
 
 textarea{
-	resize: none;
+    resize: none;
 }
 
 input.full,
@@ -278,6 +278,7 @@ button{
     margin: 0;
     padding: 9px 16px;
     border-radius: 4px;
+    font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
@@ -402,6 +403,16 @@ button i{
     font-size: 12px;
 }
 
+.ankerbtn{
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    background: none;
+    border: none;
+    color: #474747;
+    font-weight: 800;
+}
+
 a.btn:hover{
     text-decoration: none;
 }
@@ -426,7 +437,7 @@ a.btn:hover{
 /* list */
 
 .noDesc{
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .noDesc li{
@@ -442,75 +453,75 @@ div.list{
 /* modal */
 
 .modal{
-	width: 100vw;
-	height: 100vh;
-	display: none;
-	align-items: center;
-	box-sizing: border-box;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
 }
 
 .modal_container{
-	width: 400px;
-	margin: 0 auto;
-	padding: 18px 24px;
-	color: #474747;
-	background-color: #fff;
-	border-radius: 5px;
-	z-index: 1055;
+    width: 400px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    color: #474747;
+    background-color: #fff;
+    border-radius: 5px;
+    z-index: 1055;
 }
 
 .modal_alert .modal_container{
-	padding-bottom: 26px;
+    padding-bottom: 26px;
 }
 
 .modal .modal_header{
-	width: 100%;
-	margin: 0;
-	padding: 0 8px;
-	position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0 8px;
+    position: relative;
 }
 
 .modal .modal_header h3.title{
-	color: #048187;
-	font-size: 12px;
-	font-weight: 800;
+    color: #048187;
+    font-size: 12px;
+    font-weight: 800;
 }
 
 .modal .modal_header .btn_close{
-	font-size: 16px;
-	position: absolute;
-	top: -6px;
-	right: 2px;
+    font-size: 16px;
+    position: absolute;
+    top: -6px;
+    right: 2px;
 }
 
 .modal .modal_body{
-	width: 100%;
-	margin: 0;
-	padding: 0 8px 16px;
-	font-weight: 500;
+    width: 100%;
+    margin: 0;
+    padding: 0 8px 16px;
+    font-weight: 500;
 }
 
 .modal .modal_footer{
-	width: 100%;
-	margin: 0;
-	padding: 0 0 0 6px;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 0 6px;
 }
 
 .modal .modal_footer .btn_flex{
-	width: 364px;
+    width: 364px;
 }
 
 .modal .backdrop{
-	width: 100vw;
-	height: 100vh;
-	background-color: #e9ecef;
-	opacity: 0.5;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: #e9ecef;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
 }
