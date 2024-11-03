@@ -70,11 +70,13 @@ public class CrewMemberController {
 	// 크루 가입신청자 목록
 	@GetMapping(value = "/mycrew_joinList.go")
 	public String joinList(String idx, Model model, HttpSession session) {
+		page = "mycrew_joinList";
 		checkPermit(model, session);
+		
 		int crew_idx = Integer.parseInt(idx); 
 		model.addAttribute("crew_idx", crew_idx);
 		
-		return "mycrew_joinList";
+		return page;
 	}
 	
 	// 크루 가입신청자 목록 (검색 or 오름차순시)
@@ -90,7 +92,9 @@ public class CrewMemberController {
 	// 크루원 목록
 	@GetMapping(value = "/mycrew_memberList.go")
 	public String memberList(String idx, Model model, HttpSession session) {
+		page = "mycrew_memberList";
 		checkPermit(model, session);
+		
 		int crew_idx = 0;
 		
 		if (idx != null && !idx.isEmpty()) {
@@ -98,7 +102,7 @@ public class CrewMemberController {
         }
 		model.addAttribute("crew_idx", crew_idx);
 		
-		return "mycrew_memberList";
+		return page;
 	}
 	
 	// 크루원 목록 (검색 or 오름차순시)
@@ -133,7 +137,9 @@ public class CrewMemberController {
 	// 크루원/일반회원 프로필 상세보기 (id : 보고자하는 멤버ID, idx : crew_idx)
 	@RequestMapping(value = "/mycrew_memberDetail.go")
 	public String memberDetail(String id, String profileType, String idx, Model model, HttpSession session) {
+		page = "mycrew_memberDetail";
 		checkPermit(model, session);
+		
 		//세션ID가져오기
 		String user_id = (String) session.getAttribute("loginId");
 		// 추후 해당 크루의 크루장인지 확인하여 아니라면.. 일반유저 프로필이 나오도록 한번더 처리.
@@ -159,7 +165,7 @@ public class CrewMemberController {
 		// profileType  0: 일반회원 프로필, 1: 크루회원 프로필
 		model.addAttribute("profileType", profileType_);
 		
-		return "mycrew_memberDetail"; 
+		return page; 
 	}
 	
 	

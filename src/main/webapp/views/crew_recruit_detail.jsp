@@ -37,7 +37,7 @@
 
         .comment .recruit_right, .comment_reply .recruit_right {
             position: absolute;
-            top: -4%;
+            top: 0%;
             left: 12%;
             width: 80%;
         }
@@ -113,7 +113,7 @@
             color: white;
             border: none;
             position: absolute;
-            top: 0;
+            top: -13px;
     		right: -13px;
         }
 
@@ -264,15 +264,15 @@
 
         <div class="contents narrow">
             <div class="recruit_header">
-            	<i class="bi bi-person-circle" style="font-size: 60px;"></i>
+            	<a id="profile_detail_set" href="mycrew_memberDetail.go?id=${recruitHead.leader_id}&profileType=1&idx=${recruitHead.crew_idx}"> <!-- 크루회원 프로필 상세보기 이동. -->
+            		<i class="bi bi-person-circle" style="font-size: 60px;"></i>
+				</a>            	
                 <div class="recruit_right">
 	                <h2 class="title">${recruitHead.crew_name}</h2>
 	                <span class="text_area"><span class="txt_opacity">크루장</span><span>&nbsp;&nbsp;${recruitHead.leader_name}</span><span>&nbsp;( ${recruitHead.leader_mbti} )</span></span>
-	                <a id="profile_detail_set" href="mycrew_memberDetail.go?id=${recruitHead.leader_id}&profileType=1&idx=${recruitHead.crew_idx}"> <!-- 크루회원 프로필 상세보기 이동. -->
-	                	<div id="crew_leader" class="leader_chk">
-	                		<i class="bi bi-star-fill"></i>
-	                	</div>
-                	</a>
+                	<div id="crew_leader" class="leader_chk">
+                		<i class="bi bi-star-fill"></i>
+                	</div>
                 </div>
                 <div class="recruit_info">
 	                <span><i class="bi bi-geo-alt-fill">${recruitHead.region_name} ${recruitHead.regions_name}</i></span> 
@@ -386,6 +386,8 @@
     // 동적 html을 생성하기 위한 변수. (댓글 또는 대댓글 관련 요소들)
     var footer = '';
     
+ 	// 크루장인지 일반유저인지, 일반유저라면 크루입단 여부에 따른 버튼 및 문의입력창 처리 (approval_status 0: 신청전/ 1: 신청중/ 2: 신청거절/ 3: 신청수락/ 4: 크루원)
+    var apv_status = ${approval_status};
     var join_idx = '${join_idx}';        // 크루 입단신청목록 idx
     var crewLeaderId = '${recruitHead.leader_id}'; // 크루장의 ID정보
     
@@ -396,9 +398,7 @@
 		leader_chk = 1;
     }
     
-    
- 	// 크루장인지 일반유저인지, 일반유저라면 크루입단 여부에 따른 버튼 및 문의입력창 처리 (approval_status 0: 신청전/ 1: 신청중/ 2: 신청거절/ 3: 신청수락)
-    var apv_status = ${approval_status};
+
     if (leader_chk === 1) {
     	$('div.comment_area').css({
     		'max-height': 610
@@ -410,18 +410,18 @@
     } else {
 		
 		switch (apv_status) {
-		// 입단 신청 처리 -> 입단 신청버튼
+		// 0:신청전, 2:신청거절, 3:신청수락 -> 입단 신청버튼 (가입신청테이블의 마지막기록이 신청수락이여도... 현재 크루원이 아니라면... 재가입으로 간주) 
+		case 3:
 		case 0:
 		case 2: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');'); 
 				$('#crew_btn').attr('class', 'mainbtn full');
 			break;
-		// 신청중상태 -> 입단 취소버튼	
+		// 1:신청중상태 -> 입단 취소버튼	
 		case 1: $('#crew_btn').text('크루 입단 취소하기').attr('onclick', 'leave_crew(' + join_idx + ');');
 				$('#crew_btn').attr('class', 'subbtn full');
 			break;
-		// 이미 크루원인 유저 (추후 크루 탈퇴하기정도 넣어줄 수 있을 듯 함.)
-		default: $('#crew_btn').text('크루 입단 신청하기').attr('onclick', 'join_crew(' + crew_idx + ');');
-				 $('#crew_btn').attr('class', 'mainbtn full');
+		// 4:이미 크루원인 유저 => 모집게시글 페이지 접근불가하므로 크루페이지로 이동.
+		case 4: location.href='crew_main_page.go?crew_idx=' + crew_idx;
 			break;
 		}
     }
@@ -441,29 +441,47 @@
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data).each(function(idx, item){
                 	
-                	footer += '<div class="comment_box">'
-				        + '<div class="comment">'
-				        //일반회원 프로필 상세보기 이동.
-				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
-				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
-				        + '</a>'
-				        + '<div class="recruit_right">'
-				        + '<h2 class="title"></h2>'
-				        + '<span class="text_area">'
-				        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
-				        + '<span>&nbsp;' + item.comment_date + '</span>'
-				        + '</span>'
-				        + '</div>';
-				        
-				        
-				        
-                		if(item.comment_status === 1){       // 정상게시 댓글인경우
-    				    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div></div>'; 
-    					}else if(item.comment_status === 2){ // 본인이 삭제한 댓글인경우
-    						footer += '<div class="comment_txt"><div id="comment_del" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;삭제된 문의글입니다.</i></div></div></div>';
+                	// 삭제된 댓글이 아닌경우 
+                	if(item.comment_status != 2){
+                    	footer += '<div class="comment_box">'
+    				        + '<div class="comment">'
+    				        //일반회원 프로필 상세보기 이동.
+    				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
+    				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+    				        + '</a>'
+    				        + '<div class="recruit_right">'
+    				        + '<h2 class="title"></h2>'
+    				        + '<span class="text_area">'
+    				        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
+    				        + '<span>&nbsp;' + item.comment_date + '</span>'
+    				        + '</span>'
+    				        + '</div>';
+    				        
+                    	if(item.comment_status === 1){       // 정상게시 댓글인경우
+    				    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div>'; 
     					}else if(item.comment_status === 3){ // 운영자가 제재한 경우
-    						footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div></div>';	
+    						footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div>';	
     					}
+                    	
+                	}else{ // 대댓글이 있지만, 삭제된 댓글인경우
+                		if(item.recomment_idx !== 0){  
+                			footer += '<div class="comment_box">'
+        				        + '<div class="comment">'
+        				        //일반회원 프로필 상세보기 이동.
+        				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
+        				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+        				        + '</a>'
+        				        + '<div class="recruit_right">'
+        				        + '<h2 class="title"></h2>'
+        				        + '<span class="text_area">'
+        				        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
+        				        + '<span>&nbsp;' + item.comment_date + '</span>'
+        				        + '</span>'
+        				        + '</div>';
+                			
+    						footer += '<div class="comment_txt"><div id="comment_del" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;삭제된 문의글입니다.</i></div></div>';
+                		}
+                	}
 				        
                 		// 대댓글 가져오기
     				    if (item.recomment_idx !== 0) {	
@@ -542,7 +560,7 @@
     					        + '</button>';
     				    }
                 		
-    				    footer += '</div>'; // comment_box 끝
+    				    footer += '</div></div>'; // comment_box 끝
     				    
     				    modal_chk = '';
                 });
@@ -619,8 +637,7 @@
     function reply(obj) {
     	// 문의댓글 정보가져오기.
         var comment_idx = $(obj).data('comment-idx');
-    	// 게시글페이지 정보가져오기.
-        <%-- var board_idx = <%=board_idx%>;   --%>
+
 		// 답변입력영역 생성.
         var reply_area = '<div class="comment_box reply_write">'
             + '<form action="crew_recruit_detail.do?board_idx=' + board_idx + '&crew_idx=' +crew_idx+ '" method="post">'

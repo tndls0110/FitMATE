@@ -315,13 +315,13 @@ a.crew_create {
             });
             
             // 신청중인 크루가 없을 경우 '신청중인 크루가 없습니다.'
-            if (info_chk == 0) {
+            if (info_chk === 0) {
                if ($('div.approvalArea').text().trim() === '') {
                   $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
                }
             } else {
                // 내 크루 영역 마지막에 크루 생성 영역 추가.
-               if (cntRecruit % 2 == 1) {
+               if (cntRecruit % 2 === 1) {
                   $('div.recruitArea').append('<div class="recruit"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
                } else {
                   $('div.recruitArea').append('<div class="recruit_odd"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
@@ -348,9 +348,18 @@ a.crew_create {
       var profile = item.leader_profile ? '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>' 
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
       
-      // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI
-      var header = '<a href="crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">'
-                   + profile
+  	  // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI                                   
+      var header = '';                                   
+                                         
+       // 신청중인 크루인경우 => 모집글 페이지로 이동.    
+       // 내 크루인경우 => 크루페이지로 이동.
+       if (info_chk === 0) {
+       	header += '<a href="crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">';
+       }else{
+       	header += '<a href="crew_main_page.go?crew_idx=' +item.crew_idx+ '" class="recruit_detail">';
+       }
+    		   
+      header += profile
                    + '<div class="recruit_right">'
                       + '<div class="right_top">'
                          + '<h4 class="text_area">' + item.crew_name + '</h4>'
@@ -396,9 +405,9 @@ a.crew_create {
     	// 크루장이면 리더버튼 세팅 OR 크루원,신청자이면 멤버버튼 세팅
          if(leader_chk === 1){
         	 leader_button = '<div class="button_area">'
-        	 		// 크루 신청관리 => crew_join페이지 이동. 크루idx만 있으면 될듯?
-        	       + '<button type="button" class="mainbtn minbtn" onclick="location.href=\'mycrew_joinList.go?idx=' + item.crew_idx + '\'">크루 신청 관리</button>&nbsp;&nbsp'
-        	       // 크루정보 수정페이지 => crew_idx랑 board_idx정도 넘겨주면될 듯?
+        	 		// 크루 신청관리 => crew_recruit_detail.go페이지 이동. 
+        	       + '<button type="button" class="mainbtn minbtn" onclick="location.href=\'crew_recruit_detail.go?board_idx=' + item.board_idx +'&crew_idx=' +item.crew_idx+ '\'">크루 신청 관리</button>&nbsp;&nbsp'
+        	       // 크루정보 수정페이지 => crew_create_rewrite.go페이지 이동.
         	       + '<button type="button" class="subbtn minbtn" onclick="location.href=\'crew_create_rewrite.go?idx=' + item.crew_idx + '&board_idx=' + item.board_idx + '\'">크루 정보수정</button>'
         	       + '</div>';	 
          }else{

@@ -152,7 +152,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	// 모집글 상세조회
 	public boolean recruitDetail(String board_idx_, String currentUserId, String crew_idx, Model model) {
 		int board_idx = 0;
-		int approval_status = 0; // 크루입단 신청여부 (0: 신청전 / 1: 신청/ 2: 거절/ 3: 수락)
+		int approval_status = 0; // 크루입단 신청여부 (0: 신청전 / 1: 신청/ 2: 거절/ 3: 수락/ 4: 크루원)
 		
 		if(board_idx_ != null && !board_idx_.equals("")) {
 			board_idx = Integer.parseInt(board_idx_);
@@ -161,15 +161,19 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		// 1. 모집게시글 내용가져오기
 		CrewSearchListDTO recruitDetailDTO = crew_dao.recruitDetail(board_idx);
 		
-		// 2. 크루입단신청 여부 가져오기. 
+		// 2. 크루원인지 여부, 크루원이 아니라면 크루입단신청 여부 가져오기. 
 		CrewApprovalDTO approval = crew_dao.crewApproval(crew_idx, currentUserId);
 		
-		// 값이 존재하면.. 크루입단 신청여부만
 		if(approval != null && approval.isValid()) {
-			approval_status = approval.getStatus();
+			logger.info("approval확인: {}", approval.toString());
+			// 이미 크루원이라면 approval_status 4
+			if(approval.getMember_idx() != 0) {
+				approval_status = 4;
+			}else { // 아직 크루원이 아닌경우 1: 신청/ 2: 거절/ 3: 수락(재입단)
+				approval_status = approval.getStatus();
+				model.addAttribute("join_idx", approval.getJoin_idx());
+			}
 			
-			logger.info("approval_status : " + approval_status);
-			model.addAttribute("join_idx", approval.getJoin_idx());
 		}else { // 값이 존재하지 않으면... 크루입단 신청전
 			approval_status = 0; // 신청전
 		}  
