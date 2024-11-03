@@ -230,8 +230,9 @@ public class CrewController {
 	public String commentWrite(@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		// 이동할 페이지
 		String board_idx = params.get("board_idx");
+		String crew_idx = params.get("crew_idx");
 		
-		page = "redirect:/crew_recruit_detail.go?idx=" + board_idx;
+		page = "redirect:/crew_recruit_detail.go?board_idx=" + board_idx+ "&crew_idx=" + crew_idx;
 		checkPermit(model, session);
 		
 		// 댓글 또는 대댓글작성.

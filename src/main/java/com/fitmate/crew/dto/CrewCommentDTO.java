@@ -13,7 +13,7 @@ public class CrewCommentDTO {
 	// 작성일시
     private LocalDateTime comment_date;
     // 댓글 게시여부 (1: 정상게시, 2: 본인이 삭제, 3: 운영자가 제재)
-    private String comment_status;
+    private int comment_status;
     // 댓글 작성자 닉네임
     private String comment_nick;
     // 댓글 작성자 프로필사진
@@ -62,11 +62,11 @@ public class CrewCommentDTO {
 		this.comment_content = comment_content;
 	}
 
-	public String getComment_status() {
+	public int getComment_status() {
 		return comment_status;
 	}
 
-	public void setComment_status(String comment_status) {
+	public void setComment_status(int comment_status) {
 		this.comment_status = comment_status;
 	}
 

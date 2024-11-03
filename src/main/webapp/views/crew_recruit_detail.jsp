@@ -438,27 +438,8 @@
             dataType: 'JSON',
             success: function(data) {
                 
-                // 신고하기 모달인지 수정/삭제 모달인지 요소선택.
-                modal_chk = '';
-                
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data).each(function(idx, item){
-                	
-                	/* idx = item.comment_idx;
-                	comment_id = item.comment_id;
-                	content = item.comment_content;
-                    date = item.comment_date;
-                    nick = item.comment_nick;
-                    profile = item.comment_profile;	
-                    
-                    
-                    idx = item.recommnet_idx;
-                    comment_id = item.recomment_id;
-                    content = item.recomment_content;
-                    date = item.recomment_date;
-                    nick = item.recomment_nick;
-                    profile = item.recomment_profile; */
-                	
                 	
                 	footer += '<div class="comment_box">'
 				        + '<div class="comment">'
@@ -474,6 +455,8 @@
 				        + '</span>'
 				        + '</div>';
 				        
+				        
+				        
                 		if(item.comment_status === 1){       // 정상게시 댓글인경우
     				    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div></div>'; 
     					}else if(item.comment_status === 2){ // 본인이 삭제한 댓글인경우
@@ -483,7 +466,7 @@
     					}
 				        
                 		// 대댓글 가져오기
-    				    if (item.recomment_idx !== '' && item.recomment_idx !== null) {	
+    				    if (item.recomment_idx !== 0) {	
                 		
     				    	// 현재유저가 크루장, 대댓글 작성자면 => 수정/삭제 버튼.
     				        if(leader_chk === 1 && currentUserId === item.recomment_id){
@@ -511,7 +494,7 @@
     				            
     				        // 대댓글 - 모달추가
     				     	// 일반유저인 경우 대댓글에 수정/삭제 버튼이 보이지 않도록 처리.
-				            if (modal_chk !== '') {
+				            if (leader_chk === 1 && currentUserId === item.recomment_id) {
 				                footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
 						    		+ 'data-modal_chk="' + modal_chk + '" '  
 							        + 'data-content_chk="1" '
@@ -548,8 +531,8 @@
     				    	}
     				    }
                 		
-    				 	// 댓글 - 모달추가
-    				    if(modal_chk !== ''){
+    				 	// 정상댓글인경우 - 모달추가
+    				    if(item.comment_status === 1){
     				    	footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
     				    		+ 'data-modal_chk="' + modal_chk + '" '  
     					        + 'data-content_chk="0" '
@@ -560,11 +543,11 @@
     				    }
                 		
     				    footer += '</div>'; // comment_box 끝
-    				    $('.comment_area').empty().append(footer);  
+    				    
+    				    modal_chk = '';
                 });
-				    
-                      
-				        
+                
+ 				$('.comment_area').empty().append(footer);  
                 
             },
             error: function(e) {
@@ -640,7 +623,7 @@
         <%-- var board_idx = <%=board_idx%>;   --%>
 		// 답변입력영역 생성.
         var reply_area = '<div class="comment_box reply_write">'
-            + '<form action="crew_recruit_detail.do?idx=' + board_idx + '" method="post">'
+            + '<form action="crew_recruit_detail.do?board_idx=' + board_idx + '&crew_idx=' +crew_idx+ '" method="post">'
             + '<div class="reply_right">'
             + '<h3 class="capt"><i class="bi bi-arrow-return-right"></i>&nbsp;답변하기</h3>'
             + '<p>'
