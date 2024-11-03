@@ -5,19 +5,18 @@
 
 <mapper namespace="com.fitmate.mbti.dao.MbtiDAO">
 	<select id="mbtiIdx" resultType="int">
-		SELECT MIN(mbtiq_idx) FROM mbti_q
+		SELECT MIN(mbtiq_idx) FROM mbti_q WHERE mbtiq_show = 1;
 	</select>
 
 
 	<select id="getQuestion" parameterType="int" resultType="Map"> <!-- idx 기반으로 질문 idx 및 질문 내용 가져와야함 -->
-		SELECT mbtiq_idx as 질문번호,mbtiq_con as 질문내용 FROM mbti_q where mbtiq_idx
-		= #{Qidx}
+		SELECT mbtiq_idx as 질문번호,mbtiq_con as 질문내용 FROM mbti_q where mbtiq_idx = #{Qidx}
 	</select>
 
 	<select id="getOption" parameterType="int" resultType="Map">  <!-- idx 기반으로 문항별 idx, 문항별 내용, 성향 idx, 성향 이름, 점수 idx, 점수 가져오기 -->
 		SELECT distinct s.mbtiq_idx as 질문번호, s.mbtisub_idx as 문항번호, s.mbtisub_con as
 		문항내용
-		FROM mbti_q_sub s where mbtiq_idx= #{Qidx};
+		FROM mbti_q_sub s where mbtiq_idx= #{Qidx} and mbtisub_show = 1;
 	</select>
 
 	<select id="getTypeScore" parameterType="int" resultType="Map">
@@ -27,11 +26,11 @@
 
 	</select>
 	<select id="nextPageIdx" parameterType="int" resultType="int">
-		SELECT mbtiq_idx FROM mbti_q where mbtiq_idx > #{lastQIdx} LIMIT 1;
+		SELECT mbtiq_idx FROM mbti_q where mbtiq_idx > #{lastQIdx} AND mbtiq_show = 1 LIMIT 1;
 	</select>
 
 	<select id="questionCount" parameterType="int" resultType="int">
-		SELECT COUNT(mbtiq_idx) FROM mbti_q;
+		SELECT COUNT(mbtiq_idx) FROM mbti_q WHERE mbtiq_show = 1;
 	</select>
 
 	<select id="mbtiRGet" parameterType="String" resultType="map">
@@ -39,7 +38,7 @@
 	</select>
 	
 	<select id="create_totalScore" resultType="String">
-		SELECT mbtir_name FROM mbti_r;
+		SELECT mbtir_name FROM mbti_r where mbtir_show = 1;
 	</select>
 
 	<select id="checkResult" parameterType="String" resultType="int">
