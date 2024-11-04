@@ -35,13 +35,13 @@
 				<!-- 폼 -->
                 <form action="crew_photo_write.do" method="post" enctype="multipart/form-data">       		
            			<!-- 로그인세션아이디 가져오기 작성자 구분, 크루장 구분 할때 이용 <input type="hidden" id="sessionId" value="${sessionScope.sessionId}"> -->
-                	<input type="hidden" id="sessionId" value="member01">
+                	<input type="hidden" id="sessionId" value="${sessionScope.loginId}">
                 	 <!-- 작성자 id 넣기 세션아이디넣기 <input type="hidden" id="board_id" name="board_id" value="${board_id}"> -->
-                	 <input type="hidden" id="board_id" name="board_id" value="member03">
+                	 <input type="hidden" id="board_id" name="board_id" value="${sessionScope.loginId}">
                 	 <!-- 나중에 크루 idx 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> -->
-                	 <input type="hidden" id="crew_idx" name="crew_idx" value="6">
+                	 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}">
                 	 <!-- 나중에 크루장 id 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> -->
-   					<input type="hidden" id="crew_id" name="crew_id" value="member01">
+   					<input type="hidden" id="crew_id" name="crew_id" value="${crew_id}">
                     <!-- 경고 -->                     
                     <!-- 통과 -->
                     <div class="list">

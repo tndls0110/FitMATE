@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,28 +34,32 @@ public class CrewScheduleController {
 	
 	// 크루 일정 작성
 	@GetMapping(value="/crew_schedule_write.go")
-	public String crew_schedule_write_go(@RequestParam Map<String,String> params,Model model) {
+	public String crew_schedule_write_go(@RequestParam Map<String,String> params,Model model,HttpSession session) {
 		
-		/*
+		
 		String page = "";
 		// 받을 파라미터값 = 크루장id,크루idx,
 		String crew_idx = params.get("crew_idx");
 		String crew_id = params.get("crew_id");
-		
-		if(crew_id == loginId) {
+		String loginId = session.getAttribute("loginId").toString();
+		logger.info("로그인아이디"+loginId);
+		logger.info("크루장id"+crew_id);
+		logger.info("크루idx"+crew_idx);
+		if(crew_id.equals(loginId)&&loginId != null) {
 			
 			// 작성자가 크루 작성자면
 			page =	"crew_schedule_write";
+			// 전달 받은 파라미터값 crew_schedule_write 에 뿌려주기
+			model.addAttribute("crew_id", crew_id);
+			model.addAttribute("crew_idx", crew_idx);
 		}
 		else {
 			// 작성자가 크루장이 아니라면
-			page = "";
+			page = "redirect:/crew_main_page?crew_idx="+crew_idx;
 		}
-		// 전달 받은 파라미터값 crew_schedule_write 에 뿌려주기
-		model.addAttribute("crew_id", crew_id);
-		model.addAttribute("crew_idx", crew_idx);
-		*/
-			return "crew_schedule_write";
+		
+		
+			return page;
 		}
 	// 크루 일정 작성하기
 	@PostMapping(value="/crew_schedule_write.do")
@@ -64,7 +71,7 @@ public class CrewScheduleController {
 			 String end_time,
 			String place,
 			String content,
-			 String subject) {
+			 String subject,HttpServletRequest session) {
 		
 		// 받을 파라미터 = 크루idx,모임일시,모임장소,모인이유 // 주기적 일정인 경우 주기적날짜 정보
 		
@@ -78,10 +85,10 @@ public class CrewScheduleController {
 	    } else {
 	        logger.info("선택된 날짜가 없습니다.");
 	    }
-		
+		String page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
 		crewschedule_service.crew_plan_create(days,crew_id,crew_idx,date,start_time,end_time,place,content,subject);
 	    // 크루 페이지 redirect로 바꿔주기
-		return "kakao_map";
+		return page;
 	}
 	
 	// 크루 일정 날짜 가져오기
@@ -154,25 +161,25 @@ public class CrewScheduleController {
 	public String crew_plan_del(@RequestParam Map<String,String> params) {
 		logger.info("삭제 실행");
 		logger.info("del {}",params);
-		String page = "redirect:/";
+		
 		String plan_idx = params.get("plan_idx");
 		String crew_idx = params.get("crew_idx");
-		
+		String page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
 		crewschedule_service.crew_plan_del(plan_idx,crew_idx);
 		
-		return "kakao_map";
+		return page;
 	}
 	
 	@PostMapping(value="/crew_plan_join.do")
 	public String crew_plan_join(@RequestParam Map<String,String> params) {
 		logger.info("참가 실행");
 		logger.info("join {}",params);
-		String page = "redirect:/";
+		String crew_idx = params.get("crew_idx");
 		String plan_idx = params.get("plan_idx");
 		String user_id = params.get("user_id");
-		
+		String page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
 		crewschedule_service.crew_plan_join(plan_idx,user_id);
-		return "kakao_map";
+		return page;
 	}
 	
 }

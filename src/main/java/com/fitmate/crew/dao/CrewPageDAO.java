@@ -65,6 +65,10 @@ public interface CrewPageDAO {
 
 	List<CrewMemberProfileDTO> crew_main_crewmember(int crew_idx);
 
+	List<CrewBoardDTO> crew_photo_list(String crewidx, int offset, int size);
+
+	CrewDTO crew_info(String crew_idx);
+
 	
 	
 }

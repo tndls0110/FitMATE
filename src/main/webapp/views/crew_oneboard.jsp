@@ -60,13 +60,13 @@
 				<!-- 폼 -->
                 <form action="crew_oneboard.do" method="post">
                 	<!-- 로그인세션아이디 가져오기 작성자 구분, 크루장 구분 할때 이용 <input type="hidden" id="sessionId" value="${sessionScope.sessionId}"> -->
-                	<input type="hidden" id="sessionId" value="member01">
+                	<input type="hidden" id="sessionId" value="${sessionScope.loginId}">
                 	 <!-- 작성자 id 넣기 세션아이디넣기 <input type="hidden" id="board_id" name="board_id" value="${board_id}"> -->
-                	 <input type="hidden" id="board_id" name="board_id" value="member01">
+                	 <input type="hidden" id="board_id" name="board_id" value="${sessionScope.loginId}">
                 	 <!-- 나중에 크루 idx 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> -->
-                	 <input type="hidden" id="crew_idx" name="crew_idx" value="6">
+                	 <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}">
                 	 <!-- 나중에 크루장 id 넣기 모델값으로 넣어주기 <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> -->
-   					<input type="hidden" id="crew_id" name="crew_id" value="member01">
+   					<input type="hidden" id="crew_id" name="crew_id" value="${crew_id}">
                 	
                 	<!-- 기본 입력창 -->
                 	<!-- class="full": width=100% -->
@@ -194,7 +194,7 @@
 	                	// 오늘 날짜 가져오기
 		                const today = new Date();
 		                const postDate = new Date(item.date); // 게시글 날짜
-
+		                const crew_idx = $('#crew_idx').val(); 
 		                // 날짜 비교: 오늘 날짜와 같은지 확인
 		                let displayDate;
 
@@ -210,17 +210,17 @@
 	                	// 내가 작성자이면
 	                	if (sessionId == item.board_id) {
 	                	       // deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_del?board_idx=' + item.board_idx + '\'">작성자</button>';
-	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '\')" class="mainbtn full"><i class="bi bi-x-square"></i></button>'
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\')" class="mainbtn full"><i class="bi bi-x-square"></i></button>'
 	                	    }
 	                	// 크루장이면
 	                	else if(isCrewLeader){
 	                		// 숨겨진게시글이면
 	                		if(item.status == 2){
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx + '\'"><i class="bi bi-file-richtext"></i></button>';
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx +'&crew_idx='+ crew_idx + '\'"><i class="bi bi-file-richtext"></i></button>';
 	                		}
 	              			// 숨겨진게시글이 아니라면
 	                		else{
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '\'"><i class="bi bi-file-earmark-lock2"></i></button>';
+	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\'"><i class="bi bi-file-earmark-lock2"></i></button>';
 	                		}	                		
 	                	}
 	                	// 크루장이 아니고 작성자도 아니면

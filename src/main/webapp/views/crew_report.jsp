@@ -33,7 +33,7 @@
 				<!-- 폼 -->
                 <form action="crew_report.do" method="POST">
                 	<!-- 신고자  !! 나중에 세션값 넣기  !! -->
-           			<input type="hidden" name="reporter_id" value="member01">
+           			<input type="hidden" name="reporter_id" value="${sessionScope.loginId}">
            			<!-- 신고 사유 idx -->
            		<!--	<input type="hidden" name="reportr_idx" id="reportr_idx_input" value="1">-->
            			<input type="hidden" id="reportr_idx_input" name="reportr_idx"  value="">
