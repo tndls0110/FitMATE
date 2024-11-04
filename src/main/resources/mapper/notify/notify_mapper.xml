@@ -3,4 +3,30 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<mapper namespace="com.fitmate.notify.dao.NotiDAO"></mapper>
+<mapper namespace="com.fitmate.notify.dao.NotiDAO">
+    <select id="getAllAlarm" resultType="com.fitmate.notify.dto.NotiDTO">
+        SELECT * FROM noti WHERE notir_id = #{id} ORDER BY notis_date DESC
+    </select>
+
+    <select id="getspecificAlarm" resultType="com.fitmate.notify.dto.NotiDTO">
+        SELECT * FROM noti WHERE notir_id = #{id} AND notis_cate = #{idx} ORDER BY notis_date DESC
+    </select>
+
+    <update id="read_change">
+        UPDATE noti SET notis_check =1 WHERE noti_idx = #{idx}
+    </update>
+
+    <delete id="deleteAlarm">
+        DELETE FROM noti WHERE noti_idx = #{idx}
+    </delete>
+
+    <delete id="auto_delete">
+        DELETE FROM noti where notis_date = #{thirtyDaysAgo};
+    </delete>
+
+    <select id="checkUnreadAlarm" resultType="int">
+        SELECT count(*) FROM noti n2 where notir_id = #{id} AND notis_check = 0;
+    </select>
+
+
+</mapper>
