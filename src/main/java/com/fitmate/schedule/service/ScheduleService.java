@@ -1,5 +1,6 @@
 package com.fitmate.schedule.service;
 
+import com.fitmate.crew.dto.CrewScheduleMDTO;
 import com.fitmate.schedule.dao.ScheduleDAO;
 import com.fitmate.schedule.dto.ScheduleDTO;
 import com.fitmate.schedule.dto.ScheduleFileDTO;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -211,6 +213,62 @@ public class ScheduleService {
 		if(deleted>0){
 			success = true;
 		}
+		return success;
+	}
+
+    public List<ScheduleDTO> crew_plan_detail(String date, String crewIdx, String id) {
+		return s_dao.crew_plan_detail(date, crewIdx, id);
+    }
+
+	public List<CrewScheduleMDTO> crew_plan_members(int planidx) {
+		return s_dao.crew_plan_members(planidx);
+	}
+
+	public Object update_content(Map<String,Object> param) {
+		logger.info("받아온 param:{}",param);
+		boolean success = false;
+		int result = s_dao.update_content(param);
+		if(result>0){
+			success = true;
+		}
+		return success;
+	}
+
+	public boolean file_insert(String input, MultipartFile file) {
+		int idx = Integer.parseInt(input);
+		logger.info("idx:{}",idx);
+
+		boolean success = false;
+		//file을 newfilename과 orifilename으로 만들고 file에 직접 넣기
+		String ori_filename = file.getOriginalFilename();
+		logger.info("ori_filename:{}",ori_filename);
+
+		String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
+		logger.info("ext:{}",ext);
+
+		String new_filename = UUID.randomUUID().toString() + ext;
+		logger.info("new_filename:{}",new_filename);
+
+		try {
+            //1. 바이트 저장
+			byte[]arr = file.getBytes();
+
+			//2. 저장할 path 저장
+			Path path = Paths.get("C:/upload/"+new_filename);
+
+			//3. File 저장
+			Files.write(path,arr);
+
+			//4.DB에 작성
+			int result = s_dao.filewrite(idx,ori_filename,new_filename);
+			logger.info("idx:{}",idx);
+			if(result>0){
+				success = true;
+			}
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 		return success;
 	}
 }
