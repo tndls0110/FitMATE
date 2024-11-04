@@ -352,6 +352,8 @@
     // 크루 idx
     var crew_idx = ${recruitHead.crew_idx};
     
+    // 크루이름
+    var crew_name = '${recruitHead.crew_name}';
     
     // 댓글, 대댓글 불러오기.
     if (board_idx != '' && board_idx != null) {
@@ -582,7 +584,9 @@
             type: 'POST',
             data: {
                 crew_idx : crew_idx,
-                join_id : currentUserId
+                join_id : currentUserId,
+                leader_id : crewLeaderId,
+                crew_name : crew_name
             },
             success: function(data) {
                 if (data.success) {

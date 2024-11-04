@@ -15,8 +15,9 @@ public interface CrewMemberDAO {
 
 	CrewJoinDTO profileInfo(Map<String, Object> map);
 
+	// 크루 가입승인처리 
 	int joinApproval(Map<String, String> params);
-
+	// 크루에 크루원을 멤버로 등록.
 	int crewMember(Map<String, String> params);
 	
 	/*

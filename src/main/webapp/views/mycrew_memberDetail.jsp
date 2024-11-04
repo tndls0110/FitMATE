@@ -133,6 +133,9 @@
         <div class="profile_box">
             <div class="profile relative">
                 <i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>
+                
+                  
+                
                 <!-- ${profile.profile} i태그는 추후 프로필 사진으로 대체 예정.-->
                 <div class="width_50">
                     <div class="profile_right">
@@ -222,6 +225,12 @@
 <script src="resources/js/common.js"></script>
 
 <script>
+	// 크루명
+	var crew_name = '${profile.crew_name}';
+	
+	// 멤버 닉네임
+	var member_nick = '${profile.nick}';
+
     // 0: 일반회원 프로필, 1: 크루회원 프로필
     var profileType = '${profileType}';
     
@@ -233,22 +242,25 @@
     // 크루회원 프로필인 경우
     if(profileType === '1'){
     
-        // 크루장 체크 => 0: 크루장X, 1: 크루장O 
-        var leader_chk = 1; // 일단은 크루장인것으로...
+         
+        
         var crew_id = '${profile.crew_id}';     // 가져온 크루장ID
         
         // 크루장ID와 현재SessionID가 같다면 입장 허용.
         if(currentUserId === crew_id){
             // 크루 추방을 위한 크루원목록 idx
             var member_idx = '${profile.member_idx}';
+            // 크루장 체크 => 0: 크루장X, 1: 크루장O    
+            var leader_chk = 1;
             
-            // 크루장이 아닌경우 추방하기 버튼 삭제
-            // 크루장이 자기자신의 정보를 보고 있는 경우에도 추방버튼 삭제
-            if(leader_chk !== 1 || member_id === crew_id) {
+         	// 크루장이 자기자신의 정보를 보고 있는 경우에도 추방버튼 삭제
+            if(leader_chk === 1 && member_id === crew_id) {
                 $('#memberFire').remove();
-            }    
+            }
+            
         } else {
-            modal.showAlert('해당 페이지에 접근할 수 있는 권한이 없습니다.');
+        	// 크루장이 아닌경우 추방하기 버튼 삭제
+        	$('#memberFire').remove();
         }
         
     } else {  // 일반회원 프로필인 경우 
@@ -272,7 +284,10 @@
             url: 'crewMemberFire.ajax', // AJAX 요청을 보낼 URL
             type: 'POST',
             data: {
-                member_idx: member_idx
+                member_idx: member_idx,
+                member_nick: member_nick,
+                member_id: member_id,
+                crew_name: crew_name
             },
             success: function(data) {
                 console.log("성공여부 : " + data.success);
