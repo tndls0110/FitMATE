@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="resources/css/admin_dashboard.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="resources/js/admin_dashboard.js"></script>
     <script>
         var index = 0;
     </script>
@@ -25,6 +24,7 @@
         <div class="contents_flex">
             <div class="contents chart">
                 <div id="chart_div"></div>
+                <div class="waiting"><i class="bi bi-reception-4"></i></div>
             </div>
             <div class="contents summary">
                 <table>
@@ -35,7 +35,7 @@
                     </colgroup>
                     <thead>
                     <tr>
-                        <th>증감 항목</th>
+                        <th>증가 항목</th>
                         <th>오늘</th>
                         <th>일주일</th>
                     </tr>
@@ -151,4 +151,5 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
+<script src="resources/js/admin_dashboard.js"></script>
 </html>

@@ -85,6 +85,12 @@ public class MainController {
 		model.addAttribute("data", main_service.dashboardList3());
 		model.addAttribute("notice", main_service.dashboardList1());
 		model.addAttribute("report", main_service.dashboardList2());
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
+		for (int i = 0; i < 5; i++) {
+			list.add(main_service.getData(i));
+		}
+		result.put("chart", list);
 		return page;
 	}
 

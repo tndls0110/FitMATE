@@ -1,6 +1,23 @@
-var data;
-var chart;
-var chartData = [];
+let data;
+let chart;
+let chartData = [];
+
+let waitingInterval = setInterval(waitingAnimator, 500);
+
+function waitingAnimator() {
+    let waiting = document.getElementsByClassName('waiting')[0];
+    if (waiting.innerHTML == '<i class="bi bi-reception-0"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-1"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-1"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-2"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-2"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-3"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-3"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-4"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-4"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-0"></i>';
+    }
+}
 
 getData();
 
@@ -18,6 +35,8 @@ function getData() {
                 'packages':['corechart']
             });
             google.charts.setOnLoadCallback(drawVisualization);
+            clearInterval(waitingInterval);
+            document.getElementsByClassName('waiting')[0].style.display = 'none';
         },
         error: function(e) {}
     });

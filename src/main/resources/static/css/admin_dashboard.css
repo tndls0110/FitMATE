@@ -39,3 +39,30 @@
 h1{
     margin: 0;
 }
+
+.contents.chart .waiting{
+    width: 48px;
+    height: 48px;
+    margin: 95px auto 0;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    font-size: 48px;
+}
+
+.contents.chart .waiting ul{
+    width: 324px;
+    height: 48px;
+    position: absolute;
+    top: -62px;
+    left: -40px;
+}
+
+.contents.chart .waiting ul li{
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    display: inline;
+    list-style-type: none;
+}
