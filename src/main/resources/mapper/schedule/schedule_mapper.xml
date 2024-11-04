@@ -32,7 +32,7 @@
     </select>
     
     <select id="crewplan_get" resultType="Map">
-        SELECT DISTINCT cp.plan_date,cp.plan_start,cp.plan_end,cp.plan_subject,cp.plan_place,c.name
+        SELECT DISTINCT cp.crew_idx, cp.plan_date,cp.plan_start,cp.plan_end,cp.plan_subject,cp.plan_place,c.name
         FROM crew_plan cp inner join crew c on cp.crew_idx = c.crew_idx WHERE cp.plan_idx in (SELECT plan_idx FROM member inner join crew_party on user_id = party_id WHERE user_id =  #{id}) AND cp.plan_date = #{date};
     </select>
 
@@ -64,5 +64,41 @@
     <delete id="delete_img">
         DELETE FROM board_file WHERE file_idx = #{fileIdx}
     </delete>
+
+
+    <select id="crew_plan_detail" resultType="com.fitmate.schedule.dto.ScheduleDTO">
+        SELECT DISTINCT cp.plan_idx,cp.crew_idx, cp.plan_date,cp.plan_start,cp.plan_end,cp.plan_subject,cp.plan_content,cp.plan_place,c.name
+        FROM crew_plan cp inner join crew c on cp.crew_idx = c.crew_idx WHERE cp.plan_idx in (SELECT plan_idx FROM member inner join crew_party on user_id = party_id WHERE user_id =  #{id}) AND cp.plan_date = #{date} AND cp.crew_idx = #{crewIdx};
+    </select>
+
+    <select id="crew_plan_members" resultType="com.fitmate.crew.dto.CrewScheduleMDTO">
+        SELECT
+            cp.party_id,
+            cp.plan_idx,
+            cp.party_idx,
+            p.profile
+        FROM
+            crew_party cp
+                JOIN
+            profile p ON cp.party_id = p.user_id
+        WHERE
+            cp.plan_idx = #{param1};
+    </select>
+
+    <update id="update_content" parameterType="map">
+        UPDATE schedule
+        <set>
+            <if test="cate != null">journal_cate = #{cate},</if>
+            <if test="textarea != null">journal_content = #{textarea},</if>
+            <if test="date != null">date = #{date},</if>
+            <if test="start_time != null">journal_start = #{start_time},</if>
+            <if test="end_time != null">journal_end = #{end_time}</if>
+        </set>
+        WHERE journal_idx = #{journal_idx}
+    </update>
+    
+    <insert id="fileInsert">
+        INSERT INTO
+    </insert>
 
 </mapper>

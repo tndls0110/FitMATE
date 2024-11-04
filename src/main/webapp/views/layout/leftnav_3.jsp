@@ -21,9 +21,37 @@
 			<a href="member_profile.go">마이 페이지</a>
 		</li>
 		<li>
-			<a href=""><i class="bi bi-person-walking"></i></a>
+			<a href="alarm.go"><i class="bi bi-person-walking"></i></a>
 			<div class="notify_new"></div>
 		</li>
 	</ul>
 </div>
 <script src="resources/js/member_leftnav.js"></script>
+
+<script>
+	window.onload = function (){
+		//setInterval로 알림이 있는 지 function 실행
+		check_unreadAlarm();
+		setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
+
+	}
+
+	function check_unreadAlarm(){
+		$.ajax({
+			type : 'get',
+			url : 'check_unreadAlarm.ajax',
+			data :{},
+			dataType : 'JSON',
+			success : function (data){
+				console.log(data.exists);
+				if(data.exists == 'exist'){
+					$('.notify_new').css({'visibility' : 'visible'});
+				}else if(data.exists == 'none'){
+					$('.notify_new').css({'visibility' : 'hidden'});
+				}
+			},error : function (e){
+				console.log(e);
+			}
+		})
+	}
+</script>
