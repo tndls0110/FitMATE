@@ -15,12 +15,13 @@
     </select>
 
     <select id="list" resultType="com.fitmate.admin.dto.ReportDTO">
-        SELECT r.report_idx, b.subject, r.reporter_id, r.reported_id, r.report_date, r.report_prog,
+        SELECT r.report_idx, r.reporter_id, b.subject, r.reported_id, r.report_date, r.report_prog, r.board_type,
             (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) AS 'reporter_nick',
             (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) AS 'reported_nick',
             (SELECT COUNT(f.file_idx) FROM board_file f WHERE f.board_idx = b.board_idx) AS 'file_cnt',
             (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
-            (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state'
+            (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state',
+            (SELECT content FROM comment WHERE comment_idx = r.board_idx) AS 'content'
             FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
             <where>
                 <if test="param4 != null and !param4.equals('') and param3.equals('subject')">

@@ -43,18 +43,27 @@ function pageShow(page) {
 
 function listPrint(list, totalIdx, currentPage, offset) {
     let tags = '';
+    let substr = 28;
     for (let i = 0; i < list.length; i++) {
         tags += '<tr>';
         tags += '<td>'+(totalIdx - ( (currentPage - 1) * cnt) - i)+'</td>';
         tags += '<td class="left">';
-        if (list[i].file_cnt > 0){
+        if (list[i].file_cnt > 0 && list[i].board_type == 1){
             tags += '<i class="bi bi-images"></i> ';
         }
         tags += '<a href="admin_reportDetail.go?report_idx='+list[i].report_idx+'">';
-        if (list[i].subject.length > 28){
-            tags += list[i].subject.substring(0,28) +'…';
-        } else {
-            tags += list[i].subject;
+        if (list[i].board_type == 1){
+            if (list[i].subject.length > substr){
+                tags += list[i].subject.substring(0,substr) +'…';
+            } else {
+                tags += list[i].subject;
+            }
+        } else if (list[i].board_type == 2){
+            if (list[i].content.length > substr){
+                tags += list[i].content.substring(0,substr) +'…';
+            } else {
+                tags += list[i].content;
+            }
         }
         tags += '</a></td>';
         tags += '<td>';
