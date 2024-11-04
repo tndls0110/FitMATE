@@ -299,7 +299,7 @@
 	function create_Totalscore(){ //이것도 처음할 때만 하도록...
 			$.ajax({
 				type: 'GET',
-				url: '/create_Totalscore.ajax',
+				url: 'create_Totalscore.ajax',
 				data: {},
 				dataType: 'JSON',
 				success: function (score) { //여기 scores랑 전역변수 scores랑 이름이 비슷해서 생긴 문제
@@ -509,7 +509,7 @@
 				nextPageidentifier++;
 				$.ajax({
 					type : 'GET',
-					url : '/question_count.ajax',
+					url : 'question_count.ajax',
 					data : {},
 					dataType : 'JSON',
 					success : function (data){
@@ -525,7 +525,7 @@
 
 						$.ajax({
 							type : 'GET',
-							url : '/nextPageIdx.ajax',
+							url : 'nextPageIdx.ajax',
 							data : {'lastQIdx' : QuestionIdx},
 							dataType : 'JSON',
 							success : function(result){

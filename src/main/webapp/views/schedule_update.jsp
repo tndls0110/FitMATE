@@ -443,14 +443,6 @@
 
           param[$(item).attr('name')] = $(item).val();
         }
-      }else if(name == 'files'){
-        /*$.ajax({
-          type : 'POST',
-          url : 'file_write.ajax',
-          data : {},
-          dataType: 'JSON'
-
-        });*/
       }else{
         if($(item)[0].defaultValue != $(item)[0].value){
           param[$(item).attr('name')] = $(item).val();

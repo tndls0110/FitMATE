@@ -52,9 +52,7 @@
         .mbtiR_photo{
             height: 250px;
             width: 200px;
-            background-color: red;
             margin: 24px 134px;
-
         }
 
         .result_name{
@@ -110,6 +108,10 @@
         #recommed_content{
             width: 431px;
             margin: -1px 56px;
+        }
+
+        .saveResult{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -215,14 +217,17 @@
 
             $.ajax({
                 type : 'GET',
-                url : '/mbti_r_get.ajax',
+                url : 'mbti_r_get.ajax',
                 data : {'max_mbti':k},
                 dataType : 'JSON',
                 success : function(recommend){
                     console.log(recommend);
+                    console.log(recommend.mbtir_img);
                     $('.result_detail').html(recommend.mbtir_con);
                     $('.recommend_detail').html(recommend.mbtir_exc);
                     $('.recommend_routine').html(recommend.mbtir_rou);
+                    var img = '<img width = "210px" src = "/photo/'+recommend.mbtir_img+'"/>'
+                    $('.mbtiR_photo').html(img);
                 },
                 error : function (e){
                     console.log(e);
@@ -304,12 +309,12 @@
 
         $.ajax({
             type : 'GET',
-            url : '/profile_mbti.ajax',
+            url : 'profile_mbti.ajax',
             data : max,
             dataType : 'JSON',
             success : function (data){
                 console.log('프로필 저장 성공 :',data.success); //insert 시킨 후 성공 여부
-                location.href = "/member_profile.go";
+                location.href = "member_profile.go";
             },
             error : function (e){
                 console.log(e);
