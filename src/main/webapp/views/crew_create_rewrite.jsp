@@ -24,9 +24,9 @@
 			
 				<!-- 폼 -->
                 <form action="crew_create_rewrite.do" method="post">
-           			<input type="hidden" name="crew_id" value="member01">
+           			<input type="hidden" name="crew_id" value="${crew_id}">
            			<!-- board_idx 벨류값 맞춰주기  value="1" >> 테스트용 -->
-           			<input type="hidden" name="board_idx" value="1">
+           			<input type="hidden" name="board_idx" value="${board_idx}">
            		<!-- <input type="hidden" name="name" value="크루이름"> -->
                 
                     <!-- 둘로 나뉜 셀렉트박스 / 버튼 -->

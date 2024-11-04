@@ -331,6 +331,17 @@ public class CrewPageService {
 		
 		return crewpage_dao.crew_main_crewmember(crew_idx);
 	}
+
+	public List<CrewBoardDTO> crew_photo_list(String crewidx, int offset, int size) {
+		
+		return crewpage_dao.crew_photo_list(crewidx,offset,size);
+	}
+
+	public CrewDTO crew_info(String crew_idx) {
+		
+		return crewpage_dao.crew_info(crew_idx);
+		
+	}
 	
 
 	

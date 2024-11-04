@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fitmate.admin.dto.RegReportDTO;
 import com.fitmate.crew.dto.CrewBoardDTO;
+import com.fitmate.crew.dto.CrewDTO;
 import com.fitmate.crew.dto.CrewMemberProfileDTO;
 import com.fitmate.crew.service.CrewPageService;
 
@@ -29,20 +30,10 @@ public class CrewPageController {
 	
 	@Autowired CrewPageService crewpage_service;
 	
-	/*
-	// 신고 페이지 이동
+
+	// 신고 페이지 이동 
 	@RequestMapping(value="/crew_report.go")
-	public String crew_report(@RequestParam Map<String,String> params, Model model) {
-		
-		params.get("board_idx");
-		
-		return "crew_report";
-	}
-	*/
-	
-	// 신고 페이지 이동 test code
-	@RequestMapping(value="/crew_report.go")
-	public String crew_report(@RequestParam Map<String,String> params,Model model) {
+	public String crew_report(@RequestParam Map<String,String> params,Model model,HttpSession session) {
 		
 		
 		logger.info("신고 페이지 이동 params = {}",params);
@@ -59,9 +50,7 @@ public class CrewPageController {
 			model.addAttribute("board_idx", params.get("comment_idx"));
 			model.addAttribute("reported_id", params.get("comment_id"));
 		}
-		
-
-		
+	
 		return "crew_report";
 	}
 	
@@ -79,7 +68,7 @@ public class CrewPageController {
 	
 	// 신고하기 board_type 가져오는거 확인하기 == 게시글인경우 board_type=1, 댓글인경우 board_type=2
 	@RequestMapping(value="/crew_report.do",method =RequestMethod.POST)
-	public String crew_report_do(@RequestParam Map<String,String> params) {
+	public String crew_report_do(@RequestParam Map<String,String> params,HttpSession session) {
 		
 		logger.info("params = {}", params);
 		 String reportrIdxStr = params.get("reportr_idx");
@@ -115,11 +104,13 @@ public class CrewPageController {
 	}
 	*/
 	
-	// 공지사항 페이지로 이동하기 test code
+	// 공지사항 페이지로 이동하기 
 		@RequestMapping(value="/crew_page_notice.go")
-		public String crew_page_notice() {
-		
-		
+		public String crew_page_notice(@RequestParam Map<String,String> params,HttpSession session, Model model) {
+			String crew_idx = params.get("crew_idx");
+			String crew_id = params.get("crew_id");
+			model.addAttribute("crew_idx", crew_idx);
+			model.addAttribute("crew_id", crew_id);
 			
 			return "crew_page_notice";
 		}
@@ -139,12 +130,12 @@ public class CrewPageController {
 	
 	// 공지사항목록 불러오기
 	@GetMapping(value = "/crew_page_notice.ajax")
-	@ResponseBody 
+	@ResponseBody
 	public List<CrewBoardDTO> crew_notice_list(@RequestParam Map<String,String> params,HttpSession session){
 		
 		logger.info("params : " + params);
 		String crewidx = params.get("crew_idx");
-		
+		logger.info(crewidx);
 		int crew_idx = Integer.parseInt(crewidx);
 		List<CrewBoardDTO> notcelist = crewpage_service.crew_notice_list(crew_idx);
 		
@@ -154,13 +145,13 @@ public class CrewPageController {
 	}	
 	
 	@GetMapping(value="/crew_notice_del")
-	public String crew_notice_del(@RequestParam String board_idx) {
+	public String crew_notice_del(@RequestParam String board_idx,String crew_idx) {
 		
 		logger.info("보드번호는 ? " + board_idx);
-		
+		String page = "redirect:/crew_page_notice.go?crew_idx="+crew_idx;
 		crewpage_service.crew_notice_del(board_idx);
 		
-		return "redirect:/crew_page_notice.go";
+		return page;
 	}
 	
 	/*
@@ -190,10 +181,16 @@ public class CrewPageController {
 		}
 		*/
 		
-		// 한줄 게시글 페이지로 이동하기 test code
+		// 한줄 게시글 페이지로 이동하기 
 			@RequestMapping(value="/crew_oneboard.go")
-			public String crew_oneboard() {
-			
+			public String crew_oneboard(@RequestParam Map<String,String> params,HttpSession session,Model model) {
+				
+				String crew_idx = params.get("crew_idx");
+				String crew_id = params.get("crew_id");
+				
+				model.addAttribute("crew_idx", crew_idx); // 전달받은 크루idx 다음 페이지에 넘겨주기
+				model.addAttribute("crew_id", crew_id); // 전달받은 크루id 다음 페이지에 넘겨주기
+				
 				return "crew_oneboard";
 			}
 	
@@ -206,8 +203,10 @@ public class CrewPageController {
 			logger.info("입력값 {} ",subject);
 			
 			crewpage_service.crew_oneboard_write(subject,board_id,crew_idx);
+			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
 			
-			return "redirect:/crew_oneboard.go";
+			
+			return page;
 		}
 		
 		// 한줄 게시글 리스트 가져오기
@@ -235,35 +234,39 @@ public class CrewPageController {
 		
 		// 한줄게시글 삭제
 		@GetMapping(value="/crew_oneboard_del")
-		public String crew_oneboard_del(@RequestParam String board_idx) {
+		public String crew_oneboard_del(@RequestParam String board_idx, String crew_idx) {
 			
 			// logger.info("oneboard 보드번호는 ? " + board_idx);
 			
 			crewpage_service.crew_oneboard_del(board_idx);
+			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
 			
-			return "redirect:/crew_oneboard.go";
+			return page;
 		}
 		
 		// 한줄게시글 블라인드
 		@GetMapping(value="/crew_oneboard_blind")
-		public String crew_oneboard_blind(@RequestParam String board_idx) {
+		public String crew_oneboard_blind(@RequestParam String board_idx,String crew_idx) {
 			
 			 logger.info("한줄게시글 블라인드 ? " + board_idx);
+			 logger.info("한줄게시글 블라인드  " + crew_idx);
 			
 			crewpage_service.crew_oneboard_blind(board_idx);
+			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
 			
-			return "redirect:/crew_oneboard.go";
+			return page;
 		}
 		
 		// 한줄게시글 블라인드 해제
 		@GetMapping(value="/crew_oneboard_unblind")
-		public String crew_oneboard_unblind(@RequestParam String board_idx) {
+		public String crew_oneboard_unblind(@RequestParam String board_idx,String crew_idx) {
 			
 			 logger.info("한줄게시글 블라인드 해제 ? " + board_idx);
-			
+			 logger.info("한줄게시글 블라인드 해제  " + crew_idx);
 			crewpage_service.crew_oneboard_unblind(board_idx);
+			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
 			
-			return "redirect:/crew_oneboard.go";
+			return page;
 		}
 		
 		
@@ -271,8 +274,12 @@ public class CrewPageController {
 		
 		// 사진 게시글 작성 페이지로 이동하기
 		@RequestMapping(value="/crew_photo_write.go")
-		public String crew_photo() {
-					
+		public String crew_photo(@RequestParam Map<String,String> params,Model model) {
+			
+			String crew_idx = params.get("crew_idx");
+			
+			model.addAttribute("crew_idx", crew_idx);
+			
 			return "crew_photo_write";
 		}
 
@@ -284,55 +291,59 @@ public class CrewPageController {
 			logger.info("입력값 {} ",subject);
 			
 			crewpage_service.crew_photo_write(file,subject,board_id,crew_idx);
-						
-			return "index123";
+			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
+			
+			return page;
 			
 		}
 		
 		// 사진 게시글 상세보기
 		@RequestMapping(value="/crew_photo_detail.go")
-		public String crew_photo_detail(String board_idx,Model model) {
+		public String crew_photo_detail(String board_idx,String crew_id,String crew_idx,Model model) {
 				
 			crewpage_service.crew_photo_detail(board_idx, model);
-
+			
+			model.addAttribute("board_idx",board_idx);
+			model.addAttribute("crew_id",crew_id);
+			model.addAttribute("crew_idx",crew_idx);
 			return "crew_photo_detail";
 			
 		}
 		
 		// 사진게시글 삭제
 		@GetMapping(value="/crew_photo_del")
-		public String crew_photo_del(@RequestParam String board_idx) {
+		public String crew_photo_del(@RequestParam String board_idx,String crew_idx) {
 					
 			// logger.info("oneboard 보드번호는 ? " + board_idx);
-					
+			String page = 	"redirect:/crew_main_page.go?crew_idx="+crew_idx;	
 			crewpage_service.crew_photo_del(board_idx);
 					
-			return "index123";
+			return page;
 		}
 		
 		
 		// 사진게시글 블라인드
 		@GetMapping(value="/crew_photo_blind")
-		public String crew_photo_blind(@RequestParam String board_idx) {
+		public String crew_photo_blind(@RequestParam String board_idx,String crew_idx) {
 					
 				 logger.info("사진게시글 블라인드 컨트로러 실행");
 				logger.info(board_idx);	
 				crewpage_service.crew_oneboard_blind(board_idx);
 					
-				String page ="redirect:/crew_photo_detail.go?board_idx="+ board_idx.toString();
+				String page = 	"redirect:/crew_main_page.go?crew_idx="+crew_idx;	
 				
 				return page;
 			}
 				
 		// 사진게시글 블라인드 해제
 		@GetMapping(value="/crew_photo_unblind")
-		public String crew_photo_unblind(@RequestParam String board_idx) {
+		public String crew_photo_unblind(@RequestParam String board_idx,String crew_idx) {
 					
 				logger.info("사진게시글 블라인드 해제 컨트로러 실행");
 				logger.info(board_idx);	
 				crewpage_service.crew_oneboard_unblind(board_idx);
 				
-				String page ="redirect:/crew_photo_detail.go?board_idx="+ board_idx.toString();
+				String page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;	
 				
 				return page;
 			}
@@ -340,9 +351,19 @@ public class CrewPageController {
 		
 		// 크루 메인페이지(대시보드) 가기
 		@GetMapping(value="/crew_main_page.go")
-		public String crew_main_page(@RequestParam String crew_idx) {
+		public String crew_main_page(@RequestParam String crew_idx,Model model) {
 			logger.info("크루 대시보드 실행");
 			logger.info("crew idx = "+crew_idx);
+			
+			model.addAttribute("crew_idx", crew_idx);
+			// 크루 정보 가져오기
+			CrewDTO crew = crewpage_service.crew_info(crew_idx);
+			String crew_id = crew.getCrew_id();
+			logger.info("crew main page crew_id = "+crew_id);
+			model.addAttribute("crew_id", crew_id);
+			String name = crew.getName();
+			model.addAttribute("name", name);
+			logger.info("crew main page crew_name = "+name);
 			
 			return "crew_main_page";
 		}
@@ -399,7 +420,28 @@ public class CrewPageController {
 			logger.info("oneboardlist : "+limitedMembers);
 			return limitedMembers; 
 		}			
-				
+		
+		
+		// 크루 메인페이지 사진게시글 목록 가져오기
+		@GetMapping(value = "/crew_photo_list.ajax")
+		@ResponseBody 
+		public List<CrewBoardDTO> crew_photo_list(@RequestParam Map<String,String> params,HttpSession session,Model model){
+					
+			logger.info("params : " + params);
+			String crewidx = params.get("crew_idx");			
+			// 문자열인 크루idx를 int로 형변환
+			String page_ =  params.get("page");
+			String size_ =  params.get("size");
+			int page = Integer.parseInt(page_);
+			int size = Integer.parseInt(size_);
+			int offset = size * (page - 1);
+			
+			List<CrewBoardDTO> photolist = 	crewpage_service.crew_photo_list(crewidx,offset,size);
+		
+			logger.info("photolist : "+photolist);
+			return photolist; 
+		}	
+		
 		
 		//  카카오 api test code
 		@GetMapping(value="/kakao")
