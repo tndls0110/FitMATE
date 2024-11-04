@@ -208,6 +208,15 @@ public class RegDataService {
         regData_dao.insertRegion(params);
     }
 
+    public List<RegCountyDTO> regRegionTrash() {
+        return regData_dao.regRegionTrash();
+    }
+
+    public void restoreRegion(Map<String, String> params, int admin_idx) {
+        params.put("admin_idx", Integer.toString(admin_idx));
+        regData_dao.restoreRegion(params);
+    }
+
     public List<RegCountyDTO> regRegionSub(String region_idxS) {
         int region_idx = Integer.parseInt(region_idxS);
         return regData_dao.regRegionSub(region_idx);

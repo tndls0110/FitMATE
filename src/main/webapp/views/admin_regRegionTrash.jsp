@@ -17,7 +17,7 @@
     <div class="right_wrapper">
         <c:import url="layout/admin_header.jsp" />
         <div class="title">
-            <h2>지역 정보 관리</h2>
+            <h2>지역 정보 관리 > 삭제한 항목</h2>
         </div>
         <ul class="noDesc menu_tab">
             <li class="active_tab">
@@ -28,11 +28,16 @@
             </li>
         </ul>
         <div class="contents narrow">
-            <h3 class="capt">기존 항목</h3>
+            <h3 class="capt">삭제한 항목</h3>
             <ul class="noDesc narrow">
+                <c:if test="${list.size() == 0}">
+                    <li>
+                        <input type="text" value="삭제한 항목이 없습니다." class="full" readonly />
+                    </li>
+                </c:if>
                 <c:forEach items="${list}" var="list">
                     <li>
-                        <form id="${list.region_idx}" action="admin_updateRegion.do" method="post">
+                        <form id="${list.region_idx}" action="admin_restoreRegion.do" method="post">
                             <div class="btn_flex narrow">
                                 <input type="hidden" name="region_idx" value="${list.region_idx}" />
                                 <input type="hidden" name="reg_type" value="update" />
@@ -47,22 +52,7 @@
                     </li>
                 </c:forEach>
             </ul>
-            <form id="insert" action="admin_insertRegion.do" method="post">
-                <ul class="noDesc narrow">
-                    <li>
-                        <h3 class="capt">항목 추가</h3>
-                        <div class="btn_flex narrow">
-                            <div class="width80p">
-                                <input type="text" name="region_name" maxlength="1000" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
-                            </div>
-                            <div class="width20p">
-                                <input type="submit" value="추가" class="mainbtn full flex_right" />
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </form>
-            <button onclick="location.href='admin_regRegionTrash.go'" class="textbtn full">삭제한 항목 보기</button>
+            <button onclick="location.href='admin_regRegion.go'" class="textbtn full">돌아가기</button>
         </div>
     </div>
 </div>

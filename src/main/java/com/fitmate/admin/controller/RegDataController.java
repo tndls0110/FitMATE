@@ -186,6 +186,26 @@ public class RegDataController {
 		return page;
 	}
 
+	@RequestMapping (value = "/admin_regRegionTrash.go")
+	public String regRegionTrash (Model model, HttpSession session) {
+		page = "admin_regRegionTrash";
+		//main_controller.checkPermit(model, session);
+		//String admin_idx = session.removeAttribute("loginIdx");
+		int admin_idx = 1;
+		model.addAttribute("list", regData_service.regRegionTrash());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_restoreRegion.do")
+	public String restoreRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.restoreRegion(params, admin_idx);
+		return page;
+	}
+
 	@RequestMapping (value = "/admin_regRegion_sub.go")
 	public String regRegionSub (String region_idx, Model model, HttpSession session) {
 		page = "admin_regRegion_sub";

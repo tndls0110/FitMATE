@@ -37,6 +37,8 @@ public interface RegDataDAO {
     void updateRegion(Map<String, String> params);
     void deleteRegion(Map<String, String> params);
     void insertRegion(Map<String, String> params);
+    List<RegCountyDTO> regRegionTrash();
+    void restoreRegion(Map<String, String> params);
     List<RegCountyDTO> regRegionSub(int region_idx);
     void updateRegionSub(Map<String, String> params);
     void deleteRegionSub(Map<String, String> params);
