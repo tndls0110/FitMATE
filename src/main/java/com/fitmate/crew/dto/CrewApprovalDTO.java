@@ -15,7 +15,25 @@ public class CrewApprovalDTO {
 	// 처리일시 
 	private LocalDateTime date;
 	
+	// 크루원 목록idx (이미 크루원인지 여부를 체크하기 위함. => 가입상태1(정상회원)으로 값이 존재한다면 이미 크루원.)
+	private int member_idx;
 	
+	
+	
+	@Override
+	public String toString() {
+		return "CrewApprovalDTO [join_idx=" + join_idx + ", crew_idx=" + crew_idx + ", join_id=" + join_id + ", status="
+				+ status + ", date=" + date + ", member_idx=" + member_idx + "]";
+	}
+
+	public int getMember_idx() {
+		return member_idx;
+	}
+
+	public void setMember_idx(int member_idx) {
+		this.member_idx = member_idx;
+	}
+
 	public String getCreate_date() {
         if (date == null) {
             return "";

@@ -228,8 +228,7 @@
     // 확인하고자하는 멤버ID
     var member_id = '${profile.user_id}';
 
-    // 내 ID => 나중에 sessionID로 갈아껴줘야 함.
-    var currentUserId = 'member01';
+    var currentUserId = '${sessionScope.loginId}';
     
     // 크루회원 프로필인 경우
     if(profileType === '1'){

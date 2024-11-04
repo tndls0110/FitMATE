@@ -176,7 +176,7 @@
     var crew_idx = ${crew_idx};
     
     // 현재 유저ID
-    var currentUserId = 'member01';
+    var currentUserId = '${sessionScope.loginId}'; 
     
     // Ajax로 부터 반환받은 정보
     var crew_name; // 크루명
