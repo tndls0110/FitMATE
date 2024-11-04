@@ -19,7 +19,7 @@ public class ReportService {
     @Autowired ReportDAO report_dao;
 
     // 신고 목록
-    public Map<String, Object> list(int page, int cnt, String opt, String keyword) {
+    public Map<String, Object> list(int page, int cnt, String opt, String keyword, String sortType) {
         int limit = cnt;
         int offset = (page - 1) * cnt;
         int totalPages = report_dao.allCount(cnt);
@@ -30,7 +30,7 @@ public class ReportService {
         result.put("totalIdx", totalIdx);
         result.put("currentPage", page);
         result.put("offset", offset);
-        result.put("list", report_dao.list(limit, offset, opt, keyword));
+        result.put("list", report_dao.list(limit, offset, opt, keyword, sortType));
 
         return result;
     }

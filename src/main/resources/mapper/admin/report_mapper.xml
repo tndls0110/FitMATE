@@ -42,8 +42,21 @@
                 <if test="param4 != null and !param4.equals('') and param3.equals('board_idx')">
                     r.board_idx = #{param4}
                 </if>
+
+                <if test="param5.equals('reported')">
+                    r.report_prog = 1
+                </if>
+                <if test="param5.equals('inProgress')">
+                    r.report_prog = 2
+                </if>
+                <if test="param5.equals('blind')">
+                    r.report_prog = 3
+                </if>
+                <if test="param5.equals('completed')">
+                    r.report_prog = 4
+                </if>
             </where>
-            ORDER BY r.report_idx DESC LIMIT #{param1} OFFSET #{param2}
+            DESC LIMIT #{param1} OFFSET #{param2}
     </select>
 
     <!-- 신고 내역 상세 보기 -->

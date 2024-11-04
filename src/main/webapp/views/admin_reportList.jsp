@@ -41,7 +41,14 @@
                             <th>신고자</th>
                             <th>작성자</th>
                             <th>신고일시</th>
-                            <th>상태</th>
+                            <form>
+                                <th>
+                                    <input type="hidden" name="sortType" value="reported" />
+                                    <button type="submit" onclick="pageShow(1)" class="ankerbtn">
+                                        상태 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
+                                    </button>
+                                </th>
+                            </form>
                         </tr>
                     </thead>
                     <tfoot>
@@ -90,5 +97,5 @@
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script src="resources/js/admin_report.js"></script>
+<script src="resources/js/admin_reportList.js"></script>
 </html>

@@ -32,10 +32,10 @@ public class ReportController {
 
 	@RequestMapping (value = "/report_list.ajax")
 	@ResponseBody
-	public Map<String, Object> list(String page, String cnt, String opt, String keyword) {
+	public Map<String, Object> list(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		return report_service.list(pageInt, cntInt, opt, keyword);
+		return report_service.list(pageInt, cntInt, opt, keyword, sortType);
 	}
 
 	// 신고 상세보기

@@ -15,7 +15,7 @@ public interface ReportDAO {
     // 신고 목록
     int allCount(int cnt);
     int countIdx();
-    List<NoticeDTO> list(int limit, int offset, String opt, String keyword);
+    List<NoticeDTO> list(int limit, int offset, String opt, String keyword, String sortType);
 
     // 신고 상세
     ReportDTO detail(String report_idx);

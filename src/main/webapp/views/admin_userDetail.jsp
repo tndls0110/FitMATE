@@ -72,7 +72,7 @@
                     <td class="left">${member.board_cnt}</td>
                 </tr>
                 <tr>
-                    <th class="left">마지막 활동일시</th>
+                    <th class="left">최근 활동일시</th>
                     <td class="left">${member.last_regdate}</td>
                 </tr>
                 <tr>

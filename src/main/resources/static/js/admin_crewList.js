@@ -16,15 +16,15 @@ function sorterChanger() {
     switch (sortType){
         case '':
             sort.value = 'desc';
-            btn.innerHTML = '마지막 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            btn.innerHTML = '최근 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
             break;
         case 'asc':
             sort.value = '';
-            btn.innerHTML = '마지막 이용일시 <i class="bi bi-caret-up-fill" style="font-size: 14px;"></i>';
+            btn.innerHTML = '최근 이용일시 <i class="bi bi-caret-up-fill" style="font-size: 14px;"></i>';
             break;
         case 'desc' :
             sort.value = 'asc';
-            btn.innerHTML = '마지막 이용일시 <i class="bi bi-caret-down-fill" style="font-size: 14px;"></i>';
+            btn.innerHTML = '최근 이용일시 <i class="bi bi-caret-down-fill" style="font-size: 14px;"></i>';
             break;
     }
 }

@@ -6,6 +6,31 @@ let vPages = 10;
 const searchParams = new URLSearchParams(window.location.search);
 let searchType = searchParams.get('searchType');
 let keywords = searchParams.get('keywords');
+let sortType = searchParams.get('sortType');
+
+sorterChanger();
+
+function sorterChanger() {
+    let sort = document.getElementsByName('sortType')[0];
+    let btn = document.getElementsByClassName('ankerbtn')[0];
+    switch (sortType){
+        case '':
+            sort.value = 'reported';
+            break;
+        case 'reported':
+            sort.value = 'inProgress';
+            break;
+        case 'inProgress' :
+            sort.value = 'blind';
+            break;
+        case 'blind':
+            sort.value = 'completed';
+            break;
+        case 'completed' :
+            sort.value = '';
+            break;
+    }
+}
 
 pageShow(showPage);
 
@@ -17,7 +42,8 @@ function pageShow(page) {
             'page': page,
             'cnt': cnt,
             'opt': searchType,
-            'keyword': keywords
+            'keyword': keywords,
+            'sortType': sortType
         },
         dataType: 'json',
         success: function(data) {

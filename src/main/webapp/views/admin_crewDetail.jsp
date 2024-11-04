@@ -104,7 +104,7 @@
                     <td class="left">${crew.create_date}</td>
                 </tr>
                 <tr>
-                    <th class="left">마지막 활동일시</th>
+                    <th class="left">최근 활동일시</th>
                     <td class="left">${crew.last_date}</td>
                 </tr>
             </table>

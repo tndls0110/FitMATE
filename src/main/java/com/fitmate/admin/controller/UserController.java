@@ -59,7 +59,6 @@ public class UserController {
 	public Map<String, Object> crewList(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		logger.info("sortType: "+sortType);
 		return user_service.crewList(pageInt, cntInt, opt, keyword, sortType);
 	}
 

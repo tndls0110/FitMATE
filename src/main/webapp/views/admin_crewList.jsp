@@ -48,7 +48,7 @@
                                 <th>
                                     <input type="hidden" name="sortType" value="desc" />
                                     <button type="submit" onclick="pageShow(1)" class="ankerbtn">
-                                        마지막 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
+                                        최근 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
                                     </button>
                                 </th>
                             </form>
