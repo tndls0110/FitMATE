@@ -248,7 +248,7 @@
       height: 24px;
       margin : -27px -25px 0px 2px;
     }
-    #write{
+    #update{
       width: 404px;
       height: 50px;
       border-radius: 6px;
@@ -329,7 +329,9 @@
               <label for="file">
                 <div class = "btn-upload"><i class="bi bi-upload"></i></div>
               </label>
+
               <input type="file" id="file" name="files" multiple="multiple" onchange="readFile(this)">
+
             </div>
             <div class = "image_total">
                 <c:forEach items="${file}" var = "files">
@@ -360,10 +362,11 @@
   var end_time = '${journal.journal_end}';
   var change = '${journal.journal_cate}';
   var date = '${journal.date}';
-
+  var journal_idx = '${journal.journal_idx}';
   console.log("시작 시간:", start_time);
   console.log("끝난 시간:",end_time);
   console.log('value : ' + change);
+  console.log('journal_idx:'+journal_idx);
 
 
 
@@ -404,7 +407,48 @@
     }
   }
 
+  const delete_idx = [];
+  function delete_img(file_idx){
+    const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
 
+    //만약 값이 있으면 remove
+    console.log("img:",img);
+
+    const idx = {
+      'file_idx' : file_idx
+    };
+
+    delete_idx.push(idx);
+    console.log("삭제할 idx :", delete_idx);
+    if(img){
+      img.remove();
+    }
+  }
+
+
+  const f =[];
+  //이미지 미리보기
+  function readFile(input){
+    console.log(input.files);
+    var reader;
+    const f_bound = {};
+    for(var file of input.files){
+      f.push(file);
+    }
+
+    console.log("전달해야하는 파일:",f);
+
+
+    //파일 분리하기
+    for(var file of input.files){
+      //파일 읽어오기
+      reader = new FileReader(); //파일 객체로부터 binary를 읽어올 수 있는 객체
+      reader.readAsDataURL(file); //파일 객체로부터 DATA URL을 읽어올 수 있음
+      reader.onload = function(e){ //파일 다 읽었으면 function 안의 내용 실행
+        $('.image_total').append('<img class="preview" src = "' + e.target.result+ '"/>');
+      }
+    }
+  }
 
 
   //만약에 값이 중간에 바뀌면.. this.value로 다시 넣어주기
@@ -427,8 +471,33 @@
     }else if (start_time > end_time) {
       alert('종료 시간은 시작 시간보다 빠를 수 없습니다');
     }
+
+
+
+
+    //1. 저장해둔 delete_idx값 param으로 가져가서 삭제
+    console.log("삭제할 idx :", delete_idx);
+    if(delete_idx.length >0){
+      for (var idx of delete_idx){
+        console.log("삭제할 idx 분리:", idx);
+        real_delete_img(idx);
+      }
+    }
+
+
+    //2. file update
+
+    console.log("update 할 file 길이:",f.length);
+
+    console.log("update 할 file:",f);
+    if(f.length >0){
+      file_update(f,journal_idx);
+    }
+
+
     //ajax로 전달할 param 만들기
-    var param = {id : "${journal.user_id}"}
+    var param = {id : "${journal.user_id}", journal_idx : ${journal.journal_idx}}
+
     $('form').find('input, select, textarea').each(function(idx, item) {
       console.log("아이템:", item);
       console.log("아이템0:", item[0]);
@@ -440,9 +509,10 @@
       if (name == 'option') {
         if ($(item)[0].defaultSelected != $(item[0].selected)) {
           console.log("아이템0:", item[0]);
-
           param[$(item).attr('name')] = $(item).val();
         }
+      }else if(name == 'files'){
+        //insert_files();
       }else{
         if($(item)[0].defaultValue != $(item)[0].value){
           param[$(item).attr('name')] = $(item).val();
@@ -450,6 +520,25 @@
       }
     });
     console.log('param:',param);
+    update_content(param);
+  }
+
+
+
+
+  function update_content(param){
+    console.log("update 해야 하는 매개변수:",param);
+    $.ajax({
+      type : 'GET',
+      url : 'update_content.ajax',
+      data : param,
+      dataType: 'JSON',
+      success : function(data){
+        console.log(data);
+      },error : function (e){
+        console.log(e);
+      }
+    });
   }
 
 
@@ -498,48 +587,10 @@
     }
   }
 
-  //이미지 미리보기
-  function readFile(input){
-    console.log(input.files);
-    var reader;
 
 
-    //파일 분리하기
-    for(var file of input.files){
-      //파일 읽어오기
-      reader = new FileReader(); //파일 객체로부터 binary를 읽어올 수 있는 객체
-      reader.readAsDataURL(file); //파일 객체로부터 DATA URL을 읽어올 수 있음
-      reader.onload = function(e){ //파일 다 읽었으면 function 안의 내용 실행
-        $('.image_total').append('<img class="preview" src = "' + e.target.result+ '"/>');
-      }
-    }
-  }
 
 
-  function delete_img(file_idx){
-    const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
-
-    //만약 값이 있으면 remove
-    console.log("img:",img);
-
-    if(img){
-      img.remove();
-    }
-
-    $.ajax({
-      type : 'GET',
-      url : 'delete_img.ajax',
-      data : {"file_idx":file_idx},
-      dataType : 'JSON',
-      success : function(data){
-        console.log(data);
-        console.log("삭제 성공 : ",data.success);
-
-      },error : function(e){
-        console.log(e);
-      }
-    })
-  }
 
 
 
@@ -568,8 +619,55 @@
     }
   }
 
+  //실제로 삭제
+function real_delete_img(idx){
+
+  $.ajax({
+    type : 'GET',
+    url : 'delete_img.ajax',
+    data : idx,
+    dataType : 'JSON',
+    success : function(data){
+      console.log(data);
+      console.log("삭제 성공 : ",data.success);
+    },error : function(e){
+      console.log(e);
+    }
+  })
+}
+function file_update(f,journal_idx){
+  console.log("업데이트 해야 하는 file:",f);
+
+  for (var file of f){
+    console.log("file 분리 :",file);
+    file["journal_idx"]=journal_idx;
+    console.log("file로 전달하게 될 매개변수 : ", file);
+    var formData = new FormData();
+    formData.append('journalIdx',journal_idx);
+    formData.append('file',file);
+
+    $.ajax({
+      type : 'POST',
+      url : 'file_insert.ajax',
+      data : formData,
+      dataType: 'JSON',
+      enctype:'multipart/form-data',
+      processData :false,//얘네는 다 false처리
+      contentType:false, //얘네는 다 false처리
+      success : function (data){
+        console.log(data.success);
+        location.href = "schedule.go";
+
+      },error : function(e){
+        console.log(e);
+      }
+
+    })
 
 
+  }
+
+}
 
 
 </script>
