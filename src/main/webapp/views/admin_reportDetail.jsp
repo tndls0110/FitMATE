@@ -64,12 +64,17 @@
                     <tr>
                         <th>신고 게시글</th>
                         <td colspan="3">
-                            <p>${info.subject}</p>
-                            <c:if test="${info.file_cnt > 0}">
-                                <p>
-                                    <!-- 추후 파일 여러 장 입력하게 될 경우 이 구간 수정할 것 -->
-                                    <img src="/photo/${info.new_filename}" alt="${info.ori_filename}" />
-                                </p>
+                            <c:if test="${info.board_type == 1}">
+                                <p>${info.subject}</p>
+                                <c:if test="${info.file_cnt > 0}">
+                                    <p>
+                                        <!-- 추후 파일 여러 장 입력하게 될 경우 이 구간 수정할 것 -->
+                                        <img src="/photo/${info.new_filename}" alt="${info.ori_filename}" />
+                                    </p>
+                                </c:if>
+                            </c:if>
+                            <c:if test="${info.board_type == 2}">
+                                <p>${info.content}</p>
                             </c:if>
                         </td>
                     </tr>
