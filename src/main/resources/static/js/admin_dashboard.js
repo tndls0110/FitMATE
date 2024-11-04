@@ -19,17 +19,37 @@ function waitingAnimator() {
     }
 }
 
-getData();
+getTableData();
+getChartData();
 
-function getData() {
+function getTableData() {
     $.ajax({
         type: 'post',
-        url: 'admin_getDashboardData.ajax',
+        url: 'admin_getDashboardTableData.ajax',
+        data: {},
+        dataType: 'json',
+        success: function(data) {
+            drawTable(data.cnt);
+        },
+        error: function(e) {}
+    });
+}
+
+function drawTable(list) {
+    for (var i = 0; i < list.length; i++) {
+        document.getElementsByClassName('cnt'+i)[0].innerHTML = list[i];
+    }
+}
+
+function getChartData() {
+    $.ajax({
+        type: 'post',
+        url: 'admin_getDashboardChartData.ajax',
         data: {},
         dataType: 'json',
         success: function(data) {
             for (let i = 0; i < 5 ; i++) {
-                chartData.push([getChartDate(4-i), data.cnt[i].member, data.cnt[i].board, data.cnt[i].crew, data.cnt[i].report]);
+                chartData.push([getChartDate(4-i), data.cnt[0+i], data.cnt[5+i], data.cnt[10+i], data.cnt[15+i]]);
             }
             google.charts.load('current', {
                 'packages':['corechart']

@@ -82,27 +82,24 @@ public class MainController {
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
 		//checkPermit(model, session);
-		model.addAttribute("data", main_service.dashboardList3());
 		model.addAttribute("notice", main_service.dashboardList1());
 		model.addAttribute("report", main_service.dashboardList2());
-		Map<String, Object> result = new HashMap<String, Object>();
-		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
-		for (int i = 0; i < 5; i++) {
-			list.add(main_service.getData(i));
-		}
-		result.put("chart", list);
 		return page;
 	}
 
-	@RequestMapping (value = "admin_getDashboardData.ajax")
+	@RequestMapping (value = "admin_getDashboardChartData.ajax")
 	@ResponseBody
-	public Map<String, Object> getData() {
+	public Map<String, Object> getChartData() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
-		for (int i = 0; i < 5; i++) {
-			list.add(main_service.getData(i));
-		}
-		result.put("cnt", list);
+		result.put("cnt", main_service.getChartData());
+		return result;
+	}
+
+	@RequestMapping (value = "admin_getDashboardTableData.ajax")
+	@ResponseBody
+	public Map<String, Object> getTableData() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("cnt", main_service.getTableData());
 		return result;
 	}
 

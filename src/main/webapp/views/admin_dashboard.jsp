@@ -43,28 +43,28 @@
                     <tbody>
                     <tr>
                         <td class="left">회원 수</td>
-                        <td>${data.data_member_today}명</td>
-                        <td>${data.data_member_thisweek}명</td>
+                        <td><span class="cnt0">0</span>명</td>
+                        <td><span class="cnt1">0</span>명</td>
                     </tr>
                     <tr>
                         <td class="left">크루 수</td>
-                        <td>${data.data_crew_today}개</td>
-                        <td>${data.data_crew_thisweek}개</td>
+                        <td><span class="cnt2">0</span>개</td>
+                        <td><span class="cnt3">0</span>개</td>
                     </tr>
                     <tr>
                         <td class="left">한 줄 게시글</td>
-                        <td>${data.data_textboard_today}건</td>
-                        <td>${data.data_textboard_thisweek}건</td>
+                        <td><span class="cnt4">0</span>건</td>
+                        <td><span class="cnt5">0</span>건</td>
                     </tr>
                     <tr>
                         <td class="left">사진 게시글</td>
-                        <td>${data.data_photoboard_today}건</td>
-                        <td>${data.data_photoboard_thisweek}건</td>
+                        <td><span class="cnt6">0</span>건</td>
+                        <td><span class="cnt7">0</span>건</td>
                     </tr>
                     <tr>
                         <td class="left">신고 회수</td>
-                        <td>${data.data_report_today}회</td>
-                        <td>${data.data_report_thisweek}회</td>
+                        <td><span class="cnt8">0</span>회</td>
+                        <td><span class="cnt9">0</span>회</td>
                     </tr>
                     </tbody>
                 </table>

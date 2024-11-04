@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,29 +51,13 @@ public class MainService {
         return main_dao.dashboardList2();
     }
 
-    // 대시보드 > 증감 데이터 목록
-    public DashboardDTO dashboardList3() {
-        DashboardDTO dto = new DashboardDTO();
-        dto.setData_member_today(main_dao.dashboardList3_1());
-        dto.setData_member_thisweek(main_dao.dashboardList3_2());
-        dto.setData_crew_today(main_dao.dashboardList3_3());
-        dto.setData_crew_thisweek(main_dao.dashboardList3_4());
-        dto.setData_textboard_today(main_dao.dashboardList3_5());
-        dto.setData_textboard_thisweek(main_dao.dashboardList3_6());
-        dto.setData_photoboard_today(main_dao.dashboardList3_7());
-        dto.setData_photoboard_thisweek(main_dao.dashboardList3_8());
-        dto.setData_report_today(main_dao.dashboardList3_9());
-        dto.setData_report_thisweek(main_dao.dashboardList3_10());
-        return dto;
+    // 대시보드 > 차트
+    public List<Integer> getChartData() {
+        return main_dao.getChartData();
     }
 
-    // 대시보드 > 차트
-    public Map<String, Integer> getData(int i) {
-        Map<String, Integer> list = new HashMap<String, Integer>();
-        list.put("member", main_dao.getDataMember(i));
-        list.put("board", main_dao.getDataBoard(i));
-        list.put("crew", main_dao.getDataCrew(i));
-        list.put("report", main_dao.getDataReport(i));
-        return list;
+    // 대시보드 > 증감 데이터 목록
+    public List<Integer> getTableData() {
+        return main_dao.getTableData();
     }
 }
