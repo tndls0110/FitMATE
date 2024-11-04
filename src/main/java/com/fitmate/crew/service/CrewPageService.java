@@ -99,7 +99,8 @@ public class CrewPageService {
 		String noti_url = crewidx+"=url주소";
 		// 크루원 목록 가져오기
 		List<CrewMemberDTO> member_list = crewpage_dao.crew_member_list(crew_idx);
-		
+		// notis_cate 1로 맞춰주기
+		name = "1";
 		// 알림 보내기
 		for (CrewMemberDTO  member : member_list) {
 			// 멤버 id(수신자id) 가져오기
