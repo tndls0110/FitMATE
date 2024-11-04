@@ -172,11 +172,11 @@ public class CrewController {
 	// 크루 입단 신청
 	@PostMapping(value = "/join_crew.ajax")
 	@ResponseBody
-	public Map<String, Object> joinCrew(String crew_idx, String join_id){
+	public Map<String, Object> joinCrew(String crew_idx, String join_id, String leader_id, String crew_name){
 		boolean success = false;
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		int row = crew_service.joinCrew(crew_idx, join_id);
+		int row = crew_service.joinCrew(crew_idx, join_id, leader_id, crew_name);
 		
 		// Insert에 성공했을 때 
 		if(row > 0) {

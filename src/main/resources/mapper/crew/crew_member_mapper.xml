@@ -84,7 +84,7 @@ INNER JOIN (
 		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 
 	</if>
 	<if test="searchFilter == 2 and searchKeyword != null and !searchKeyword.equals('')">
-		AND B.member_id LIKE CONCAT('%', #{searchKeyword}, '%') 
+		AND B.user_id LIKE CONCAT('%', #{searchKeyword}, '%') 
 	</if>
 	</where>
 	<choose>

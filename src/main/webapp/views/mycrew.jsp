@@ -43,7 +43,7 @@ div.recruit, div.recruit_odd {
 	display: inline-block;
 	width: 15%;
 	aspect-ratio: 1;
-	border: 1px solid black;
+	border: 0 solid black;
 	border-radius: 50%;
 }
 
@@ -344,9 +344,12 @@ a.crew_create {
 	   }
 	   
 	   console.log('dqweItem:'+item.leader_nick);
-	   
-      var profile = item.leader_profile ? '<img class="recruit_left" src="resources/img/' + item.leader_profile + '"/>' 
+	  
+	  // 프로필
+      var profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
+   	  
+                                         
       
   	  // Header: 모집게시글링크-board_idx, 프로필사진, 크루명, 크루장 닉네임, MBTI                                   
       var header = '';                                   

@@ -275,23 +275,44 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 	}
 	
 	// 크루 입단신청하기
-	public int joinCrew(String crew_idx_, String join_id) {
+	public int joinCrew(String crew_idx_, String join_id, String leader_id, String crew_name) {
 		
 		int crew_idx = Integer.parseInt(crew_idx_);
 		// 1: 신청 / 2: 신청 거절/ 3: 수락
 		int status = 1;
 		
-		return crew_dao.joinCrew(crew_idx, join_id, status);
+		int row = crew_dao.joinCrew(crew_idx, join_id, status);
+		
+		// 입단신청 성공시 => 크루장에게 알림전송
+		if(row > 0) {
+			// 크루명
+			String name = crew_name;
+			
+			// 크루장ID(수신자ID)
+			String notir_id = leader_id;
+			
+			// 알람 내용
+			String noti_content = "'" +name+ "' 크루에 '" +join_id+ "'님이 입단을 요청하였습니다.";
+			
+			// url 주소 == 크루입단신청관리 주소로 보내주기
+			String noti_url = "mycrew_joinList.go?idx=" + crew_idx;
+			
+			
+			// 알림 보내기
+			row = crew_dao.crew_alarmSend(notir_id, noti_content, noti_url);
+			
+		}		
+		
+		return row;
 	}
 
 	// 입단신청 취소하기.
 	public int leaveCrew(String join_idx_) {
 
 		int join_idx = Integer.parseInt(join_idx_);
+		int row = crew_dao.leaveCrew(join_idx);
 		
-		logger.info(join_idx_);
-		
-		return crew_dao.leaveCrew(join_idx);
+		return row;
 	}
 
 	// 크루 탈퇴

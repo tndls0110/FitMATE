@@ -172,10 +172,10 @@ public class CrewMemberController {
 	// 크루원 추방하기
 	@PostMapping(value = "/crewMemberFire.ajax")
 	@ResponseBody
-	public Map<String, Object> memberFire(String member_idx){
+	public Map<String, Object> memberFire(String member_idx, String member_nick, String crew_name, String member_id){
 		boolean success = false;
 		
-		int row = crewmember_service.memberFire(member_idx); 
+		int row = crewmember_service.memberFire(member_idx, member_nick, crew_name, member_id); 
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		

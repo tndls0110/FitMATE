@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dao.CrewMemberDAO;
 import com.fitmate.crew.dto.CrewJoinDTO;
 import com.fitmate.crew.dto.CrewMemberProfileDTO;
@@ -20,7 +21,7 @@ import com.fitmate.crew.dto.CrewMemberProfileDTO;
 public class CrewMemberService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CrewMemberDAO crewmember_dao;
-	
+	@Autowired CrewDAO crew_dao;
 	
 	public List<CrewJoinDTO> joinList(String crew_idx_, Boolean order, String searchFilter_, String searchKeyword) {
 		
@@ -63,26 +64,52 @@ public class CrewMemberService {
 
 	@Transactional
 	public int joinApproval(Map<String, String> params) {
-		/*
-		 * // 현재 날짜와 시간 가져오기 LocalDateTime date = LocalDateTime.now(); // 원하는 포맷으로 날짜와
-		 * 시간을 String으로 변환
-		 * 
-		 * DateTimeFormatter formatter =
-		 * DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); String formattedDate =
-		 * date.format(formatter);
-		 * 
-		 * // map에 date 추가. params.put("date", formattedDate);
-		 * 
-		 * logger.info("params Test : " + params);
-		 */
         
         int status = Integer.parseInt(params.get("status"));
-		
+        
         // 신청 수락/거절인경우 공통수행. => 신청자목록 상태바꾸기.
 		int row = crewmember_dao.joinApproval(params);
 		 // 신청수락인 경우 크루원 목록테이블에도 저장. 
 		if(row > 0 && status == 3) { 
 			row = crewmember_dao.crewMember(params); 
+		}
+		
+		
+		// 최종적으로 모든 신청 수락/거절이 정상적으로 처리되었을시 => 크루원에게 알림전송
+		if(row > 0) {
+			// 크루 idx
+			String crew_idx = params.get("crew_idx");
+			
+			// 크루명 받아오기 
+			String name = params.get("crew_name");
+			logger.info("crew_name 체킹: " + name);
+			logger.info("crew_name 파람체킹: " + params.get("crew_name"));
+			
+			// 입단 신청자ID(수신자ID)
+			String notir_id = params.get("join_id");
+			
+			// 알람내용
+			String noti_content = "";
+			
+			// url 주소
+			String noti_url = "";
+			
+			// status 2: 거절, 3: 수락
+			if(status == 2) {
+				noti_content = "'" +name+ "' 크루 입단이 거절되었습니다.";
+				
+				// url 주소 미존재
+				noti_url = "none";
+			}else if(status == 3){
+				noti_content = "'" +name+ "' 크루 입단이 승인되었습니다.";
+				
+				// url 주소는 크루페이지
+				noti_url = "crew_main_page.go?crew_idx=" + crew_idx;
+			}
+			
+			// 알림 보내기
+			row = crew_dao.crew_alarmSend(notir_id, noti_content, noti_url);
+			
 		}
         
         return row;
@@ -110,7 +137,7 @@ public class CrewMemberService {
 	
 
 	// 크루멤버 추방
-	public int memberFire(String member_idx_) {
+	public int memberFire(String member_idx_, String member_nick, String crew_name, String member_id) {
 		// 현재 날짜와 시간 가져오기
         LocalDateTime localDate = LocalDateTime.now();
         // 원하는 포맷으로 날짜와 시간을 String으로 변환
@@ -122,6 +149,22 @@ public class CrewMemberService {
 		int member_idx = Integer.parseInt(member_idx_);
 		
 		int row = crewmember_dao.memberFire(member_idx, date);
+		
+		// 크루멤버 추방에 성공하였다면 => 크루원에게 알림전송
+		if(row > 0) {
+			// 알림 수신자ID
+			String notir_id = member_id;
+			
+			// 알람내용
+			String noti_content = "'" +member_nick+ "'님은 '" +crew_name+ "' 크루에서 추방되었습니다.";
+			
+			// url 주소 미존재
+			String noti_url = "none";
+			
+			// 알림 보내기
+			row = crew_dao.crew_alarmSend(notir_id, noti_content, noti_url);
+		}
+		
 		
 		return row;
 	}

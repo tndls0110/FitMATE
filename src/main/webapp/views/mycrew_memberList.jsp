@@ -66,9 +66,11 @@
 
         .width_50 {
             display: inline-block;
-            margin-left: 3%;
-            margin-bottom: 2%;
-            width: 50%;
+		    margin-left: 3%;
+		    margin-bottom: 2%;
+		    width: 50%;
+		    position: absolute;
+		    top: 10%;
         }
 
         .txt_opacity {
@@ -103,14 +105,14 @@
 
         #crew_leader {
             color: white;
-            position: absolute;
-            bottom: 27%;
-            left: 7%;
-            border: 2px solid white;
-            border-radius: 10px;
-            background-color: #048187; 
-            font-size: 20px;
-        }
+		    position: absolute;
+		    bottom: 7%;
+		    left: -12%;
+		    border: 2px solid white;
+		    border-radius: 10px;
+		    background-color: #048187;
+		    font-size: 20px;
+		}
 
         .no_people {
             margin: 15% auto;
@@ -138,6 +140,12 @@
         .bi.bi-sort-down, .bi.bi-sort-down-alt, .order_by{
         	font-size: 13px;
         } 
+        
+        .profile_detail_set{
+        	display: inline-block;
+        	width: 60px;
+        	height: 60px;
+        }
         
     </style>
 </head>
@@ -217,6 +225,9 @@
           searchKeyword = $('.searchKeyword').val();
           // 2-2. 목록 불러오기 함수   
           crew_memberList();
+			
+          // 검색 키워드 초기화. (검색했는지 여부를 판단하기 위함.)
+          searchKeyword = '';
        }
     }
     
@@ -236,14 +247,15 @@
             },
             dataType: 'JSON',
             success: function(list) {
-                // 프로필 목록을 비워주기.
-                $('.profile_list').empty();
+            	
+                $('.profile_list').empty(); // 프로필 목록 비우기
 
                 console.log('list : ', list);
                 
                 $.each(list, function(index, data) {
-                    // 멤버수 체크하기. (크루장은 인원수에서 제외하기 때문에 index값과 동일.)
-                    memberCount = index;
+                	
+               		// 멤버수 체크하기. 
+                    memberCount += 1;
                  	
                  	// 크루명
                     crew_name = data.crew_name;
@@ -292,11 +304,8 @@
                             $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
                         }
                         
-                        console.log('id ? : ' + id);
-                        
                         profile_info = '<div class="profile relative ' +id+ '">'
-                        				+ '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
-                                        	+ '<i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>' // 나중에 프로필로 변경.
+                        				+ '<a class="profile_detail_set ' +id+ '" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
                                         + '</a>'
                                         + '<div class="width_50">' 
                                             + '<div class="profile_right">'
@@ -319,26 +328,31 @@
                         if(leader_id === user_id){
                         	$('.profile_list').prepend(profile_info);
     	                    $('.leader_chk' + index).show(); // 크루장 표시
-    	                    $('#profile_detail_set').attr('href', );  // 크루장 표시
                         }else{
                         	$('.profile_list').append(profile_info);
                         	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
                         }
+                        
+                        console.log('profile 확인!!: ' + profile);  
+                        // 프로필  
+                        if (profile !== ''){
+                        	$('.profile_detail_set.' + id).html('<img src="/photo/' + profile + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">');
+                        	/* $('.profile_detail_set.' + id).css('background-image', 'url(/photo/' + profile + ')'); */
+                    	} else {
+                     		$('.profile_detail_set.' + id).html('<i class="bi bi-person-circle" style="font-size:60px"></i>');
+        				}
                     }
-                    
-                });	
-                
-                // 회원수가 1명도 없는 경우 '크루에 멤버가 없습니다.' 이미지 띄우기.
-                if(memberCount < 1){
-                    $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
-                }
+                });
+                // 크루원이 한명도 없는경우 => 크루원이 없습니다.
+                if(memberCount === 1){
+         	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
+         	    }
             },
             error: function(e) {
                 console.log(e);
             }
         });	
     }
-    
     
     // 닉네임 오름차순/내림차순 버튼 클릭이벤트
     $(document).on('click', '[id="order_asc"], [id="order_desc"]', function() {

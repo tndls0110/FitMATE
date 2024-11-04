@@ -69,6 +69,9 @@ public interface CrewDAO {
 	
 	// 크루 탈퇴하기
 	int memberExit(int member_idx);
+	
+	// 크루전용 알림전송 
+	int crew_alarmSend(String notir_id, String noti_content, String noti_url);
 
 	
 }

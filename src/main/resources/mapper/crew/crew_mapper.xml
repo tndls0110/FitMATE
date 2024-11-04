@@ -274,6 +274,12 @@ ORDER BY C.comment_idx;
 	INSERT INTO crew_join(crew_idx, join_id, status) VALUES(#{param1}, #{param2}, #{param3}) 
 </insert>
 
+<!-- 크루전용 알림전송 -->
+<insert id="crew_alarmSend" parameterType="String">
+	INSERT INTO noti(notir_id, notis_idx, notis_cate, noti_content, noti_url)
+		VALUES(#{notir_id}, 0, 2, #{noti_content}, #{noti_url})
+</insert>
+
 <!-- 크루 입단신청 취소 -->
 <delete id="leaveCrew" parameterType="int">
 	DELETE FROM crew_join WHERE join_idx = #{join_idx}
