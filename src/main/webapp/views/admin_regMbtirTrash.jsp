@@ -17,7 +17,7 @@
     <div class="right_wrapper">
         <c:import url="layout/admin_header.jsp" />
         <div class="title">
-            <h2>헬스 MBTI 정보 관리</h2>
+            <h2>헬스 MBTI 정보 관리 > 삭제한 항목</h2>
         </div>
         <ul class="noDesc menu_tab">
             <li>
@@ -34,27 +34,29 @@
             </li>
         </ul>
         <div class="contents narrow">
-            <h3 class="capt">기존 항목</h3>
+            <h3 class="capt">삭제한 항목</h3>
             <ul class="noDesc narrow">
+                <c:if test="${list.size() == 0}">
+                    <li>
+                        <input type="text" value="삭제한 항목이 없습니다." class="full" readonly />
+                    </li>
+                </c:if>
                 <c:forEach items="${list}" var="list">
                     <li>
-                        <div class="btn_flex narrow">
-                            <div class="width80p">
-                                <input type="text" name="mbtir_name" value="${list.mbtir_name}" maxlength="1000" class="full flex_left" readonly />
+                        <form action="/admin_restoreMbtir.do?mbtir_idx=${list.mbtir_idx}" method="post">
+                            <div class="btn_flex narrow">
+                                <div class="width80p">
+                                    <input type="text" name="mbtir_name" value="${list.mbtir_name}" maxlength="1000" class="full flex_left" readonly />
+                                </div>
+                                <div class="width20p">
+                                    <input type="submit" value="복구" class="disabledbtn full flex_right" />
+                                </div>
                             </div>
-                            <div class="width20p">
-                                <input type="submit" value="수정" class="disabledbtn full flex_right" onclick="location.href='admin_regMbtir_detail.go?mbtir_idx=${list.mbtir_idx}'" />
-                            </div>
-                        </div>
+                        </form>
                     </li>
                 </c:forEach>
             </ul>
-            <ul class="noDesc">
-                <li>
-                    <p><input type="button" value="추가하기" class="full mainbtn" onclick="location.href='admin_regMbtir_insert.go'" /></p>
-                </li>
-            </ul>
-            <button onclick="location.href='admin_regMbtirTrash.go'" class="textbtn full">삭제한 항목 보기</button>
+            <button onclick="location.href='admin_regMbtir.go'" class="textbtn full">돌아가기</button>
         </div>
     </div>
 </div>

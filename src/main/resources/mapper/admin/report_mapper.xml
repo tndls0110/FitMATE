@@ -56,7 +56,7 @@
                     r.report_prog = 4
                 </if>
             </where>
-            DESC LIMIT #{param1} OFFSET #{param2}
+            LIMIT #{param1} OFFSET #{param2}
     </select>
 
     <!-- 신고 내역 상세 보기 -->

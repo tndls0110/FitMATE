@@ -1,5 +1,6 @@
 // 헬스 MBTI 결과 정보 관리
 manageMBTIR();
+
 function manageMBTIR() {
     let urlParams = new URLSearchParams(window.location.search);
     let mbtir_idx = urlParams.get('mbtir_idx');
@@ -20,8 +21,6 @@ function regData(regType) {
     document.getElementsByName('reg_type')[0].value = regType;
     document.getElementsByTagName('form')[0].submit();
 }
-
-
 
 // 이미지 파일 입력시 미리보기 출력, 입력 개수 제한
 function readFile(input){

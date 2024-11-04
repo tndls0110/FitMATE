@@ -161,7 +161,6 @@ public class RegDataService {
                     }
 
                     // 새 파일 업로드
-                    logger.info("img before iterator: "+files.toString());
                     for (MultipartFile file : files) {
                         if (file.getOriginalFilename().lastIndexOf(".") < 0) {
                             regData_dao.insertImg(params.get("mbtir_idx"), "");
@@ -184,6 +183,14 @@ public class RegDataService {
                 regData_dao.deleteMbtiResult(params);
                 break;
         }
+    }
+
+    public List<RegMBTIDTO> regMbtiResultTrash() {
+        return regData_dao.regMbtiResultTrash();
+    }
+
+    public void restoreMbtiResult(String mbtir_idx, int admin_idx) {
+        regData_dao.restoreMbtiResult(mbtir_idx, admin_idx);
     }
 
     // 지역 정보 관리

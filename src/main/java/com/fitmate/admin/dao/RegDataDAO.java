@@ -31,6 +31,8 @@ public interface RegDataDAO {
     int deleteImg(String mbtir_idx);
     int insertImg(String mbtir_idx, String mbtir_img);
     int deleteMbtiResult(Map<String, String> params);
+    List<RegMBTIDTO> regMbtiResultTrash();
+    int restoreMbtiResult(String mbtir_idx, int admin_idx);
 
     // 지역 정보 관리
     List<RegCountyDTO> regRegion();

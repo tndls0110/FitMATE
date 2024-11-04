@@ -81,6 +81,14 @@
         UPDATE mbti_r SET mbtir_show = 0, admin_idx = #{admin_idx} WHERE mbtir_idx = #{mbtir_idx}
     </update>
 
+    <select id="regMbtiResultTrash" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtir_idx, mbtir_name FROM mbti_r WHERE mbtir_show = 0
+    </select>
+
+    <update id="restoreMbtiResult" parameterType="map">
+        UPDATE mbti_r SET mbtir_show = 1, admin_idx = #{admin_idx} WHERE mbtir_idx = #{mbtir_idx}
+    </update>
+
     <!-- 지역 정보 관리 -->
     <select id="regRegion" resultType="com.fitmate.admin.dto.RegCountyDTO">
         SELECT region_idx, region_name FROM region WHERE region_show = 1

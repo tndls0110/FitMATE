@@ -143,8 +143,6 @@ public class RegDataController {
 	public String regMbtiResultDetail (MultipartFile[] mbtir_img, @RequestParam Map<String, String> params, Model model, HttpSession session) {
 		//int admin_idx = session.getAttribute("loginIdx");
 		int admin_idx = 1;
-		logger.info(params.get("mbtir_idx"));
-		logger.info("img at controller: "+mbtir_img.toString());
 		regData_service.regMbtiResultDetail(mbtir_img, params, admin_idx);
 		if (params.get("reg_type").equals("update")) {
 			page = "redirect:/admin_regMbtir_detail.go?mbtir_idx="+params.get("mbtir_idx");
@@ -152,6 +150,24 @@ public class RegDataController {
 			page = "redirect:/admin_regMbtir.go";
 		}
 		//main_controller.checkPermit(model, session);
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_regMbtirTrash.go")
+	public String regMbtiResultTrash (Model model, HttpSession session) {
+		page = "admin_regMbtirTrash";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("list", regData_service.regMbtiResultTrash());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_restoreMbtir.do")
+	public String restoreMbtiResult (String mbtir_idx, Model model, HttpSession session) {
+		page = "redirect:/admin_regMbtir.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.restoreMbtiResult(mbtir_idx, admin_idx);
 		return page;
 	}
 
