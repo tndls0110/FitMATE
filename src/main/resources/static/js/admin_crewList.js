@@ -39,7 +39,8 @@ function pageShow(page) {
             'page': page,
             'cnt': cnt,
             'opt': searchType,
-            'keyword': keywords
+            'keyword': keywords,
+            'sortType': sortType
         },
         dataType: 'json',
         success: function(data) {
@@ -78,7 +79,11 @@ function listPrint(list, totalIdx, currentPage, offset) {
         tags += '<td>'+list[i].region_name+' '+list[i].regions_name+'</td>';
         tags += '<td>'+list[i].cnt_members+'</td>';
         tags += '<td>'+list[i].create_date+'</td>';
-        tags += '<td>'+list[i].last_date+'</td>';
+        if (list[i].last_date == ''){
+            tags += '<td>이용내역 없음</td>';
+        } else {
+            tags += '<td>'+list[i].last_date+'</td>';
+        }
         if (list[i].status){
             tags += '<td><button class="mainbtn minbtn">운영중</button></td>';
         } else {

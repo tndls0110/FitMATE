@@ -46,6 +46,9 @@
             <if test="param6 != null and !param6.equals('') and param6.equals('desc')">
                 ORDER BY (SELECT cleared_date FROM restriction WHERE user_id = m.user_id) DESC
             </if>
+            <if test="(param5 == null or param5.equals('')) and (param6 == null or param6.equals(''))">
+                ORDER BY m.regdate DESC
+            </if>
             LIMIT #{param2} OFFSET #{param1}
     </select>
 
@@ -72,7 +75,7 @@
     </select>
 
     <select id="crewList" resultType="com.fitmate.admin.dto.CrewListDTO">
-        SELECT c.crew_idx, c.name, c.crew_id, c.create_date, c.status, c.last_date, m.nick,
+        SELECT c.crew_idx, c.name, c.crew_id, c.create_date, c.status, m.nick, c.last_date,
         (SELECT r.region_name FROM region r JOIN region_sub rs ON r.region_idx = rs.region_idx WHERE rs.regions_idx = c.regions_idx) AS 'region_name',
         (SELECT rs.regions_name FROM region_sub rs WHERE rs.regions_idx = c.regions_idx) AS 'regions_name',
         ((SELECT COUNT(member_idx) FROM crew_member WHERE crew_idx = c.crew_idx) + 1) AS 'cnt_members'
@@ -94,6 +97,9 @@
         <if test="param5 != null and !param5.equals('') and param5.equals('desc')">
             ORDER BY c.last_date DESC
         </if>
+        <if test="param5 == null or param5.equals('')">
+            ORDER BY c.crew_idx DESC
+        </if>
         LIMIT #{param2} OFFSET #{param1}
     </select>
 
@@ -112,7 +118,8 @@
                 (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 4 AND i.crew_idx = c.crew_idx) AS 'cnt_notice',
                 (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 2 AND i.crew_idx = c.crew_idx) AS 'cnt_singleline',
                 (SELECT COUNT(b.board_idx) FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 3 AND i.crew_idx = c.crew_idx) AS 'cnt_photo',
-                (SELECT b.subject FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 1 AND i.crew_idx = c.crew_idx) AS 'recruit'
+                (SELECT b.subject FROM crew_board b JOIN crew_idx i WHERE b.board_idx = i.board_idx AND b.category_idx = 1 AND i.crew_idx = c.crew_idx) AS 'recruit',
+                (SELECT MAX(b.date) FROM crew_board b JOIN crew_idx i ON b.board_idx = i.board_idx WHERE i.crew_idx = c.crew_idx) AS 'last_date'
         FROM crew c JOIN member m ON c.crew_id = m.user_id WHERE c.crew_idx = #{param}
     </select>
 
