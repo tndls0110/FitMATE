@@ -100,12 +100,22 @@ table tfoot td{
     font-weight: 700;
 }
 
+.narrow td.profileImage{
+    padding-bottom: 24px;
+}
+
 .narrow td .profImg{
     width: 140px;
     height: 140px;
-    margin: 0 auto 24px;
+    margin: 0 auto;
     border-radius: 5px;
+    background-color: #e9ecef;
     background-size: cover;
+}
+
+.narrow td .bi-person-square{
+    font-size: 140px;
+    margin: 0 auto
 }
 
 

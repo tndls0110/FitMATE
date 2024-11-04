@@ -27,12 +27,12 @@
                     <col width="auto" />
                 </colgroup>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" class="profileImage">
                         <c:if test="${crew.profile != ''}">
                             <div class="profImg" style="background-image: url('/photo/${crew.profile}')"></div>
                         </c:if>
                         <c:if test="${crew.profile == ''}">
-                            <i class="bi bi-person-square" style="font-size: 140px;"></i>
+                            <i class="bi bi-person-square"></i>
                         </c:if>
                     </td>
                 </tr>
@@ -42,7 +42,11 @@
                 </tr>
                 <tr>
                     <th class="left">크루장 ID</th>
-                    <td class="left">${crew.crew_id}</td>
+                    <td class="left">
+                        <a href="admin_userDetail.go?user_id=${crew.crew_id}" target="_blank">
+                            ${crew.crew_id}
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <th class="left">크루장 닉네임</th>

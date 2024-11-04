@@ -71,7 +71,10 @@ function listPrint(list, totalIdx, currentPage, offset) {
         tags += '<a href="admin_crewDetail.go?crew_idx='+list[i].crew_idx+'">';
         tags += list[i].name;
         tags += '</a></td>';
-        tags += '<td>'+list[i].crew_id+' ('+list[i].nick+')</td>';
+        tags += '<td class="left">';
+        tags += '<a href="admin_userDetail.go?user_id='+list[i].crew_id+'">';
+        tags += list[i].crew_id+' ('+list[i].nick+')';
+        tags += '</a></td>';
         tags += '<td>'+list[i].region_name+' '+list[i].regions_name+'</td>';
         tags += '<td>'+list[i].cnt_members+'</td>';
         tags += '<td>'+list[i].create_date+'</td>';

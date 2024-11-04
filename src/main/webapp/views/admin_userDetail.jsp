@@ -26,14 +26,12 @@
                     <col width="auto" />
                 </colgroup>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" class="profileImage">
                         <c:if test="${member.profile != ''}">
                             <div class="profImg" style="background-image: url('/photo/${member.profile}')"></div>
                         </c:if>
                         <c:if test="${member.profile == ''}">
-                            <div class="profImg" style="background-image: url('/photo/${member.profile}')">
-                                <i class="bi bi-person-square" style="font-size: 140px;"></i>
-                            </div>
+                            <i class="bi bi-person-square"></i>
                         </c:if>
                     </td>
                 </tr>
