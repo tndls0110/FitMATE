@@ -357,6 +357,21 @@
     max-height: 200px;
 }
 	
+	.gallery {
+            display: flex;
+            flex-wrap: wrap;
+             justify-content: space-evenly; /* 왼쪽 정렬 */
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .gallery-item {
+            width: 33%;
+            margin: 0px;
+        }
+		 #loading {
+            text-align: center;
+            display: none;
+        }
 	</style>
 
 </head>
@@ -368,20 +383,20 @@
 	
 	<div class="contents crew_contents">
 	 
-             <p style="display: inline; margin-right: 10px;">크루이름 대시보드</p>
+            <p style="display: inline; margin-right: 10px;">${crew_name} 대시보드</p>
            <div id="profileList" class="profile-list" style="display: inline;">
             <!-- 프로필 사진을 여기에 추가 -->
           
             <!-- 추가 프로필 사진 -->
         </div>
 		
-		<input type="hidden" id="crew_idx" name="crew_idx" value="6">
-		<input type="hidden" id="crew_id" name="crew_id" value="크루장id">
-		<input type="hidden" id="user_id" name="user_id" value="member02">
+		<input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}">
+		<input type="hidden" id="crew_id" name="crew_id" value="${crew_id}">
+		<input type="hidden" id="user_id" name="user_id" value="${sessionScope.loginId}">
 		<div class="list" style="margin:15px 0;"> <!-- 공지사항 시작 -->
 		 <p>
 		 <input type="text" class="full" name="crew_notice" value="" readonly/>
-		 <button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()">더보기</button>
+		 <button class="writebtn mainbtn minbtn relative-button" onclick="crew_notice_go()">공지 +</button>
 		 </p>
 		</div> <!-- 공지사항 끝 -->
 		
@@ -422,7 +437,9 @@
 		 
 		 <p><input style="margin-top: 10px;" type="text" class="full" name="photostart" value="사진게시글자리" readonly/></p>
 		<div class="list custom_photo"> <!-- 사진 넣는 공간 -->
-		<span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span><span><input type="image" src="/photo/4bfd9405-fc09-478f-ab2f-01ea6149f9a0.png"/></span>
+			<div class="gallery" id="gallery">
+			</div>
+			<div id="loading">로딩 중...</div>
 		</div>
 		
 		</div> <!-- <div class="list custom-photolist"> 사진 끝 -->		
@@ -463,6 +480,7 @@ var userId = document.getElementById('user_id').value;
 // 크루장 판단하기 
 const isCrewLeader = true;
 var crewIdx = $('#crew_idx').val();
+var crewId =  $('#crew_id').val();
 
 	document.addEventListener('DOMContentLoaded', function() {
 		let event_create = []; // 이벤트 배열 초기화
@@ -604,6 +622,88 @@ var crewIdx = $('#crew_idx').val();
 		date = $('#date').html();
 
 		console.log('오늘 날짜:', date);
+		
+		// 사진게시글 리스트 페이징 시작
+			const gallery = $('#gallery'); // 갤러리 컨테이너 선택
+	        const loading = $('#loading'); // 로딩 텍스트 선택
+	        let page = 1; // 현재 페이지 번호
+	        const pageSize = 6; // 한 번에 로드할 이미지 수
+	        let isLoading = false; // 로딩 상태 체크
+			let noimg = false;
+	        // 이미지를 로드하는 함수
+	        function loadImages() {
+	            if (isLoading) return; // 이미 로딩 중이면 중복 요청 방지
+	            isLoading = true;
+	            if(noimg == false){
+	            loading.show(); // 로딩 표시
+	            }
+	            $.ajax({
+	                url: "crew_photo_list.ajax", // 서버에 Ajax 요청
+	                method: 'GET',
+	                data: { page: page, size: pageSize, crew_idx: $('#crew_idx').val() },
+	                success: function(data) {
+	                	console.log('포토리스트아작스 실행');
+	                	console.log(data);
+	                    renderImages(data); // 이미지 렌더링
+	                    page++; // 페이지 번호 증가
+	                    console.log(page);
+	                    isLoading = false; // 로딩 완료
+	                    loading.hide(); // 로딩 숨김
+	                },
+	                error: function(error) {
+	                    console.error('Error loading images:', error);
+	                    isLoading = false; // 에러 발생 시 로딩 완료
+	                    loading.hide(); // 로딩 숨김
+	                }
+	            });
+	        }
+
+	        // 이미지를 갤러리에 추가하는 함수
+	         function renderImages(items) {
+	            if (!items || items.length === 0) {
+	            	console.log('더 이상 불러올 이미지가 없습니다.');
+	            		noimg = true;
+	            	  isLoading = false; // 로딩 상태 해제
+	                  loading.hide(); // 로딩 숨김
+	                return;
+	            }
+	            items.forEach(item => {
+	                if (item.board_idx) { // item에 url이 존재하는지 확인
+	                	console.log('랜더링이미지 함수실행');
+	                    const img = $('<img>').attr('src','/photo/'+item.new_filename); // img 요소 생성
+	                    const redirectUrl = '/Fitmate/crew_photo_detail.go?board_idx=' + item.board_idx+'&crew_id='+crewId+'&crew_idx='+crewIdx;
+	                    img.on('click', function() {
+	                        window.location.href = redirectUrl; // 클릭 시 해당 URL로 이동
+	                    });
+	                    const div = $('<div>').addClass('gallery-item').append(img); // div 요소 생성
+	                    gallery.append(div); // div를 갤러리에 추가
+	                }
+	            });
+	        }
+	        
+	         let timeout;
+	         $('.contents.crew_contents').on('scroll', function() {
+	             clearTimeout(timeout);
+	             timeout = setTimeout(onScroll, 100); // 100ms 후에 onScroll 실행
+	         });
+	        
+	         function onScroll() {
+	        	    const scrollTop = $('.contents.crew_contents').scrollTop();
+	        	    const elementHeight = $('.contents.crew_contents').height();
+	        	    const contentHeight = $('.contents.crew_contents')[0].scrollHeight;
+
+	        	    // 스크롤 위치가 요소의 하단에 가까워졌는지 확인
+	        	    if (scrollTop + elementHeight >= contentHeight - 100) {
+	        	        console.log("스크롤이벤트실행");
+	        	        loadImages(); // 새로운 이미지 로드
+	        	    }
+	        	}
+
+	         
+	        loadImages(); // 페이지 로드 시 초기 이미지 로드
+		// 사진게시글 리스트 페이징 끝
+		
+		
 	}); // document.addEventListener('DOMContentLoaded', function()
 
 	function change_css(){
@@ -707,14 +807,15 @@ var crewIdx = $('#crew_idx').val();
 
 	                        // 원하는 형식으로 출력
 	                        const formattedEndTime = endHours + ':'  + endMinutes;
-	                        
+	                        var crew_idx = $('#crew_idx').val(); // crew_idx의 값
+	                        var user_id = $('#user_id').val(); // user_id의 값
 	                        // 크루 일정 정보 출력
                             $('#modalBody').append(
                             		
                             		'<div class="schedule-item" data-id="' + crewScheduleDTO.plan_idx + '">' +
                             	    '<form action="' + postform + '" method="POST">' + 
-                            	        '<input type="hidden" id="user_id" name="user_id" value="member02">' +
-                            	        '<input type="hidden" id="crew_idx" name="crew_idx" value="6">'+
+                            	        '<input type="hidden" id="user_id" name="user_id" value="'+user_id+'">' +
+                            	        '<input type="hidden" id="crew_idx" name="crew_idx" value="'+crew_idx+'">'+
                             	        '<input type="hidden" name="plan_idx" value="' + crewScheduleDTO.plan_idx + '">' + 
                             	        '<h3 class="title">제목 : ' + (crewScheduleDTO.plan_subject || '제목 없음') + '</h3>' +
                             	        '<p><span><i class="bi bi-calendar-check"></i></span><span style="padding-left: 8px;">' + (crewScheduleDTO.plan_date) + '</span></p>' +
@@ -753,6 +854,8 @@ var crewIdx = $('#crew_idx').val();
 	        }
 	    });
 	} // function get_crewplan(date)
+	
+	
 	
 	function draw_journal(journal){
 		var keySet = Object.keys(journal.content);
@@ -801,24 +904,24 @@ var crewIdx = $('#crew_idx').val();
 	} // function draw_journal(journal)
 
 	
-
+	
 	
 	// 크루일정 작성하러 가기
 	function crew_plan_write(){
 		var crewIdx = $('#crew_idx').val();
-		location.href = "crew_schedule_write.go?crew_idx=" + crewIdx;
+		location.href = "crew_schedule_write.go?crew_idx=" + crewIdx+"&crew_id="+crewId;
 	}
 	
 	// 크루 한줄게시글 보러 가기
 	function crew_oneboard_go(){
 		var crewIdx = $('#crew_idx').val();
-		location.href = "crew_oneboard.go?crew_idx=" + crewIdx;
+		location.href = "crew_oneboard.go?crew_idx=" + crewIdx+"&crew_id="+crewId;
 	}
 	
 	// 크루 공지사항 보러 가기
 	function crew_notice_go(){
 		var crewIdx = $('#crew_idx').val();
-		location.href = "crew_page_notice.go?crew_idx=" + crewIdx;
+		location.href = "crew_page_notice.go?crew_idx=" +crewIdx+"&crew_id="+crewId;
 	}
 
 

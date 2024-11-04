@@ -12,6 +12,14 @@ public class CrewBoardDTO {
 	private	int status;
 	private	int category_idx;
 	private String nick;
+	private String new_filename;
+	
+	public String getNew_filename() {
+		return new_filename;
+	}
+	public void setNew_filename(String new_filename) {
+		this.new_filename = new_filename;
+	}
 	public int getBoard_idx() {
 		return board_idx;
 	}

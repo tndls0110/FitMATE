@@ -207,12 +207,13 @@ textarea, hr{
 				<!-- 제목 -->
 				<h2 class="title">크루이름<span>사진게시글</span></h2>
 					
-					<input type="hidden" id="sessionId" value="sessionid">
+					<input type="hidden" id="sessionId" value="${sessionScope.loginId}">
                 	<!-- 작성자 id 넣기 -->
                 	 <input type="hidden" id="board_id" name="board_id" value="${board.board_id}">
                 	 <!-- 크루 idx 넣기 -->
                 	 <input type="hidden" id="board_idx" name="board_idx" value="${board.board_idx}">     	             
-                    
+                    <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> 
+                      <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> 
                     <div id="img_list" class="list">
    							<img alt="${file.ori_filename}" id="photo_file" src="/photo/${file.new_filename}"><br/>
                     </div>  
@@ -252,8 +253,8 @@ textarea, hr{
                        <div id="reportModal" class="modal">
 						    <div class="modal-content">
 						        <span class="close" onclick="hideReportModal()">&times;</span>
-						        <h5 id="modaltitle">신고하기/블라인드하기/블라인드취소하기/삭제하기</h5>
-						        <p id="modalcontent">신고하시겠습니까?/블라인드하시겠습니까?/블라인드취소하시겠습니까?/삭제하시겠습니까?</p>
+						        <h5 id="modaltitle"></h5>
+						        <p id="modalcontent"></p>
 						        <p id="buttontype">
 						      	<button onclick="submitReport()">확인</button></p>
 						        <button onclick="hideReportModal()">취소하기</button>
@@ -288,13 +289,21 @@ textarea, hr{
      var board = "${board}"; // EL을 사용하여 모델 값 가져오기
      console.log(board); // 콘솔에 출력
 
-
+	
      var member = "${member.nick}"; // EL을 사용하여 모델 값 가져오기
      console.log(member); // 콘솔에 출력
      console.log(member.profile);
-     
+     var crewIdx = $('#crew_idx').val();
+     var crewId = $('#crew_id').val();
+     var loginId = '${sessionScope.loginId}';
      // 크루장인지 확인하는 변수
      var isCrewLeader = false;
+     if(loginId === $('#crew_id').val() ){
+    	 isCrewLeader = true;
+     }
+     else{
+    	 isCrewLeader = false;
+     }
      console.log(Object.keys(board)); 
      Buttontype(1);
      
@@ -320,52 +329,57 @@ textarea, hr{
     	     const modalContent = document.getElementById("modalcontent");
     	     const photosubject =  document.getElementById("contentInput");
     	     
-    	    // 내가 작성자이면 
-    	    if (sessionId === "${board.board_id}") {
-    	      //  deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
-    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}';
-    	        modalTitle.textContent = '삭제하기';
-    	        modalContent.textContent = '정말로 삭제하시겠습니까';
-    	        console.log(reportUrl);
-    	    }
-    	    // 크루장이면
-    	    else if (isCrewLeader) {
-    	        // 숨겨진 게시글이면
-    	        if ("${board.status}" === "2") {
-    	          //  deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_oneboard_unblind?board_idx=${board.board_idx}\')">블라인드취소하기</button>';
-    	            reportUrl = 'crew_photo_unblind?board_idx=${board.board_idx}';
-    	            modalTitle.textContent = '블라인드풀기';
-        	        modalContent.textContent = '정말로 블라인드 해제 하시겠습니까';
-        	        console.log(reportUrl);
-    	        } else {
-    	          //  deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_oneboar_blind?board_idx=${board.board_idx}\')">블라인드하기</button>';
-    	            reportUrl = 'crew_photo_blind?board_idx=${board.board_idx}';
-    	            modalTitle.textContent = '블라인드하기';
-        	        modalContent.textContent = '정말로 블라인드 하시겠습니까';
-        	        console.log(reportUrl);
-    	        }
-    	    }
-			
-    	    // 블라인드되지 않은 게시글에만 신고하기 버튼 추가
-    	    else {
-    	    	if("${board.status}" !== "2"){
-			  //  deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}\')">신고하기</button>';
-			    reportUrl = 'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}';
-			    modalTitle.textContent = '신고하기';
-    	        modalContent.textContent = '정말로 신고 하시겠습니까';
-    	        
-    	        	console.log(reportUrl);
-    	    	}
-    	    	else{
-    	    		 modalTitle.textContent = '블라인드된 글입니다';
-    	    	     modalContent.textContent = '블라인드된 글입니다';
-    	    	     reportUrl = 'crew_photo_detail.go?board_idx=${board.board_idx}';
-    	    	     console.log(reportUrl);
-    	    	}
-    	    }
-
-    	    // 상태에 따라 블라인드된 게시글 표시
-    	   
+    	     
+    	     
+    	     if(isCrewLeader){ // 크루장이라면
+    	    	 if (sessionId === "${board.board_id}") { // 내가 작성자라면
+    	    	      //  deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
+    	    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}';
+    	    	        modalTitle.textContent = '삭제하기';
+    	    	        modalContent.textContent = '정말로 삭제하시겠습니까';
+    	    	        console.log(reportUrl);
+    	    	    }
+    	    	 else{
+    	    		 if ("${board.status}" === "2") { // 숨겨진 글이라면 블라인드 풀기
+           	          //  deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_oneboard_unblind?board_idx=${board.board_idx}\')">블라인드취소하기</button>';
+           	            reportUrl = 'crew_photo_unblind?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
+           	            modalTitle.textContent = '블라인드풀기';
+               	        modalContent.textContent = '정말로 블라인드 해제 하시겠습니까';
+               	        console.log(reportUrl);
+           	        }
+    	    		 if("${board.status}" === "1"){ // 보여지는 글이라면 블라인드하기
+    	    			 reportUrl = 'crew_photo_blind?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
+           	            modalTitle.textContent = '블라인드하기';
+               	        modalContent.textContent = '정말로 블라인드 하시겠습니까';
+               	        console.log(reportUrl);
+    	    		 }
+    	    	 }
+    	     }
+    	     else{ // 크루장이 아니라면
+    	    	 if (sessionId === "${board.board_id}") { // 내가 작성자라면
+   	    	      //  deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
+   	    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
+   	    	        modalTitle.textContent = '삭제하기';
+   	    	        modalContent.textContent = '정말로 삭제하시겠습니까';
+   	    	        console.log(reportUrl);
+   	    	    }
+    	    	 else{ // 내가 작성자가 아니라면
+    	    		 if("${board.status}" !== "2"){
+    	   			  //  deleteButton = '<button type="button" class="mainbtn small" onclick="showReportModal(\'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}\')">신고하기</button>';
+    	   			    reportUrl = 'crew_report.go?board_idx=${board.board_idx}&board_id=${board.board_id}&crew_idx=' + crewIdx;
+    	   			    modalTitle.textContent = '신고하기';
+    	       	        modalContent.textContent = '정말로 신고 하시겠습니까';
+    	       	        
+    	       	        	console.log(reportUrl);
+    	       	    	}
+    	    		 else{
+    	    			 modalTitle.textContent = '블라인드된 글입니다';
+        	    	     modalContent.textContent = '블라인드된 글입니다';
+        	    	     reportUrl = 'crew_photo_detail.go?board_idx=${board.board_idx}';
+        	    	     console.log(reportUrl);
+    	    		 }
+    	    	 }
+    	     }
 
     	    // 버튼을 #buttontype 요소에 추가
     	  //  $('#buttontype').append(deleteButton);
@@ -373,11 +387,11 @@ textarea, hr{
 	
      console.log(reportUrl);
 
-     function showReportModal(reportUrl) {
+     function showReportModal() {
           // 신고 URL 저장
          document.getElementById("reportModal").style.display = "block"; // 모달 보여주기
          
-         console.log(reportUrl);
+         console.log('쇼모달창 주소 ',reportUrl);
          
      }
 
