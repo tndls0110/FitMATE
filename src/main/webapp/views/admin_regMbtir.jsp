@@ -40,7 +40,7 @@
                     <li>
                         <div class="btn_flex narrow">
                             <div class="width80p">
-                                <input type="text" name="mbtir_name" value="${list.mbtir_name}" class="full flex_left" readonly />
+                                <input type="text" name="mbtir_name" value="${list.mbtir_name}" maxlength="1000" class="full flex_left" readonly />
                             </div>
                             <div class="width20p">
                                 <input type="submit" value="수정" class="subbtn full flex_right" onclick="location.href='admin_regMbtir_detail.go?mbtir_idx=${list.mbtir_idx}'" />

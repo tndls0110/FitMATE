@@ -30,7 +30,7 @@
                                 <input type="hidden" name="reportr_idx" value="${list.reportr_idx}" />
                                 <input type="hidden" name="reg_type" value="update" />
                                 <div class="width80p">
-                                    <input type="text" name="reportr_con" value="${list.reportr_con}" class="full flex_left" onblur="regData('update', ${list.reportr_idx})" />
+                                    <input type="text" name="reportr_con" value="${list.reportr_con}" maxlength="1000" class="full flex_left" onblur="regData('update', ${list.reportr_idx})" />
                                 </div>
                                 <div class="width20p">
                                     <input type="button" value="삭제" class="subbtn full flex_right" onclick="regData('delete', ${list.reportr_idx})" />
@@ -46,7 +46,7 @@
                         <h3 class="capt">항목 추가</h3>
                         <div class="btn_flex narrow">
                             <div class="width80p">
-                                <input type="text" name="reportr_con" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
+                                <input type="text" name="reportr_con" maxlength="1000" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
                             </div>
                             <div class="width20p">
                                 <input type="submit" value="추가" class="mainbtn full flex_right" />

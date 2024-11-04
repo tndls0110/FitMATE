@@ -37,7 +37,7 @@
                                 <input type="hidden" name="region_idx" value="${list.region_idx}" />
                                 <input type="hidden" name="reg_type" value="update" />
                                 <div class="width80p">
-                                    <input type="text" name="region_name" value="${list.region_name}" class="full flex_left" onblur="regData('update', ${list.region_idx})" />
+                                    <input type="text" name="region_name" value="${list.region_name}" maxlength="1000" class="full flex_left" onblur="regData('update', ${list.region_idx})" />
                                 </div>
                                 <div class="width20p">
                                     <input type="button" value="삭제" class="subbtn full flex_right" onclick="regData('delete', ${list.region_idx})" />
@@ -53,7 +53,7 @@
                         <h3 class="capt">항목 추가</h3>
                         <div class="btn_flex narrow">
                             <div class="width80p">
-                                <input type="text" name="region_name" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
+                                <input type="text" name="region_name" maxlength="1000" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
                             </div>
                             <div class="width20p">
                                 <input type="submit" value="추가" class="mainbtn full flex_right" />

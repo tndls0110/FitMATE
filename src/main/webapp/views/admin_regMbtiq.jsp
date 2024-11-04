@@ -40,7 +40,7 @@
                     <li>
                         <div class="btn_flex narrow">
                             <div class="width80p">
-                                <input type="text" name="mbtiq_con" value="${list.mbtiq_con}" class="full flex_left" readonly />
+                                <input type="text" name="mbtiq_con" value="${list.mbtiq_con}" maxlength="1000" class="full flex_left" readonly />
                             </div>
                             <div class="width20p">
                                 <input type="submit" value="수정" class="subbtn full flex_right" onclick="location.href='admin_regMbtiq_sub.go?mbtiq_idx=${list.mbtiq_idx}'" />
@@ -55,7 +55,7 @@
                         <h3 class="capt">항목 추가</h3>
                         <div class="btn_flex narrow">
                             <div class="width80p">
-                                <input type="text" name="mbtiq_con" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
+                                <input type="text" name="mbtiq_con" maxlength="1000" class="full flex_left" placeholder="추가할 항목을 입력하세요." />
                             </div>
                             <div class="width20p">
                                 <input type="submit" value="추가" class="mainbtn full flex_right" />

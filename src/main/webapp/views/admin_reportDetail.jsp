@@ -105,7 +105,7 @@
                         <div class="width80p">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
-                                    <input type="text" name="reportd_con" class="full flex_left" placeholder="비고 란에 들어갈 문구를 입력하세요." />
+                                    <input type="text" name="reportd_con" maxlength="1000" class="full flex_left" placeholder="비고 란에 들어갈 문구를 입력하세요." />
                                 </div>
                                 <div class="width20p">
                                     <input type="button" onclick="confirmReport()" value="처리 상태 변경" class="mainbtn full flex_right" />

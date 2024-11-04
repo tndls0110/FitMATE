@@ -47,7 +47,7 @@
                 <ul class="noDesc">
                     <li>
                         <h3 class="capt">결과 이름</h3>
-                        <p><input type="text" name="mbtir_name" value="${list.mbtir_name}" class="full" /></p>
+                        <p><input type="text" name="mbtir_name" maxlength="1000" value="${list.mbtir_name}" class="full" /></p>
                     </li>
                     <li>
                         <h3 class="capt">이미지 파일</h3>
@@ -62,15 +62,15 @@
                     </li>
                     <li>
                         <h3 class="capt">설명</h3>
-                        <p><textarea name="mbtir_con" class="full">${list.mbtir_con}</textarea></p>
+                        <p><textarea name="mbtir_con" maxlength="1000" class="full">${list.mbtir_con}</textarea></p>
                     </li>
                     <li>
                         <h3 class="capt">추천하는 운동</h3>
-                        <p><textarea name="mbtir_exc" class="full">${list.mbtir_exc}</textarea></p>
+                        <p><textarea name="mbtir_exc" maxlength="1000" class="full">${list.mbtir_exc}</textarea></p>
                     </li>
                     <li>
                         <h3 class="capt">추천하는 루틴</h3>
-                        <p><textarea name="mbtir_rou" class="full">${list.mbtir_rou}</textarea></p>
+                        <p><textarea name="mbtir_rou" maxlength="1000" class="full">${list.mbtir_rou}</textarea></p>
                     </li>
                 </ul>
                 <ul class="noDesc">

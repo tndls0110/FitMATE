@@ -71,7 +71,7 @@
                         <div class="width80p">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
-                                    <input type="text" name="keywords" class="full flex_left" placeholder="검색어를 입력하세요." />
+                                    <input type="text" name="keywords" maxlength="1000" class="full flex_left" placeholder="검색어를 입력하세요." />
                                     <button type="button" onclick="location.href='admin_reportList.go'" class="textbtn refresh">
                                         <i class="bi bi-x-circle-fill"></i>
                                     </button>

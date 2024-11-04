@@ -64,11 +64,11 @@
                     <c:forEach items="${mbtisub}" var="mbtisub">
                         <tr>
                             <td>
-                                <input type="text" name="mbtisub_idx_${mbtisub.mbtisub_idx}" value="${mbtisub.mbtisub_con}" onblur="updateQuestion(${mbtisub.mbtisub_idx})" />
+                                <input type="text" name="mbtisub_idx_${mbtisub.mbtisub_idx}" value="${mbtisub.mbtisub_con}" maxlength="1000" onblur="updateQuestion(${mbtisub.mbtisub_idx})" />
                             </td>
                             <c:forEach items="${mbtisub.regMBTIDTO}" var="score">
                                 <td>
-                                    <input type="text" name="mbtiscr_idx_${score.mbtiscr_idx}" value="${score.mbtiscr_scr}" onblur="updateScore(${score.mbtiscr_idx})" />
+                                    <input type="text" name="mbtiscr_idx_${score.mbtiscr_idx}" value="${score.mbtiscr_scr}" maxlength="10" onblur="updateScore(${score.mbtiscr_idx})" />
                                 </td>
                             </c:forEach>
                             <td>
