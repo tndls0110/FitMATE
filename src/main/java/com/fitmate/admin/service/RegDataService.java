@@ -230,6 +230,16 @@ public class RegDataService {
         regData_dao.insertRegionSub(params);
     }
 
+    public List<RegCountyDTO> regRegionSubTrash(String region_idxS) {
+        int region_idx = Integer.parseInt(region_idxS);
+        return regData_dao.regRegionSubTrash(region_idx);
+    }
+
+    public void restoreRegionSub(Map<String, String> params, int admin_idx) {
+        params.put("admin_idx", Integer.toString(admin_idx));
+        regData_dao.restoreRegionSub(params);
+    }
+
     // 신고 사유 관리
     public List<RegReportDTO> regReport() {
         return regData_dao.regReport();

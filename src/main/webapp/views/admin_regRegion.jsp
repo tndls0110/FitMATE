@@ -40,7 +40,7 @@
                                     <input type="text" name="region_name" value="${list.region_name}" maxlength="1000" class="full flex_left" onblur="regData('update', ${list.region_idx})" />
                                 </div>
                                 <div class="width20p">
-                                    <input type="button" value="삭제" class="subbtn full flex_right" onclick="regData('delete', ${list.region_idx})" />
+                                    <input type="button" value="삭제" class="disabledbtn full flex_right" onclick="regData('delete', ${list.region_idx})" />
                                 </div>
                             </div>
                         </form>

@@ -215,6 +215,25 @@ public class RegDataController {
 		return page;
 	}
 
+	@RequestMapping (value = "/admin_regRegion_subTrash.go")
+	public String regRegionSubTrash (String region_idx, Model model, HttpSession session) {
+		page = "admin_regRegion_subTrash";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("region", regData_service.regRegion());
+		model.addAttribute("list", regData_service.regRegionSubTrash(region_idx));
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_restoreRegion_sub.do")
+	public String restoreRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.restoreRegionSub(params, admin_idx);
+		return page;
+	}
+
 	// 신고 사유 관리
 	@RequestMapping (value = "/admin_regReport.go")
 	public String regReport (Model model, HttpSession session) {

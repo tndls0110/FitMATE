@@ -114,6 +114,14 @@
         INSERT INTO region_sub (region_idx, regions_name, admin_idx) VALUES (#{region_idx}, #{regions_name}, #{admin_idx})
     </insert>
 
+    <select id="regRegionSubTrash" resultType="com.fitmate.admin.dto.RegCountyDTO">
+        SELECT region_idx, regions_idx, regions_name FROM region_sub WHERE region_idx = #{param} AND regions_show = 0
+    </select>
+
+    <update id="restoreRegionSub" parameterType="map">
+        UPDATE region_sub SET regions_show = 1, admin_idx = #{admin_idx} WHERE regions_idx = #{regions_idx}
+    </update>
+
     <!-- 신고 사유 관리 -->
     <select id="regReport" resultType="com.fitmate.admin.dto.RegReportDTO">
         SELECT reportr_idx, reportr_con FROM report_reason WHERE reportr_show = 1

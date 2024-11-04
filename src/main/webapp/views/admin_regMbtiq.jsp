@@ -43,7 +43,7 @@
                                 <input type="text" name="mbtiq_con" value="${list.mbtiq_con}" maxlength="1000" class="full flex_left" readonly />
                             </div>
                             <div class="width20p">
-                                <input type="submit" value="수정" class="subbtn full flex_right" onclick="location.href='admin_regMbtiq_sub.go?mbtiq_idx=${list.mbtiq_idx}'" />
+                                <input type="submit" value="수정" class="disabledbtn full flex_right" onclick="location.href='admin_regMbtiq_sub.go?mbtiq_idx=${list.mbtiq_idx}'" />
                             </div>
                         </div>
                     </li>

@@ -41,6 +41,8 @@ public interface RegDataDAO {
     void updateRegionSub(Map<String, String> params);
     void deleteRegionSub(Map<String, String> params);
     void insertRegionSub(Map<String, String> params);
+    List<RegCountyDTO> regRegionSubTrash(int region_idx);
+    void restoreRegionSub(Map<String, String> params);
 
     // 신고 사유 관리
     List<RegReportDTO> regReport();

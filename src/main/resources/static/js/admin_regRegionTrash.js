@@ -8,13 +8,12 @@ function manageRegion() {
     for (let i = 0; i < document.getElementsByName('region_idx').length; i++) {
         document.getElementsByName('region_idx')[i].value = region_idx;
     }
-    document.getElementById('insert').action = 'admin_insertRegion_sub.do?region_idx='+region_idx;
-    document.getElementsByClassName('goTrash')[0].onclick = function (){
-        location.href = 'admin_regRegion_subTrash.go?region_idx='+region_idx;
+    document.getElementsByClassName('goBack')[0].onclick = function (){
+        location.href = 'admin_regRegion_sub.go?region_idx='+region_idx;
     };
 }
 
 function onOptionChange(event){
-    let region_idx = event.target.value;
-    location.href='admin_regRegion_sub.go?region_idx='+region_idx;
+    var region_idx = event.target.value;
+    location.href='admin_regRegion_subTrash.go?region_idx='+region_idx;
 }

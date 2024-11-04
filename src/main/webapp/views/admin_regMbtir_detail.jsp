@@ -78,7 +78,7 @@
                         <p><input type="button" value="수정하기" class="full mainbtn" onclick="regData('update')" /></p>
                     </li>
                     <li>
-                        <p><input type="button" value="삭제하기" class="full subbtn" onclick="regData('delete')" /></p>
+                        <p><input type="button" value="삭제하기" class="full disabledbtn" onclick="regData('delete')" /></p>
                     </li>
                 </ul>
             </form>

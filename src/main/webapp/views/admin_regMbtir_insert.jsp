@@ -66,7 +66,7 @@
                         <p><input type="submit" value="추가하기" class="full mainbtn" /></p>
                     </li>
                     <li>
-                        <p><input type="button" value="목록으로 돌아가기" class="full subbtn" onclick="location.href='admin_regMbtir.go'" /></p>
+                        <p><input type="button" value="목록으로 돌아가기" class="full disabledbtn" onclick="location.href='admin_regMbtir.go'" /></p>
                     </li>
                 </ul>
             </form>
