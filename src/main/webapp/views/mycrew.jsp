@@ -347,7 +347,7 @@ a.crew_create {
 	  
 	  // 프로필
       var profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 
-                                         : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
+                                         : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; 
    	  
                                          
       
