@@ -244,4 +244,22 @@ public class RegDataController {
 		return page;
 	}
 
+	@RequestMapping (value = "/admin_regReportTrash.go")
+	public String regReportTrash (Model model, HttpSession session) {
+		page = "admin_regReportTrash";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("list", regData_service.regReportTrash());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_restoreReport.do")
+	public String restoreReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
+		page = "redirect:/admin_regReport.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.restoreReport(params, admin_idx);
+		return page;
+	}
+
 }

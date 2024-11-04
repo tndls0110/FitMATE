@@ -250,4 +250,13 @@ public class RegDataService {
         params.put("admin_idx", Integer.toString(admin_idx));
         regData_dao.insertReport(params);
     }
+
+    public List<RegReportDTO> regReportTrash() {
+        return regData_dao.regReportTrash();
+    }
+
+    public void restoreReport(Map<String, String> params, int admin_idx) {
+        params.put("admin_idx", Integer.toString(admin_idx));
+        regData_dao.restoreReport(params);
+    }
 }

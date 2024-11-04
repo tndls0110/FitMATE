@@ -52,13 +52,6 @@
     padding: 9px;
 }
 
-input.subbtn,
-button.subbtn{
-    color: #E1E4EA;
-    border-color: #363940;
-    background-color: #363940;
-}
-
 select.bg_dark{
     border: 1px solid #474747;
     background: #474747;

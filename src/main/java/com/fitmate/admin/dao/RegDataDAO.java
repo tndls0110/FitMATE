@@ -47,5 +47,7 @@ public interface RegDataDAO {
     void updateReport(Map<String, String> params);
     void deleteReport(Map<String, String> params);
     void insertReport(Map<String, String> params);
+    List<RegReportDTO> regReportTrash();
+    void restoreReport(Map<String, String> params);
 
 }

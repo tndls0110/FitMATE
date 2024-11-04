@@ -131,4 +131,12 @@
         INSERT INTO report_reason (reportr_con, admin_idx) VALUES (#{reportr_con}, #{admin_idx})
     </insert>
 
+    <select id="regReportTrash" resultType="com.fitmate.admin.dto.RegReportDTO">
+        SELECT reportr_idx, reportr_con FROM report_reason WHERE reportr_show = 0
+    </select>
+
+    <update id="restoreReport" parameterType="map">
+        UPDATE report_reason SET reportr_show = 1, admin_idx = #{admin_idx} WHERE reportr_idx = #{reportr_idx}
+    </update>
+
 </mapper>
