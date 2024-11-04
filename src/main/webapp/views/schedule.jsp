@@ -95,6 +95,7 @@
 			border-radius: 6px 6px 6px 6px;
 			width: 500px;
 			background-color: rgba(40, 43, 52, 1);
+			margin-bottom: 10px;
 		}
 
 		.journal_datetime {
@@ -425,7 +426,7 @@
 		//처음에 실행할 때 캘린더 안에 있는 날짜 기반으로 journal 띄우기
 		$.ajax({
 			type : 'GET',
-			url : '/journal_get.ajax',
+			url : 'journal_get.ajax',
 			data : {'date' : date},
 			dataType : 'JSON',
 			success : function(journal){
@@ -690,7 +691,17 @@
 
 	function delete_journal(idx,user_id){
 		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
+		const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
+
+		//만약 값이 있으면 remove
+		console.log("img:",img);
+
+		if(img){
+			img.remove();
+		}
 		var i = idx;
+		//뭐가 문제인지 보기..
+		$('.journal[value="' + idx + '"]').remove();
 		$.ajax({
 			type : 'GET',
 			url : 'delete_journal.ajax',
@@ -698,10 +709,7 @@
 			dataType : 'JSON',
 			success : function(data){
 				console.log('success :', data.success);
-				if(data.success){
 
-					$('.journal[value="' + idx + '"]').remove();
-				}
 			}, error(e){
 				console.log(e);
 			}
