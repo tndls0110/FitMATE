@@ -28,9 +28,16 @@
 	GROUP BY cb.board_idx;
 </select>		
 
+<!--  공지사항 삭제 -->
 <delete id="crew_notice_del">
 	delete from crew_board where board_idx = #{param1} 
 </delete>
+
+ 
+<update id="crew_board_del">
+	update crew_board set status = 3 where board_idx = #{param1}
+</update>
+
 <delete id="notice_del_crewidx">
 	delete from crew_idx where board_idx = #{param1}
 </delete>
@@ -68,7 +75,7 @@
 	    crew_idx ci ON cb.board_idx = ci.board_idx
 	JOIN 
     member m ON cb.board_id = m.user_id
-	WHERE ci.crew_idx = #{crew_idx} AND cb.category_idx = 2
+	WHERE ci.crew_idx = #{crew_idx} AND cb.category_idx = 2  AND cb.status IN (1, 2)
 	GROUP BY cb.board_idx
 	ORDER BY 
     cb.date DESC
@@ -151,6 +158,7 @@ WHERE
     cb.category_idx = 3 
     AND f.category_idx = 2 
     AND ci.crew_idx = #{param1}
+    AND cb.status IN (1, 2)
     ORDER BY cb.board_idx DESC
     LIMIT #{param3} OFFSET #{param2}
 </select>

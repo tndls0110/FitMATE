@@ -26,6 +26,8 @@ public interface CrewPageDAO {
 	List<CrewBoardDTO> crew_notice_list(int crew_idx);
 
 	int crew_notice_del(String board_idx);
+	
+	int crew_board_del(String board_idx);
 
 	int notice_del_crewidx(String board_idx);
 
