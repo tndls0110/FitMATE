@@ -369,14 +369,12 @@
                     read = noti.notis_check;
 
                         //아래 코드는 수정하기...
-
                         if(read == 0){
                             if(noti.notis_cate == 2){
                                if(url == 'none'){
                                    content += '<div class="crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알림</div>';
                                }else{
                                    content += '<div class="crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알림</div>';
-
                                }
                             }else if(noti.notis_cate == 1){
                                 if(url == 'none') {
@@ -391,7 +389,6 @@
                                     content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알람</div>';
                                 }else{
                                     content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알람</div>';
-
                                 }
                             }else if(noti.notis_cate == 1){
                                 if(url == 'none') {
@@ -405,7 +402,7 @@
 
                 //알림이 없을 경우 css
                 if(data.id.length == 0){
-                    content += ' <div class="no_alarm"><i class="bi bi-bell-slash-fill"></i><div class="no_alarm_text">알림이 없습니다.</div></div>'
+                    content += ' <div class="no_alarm"><i class="bi bi-bell-slash-fill"></i><div class="no_alarm_text">알림이 없습니다.</div></div>';
                 }
                 console.log("content:",content);
                 $('#alarm_box').html(content);
@@ -422,7 +419,6 @@
             },
             error : function(e){
                 console.log(e);
-
             }
 
         })
@@ -452,9 +448,15 @@
     function url(url,idx,event){
 
         var read = document.querySelector('div[alarm_idx = "'+idx+'"]');
+
         var round = document.querySelector('.read[alarm_idx="' + idx + '"]');
         var already_read = document.querySelector('.already_read_admin_alarm');
-        if(!already_read){
+
+        read.setAttribute('read',1); //읽으면 읽음 숫자 1로
+        console.log("바뀌었는지 확인 :",read);
+
+        console.log("읽은 알림인지 확인 :",read.getAttribute('read') == 1);
+        if(!already_read || read.getAttribute('read')!= 1){
             console.log(event);
             read.style.opacity = "0.7";
             round.style.visibility ="hidden"; //jquery에서는 .html이지만 js에서는.innerHTML을 사용해야함

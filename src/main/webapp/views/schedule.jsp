@@ -773,7 +773,6 @@
 	}
 
 
-
 	//모달창 열기
 	// 모달 열기 함수
 	function openModal(day,idx) {
