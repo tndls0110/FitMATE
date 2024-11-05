@@ -49,10 +49,11 @@ public class NoticeController {
 	// 공지사항 목록
 	@RequestMapping (value = "/notice_list.ajax")
 	@ResponseBody
-	public Map<String, Object> list(String page, String cnt, String opt, String keyword) {
+	public Map<String, Object> list(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		return notice_service.list(pageInt, cntInt, opt, keyword);
+		logger.info(String.valueOf(sortType));
+		return notice_service.list(pageInt, cntInt, opt, keyword, sortType);
 	}
 
 	// 공지사항 삭제

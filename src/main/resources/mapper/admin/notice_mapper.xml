@@ -19,15 +19,44 @@
 
     <!-- 공지사항 목록 -->
     <select id="allCount" resultType="int">
-        SELECT CEIL(COUNT(notice_idx) / #{param1}) FROM notice
+        SELECT CEIL(COUNT(notice_idx) / #{cnt}) FROM notice
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
+                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
+                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="sortType.equals('noticed')">
+                notice_show = 1
+            </if>
+            <if test="sortType.equals('blind')">
+                notice_show = 0
+            </if>
+        </where>
     </select>
 
     <select id="countIdx" resultType="int">
         SELECT COUNT(notice_idx) FROM notice
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
+                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
+                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="sortType.equals('noticed')">
+                notice_show = 1
+            </if>
+            <if test="sortType.equals('blind')">
+                notice_show = 0
+            </if>
+        </where>
     </select>
 
     <select id="list" resultType="com.fitmate.admin.dto.NoticeDTO">
-        SELECT notice_idx, notice_cont, notice_regdate, (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) AS 'admin_name', notice_show
+        SELECT notice_idx, notice_cont, notice_regdate, notice_show,
+            (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) AS 'admin_name'
             FROM notice
             <where>
                 <if test="param4 != null and !param4.equals('') and param3.equals('notice_cont')">
@@ -35,6 +64,12 @@
                 </if>
                 <if test="param4 != null and !param4.equals('') and param3.equals('admin_name')">
                     (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{param4}, '%')
+                </if>
+                <if test="param5.equals('noticed')">
+                    notice_show = 1
+                </if>
+                <if test="param5.equals('blind')">
+                    notice_show = 0
                 </if>
             </where>
             ORDER BY notice_idx DESC LIMIT #{param1} OFFSET #{param2}

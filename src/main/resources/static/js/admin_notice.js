@@ -6,6 +6,28 @@ let vPages = 10;
 const searchParams = new URLSearchParams(window.location.search);
 let searchType = searchParams.get('searchType');
 let keywords = searchParams.get('keywords');
+let sortType = searchParams.get('sortType');
+
+sorterChanger();
+
+function sorterChanger() {
+    let sort = document.getElementsByName('sortType')[0];
+    let btn = document.getElementsByClassName('ankerbtn')[0];
+    switch (sortType){
+        case '':
+            sort.value = 'noticed';
+            btn.innerHTML = '게시여부 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
+            break;
+        case 'noticed':
+            sort.value = 'blind';
+            btn.innerHTML = '게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            break;
+        case 'blind' :
+            sort.value = '';
+            btn.innerHTML = '게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            break;
+    }
+}
 
 pageShow(showPage);
 
@@ -17,7 +39,8 @@ function pageShow(page) {
             'page': page,
             'cnt': cnt,
             'opt': searchType,
-            'keyword': keywords
+            'keyword': keywords,
+            'sortType': sortType
         },
         dataType: 'json',
         success: function(data) {

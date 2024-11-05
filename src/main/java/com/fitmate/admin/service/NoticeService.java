@@ -31,18 +31,18 @@ public class NoticeService {
 	}
 
 	// 공지사항 목록
-	public Map<String, Object> list(int page, int cnt, String opt, String keyword) {
+	public Map<String, Object> list(int page, int cnt, String opt, String keyword, String sortType) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
-		int totalPages = notice_dao.allCount(cnt);
-		int totalIdx = notice_dao.countIdx();
+		int totalPages = notice_dao.allCount(cnt, opt, keyword, sortType);
+		int totalIdx = notice_dao.countIdx(opt, keyword, sortType);
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("totalPages", totalPages);
 		result.put("totalIdx", totalIdx);
 		result.put("currentPage", page);
 		result.put("offset", offset);
-		result.put("list", notice_dao.list(limit, offset, opt, keyword));
+		result.put("list", notice_dao.list(limit, offset, opt, keyword, sortType));
 
 		return result;
 	}

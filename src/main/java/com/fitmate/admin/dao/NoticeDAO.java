@@ -13,9 +13,9 @@ public interface NoticeDAO {
     int insertAlert(int notice_idx);
 
     // 공지사항 목록
-    int allCount(int cnt);
-    int countIdx();
-    List<NoticeDTO> list(int limit, int offset, String opt, String keyword);
+    int allCount(int cnt, String opt, String keyword, String sortType);
+    int countIdx(String opt, String keyword, String sortType);
+    List<NoticeDTO> list(int limit, int offset, String opt, String keyword, String sortType);
 
     // 공지사항 삭제
     int invisible(int noticeIdx);

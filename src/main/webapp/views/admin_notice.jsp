@@ -55,7 +55,14 @@
                             <th>내용</th>
                             <th>작성자</th>
                             <th>작성일시</th>
-                            <th>게시여부</th>
+                            <form>
+                                <th>
+                                    <input type="hidden" name="sortType" value="" />
+                                    <button type="submit" onclick="pageShow(1)" class="ankerbtn">
+                                        게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
+                                    </button>
+                                </th>
+                            </form>
                             <th></th>
                         </tr>
                     </thead>
