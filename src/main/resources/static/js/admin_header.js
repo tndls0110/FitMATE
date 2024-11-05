@@ -4,12 +4,9 @@ $.ajax({
     url: 'admin_header.ajax',
     data: {},
     success: function(data) {
-        drawProfile(data.name);
+        if (data.name != null || data.name != "") {
+            document.getElementsByClassName('admin_name')[0].innerHTML = data.name;
+        }
     },
     error: function(e) {}
 });
-
-function drawProfile(name) {
-    let admin_name = document.getElementsByClassName('admin_name')[0];
-    admin_name.innerHTML = name;
-}

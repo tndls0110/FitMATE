@@ -1,6 +1,5 @@
 package com.fitmate.admin.service;
 
-import com.fitmate.admin.controller.MainController;
 import com.fitmate.admin.dao.MainDAO;
 import com.fitmate.admin.dto.DashboardDTO;
 import org.slf4j.Logger;
@@ -8,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MainService {
@@ -19,7 +15,7 @@ public class MainService {
     @Autowired MainDAO main_dao;
 
     // layout
-    public String getnick(int admin_idx) {
+    public String getname(String admin_idx) {
         return main_dao.getname(admin_idx);
     }
 

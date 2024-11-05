@@ -23,7 +23,7 @@ public class MainController {
 	// 세션 체크
 	String page = "";
 	public void checkPermit(Model model, HttpSession session) {
-		if (session.getAttribute("loginId") == null || session.getAttribute("permit") == null) {
+		if (session.getAttribute("loginIdx") == null && session.getAttribute("permit") == null) {
 			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
 			page = "admin_login";
 		}
@@ -34,8 +34,12 @@ public class MainController {
 	@ResponseBody
 	public Map<String, Object> leftnav(HttpSession session) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
-		result.put("name", main_service.getnick(admin_idx));
+		if (session.getAttribute("loginIdx") == null) {
+			result.put("name", "");
+		} else {
+			String admin_idx = session.getAttribute("loginIdx").toString();
+			result.put("name", main_service.getname(admin_idx));
+		}
 		return result;
 	}
 

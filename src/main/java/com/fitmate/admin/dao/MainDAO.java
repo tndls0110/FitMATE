@@ -9,7 +9,7 @@ import java.util.List;
 public interface MainDAO {
 
     // layout
-    String getname(int admin_idx);
+    String getname(String admin_idx);
 
     // 로그인
     int login(String admin_id, String pw);
