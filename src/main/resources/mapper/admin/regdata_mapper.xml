@@ -49,6 +49,14 @@
         UPDATE mbti_q SET mbtiq_show = 0, admin_idx = #{admin_idx} WHERE mbtiq_idx = #{mbtiq_idx}
     </update>
 
+    <select id="regMbtiQuestionTrash" resultType="com.fitmate.admin.dto.RegMBTIDTO">
+        SELECT mbtiq_idx, mbtiq_con FROM mbti_q WHERE mbtiq_show = 0
+    </select>
+
+    <update id="restoreMbtiQuestion">
+        UPDATE mbti_q SET mbtiq_show = 1, admin_idx = #{admin_idx} WHERE mbtiq_idx = #{mbtiq_idx}
+    </update>
+
     <!-- 헬스 MBTI 결과 관리 -->
     <select id="regMbtiResult" resultType="com.fitmate.admin.dto.RegMBTIDTO">
         SELECT mbtir_idx, mbtir_name FROM mbti_r WHERE mbtir_show = 1

@@ -104,6 +104,24 @@ public class RegDataController {
 		return result;
 	}
 
+	@RequestMapping (value = "/admin_regMbtiqTrash.go")
+	public String regMbtiQuestionTrash (Model model, HttpSession session) {
+		page = "admin_regMbtiqTrash";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("list", regData_service.regMbtiQuestionTrash());
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_restoreMbtiq.do")
+	public String restoreMbtiQuestion (String mbtiq_idx, Model model, HttpSession session) {
+		page = "redirect:/admin_regMbtiq.go";
+		//main_controller.checkPermit(model, session);
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		regData_service.restoreMbtiQuestion(mbtiq_idx, admin_idx);
+		return page;
+	}
+
 	// 헬스 MBTI 결과 관리
 	@RequestMapping (value = "/admin_regMbtir.go")
 	public String regMbtiResult (Model model, HttpSession session) {

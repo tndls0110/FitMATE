@@ -52,7 +52,6 @@ public class NoticeController {
 	public Map<String, Object> list(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		logger.info(String.valueOf(sortType));
 		return notice_service.list(pageInt, cntInt, opt, keyword, sortType);
 	}
 

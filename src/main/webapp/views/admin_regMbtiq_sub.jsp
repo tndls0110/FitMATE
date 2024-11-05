@@ -89,6 +89,7 @@
                     </li>
                 </ul>
             </form>
+            <button onclick="location.href='admin_regMbtiqTrash.go'" class="textbtn full">삭제한 항목 보기</button>
         </div>
     </div>
 </div>

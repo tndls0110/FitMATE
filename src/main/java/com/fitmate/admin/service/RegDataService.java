@@ -105,6 +105,19 @@ public class RegDataService {
         return success;
     }
 
+    public List<RegMBTIDTO> regMbtiQuestionTrash() {
+        return regData_dao.regMbtiQuestionTrash();
+    }
+
+    public boolean restoreMbtiQuestion(String mbtiq_idx, int admin_idx) {
+        boolean success = false;
+        int mbtiqIdx= Integer.parseInt(mbtiq_idx);
+        if (regData_dao.restoreMbtiQuestion(mbtiqIdx, admin_idx) == 1){
+            success = true;
+        }
+        return success;
+    }
+
     // 헬스 MBTI 결과 관리
     public List<RegMBTIDTO> regMbtiResult() {
         return regData_dao.regMbtiResult();
