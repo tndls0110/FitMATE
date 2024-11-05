@@ -171,6 +171,26 @@
    	height:900px;
    }
    
+   .bi.bi-arrow-repeat {
+    display: inline-block; /* 또는 block */
+    animation: spin 1s infinite; /* 애니메이션 적용 */
+	}
+   
+   @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+	}
+   
+	.recruit {
+	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+	    transition: transform 0.2s; /* 호버 시 효과 */
+	}
+
+	.recruit:hover{
+	    transform: translateY(-5px); /* 호버 시 상승 효과 */
+	    transform: scale(1.2); /* 마우스를 올렸을 때 크기 증가 */
+	}   
+   
 </style>
 </head>
 
@@ -230,18 +250,29 @@
 <script src="resources/js/common.js"></script>
 <script>
 
-	// 현재 유저ID 세팅
-	var currentUserId = '${sessionScope.loginId}';
+   // 현재 유저ID 세팅
+   var currentUserId = '${sessionScope.loginId}';
 
-   //0. 초기 크루목록 가져오기
-   crewList();
-   
    // 필터선택 or 검색한 경우 데이터 다시 가져오기.
    var searchFilter = '';
    var searchKeyword = '';
    var placeFilter = '';
    var mbtiFilter = '';
-
+   
+   
+   // 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
+   var cnt = 1;
+   
+   // 무한 스크롤 이벤트 작동 시 데이터를 가져올 offset을 초기화
+   var offset = 0;
+   // 한 번에 가져올 데이터 개수
+   const limit = 10; 
+   // 데이터 로딩 중 여부를 관리할 변수
+   var isLoading = false;
+   
+   //0. 초기 크루목록 가져오기
+   crewList();
+   
    // 1. 필터를 선택한 경우(지역, MBTI)
    // 변경 이벤트 발생감시
    $('.filterSelect').on('change', function() {
@@ -306,32 +337,29 @@
             'searchKeyword' : searchKeyword,
             'placeFilter' : placeFilter,
             'mbtiFilter' : mbtiFilter,
+            'offset': offset,
+            'limit': limit
          },
          dataType : 'JSON',
          success : function(list) {
         	 
             // 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. => 기존 데이터 그대로 유지 
-            if(list == null || list == ''){
-               modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
-               
-            }else{ 
-            	// 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
-                var cnt = 1;
-                
-                $('div.recruitArea').empty();
-                
-                $(list).each(function(idx, item) { // 데이터 =item
-                   
-                   console.log('cnt : ' + cnt);
-                   // Controller에서 받아온 크루원 모집게시글 추가.
-                   recruitAdd(item, cnt);      
-                   cnt++;
-                });		
+            if (list == null || list == '') {
+                modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
+            } else {
+                if (list && list.length > 0) {
+                    $.each(list, function(index, item) {
+                        recruitAdd(item); 
+                        cnt++;
+                    });
+                    isLoading = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
+                    addLoadMoreTrigger(); // 추가된 요소 아래에 로딩 메시지 추가
+                } else {
+                    // 더 이상 데이터가 없으면 관찰 중지
+                    observer.unobserve($('#load-more-trigger')[0]); // jQuery로 선택한 요소의 첫 번째 DOM 요소를 관찰 중지
+                    $('#load-more-trigger').remove(); // 트리거 요소 제거
+                }
             }
-
-             /* [...버튼]
-             크루장인 경우에만 ...버튼을통해 모집글 수정 or 삭제가능..?   삭제는 빼야될듯..? 크루생성과 크루모집글생성을 합쳤기 때문에...
-             크루장인지 확인은.. sessionId와 크루장 id 비교..? OR sessionName와 크루장이름 비교 */
          },
          error : function(e) {
             console.log(e); // 에러가 보이지 않도록 추후 처리필요?
@@ -361,19 +389,32 @@
       });
    }
    
-   function recruitAdd(item, cnt){
+   function recruitAdd(item){
+	  // 모집게시글에 담기는 정보
       var header = '';
       var content = '';
       var info = '';
       var profile = ''; // 프로필 사진
+      var leader_id = item.leader_id; // 크루장ID
+      
+      // 기본값은 모집페이지이동 (크루원: 크루페이지, 일반회원or크루장: 모집페이지)
+      var page = 'crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx;       
+      
+      // 크루장이 아닌 크루원이라면 => 크루페이지로 이동!!
+      /* if(leader_id !== currentUserId && item.member_idx !== ''){
+    	  page = 'crew_main_page.go?crew_idx=' +item.crew_idx;
+    	  
+      } */
+      
       
       // profile: 프로필사진 (프로필 사진이 없을경우 기본 프로필 적용.)
       // 프로필
       profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
-      
+
+                                         
       // Header: 모집게시글링크-board_idx/크루장id, 프로필사진, 크루명, 크루장닉네임, MBTI
-      header = '<a href="crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx+ '" class="recruit_detail">'
+      header = '<a href="' +page+ '" class="recruit_detail">'
                + profile
                + '<div class="recruit_right">'
                   + '<div class="right_top">'
@@ -398,8 +439,6 @@
                + '<span><i class="bi bi-geo-alt-fill"></i>&nbsp;&nbsp;' + item.region_name + ' ' + item.regions_name + '</span>'
            +'</div>';
 
-      // item.leader_id(크루장 id)로 크루장인경우 버튼생성.
-      /* var add_button = '<button type="button" class="add_button">︙</button>'; */
       // 홀수번째 게시글은 왼쪽정렬
       if(cnt % 2 == 1){
          $('div.recruitArea').append('<div class="recruit_odd">' + header + content + info  + '</div>');
@@ -407,6 +446,50 @@
          $('div.recruitArea').append('<div class="recruit">' + header + content + info + '</div>');
       }
    }
+   
+   
+   /* 무한스크롤 IntersectionObserver 구현 */
+   var observer = new IntersectionObserver(loadMoreEntries, {
+	    root: null, // 기본 뷰포트를 기준으로 설정   
+	    rootMargin: '0px',
+	    threshold: 0.5
+	});
+   
+   // Intersection Observer 콜백 함수
+   function loadMoreEntries(entries, observer) {
+	    // 엔트리마다 체크
+	    entries.forEach(function(entry) {
+	        if (entry.isIntersecting && !isLoading) {
+	            isLoading = true; // 로딩 상태 설정
+	            offset += limit; // 다음 요청을 위한 offset 값 증가
+	            crewList(); // 데이터를 가져오는 함수 호출
+	        }
+	    });
+	}
+   
+	// '더보기' 트리거 요소 추가 함수
+	function addLoadMoreTrigger() {
+	    $('#load-more-trigger').remove(); 
+	    
+	    var targetElement = $('<div>', {
+	        id: 'load-more-trigger',
+	        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+	        css: {
+	            textAlign: 'center',
+	            width: '100%',
+	            padding: '20px',
+	            fontSize: '16px'
+	        }
+	    });
+	
+	    // recruitArea에 트리거 요소 추가
+	    $('.recruitArea').append(targetElement);
+	    
+	    // 새로운 트리거 요소를 observer로 관찰
+	    observer.observe(targetElement[0]); 
+	}
+
+   
 </script>
 
 </html>
