@@ -11,7 +11,6 @@ function confirmReport() {
 hideWriter();
 function hideWriter() {
     if (report_prog > 2){
-        console.log(report_prog);
         document.getElementsByClassName('writer')[0].classList.add('hide');
     }
 }
