@@ -134,11 +134,11 @@ public class CrewScheduleService {
 		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
 		
 		// crew_idx = 스트링값이어서 형변환 안해도됨
-		String noti_url = crew_idx+"=크루일정url주소";
+		String noti_url = "crew_main_page.go?crew_idx="+crew_idx;
 		// 크루원 목록 가져오기
 		List<CrewMemberDTO> member_list = crewpage_dao.crew_member_list(crewidx);
 		// noti cate 1로 맞춰주기
-		name = "1";
+		name = "2";
 		// 알림 보내기
 		for (CrewMemberDTO  member : member_list) {
 			// 멤버 id(수신자id) 가져오기
@@ -207,11 +207,11 @@ public class CrewScheduleService {
 		// 알람 내용
 		String noti_content = name+" 크루의 일정 삭제";
 		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
-		String noti_url = crewidx+"=url주소";
+		String noti_url = "/crew_main_page.go?crew_idx="+crewidx;
 		// 크루원 목록 가져오기
 		List<CrewScheduleMDTO> plan_member = crewschedule_dao.crew_plan_members(planidx);
 		// noti cate 1로 맞춰주기
-		name = "1";
+		name = "2";
 		// 알림 보내기
 		for (CrewScheduleMDTO  member : plan_member) {
 			// 멤버 id(수신자id) 가져오기

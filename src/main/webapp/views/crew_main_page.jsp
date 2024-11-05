@@ -383,7 +383,7 @@
 	
 	<div class="contents crew_contents">
 	 
-            <p style="display: inline; margin-right: 10px;">${crew_name} 대시보드</p>
+            <p style="display: inline; margin-right: 10px;">${name} 대시보드</p>
            <div id="profileList" class="profile-list" style="display: inline;">
             <!-- 프로필 사진을 여기에 추가 -->
           

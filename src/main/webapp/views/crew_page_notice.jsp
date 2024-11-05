@@ -156,7 +156,8 @@
 	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
 	var crewIdx = $('#crew_idx').val();
 	// const isCrewLeader = ${isCrewLeader};
-	const isCrewLeader = true;
+	const isCrewLeader = false;
+	
 	// 크루장이면 작성하기 폼 보여주기
 	if (isCrewLeader) {
         document.getElementById('crewleader').style.display = 'block';
