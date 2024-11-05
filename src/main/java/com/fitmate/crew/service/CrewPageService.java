@@ -96,7 +96,7 @@ public class CrewPageService {
 		// 알람 내용
 		String noti_content = name+" 크루의 새로운 공지사항 갱신";
 		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
-		String noti_url = "/crew_page_notice.go?crew_idx="+crewidx;
+		String noti_url = "crew_page_notice.go?crew_idx="+crewidx;
 		// 크루원 목록 가져오기
 		List<CrewMemberDTO> member_list = crewpage_dao.crew_member_list(crew_idx);
 		// notis_cate 1로 맞춰주기

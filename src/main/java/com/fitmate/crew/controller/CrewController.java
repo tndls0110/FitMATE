@@ -2,6 +2,7 @@ package com.fitmate.crew.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.crew.dto.CrewCommentDTO;
 import com.fitmate.crew.dto.CrewSearchListDTO;
 import com.fitmate.crew.service.CrewService;
@@ -69,52 +72,89 @@ public class CrewController {
 	
 		
 	@RequestMapping(value="/crew_create.go")
-	public String crew_create() {
+	public String crew_create(Model model, HttpSession session) {
+		
+		List<RegCountyDTO> list = member_service.getRegion();
+		model.addAttribute("region", list);
+		list = member_service.getRegion2("1");
+		model.addAttribute("region2", list);
 		
 		return "crew_create";
 	}
 	
+	@RequestMapping (value = "crew_regions.ajax")
+	@ResponseBody
+	public List<RegCountyDTO> crew_regions(@RequestParam String selectedRegionIdx , HttpSession session) {
+		
+		
+		List<RegCountyDTO> placemap = crew_service.crew_regions(selectedRegionIdx);
+		
+		
+		
+		logger.info(selectedRegionIdx);
+		return placemap;
+	}
+	
 	@RequestMapping(value="/crew_create_rewrite.go")
-	public String crew_create_rewrite() {
+	public String crew_create_rewrite(@RequestParam String idx,@RequestParam String board_idx,Model model) {
+		
+		logger.info("crew_idx = "+idx+"board_idx = "+board_idx);
+		
+		
+		String crew_idx = idx;
+		CrewSearchListDTO crewboard = new CrewSearchListDTO();
+		
+		crewboard = crew_service.crew_board_detail(board_idx,crew_idx);
+		String crew_name = crewboard.getCrew_name();
+		String region_idx = crewboard.getRegion_name();
+		String regions_idx = crewboard.getRegions_name();
+		String subject = crewboard.getSubject();
+		String crew_id = crewboard.getLeader_id();
+		
+		
+		List<RegCountyDTO> list = member_service.getRegion();
+		logger.info("crew_idx"+crew_idx+"board_idx"+board_idx+"crew_name"+crew_name+"region_idx"+region_idx+"regions_idx"+regions_idx);
+		model.addAttribute("region", list);
+		model.addAttribute("crew_idx", crew_idx);
+		model.addAttribute("board_idx", board_idx);
+		model.addAttribute("crew_name", crew_name);
+		model.addAttribute("region_idx", region_idx);
+		model.addAttribute("regions_idx", regions_idx);
+		model.addAttribute("subject", subject);
+		model.addAttribute("crew_id", crew_id);
+		
 		
 		return "crew_create_rewrite";
 	}
 	
-	@PostMapping(value="/crew_create.do" )
+	@PostMapping(value="/crew_create.do")
 	public String crew_create(@RequestParam String crew_id,@RequestParam String name,@RequestParam int regions_idx,@RequestParam String content) {
 		
-		crew_service.crew_create(crew_id,name,regions_idx,content);
+		int crew_idx = crew_service.crew_create(crew_id,name,regions_idx,content);
 		/* 
 		logger.info("crew_id {}",crew_id);
 		logger.info("name {}",name);
 		logger.info("regions_idx {}",regions_idx);
 		logger.info("content {}",content);
 		*/
-		return "index123";
+		logger.info("crewidx = "+crew_idx+" regions_idx= "+regions_idx);
+		String crewidx = Integer.toString(crew_idx);
+		 String page = "redirect:/crew_main_page.go?crew_idx="+crewidx;
+		return page;
 	}
 	
-	// 지역 상위 정보 가져오기
-	@GetMapping(value="/crew_region.ajax")
-	public Map<String,Object> crew_region(){
-		
-		
-		
-		return null;
-	}
 	
-	// 지역 하위 정보 가져오기
-	@GetMapping(value="/crew_regions.ajax")
-	public Map<String,Object> crew_regions(){
-
-		return null;
-	}
+	
+	
 	
 	// 크루 모집글 수정하기
 	@PostMapping(value="/crew_create_rewrite.do")
-	public String crew_create_rewrite(@RequestParam int regions_idx,@RequestParam String content,@RequestParam int board_idx) {
+	public String crew_create_rewrite(@RequestParam int regions_idx,@RequestParam String content,@RequestParam int board_idx, String crew_idx) {
 		 crew_service.crew_create_rewrite(regions_idx,content,board_idx);
-		
-		return "index123";
+		 logger.info("regions_idx = "+regions_idx+" board_idx = "+board_idx);
+		 
+		 String page = "redirect:/crew_recruit_detail.go?board_idx="+board_idx+"&crew_idx="+crew_idx;
+		return page;
 	}
 	
 	

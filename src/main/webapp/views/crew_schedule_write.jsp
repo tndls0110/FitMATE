@@ -106,8 +106,9 @@ input[type="time"]
 				<!-- 폼 -->
                 <form action="crew_schedule_write.do" method="post">
                 	<!-- 작성자 id 넣기 = 세션아이디 넣기 -->
-           			<input type="hidden" name="crew_id" value="member01">
-                    <input type="hidden" name="crew_idx" value="6">
+                	<input type="hidden" name="user_id" value="${sessionScope.loginId}">
+           			<input type="hidden" name="crew_id" value="${crew_id}">
+                    <input type="hidden" name="crew_idx" value="${crew_idx}">
                     <!-- 경고 -->                     
                     <!-- 통과 -->
                     <div class="list">
