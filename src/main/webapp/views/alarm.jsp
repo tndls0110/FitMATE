@@ -95,10 +95,7 @@
 
 
         #alarm_box{
-            overflow-x: hidden;
-            overflow-y: scroll;
             width: 445px;
-            height: 534px;
             margin: 25px 10px 13px 198px;
         }
 
@@ -113,10 +110,6 @@
             cursor: pointer;
             opacity: 40%;
         }
-
-
-
-
 
         .round{
             border-radius: 100px;
