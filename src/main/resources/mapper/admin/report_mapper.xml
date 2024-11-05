@@ -98,7 +98,7 @@
                     r.report_prog = 4
                 </if>
             </where>
-            LIMIT #{param1} OFFSET #{param2}
+            ORDER BY r.report_idx DESC LIMIT #{param1} OFFSET #{param2}
     </select>
 
     <!-- 신고 내역 상세 보기 -->

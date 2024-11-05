@@ -23,7 +23,7 @@ public class MainController {
 	// 세션 체크
 	String page = "";
 	public void checkPermit(Model model, HttpSession session) {
-		if (session.getAttribute("loginIdx") == null && session.getAttribute("permit") == null) {
+		if (session.getAttribute("loginIdx") == null) {
 			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
 			page = "admin_login";
 		}
@@ -55,7 +55,6 @@ public class MainController {
 		switch (main_service.login(admin_id, pw)){
 			case "pass":
 				session.setAttribute("loginIdx", main_service.getidx(admin_id));
-				session.setAttribute("permit", "all");
 				page = "redirect:/admin_dashboard.go";
 				break;
 			case "invalidID":
@@ -76,7 +75,6 @@ public class MainController {
 	@RequestMapping (value = "/admin_logout.do")
 	public String logout(Model model, HttpSession session) {
 		session.removeAttribute("loginIdx");
-		session.removeAttribute("permit");
 		return "admin_login";
 	}
 
