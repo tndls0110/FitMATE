@@ -17,20 +17,20 @@
         .recruit_left {
             width: 15%;
             aspect-ratio: 1;
-            border: 1px solid black;
+            border: 0 solid black;
             border-radius: 50%;
         }
 
         .bi bi-person-circle {
             aspect-ratio: 1;
-            border: 1px solid black;
+            border: 0 solid black;
             border-radius: 50%;
             font-size: 15%;
         }
 
         div.recruit_header .recruit_right {
             position: absolute;
-            top: -4%;
+            top: -3%;
             left: 20%;
             width: 80%;
         }
@@ -204,7 +204,7 @@
 
         div.comment_box button.mainbtn.minbtn {
             position: absolute;
-            top: 20%;
+            top: 15%;
     		right: 40%;
         }
 
@@ -264,8 +264,7 @@
 
         <div class="contents narrow">
             <div class="recruit_header">
-            	<a id="profile_detail_set" href="mycrew_memberDetail.go?id=${recruitHead.leader_id}&profileType=1&idx=${recruitHead.crew_idx}"> <!-- 크루회원 프로필 상세보기 이동. -->
-            		<i class="bi bi-person-circle" style="font-size: 60px;"></i>
+            	<a class="profile_detail_set leader" href="mycrew_memberDetail.go?id=${recruitHead.leader_id}&profileType=1&idx=${recruitHead.crew_idx}"> <!-- 크루회원 프로필 상세보기 이동. -->
 				</a>            	
                 <div class="recruit_right">
 	                <h2 class="title">${recruitHead.crew_name}</h2>
@@ -343,6 +342,7 @@
 
 <script src="resources/js/common.js"></script>
 <script>
+
 	// 현재 게시글의 idx번호 저장.
     var board_idx = <%=board_idx%>;
     // 현재 유저정보 세팅.
@@ -355,6 +355,15 @@
     // 크루이름
     var crew_name = '${recruitHead.crew_name}';
     
+ 	// 크루장 프로필사진
+ 	var header_profile = '${recruitHead.leader_profile}' ? '<img class="recruit_left" src="/photo/${recruitHead.leader_profile}" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;"/>' 
+            : '<i class="bi bi-person-circle" style="font-size: 60px;"></i>';
+    var leader_profile = '${recruitHead.leader_profile}' ? '<img class="recruit_left" src="/photo/${recruitHead.leader_profile}" alt="프로필 이미지" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"/>' 
+            : '<i class="bi bi-person-circle" style="font-size: 40px;"></i>';
+    
+    // Header정보에 프로필사진 넣어주기
+    $('.profile_detail_set.leader').append(header_profile);
+            
     // 댓글, 대댓글 불러오기.
     if (board_idx != '' && board_idx != null) {
     	detail(board_idx);                    
@@ -381,8 +390,8 @@
     var date;
     // 댓글 작성자 닉네임
     var nick;
-    // 댓글 작성자 프로필사진
-    var profile;
+    // 문의자 프로필
+    var comment_profile = '';
 
 	
     // 동적 html을 생성하기 위한 변수. (댓글 또는 대댓글 관련 요소들)
@@ -443,13 +452,17 @@
                 // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                 $(data).each(function(idx, item){
                 	
+                	// 댓글작성자 프로필
+                	comment_profile = item.comment_profile ? '<img class="recruit_left" src="/photo/' + item.comment_profile + '" alt="프로필 이미지" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"/>' 
+                            : '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'; 
+                	
                 	// 삭제된 댓글이 아닌경우 
                 	if(item.comment_status != 2){
                     	footer += '<div class="comment_box">'
     				        + '<div class="comment">'
     				        //일반회원 프로필 상세보기 이동.
-    				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
-    				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+    				        + '<a class="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
+    				        + comment_profile
     				        + '</a>'
     				        + '<div class="recruit_right">'
     				        + '<h2 class="title"></h2>'
@@ -471,7 +484,7 @@
         				        + '<div class="comment">'
         				        //일반회원 프로필 상세보기 이동.
         				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
-        				        + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+        				        + comment_profile
         				        + '</a>'
         				        + '<div class="recruit_right">'
         				        + '<h2 class="title"></h2>'
@@ -500,8 +513,8 @@
     				            + '<i class="bi bi-arrow-return-right absolute"></i>'
     				            + '<div class="content_right">'
     				            + '<div class="comment right">'
-    				            + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.recomment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
-    				            + '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'
+    				            + '<a id="profile_detail_set leader_profile" href="mycrew_memberDetail.go?id=' +item.recomment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
+    				            + leader_profile
     				            + '</a>'
     				            + '<div class="recruit_right">'
     				            + '<h2 class="title"></h2>'
@@ -567,8 +580,9 @@
     				    modal_chk = '';
                 });
                 
- 				$('.comment_area').empty().append(footer);  
-                
+ 				$('.comment_area').empty().append(footer);
+ 				
+ 			
             },
             error: function(e) {
                 console.log(e);

@@ -132,9 +132,6 @@
 
         <div class="profile_box">
             <div class="profile relative">
-                <i class="inlineBlock bi bi-person-circle" style="font-size: 60px;"></i>
-                
-                  
                 
                 <!-- ${profile.profile} i태그는 추후 프로필 사진으로 대체 예정.-->
                 <div class="width_50">
@@ -225,6 +222,14 @@
 <script src="resources/js/common.js"></script>
 
 <script>
+
+	//프로필
+	var profile = '${profile.profile}' ? '<img class="recruit_left" src="/photo/' + '${profile.profile}' + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;"/>' 
+	        : '<i class="bi bi-person-circle" style="font-size: 60px;"></i>';
+	
+	// 프로필 세팅
+	$('.profile.relative').prepend(profile);
+	        
 	// 크루명
 	var crew_name = '${profile.crew_name}';
 	

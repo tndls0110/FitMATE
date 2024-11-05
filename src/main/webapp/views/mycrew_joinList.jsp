@@ -246,12 +246,12 @@
             },
             dataType: 'JSON',
             success: function(list) {
-                // 프로필 목록을 비워주기.
-                $('.profile_list > *:not(.profile.relative.' +leader_id+ ')').remove(); // 프로필 목록 비우기
+            	
+            	$('.profile_list').empty(); // 프로필 목록 비우기
 
                 $.each(list, function(index, data) {
-                    // 멤버수 체크하기. (크루장은 인원수에서 제외하기 때문에 index값과 동일.)
-                    memberCount = index;
+                	// 멤버수 체크하기. 
+                    memberCount += 1;
                     
                     console.log('data : ', data);
                     console.log('crew_idx : ', data.crew_idx);
@@ -344,7 +344,7 @@
                     }			
                     
                 });	
-            	 // 크루원이 한명도 없는경우 => 크루원이 없습니다.
+             	// 크루원이 한명도 없는경우 => 크루원이 없습니다.
                 if(memberCount === 1){
          	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
          	    }
