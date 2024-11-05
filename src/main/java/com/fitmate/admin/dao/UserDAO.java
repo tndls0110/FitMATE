@@ -10,16 +10,16 @@ import java.util.List;
 public interface UserDAO {
 
     // 사용자 목록
-    int userAllCount(int cnt);
-    int userCountIdx();
+    int userAllCount(int cnt, String opt, String keyword);
+    int userCountIdx(String opt, String keyword);
     List<MemberDTO> userList(int offset, int limit, String opt, String keyword, String sortType1, String sortType2);
 
     // 사용자 조회
     MemberDTO userDetail(String user_id);
 
     // 크루 목록
-    int crewAllCount(int cnt);
-    int crewCountIdx();
+    int crewAllCount(int cnt, String opt, String keyword);
+    int crewCountIdx(String opt, String keyword);
     List<CrewListDTO> crewList(int offset, int limit, String opt, String keyword, String sortType);
 
     // 크루 조회

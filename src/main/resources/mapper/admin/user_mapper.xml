@@ -8,10 +8,38 @@
     <!-- 사용자 목록 -->
     <select id="userAllCount" resultType="int">
         SELECT CEIL(COUNT(user_id) / #{param1}) FROM member
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
+                user_id LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
+                nick LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
+                name LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+                email LIKE CONCAT('%', #{param4}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="userCountIdx" resultType="int">
         SELECT COUNT(user_id) FROM member
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
+                user_id LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
+                nick LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
+                name LIKE CONCAT('%', #{param4}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+                email LIKE CONCAT('%', #{param4}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="userList" resultType="com.fitmate.member.dto.MemberDTO">
@@ -68,10 +96,32 @@
     <!-- 크루 목록 -->
     <select id="crewAllCount" resultType="int">
         SELECT CEIL(COUNT(crew_idx) / #{param1}) FROM crew
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
+                name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
+                crew_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
+                (SELECT m.nick FROM member m WHERE crew_id = m.user_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="crewCountIdx" resultType="int">
         SELECT COUNT(crew_idx) FROM crew
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
+                name LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
+                crew_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
+                (SELECT m.nick FROM member m WHERE crew_id = m.user_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="crewList" resultType="com.fitmate.admin.dto.CrewListDTO">

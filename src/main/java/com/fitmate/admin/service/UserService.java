@@ -23,8 +23,8 @@ public class UserService {
 	public Map<String, Object> userList(int page, int cnt, String opt, String keyword, String sortType1, String sortType2) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
-		int totalPages = user_dao.userAllCount(cnt);
-		int totalIdx = user_dao.userCountIdx();
+		int totalPages = user_dao.userAllCount(cnt, opt, keyword);
+		int totalIdx = user_dao.userCountIdx(opt, keyword);
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("totalPages", totalPages);
@@ -80,8 +80,8 @@ public class UserService {
 	public Map<String, Object> crewList(int page, int cnt, String opt, String keyword, String sortType) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
-		int totalPages = user_dao.crewAllCount(cnt);
-		int totalIdx = user_dao.crewCountIdx();
+		int totalPages = user_dao.crewAllCount(cnt, opt, keyword);
+		int totalIdx = user_dao.crewCountIdx(opt, keyword);
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("totalPages", totalPages);
