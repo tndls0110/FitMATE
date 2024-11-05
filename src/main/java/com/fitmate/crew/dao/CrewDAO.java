@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.crew.dto.AskWriteDTO;
 import com.fitmate.crew.dto.CrewApprovalDTO;
 import com.fitmate.crew.dto.CrewBoardDTO;
@@ -72,6 +73,12 @@ public interface CrewDAO {
 	
 	// 크루전용 알림전송 
 	int crew_alarmSend(String notir_id, String noti_content, String noti_url);
+	
+	// region_idx로 하위지역 가져오기
+	List<RegCountyDTO> crew_regions(String selectedRegionIdx);
+	
+	// 크루 모집게시글 수정하기 정보 가져오기
+	CrewSearchListDTO crew_board_detail(String board_idx, String crew_idx);
 
 	
 }

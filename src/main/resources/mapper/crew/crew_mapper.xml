@@ -326,12 +326,39 @@ DELETE FROM recomment WHERE recomment_idx = #{comment_idx}
 		AND status = 1        <!-- 추방된 회원은 탈퇴하지 못하도록 처리. --> 
 </update>
 
+<select id="crew_regions" resultType="com.fitmate.admin.dto.RegCountyDTO">
+SELECT rs.regions_name, rs.regions_idx
+FROM region_sub rs
+JOIN region r ON rs.region_idx = r.region_idx
+WHERE rs.region_idx = #{param1};
+</select>
+
+
+<select id="crew_board_detail" resultType="com.fitmate.crew.dto.CrewSearchListDTO">
+SELECT 
+    c.regions_idx as regions_name,        
+    r.region_idx as region_name,          
+    c.name as crew_name,           
+    cb.subject,
+    c.crew_idx,
+    c.crew_id as leader_id,
+    cb.board_idx 
+FROM crew_board cb
+JOIN crew_idx ci ON ci.board_idx = cb.board_idx    
+JOIN crew c on c.crew_idx = ci.crew_idx 
+JOIN region_sub rs ON c.regions_idx = rs.regions_idx 
+join region r on r.region_idx =rs.region_idx 
+WHERE cb.board_idx = #{param1}
+  AND ci.crew_idx = #{param2}
+LIMIT 1
+</select>
+
 
 <insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO">
-insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},3);
+insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},#{regions_idx})
 </insert>
 <insert id="crew_post_create" useGeneratedKeys="true" keyColumn="board_idx" keyProperty="board_idx" parameterType="com.fitmate.crew.dto.CrewBoardDTO">
-insert into crew_board (board_id,content,category_idx) value(#{board_id},#{content},1); 
+insert into crew_board (board_id,subject,category_idx) value(#{board_id},#{content},1); 
 </insert>
 <insert id="crew_idx">
 insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
@@ -340,9 +367,9 @@ insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
 insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id});
 </insert>
 <update id="crew_create_rewrite">
-update crew_board set content = #{content} where board_idx = #{board_idx} and category_idx = 1
+update crew_board set subject = #{param1} where board_idx = #{param2} and category_idx = 1
 </update>
 <update id="crew_create_rewrite_region">
-update crew set regions_idx = #{regions_idx} where crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx = #{board_idx} )
+update crew set regions_idx = #{param1} where crew_idx IN ( SELECT crew_idx FROM crew_idx WHERE board_idx = #{param2})
 </update>
 </mapper>

@@ -25,7 +25,7 @@
 	FROM crew_idx ci
 	INNER JOIN crew_board cb ON ci.board_idx = cb.board_idx
 	WHERE ci.crew_idx = #{crew_idx} AND cb.category_idx = 4
-	GROUP BY cb.board_idx;
+	ORDER BY cb.board_idx DESC;
 </select>		
 
 <!--  공지사항 삭제 -->

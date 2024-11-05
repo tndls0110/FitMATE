@@ -372,6 +372,13 @@
             text-align: center;
             display: none;
         }
+        
+        .relative-button.notice_btn{
+        	position: absolute;
+        	top: 0%;
+        	right: 0%;
+        	width: 7%;
+        }
 	</style>
 
 </head>
@@ -396,7 +403,7 @@
 		<div class="list" style="margin:15px 0;"> <!-- 공지사항 시작 -->
 		 <p>
 		 <input type="text" class="full" name="crew_notice" value="" readonly/>
-		 <button class="writebtn mainbtn minbtn relative-button" onclick="crew_notice_go()">공지 +</button>
+		 <button class="writebtn mainbtn minbtn relative-button notice_btn" onclick="crew_notice_go()">공지 +</button>
 		 </p>
 		</div> <!-- 공지사항 끝 -->
 		

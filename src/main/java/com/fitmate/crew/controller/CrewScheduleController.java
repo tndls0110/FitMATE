@@ -55,7 +55,7 @@ public class CrewScheduleController {
 		}
 		else {
 			// 작성자가 크루장이 아니라면
-			page = "redirect:/crew_main_page?crew_idx="+crew_idx;
+			page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
 		}
 		
 		

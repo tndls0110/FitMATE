@@ -155,8 +155,16 @@
 	
 	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
 	var crewIdx = $('#crew_idx').val();
+	var crewId = $('#crew_id').val();
+	var sessionId = $('#sessionId').val();
 	// const isCrewLeader = ${isCrewLeader};
-	const isCrewLeader = false;
+	let isCrewLeader = false;
+	
+	if(crewId === sessionId){
+		isCrewLeader = true;
+	}else{
+		isCrewLeader = false;
+	}
 	
 	// 크루장이면 작성하기 폼 보여주기
 	if (isCrewLeader) {
@@ -213,7 +221,21 @@
 							
 	           
 	                $(list).each(function(idx, item) {
+	                	// 오늘 날짜 가져오기
+		                const today = new Date();
+		                const postDate = new Date(item.date); // 게시글 날짜
+		                const crew_idx = $('#crew_idx').val(); 
 	                	
+		                let displayDate;
+
+		                if (postDate.toDateString() === today.toDateString()) {
+		                    // 오늘 날짜라면 시간만 표시
+		                    displayDate = postDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		                } else {
+		                    // 오늘이 아니면 날짜만 표시
+		                    displayDate = postDate.toLocaleDateString(); // 기본 포맷으로 날짜 표시
+		                }
+		                
 	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
 	                	 // sessionId == item.board_id
 	                	if (1) {
@@ -227,7 +249,7 @@
 	                    tbody.append('<tr><td>' + item.board_idx 
 	                    		+ '</td><td>' + item.subject
 	                    		+ '</td><td>' +item.board_id
-	                    		+ '</td><td>' +item.date
+	                    		+ '</td><td>' +displayDate
 	                    		+ '</td><td>' + deleteButton + '</td></tr>'
                     	);
 	                    
