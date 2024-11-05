@@ -24,6 +24,8 @@ public interface RegDataDAO {
     int admin_regMbtiq_sub_deleteQuestion(Map<String, String> params);
     List<RegMBTIDTO> regMbtiQuestionTrash();
     int restoreMbtiQuestion(int mbtiq_idx, int admin_idx);
+    List<RegMBTIDTO> regMbtisubTrash(int mbtiq_idx);
+    int admin_regMbtiq_sub_restoreRow(Map<String, String> params);
 
     // 헬스 MBTI 결과 관리
     List<RegMBTIDTO> regMbtiResult();

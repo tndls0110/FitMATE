@@ -83,3 +83,7 @@ function deleteQuestion() {
         error: function(e) {}
     });
 }
+
+function goTrash() {
+    location.href='admin_regMbtiq_subTrash.go?mbtiq_idx='+mbtiq_idx;
+}

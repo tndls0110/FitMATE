@@ -118,6 +118,24 @@ public class RegDataService {
         return success;
     }
 
+    public List<RegMBTIDTO> regMbtisubTrash(String mbtiq_idx) {
+        int mbtiqIdx = Integer.parseInt(mbtiq_idx);
+        List<RegMBTIDTO> score = regData_dao.regMbtisubTrash(mbtiqIdx);
+        for (RegMBTIDTO dto : score) {
+            dto.setRegMBTIDTO(regData_dao.getMbtiQScore(dto.getMbtisub_idx()));
+        }
+        return score;
+    }
+
+    public boolean admin_regMbtiq_sub_restoreRow(Map<String, String> params, int admin_idx) {
+        boolean success = false;
+        params.put("admin_idx", String.valueOf(admin_idx));
+        if (regData_dao.admin_regMbtiq_sub_restoreRow(params) == 1){
+            success = true;
+        }
+        return success;
+    }
+
     // 헬스 MBTI 결과 관리
     public List<RegMBTIDTO> regMbtiResult() {
         return regData_dao.regMbtiResult();

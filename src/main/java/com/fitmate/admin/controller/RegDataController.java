@@ -122,6 +122,27 @@ public class RegDataController {
 		return page;
 	}
 
+	@RequestMapping (value = "/admin_regMbtiq_subTrash.go")
+	public String regMbtiQuestionSubTrash (String mbtiq_idx, Model model, HttpSession session) {
+		page = "admin_regMbtiq_subTrash";
+		//main_controller.checkPermit(model, session);
+		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
+		model.addAttribute("mbtir", regData_service.regMbtiResultTrash());
+		model.addAttribute("mbtisub", regData_service.regMbtisubTrash(mbtiq_idx));
+		return page;
+	}
+
+	@RequestMapping (value = "/admin_regMbtiq_sub_restoreRow.ajax")
+	@ResponseBody
+	public Map<String, Object> admin_regMbtiq_sub_restoreRow (@RequestParam Map<String, String> params) {
+		Map<String, Object> result = new HashMap<>();
+		//int admin_idx = session.getAttribute("loginIdx");
+		int admin_idx = 1;
+		logger.info("params: {}", params);
+		result.put("status", regData_service.admin_regMbtiq_sub_restoreRow(params, admin_idx));
+		return result;
+	}
+
 	// 헬스 MBTI 결과 관리
 	@RequestMapping (value = "/admin_regMbtir.go")
 	public String regMbtiResult (Model model, HttpSession session) {

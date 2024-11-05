@@ -57,14 +57,14 @@
                         <c:forEach items="${mbtir}" var="mbtir">
                             <th>${mbtir.mbtir_name}(점)</th>
                         </c:forEach>
-                        <th>삭제</th>
+                        <th>복구</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:if test="${mbtisub.size() == 0}">
                         <tr>
                             <td colspan="${mbtir.size() + 2}">
-                                <input type="text" value="세부 항목이 없습니다." class="full" readonly />
+                                <input type="text" value="삭제한 항목이 없습니다." class="full" readonly />
                             </td>
                         </tr>
                     </c:if>
@@ -79,8 +79,8 @@
                                 </td>
                             </c:forEach>
                             <td>
-                                <button onclick='deleteRow(${mbtisub.mbtisub_idx});' class="disabledbtn">
-                                    <i class="bi bi-trash"></i>
+                                <button onclick='restoreRow(${mbtisub.mbtisub_idx});' class="disabledbtn">
+                                    <i class="bi bi-arrow-clockwise"></i>
                                 </button>
                             </td>
                         </tr>
@@ -96,12 +96,12 @@
                     </li>
                 </ul>
             </form>
-            <button onclick="goTrash()" class="textbtn full">삭제한 항목 보기</button>
+            <button onclick="goBack()" class="textbtn full">목록으로 돌아가기</button>
         </div>
     </div>
 </div>
 <c:import url="layout/modal.jsp" />
 </body>
 <script src="resources/js/admin_common.js"></script>
-<script src="resources/js/admin_regMbtiQ.js"></script>
+<script src="resources/js/admin_regMbtiQTrash.js"></script>
 </html>
