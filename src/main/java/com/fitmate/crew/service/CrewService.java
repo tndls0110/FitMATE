@@ -102,13 +102,12 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		String searchKeyword = params.get("searchKeyword");    // searchKeyword [검색키워드]
 		String placeFilter_ = params.get("placeFilter");        // placeFilter [regions_idx]
 		String mbtiFilter_ = params.get("mbtiFilter");          // mbtiFilter [프로필-mbtir_idx]
+		int offset = Integer.parseInt(params.get("offset")); 
+		int limit = Integer.parseInt(params.get("limit")); 
 		
 		
 		CrewSearchConditionDTO searchDTO = new CrewSearchConditionDTO();
 		
-		int searchFilter = 0;
-		int regions_idx = 0;
-		int mbtiFilter = 0;
 		
 		if(searchFilter_ != null && !searchFilter_.equals("")) {
 			searchDTO.setSearchFilter(Integer.parseInt(searchFilter_.trim())); 
@@ -123,9 +122,6 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 			searchDTO.setMbtiFilter(Integer.parseInt(mbtiFilter_.trim()));
 		}
 		
-		// Limit & Offset 세팅
-		int limit = 6;
-		int offset = 0;
 		searchDTO.setLimit(limit);
 		searchDTO.setOffset(offset);
 		
@@ -133,18 +129,25 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		return crew_dao.crewList(searchDTO);
 		
 	}
-
+	
 	
 	// 내 크루 목록조회
-	public List<CrewSearchListDTO> mycrewList(String info_chk, String userId) {
-
+	public List<CrewSearchListDTO> mycrewList(Map<String, String> params, String user_id) {
 		List<CrewSearchListDTO> list = null;
 		
+		int info_chk = Integer.parseInt(params.get("info_chk"));
+		int limit = Integer.parseInt(params.get("limit"));
+		int offset = Integer.parseInt(params.get("offset"));
+		
+		logger.info("limit 확인 : " + limit);
+		logger.info("offset 확인 : " + offset);
+		logger.info("info_chk 확인 : " + info_chk);
+		
 		// info_chk 0:신청중인 크루목록, 1: 내크루 목록 
-		if(info_chk.equals("0")) {
-			list = crew_dao.joincrewList(userId);
-		}else if(info_chk.equals("1")){
-			list = crew_dao.mycrewList(userId);
+		if(info_chk == 0) {
+			list = crew_dao.joincrewList(user_id, limit, offset);
+		}else if(info_chk == 1){
+			list = crew_dao.mycrewList(user_id, limit, offset);
 		}
 		
 		return list;
@@ -339,6 +342,9 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		return crew_dao.crew_board_detail(board_idx,crew_idx);
 		
 	}
+
+
+	
 	
 
 

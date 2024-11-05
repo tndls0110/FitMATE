@@ -120,7 +120,7 @@ CB.status = 1
 
 
 <!-- 가입신청중인 크루목록 -->
-<select id="joincrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="String">
+<select id="joincrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO">
 SELECT
 <!-- 가입신청 idx -->
 A.join_idx,
@@ -163,7 +163,7 @@ LEFT JOIN (
     GROUP BY crew_idx 
 ) MC ON MC.crew_idx = C.crew_idx
 WHERE
-A.join_id = #{userId}  <!-- 현재 유저ID로 신청중인 크루목록 가져오기. -->
+A.join_id = #{param1}  <!-- 현재 유저ID로 신청중인 크루목록 가져오기. -->
 AND
 A.status = 1           <!-- 신청중인 모집게시글목록만 가져오기 -->
 AND
@@ -171,13 +171,14 @@ CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
 AND A.date = (         <!-- status상관없이 가장 최근 날짜의 신청만 가져오기...하나의 크루에대해 여러번의 입단신청을한경우를 고려하였음. -->
         SELECT MAX(date) 
         FROM crew_join 
-        WHERE join_id = #{userId} 
+        WHERE join_id = #{param1} 
         AND crew_idx = C.crew_idx
     )  
+LIMIT #{param2} OFFSET #{param3}
 </select>
 
 <!-- 내가속해있는 크루목록 -->
-<select id="mycrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO" parameterType="String">
+<select id="mycrewList" resultType="com.fitmate.crew.dto.CrewSearchListDTO">
 SELECT
 <!-- 크루원 목록 idx -->
 A.member_idx,
@@ -216,12 +217,12 @@ INNER JOIN region R ON R.region_idx = RS.region_idx
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
 LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
 WHERE
-A.member_id = #{userId}  <!-- 현재 유저ID로 활동중인 크루목록 가져오기. -->
+A.member_id = #{param1}  <!-- 현재 유저ID로 활동중인 크루목록 가져오기. -->
 AND
 A.status = 1           <!-- 정상적으로 활동허가를 받은 크루목록만 가져오기 -->
 AND
 CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
-
+LIMIT #{param2} OFFSET #{param3}
 </select>
 
 <!-- 댓글, 대댓글 한번에 가져오기 -->

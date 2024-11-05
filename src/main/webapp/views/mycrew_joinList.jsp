@@ -159,10 +159,10 @@
 				   <p>
 				      <select name="searchFilter" id="searchFilter">
 				         <option value="" selected>검색기준</option>
-				         <option value="1">크루원닉네임</option>
-				         <option value="2">크루원아이디</option>
+				         <option value="1">신청자닉네임</option>
+				         <option value="2">신청자아이디</option>
 				      </select>
-				      <input type="text" class="searchKeyword" name="searchKeyword" placeholder="크루원 닉네임 / 아이디를 입력하세요." />
+				      <input type="text" class="searchKeyword" name="searchKeyword" placeholder="가입 신청자 닉네임 / 아이디를 입력하세요." />
 				      <button type="button" onclick="search()" class="mainbtn search"><i class="bi bi-search"></i></button>
 				   </p>
 				   <div class="list_abs">
@@ -346,7 +346,7 @@
                 });	
              	// 크루원이 한명도 없는경우 => 크루원이 없습니다.
                 if(memberCount === 1){
-         	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
+         	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루 가입신청자가 없습니다.</h2></div>');
          	    }
             },
             error: function(e) {

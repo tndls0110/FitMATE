@@ -41,6 +41,16 @@ public class CrewSearchListDTO {
 	
 	
 	
+	@Override
+	public String toString() {
+		return "CrewSearchListDTO [crew_name=" + crew_name + ", crew_idx=" + crew_idx + ", board_idx=" + board_idx
+				+ ", subject=" + subject + ", region_name=" + region_name + ", regions_name=" + regions_name
+				+ ", member_count=" + member_count + ", leader_id=" + leader_id + ", leader_name=" + leader_name
+				+ ", leader_nick=" + leader_nick + ", leader_profile=" + leader_profile + ", leader_mbti=" + leader_mbti
+				+ ", board_count=" + board_count + ", create_date=" + create_date + ", member_idx=" + member_idx
+				+ ", join_idx=" + join_idx + "]";
+	}
+	
 	public int getMember_idx() {
 		return member_idx;
 	}
