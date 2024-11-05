@@ -768,7 +768,6 @@
 			console.log("parent :",p);
 			p.animate({'right':'+=460'},'slow','swing');
 		}
-
 	});
 
 
@@ -781,13 +780,10 @@
 
 		console.log('parent:',parent);
 		console.log('grandparent:',grandparent);
-		console.log('grandparent:',grandparent);
 		for(var grand of grandparent){
 			console.log("grand :",grand);
 			grand.animate({'right':'+=460'},'slow','swing');
 		}
-
-
 	});
 
 
