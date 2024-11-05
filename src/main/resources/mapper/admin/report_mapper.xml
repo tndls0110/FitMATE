@@ -8,10 +8,52 @@
     <!-- 신고 목록 -->
     <select id="allCount" resultType="int">
         SELECT CEIL(COUNT(report_idx) / #{param1}) FROM report
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
+                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
+                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+
+            <if test="sortType.equals('reported')">
+                report_prog = 1
+            </if>
+            <if test="sortType.equals('inProgress')">
+                report_prog = 2
+            </if>
+            <if test="sortType.equals('blind')">
+                report_prog = 3
+            </if>
+            <if test="sortType.equals('completed')">
+                report_prog = 4
+            </if>
+        </where>
     </select>
 
     <select id="countIdx" resultType="int">
         SELECT COUNT(report_idx) FROM report
+        <where>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
+                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
+                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+
+            <if test="sortType.equals('reported')">
+                report_prog = 1
+            </if>
+            <if test="sortType.equals('inProgress')">
+                report_prog = 2
+            </if>
+            <if test="sortType.equals('blind')">
+                report_prog = 3
+            </if>
+            <if test="sortType.equals('completed')">
+                report_prog = 4
+            </if>
+        </where>
     </select>
 
     <select id="list" resultType="com.fitmate.admin.dto.ReportDTO">

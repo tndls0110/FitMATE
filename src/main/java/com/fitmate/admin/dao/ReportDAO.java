@@ -13,8 +13,8 @@ import java.util.Map;
 public interface ReportDAO {
 
     // 신고 목록
-    int allCount(int cnt);
-    int countIdx();
+    int allCount(int cnt, String opt, String keyword, String sortType);
+    int countIdx(String opt, String keyword, String sortType);
     List<NoticeDTO> list(int limit, int offset, String opt, String keyword, String sortType);
 
     // 신고 상세

@@ -22,8 +22,8 @@ public class ReportService {
     public Map<String, Object> list(int page, int cnt, String opt, String keyword, String sortType) {
         int limit = cnt;
         int offset = (page - 1) * cnt;
-        int totalPages = report_dao.allCount(cnt);
-        int totalIdx = report_dao.countIdx();
+        int totalPages = report_dao.allCount(cnt, opt, keyword, sortType);
+        int totalIdx = report_dao.countIdx(opt, keyword, sortType);
 
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("totalPages", totalPages);
