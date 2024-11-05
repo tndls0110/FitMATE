@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import com.fitmate.admin.dto.RegCountyDTO;
 import com.fitmate.crew.dao.CrewDAO;
 import com.fitmate.crew.dto.AskWriteDTO;
 import com.fitmate.crew.dto.CrewApprovalDTO;
@@ -32,7 +33,7 @@ public class CrewService {
 	
 	
 	
-public void crew_create(String crew_id, String name, int regions_idx, String content) {
+public int crew_create(String crew_id, String name, int regions_idx, String content) {
 		
 		int suc = 0;
 		// 크루idx와 모집게시글idx 동시성 맞춰주기 = dto로 변환 시켜 idx 받기
@@ -54,11 +55,12 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 			
 			int crew_idx = crew_dto.getCrew_idx();
 			int board_idx = board_dto.getBoard_idx();
+			suc = crew_idx;
 			// 크루원 목록에 크루장 넣기
 			crewmember_dto.setMember_id(crew_id);
 			crewmember_dto.setCrew_idx(crew_idx);
 			if(crew_dao.crew_idx(board_idx,crew_idx)>0) {
-				suc = 1;
+			//	suc = crew_idx;
 				crew_dao.crew_leaderjoin(crewmember_dto);
 			};
 			
@@ -67,7 +69,7 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		// 크루 생성 확인
 	//	logger.info("크루생성 성공 : ",suc);
 	
-		
+		return suc;
 	}
 
 
@@ -323,6 +325,19 @@ public void crew_create(String crew_id, String name, int regions_idx, String con
 		int row = crew_dao.memberExit(member_idx);
 		
 		return row;
+	}
+
+
+	public List<RegCountyDTO> crew_regions(String selectedRegionIdx) {
+		
+		return crew_dao.crew_regions(selectedRegionIdx);
+	}
+
+
+	public CrewSearchListDTO crew_board_detail(String board_idx, String crew_idx) {
+		
+		return crew_dao.crew_board_detail(board_idx,crew_idx);
+		
 	}
 	
 

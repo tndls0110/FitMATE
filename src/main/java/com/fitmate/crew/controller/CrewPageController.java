@@ -35,9 +35,9 @@ public class CrewPageController {
 	@RequestMapping(value="/crew_report.go")
 	public String crew_report(@RequestParam Map<String,String> params,Model model,HttpSession session) {
 		
-		
+		String url = "";
 		logger.info("신고 페이지 이동 params = {}",params);
-		
+		/*
 		// 보드 idx가 있으면 >> 신고글이 게시글이면
 		if(params.get("board_idx")!=null) {
 			model.addAttribute("board_type", 1);
@@ -50,7 +50,28 @@ public class CrewPageController {
 			model.addAttribute("board_idx", params.get("comment_idx"));
 			model.addAttribute("reported_id", params.get("comment_id"));
 		}
-	
+		 */
+		
+		// 신고글이 댓글이면
+		if(params.get("comment_idx")!=null) {
+			String boardidx = params.get("board_idx");
+			url = "";
+			model.addAttribute("board_type", 2);
+			model.addAttribute("board_idx", params.get("comment_idx"));
+			model.addAttribute("reported_id", params.get("comment_id"));
+			model.addAttribute("url", url);
+					
+		}
+		else { // 신고글이 게시글이면
+			String crewidx = params.get("crew_idx");
+			url = "/crew_main_page.go?crew_idx="+crewidx;
+			model.addAttribute("board_type", 1);
+			model.addAttribute("board_idx", params.get("board_idx"));
+			model.addAttribute("reported_id", params.get("board_id"));
+			model.addAttribute("url", url);
+			
+		}
+		
 		return "crew_report";
 	}
 	
@@ -109,8 +130,18 @@ public class CrewPageController {
 		public String crew_page_notice(@RequestParam Map<String,String> params,HttpSession session, Model model) {
 			String crew_idx = params.get("crew_idx");
 			String crew_id = params.get("crew_id");
-			model.addAttribute("crew_idx", crew_idx);
-			model.addAttribute("crew_id", crew_id);
+		//	model.addAttribute("crew_idx", crew_idx);
+		//	model.addAttribute("crew_id", crew_id);
+			CrewDTO crewdto = new CrewDTO();
+			crewdto = crewpage_service.crew_info(crew_idx);
+			
+				String crewid =	crewdto.getCrew_id();
+				String crewname =	crewdto.getName();
+				int crewidx = crewdto.getCrew_idx();
+				
+			model.addAttribute("crew_idx", crewidx);
+			model.addAttribute("crew_id", crewid);
+			
 			
 			return "crew_page_notice";
 		}
@@ -124,8 +155,9 @@ public class CrewPageController {
 		logger.info("입력값 {} ",subject);
 		
 		crewpage_service.crew_notice_write(subject,board_id,crew_idx);
+		String page = "redirect:/crew_page_notice.go?crew_idx="+crew_idx+"&crew_id="+board_id;
 		
-		return "redirect:/crew_page_notice.go";
+		return page;
 	}
 	
 	// 공지사항목록 불러오기
@@ -188,8 +220,19 @@ public class CrewPageController {
 				String crew_idx = params.get("crew_idx");
 				String crew_id = params.get("crew_id");
 				
-				model.addAttribute("crew_idx", crew_idx); // 전달받은 크루idx 다음 페이지에 넘겨주기
-				model.addAttribute("crew_id", crew_id); // 전달받은 크루id 다음 페이지에 넘겨주기
+				CrewDTO crewdto = new CrewDTO();
+				crewdto = crewpage_service.crew_info(crew_idx);
+				
+					String crewid =	crewdto.getCrew_id();
+					String crewname =crewdto.getName();
+					int crewidx = crewdto.getCrew_idx();
+					
+				model.addAttribute("crew_idx", crewidx);
+				model.addAttribute("crew_id", crewid);
+				
+				
+			//	model.addAttribute("crew_idx", crew_idx); // 전달받은 크루idx 다음 페이지에 넘겨주기
+			//	model.addAttribute("crew_id", crew_id); // 전달받은 크루id 다음 페이지에 넘겨주기
 				
 				return "crew_oneboard";
 			}
@@ -291,7 +334,7 @@ public class CrewPageController {
 			logger.info("입력값 {} ",subject);
 			
 			crewpage_service.crew_photo_write(file,subject,board_id,crew_idx);
-			String page = "redirect:/crew_oneboard.go?crew_idx="+crew_idx;
+			String page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
 			
 			return page;
 			
