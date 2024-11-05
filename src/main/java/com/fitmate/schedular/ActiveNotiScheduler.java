@@ -17,7 +17,7 @@ import java.time.LocalTime;
 public class ActiveNotiScheduler {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired NotiDAO notiDAO;
-	@Scheduled (cron = "0 0 0 * * ?")
+	@Scheduled (cron = "0 0/5 0 * * ?") // cron = "0 0 0 * * ?"
 	public void activeNoti() {
 		LocalDate thirty_days_ago = LocalDate.now().minusDays(30); //일 수를 구하고 싶다면 localDate
 		logger.info("thirty_days_ago:"+thirty_days_ago.toString());
