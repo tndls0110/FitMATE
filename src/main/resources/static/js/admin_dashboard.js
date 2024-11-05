@@ -2,7 +2,7 @@ let data;
 let chart;
 let chartData = [];
 
-let waitingInterval = setInterval(waitingAnimator, 500);
+let waitingInterval = setInterval(waitingAnimator, 150);
 
 function waitingAnimator() {
     let waiting = document.getElementsByClassName('waiting')[0];

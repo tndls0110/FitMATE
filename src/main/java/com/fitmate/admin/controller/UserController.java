@@ -25,7 +25,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_userList.go")
 	public String userList (Model model, HttpSession session) {
 		page = "admin_userList";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
@@ -41,7 +41,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_userDetail.go")
 	public String userDetail (String user_id, Model model, HttpSession session) {
 		page = "admin_userDetail";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("member", user_service.userDetail(user_id));
 		return page;
 	}
@@ -50,7 +50,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_crewList.go")
 	public String crewList (Model model, HttpSession session) {
 		page = "admin_crewList";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
@@ -66,7 +66,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_crewDetail.go")
 	public String crewDetail (String crew_idx, Model model, HttpSession session) {
 		page = "admin_crewDetail";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("crew", user_service.crewDetail(crew_idx));
 		return page;
 	}

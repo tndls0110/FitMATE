@@ -125,7 +125,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtiq_subTrash.go")
 	public String regMbtiQuestionSubTrash (String mbtiq_idx, Model model, HttpSession session) {
 		page = "admin_regMbtiq_subTrash";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
 		model.addAttribute("mbtir", regData_service.regMbtiResultTrash());
 		model.addAttribute("mbtisub", regData_service.regMbtisubTrash(mbtiq_idx));
@@ -134,10 +134,9 @@ public class RegDataController {
 
 	@RequestMapping (value = "/admin_regMbtiq_sub_restoreRow.ajax")
 	@ResponseBody
-	public Map<String, Object> admin_regMbtiq_sub_restoreRow (@RequestParam Map<String, String> params) {
+	public Map<String, Object> admin_regMbtiq_sub_restoreRow (@RequestParam Map<String, String> params, HttpSession session) {
 		Map<String, Object> result = new HashMap<>();
-		//int admin_idx = session.getAttribute("loginIdx");
-		int admin_idx = 1;
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		logger.info("params: {}", params);
 		result.put("status", regData_service.admin_regMbtiq_sub_restoreRow(params, admin_idx));
 		return result;
@@ -147,7 +146,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtir.go")
 	public String regMbtiResult (Model model, HttpSession session) {
 		page = "admin_regMbtir";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("list", regData_service.regMbtiResult());
 		return page;
 	}
@@ -155,14 +154,14 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtir_insert.go")
 	public String regMbtiResultInsert (Model model, HttpSession session) {
 		page = "admin_regMbtir_insert";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtir_detail.go")
 	public String regMbtiResultDetail (String mbtir_idx, Model model, HttpSession session) {
 		page = "admin_regMbtir_detail";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("mbtir", regData_service.regMbtiResult());
 		model.addAttribute("list", regData_service.regMbtiResultDetail(mbtir_idx));
 		return page;
@@ -170,32 +169,30 @@ public class RegDataController {
 
 	@RequestMapping (value = "/admin_insertMbtir.do")
 	public String regMbtiResultInsert (MultipartFile[] mbtir_img, @RequestParam Map<String, String> params, Model model, HttpSession session) {
-		//int admin_idx = session.getAttribute("loginIdx");
-		int admin_idx = 1;
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		int mbtir_idx = regData_service.regMbtiResultInsert(mbtir_img, params, admin_idx);
 		page = "redirect:/admin_regMbtir_detail.go?mbtir_idx="+mbtir_idx;
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_updateMbtir.do")
 	public String regMbtiResultDetail (MultipartFile[] mbtir_img, @RequestParam Map<String, String> params, Model model, HttpSession session) {
-		//int admin_idx = session.getAttribute("loginIdx");
-		int admin_idx = 1;
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		regData_service.regMbtiResultDetail(mbtir_img, params, admin_idx);
 		if (params.get("reg_type").equals("update")) {
 			page = "redirect:/admin_regMbtir_detail.go?mbtir_idx="+params.get("mbtir_idx");
 		} else if (params.get("reg_type").equals("delete")) {
 			page = "redirect:/admin_regMbtir.go";
 		}
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtirTrash.go")
 	public String regMbtiResultTrash (Model model, HttpSession session) {
 		page = "admin_regMbtirTrash";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		model.addAttribute("list", regData_service.regMbtiResultTrash());
 		return page;
 	}
@@ -203,9 +200,8 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreMbtir.do")
 	public String restoreMbtiResult (String mbtir_idx, Model model, HttpSession session) {
 		page = "redirect:/admin_regMbtir.go";
-		//main_controller.checkPermit(model, session);
-		//int admin_idx = session.getAttribute("loginIdx");
-		int admin_idx = 1;
+		main_controller.checkPermit(model, session);
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		regData_service.restoreMbtiResult(mbtir_idx, admin_idx);
 		return page;
 	}

@@ -27,7 +27,7 @@ public class NoticeController {
 	@RequestMapping (value = "/admin_notice.go")
 	public String list (Model model, HttpSession session) {
 		page = "admin_notice";
-		//main_controller.checkPermit(model, session);
+		main_controller.checkPermit(model, session);
 		return page;
 	}
 
@@ -35,9 +35,8 @@ public class NoticeController {
 	@RequestMapping (value = "/admin_noticeWrite.do")
 	public String write (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_notice.go";
-		//main_controller.checkPermit(model, session);
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
+		main_controller.checkPermit(model, session);
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		if (notice_service.write(params.get("notice_cont"), admin_idx)){
 			model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");
 		} else {

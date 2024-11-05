@@ -1,5 +1,6 @@
 package com.fitmate.admin.service;
 
+import com.fitmate.admin.controller.MainController;
 import com.fitmate.admin.dao.MainDAO;
 import com.fitmate.admin.dto.DashboardDTO;
 import org.slf4j.Logger;
@@ -16,9 +17,6 @@ import java.util.Map;
 public class MainService {
 	Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired MainDAO main_dao;
-
-    // 세션 체크
-    String page = "";
 
     // layout
     public String getnick(int admin_idx) {

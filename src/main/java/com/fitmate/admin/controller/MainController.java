@@ -34,15 +34,14 @@ public class MainController {
 	@ResponseBody
 	public Map<String, Object> leftnav(HttpSession session) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		//String admin_idx = session.removeAttribute("loginIdx");
-		int admin_idx = 1;
+		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		result.put("name", main_service.getnick(admin_idx));
 		return result;
 	}
 
 	// 로그인
 	@RequestMapping (value = "/admin_login.go")
-	public String login(Model model, HttpSession session) {
+	public String login() {
 		return "admin_login";
 	}
 
@@ -81,7 +80,7 @@ public class MainController {
 	@RequestMapping (value = "/admin_dashboard.go")
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
-		//checkPermit(model, session);
+		checkPermit(model, session);
 		model.addAttribute("notice", main_service.dashboardList1());
 		model.addAttribute("report", main_service.dashboardList2());
 		return page;
