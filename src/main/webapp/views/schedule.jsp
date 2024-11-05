@@ -743,10 +743,6 @@
 						index++; //인덱스 증가
 					}
 					content +='</div>';
-
-
-
-
 				}
 				content +=	'</div></div></div>';
 

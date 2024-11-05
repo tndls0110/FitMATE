@@ -226,9 +226,11 @@
             font-style: oblique;
             visibility:hidden;
         }
+
         .bi-x{
             cursor: pointer;
         }
+
     </style>
     <script>
         var msg = '${msg}';
