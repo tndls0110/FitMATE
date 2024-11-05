@@ -96,11 +96,11 @@ public class CrewPageService {
 		// 알람 내용
 		String noti_content = name+" 크루의 새로운 공지사항 갱신";
 		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
-		String noti_url = crewidx+"=url주소";
+		String noti_url = "/crew_page_notice.go?crew_idx="+crewidx;
 		// 크루원 목록 가져오기
 		List<CrewMemberDTO> member_list = crewpage_dao.crew_member_list(crew_idx);
 		// notis_cate 1로 맞춰주기
-		name = "1";
+		name = "2";
 		// 알림 보내기
 		for (CrewMemberDTO  member : member_list) {
 			// 멤버 id(수신자id) 가져오기
@@ -160,7 +160,7 @@ public class CrewPageService {
 	@Transactional
 	public void crew_oneboard_del(String board_idx) {
 		crewpage_dao.notice_del_crewidx(board_idx);
-		crewpage_dao.crew_notice_del(board_idx);
+		crewpage_dao.crew_board_del(board_idx);
 		
 	}
 	// 게시글 블라인드
@@ -256,10 +256,10 @@ public class CrewPageService {
 	public void crew_photo_del(String board_idx) {
 		// 이름은 notice이지만 게시글 삭제 로직은 같다 == board_idx 와 엮인 crew_idx 지우기
 		crewpage_dao.notice_del_crewidx(board_idx);
-		// 이름은 notice 이지만 게시글 삭제 로직은 같다 == board_idx로 게시글 지우기
-		crewpage_dao.crew_notice_del(board_idx);
+		// status 3 으로 변경
+		crewpage_dao.crew_board_del(board_idx);
 		// 추가한 코드 사진파일 db 정보 없애주기
-		crewpage_dao.crew_photofile_del(board_idx);
+	// 게시글 삭제시(status = 3) 사진유지	crewpage_dao.crew_photofile_del(board_idx);
 			
 	}
 
@@ -326,17 +326,17 @@ public class CrewPageService {
 		
 		return crewpage_dao.crew_main_notice(crew_idx);
 	}
-
+	// 크루원 멤버들 정보(닉네임,프로필사진) 가져오기
 	public List<CrewMemberProfileDTO> crew_main_crewmember(int crew_idx) {
 		
 		return crewpage_dao.crew_main_crewmember(crew_idx);
 	}
-
+	// 크루 사진 게시글 가져오기
 	public List<CrewBoardDTO> crew_photo_list(String crewidx, int offset, int size) {
 		
 		return crewpage_dao.crew_photo_list(crewidx,offset,size);
 	}
-
+	// 크루 정보 가져오기
 	public CrewDTO crew_info(String crew_idx) {
 		
 		return crewpage_dao.crew_info(crew_idx);
