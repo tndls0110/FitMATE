@@ -23,6 +23,12 @@
         </div>
         <div class="contents narrow">
             <form action="admin_login.do" method="post">
+                <c:if test="${addr == null}">
+                    <input type="hidden" name="addr" value="redirect:/admin_dashboard.go" />
+                </c:if>
+                <c:if test="${addr != null}">
+                    <input type="hidden" name="addr" value="${addr}" />
+                </c:if>
                 <div class="list">
                     <h3 class="capt">아이디</h3>
                     <p><input type="text" class="full thick" name="admin_id" value="${admin_id}" /></p>

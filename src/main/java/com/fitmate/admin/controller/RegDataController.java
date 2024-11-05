@@ -22,9 +22,14 @@ public class RegDataController {
 
 	// 세션 체크
 	String page = "";
-	public void checkPermit(Model model, HttpSession session) {
+	public void checkPermit(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginIdx") == null) {
 			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/admin_dashboard.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
 			page = "admin_login";
 		}
 	}
@@ -33,7 +38,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtiq.go")
 	public String regMbtiQuestion (Model model, HttpSession session) {
 		page = "admin_regMbtiq";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtiq.go", model, session);
 		model.addAttribute("list", regData_service.regMbtiQuestion());
 		return page;
 	}
@@ -43,14 +48,14 @@ public class RegDataController {
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		int mbtiq_idx = regData_service.insertMbtiQuestion(params, admin_idx);
 		page = "redirect:/admin_regMbtiq_sub.go?mbtiq_idx="+mbtiq_idx;
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtiq_sub.go")
 	public String regMbtiQuestionSub (String mbtiq_idx, Model model, HttpSession session) {
 		page = "admin_regMbtiq_sub";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtiq_sub.go", model, session);
 		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
 		model.addAttribute("mbtir", regData_service.regMbtiResult());
 		model.addAttribute("mbtisub", regData_service.regMbtisub(mbtiq_idx));
@@ -105,7 +110,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtiqTrash.go")
 	public String regMbtiQuestionTrash (Model model, HttpSession session) {
 		page = "admin_regMbtiqTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtiqTrash.go", model, session);
 		model.addAttribute("list", regData_service.regMbtiQuestionTrash());
 		return page;
 	}
@@ -113,7 +118,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreMbtiq.do")
 	public String restoreMbtiQuestion (String mbtiq_idx, Model model, HttpSession session) {
 		page = "redirect:/admin_regMbtiq.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.restoreMbtiQuestion(mbtiq_idx, admin_idx);
 		return page;
@@ -122,7 +127,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtiq_subTrash.go")
 	public String regMbtiQuestionSubTrash (String mbtiq_idx, Model model, HttpSession session) {
 		page = "admin_regMbtiq_subTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtiq_subTrash.go", model, session);
 		model.addAttribute("mbtiq", regData_service.regMbtiQuestion());
 		model.addAttribute("mbtir", regData_service.regMbtiResultTrash());
 		model.addAttribute("mbtisub", regData_service.regMbtisubTrash(mbtiq_idx));
@@ -142,7 +147,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtir.go")
 	public String regMbtiResult (Model model, HttpSession session) {
 		page = "admin_regMbtir";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtir.go", model, session);
 		model.addAttribute("list", regData_service.regMbtiResult());
 		return page;
 	}
@@ -150,14 +155,14 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regMbtir_insert.go")
 	public String regMbtiResultInsert (Model model, HttpSession session) {
 		page = "admin_regMbtir_insert";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtir_insert.go", model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtir_detail.go")
 	public String regMbtiResultDetail (String mbtir_idx, Model model, HttpSession session) {
 		page = "admin_regMbtir_detail";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtir_detail.go", model, session);
 		model.addAttribute("mbtir", regData_service.regMbtiResult());
 		model.addAttribute("list", regData_service.regMbtiResultDetail(mbtir_idx));
 		return page;
@@ -168,7 +173,7 @@ public class RegDataController {
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		int mbtir_idx = regData_service.regMbtiResultInsert(mbtir_img, params, admin_idx);
 		page = "redirect:/admin_regMbtir_detail.go?mbtir_idx="+mbtir_idx;
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		return page;
 	}
 
@@ -181,14 +186,14 @@ public class RegDataController {
 		} else if (params.get("reg_type").equals("delete")) {
 			page = "redirect:/admin_regMbtir.go";
 		}
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		return page;
 	}
 
 	@RequestMapping (value = "/admin_regMbtirTrash.go")
 	public String regMbtiResultTrash (Model model, HttpSession session) {
 		page = "admin_regMbtirTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regMbtirTrash.go", model, session);
 		model.addAttribute("list", regData_service.regMbtiResultTrash());
 		return page;
 	}
@@ -196,7 +201,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreMbtir.do")
 	public String restoreMbtiResult (String mbtir_idx, Model model, HttpSession session) {
 		page = "redirect:/admin_regMbtir.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.restoreMbtiResult(mbtir_idx, admin_idx);
 		return page;
@@ -206,7 +211,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regRegion.go")
 	public String regRegion (Model model, HttpSession session) {
 		page = "admin_regRegion";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regRegion.go", model, session);
 		model.addAttribute("list", regData_service.regRegion());
 		return page;
 	}
@@ -214,7 +219,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_updateRegion.do")
 	public String regRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.regRegion(params, admin_idx);
 		return page;
@@ -223,7 +228,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_insertRegion.do")
 	public String insertRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.insertRegion(params, admin_idx);
 		return page;
@@ -232,7 +237,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regRegionTrash.go")
 	public String regRegionTrash (Model model, HttpSession session) {
 		page = "admin_regRegionTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regRegionTrash.go", model, session);
 		model.addAttribute("list", regData_service.regRegionTrash());
 		return page;
 	}
@@ -240,7 +245,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreRegion.do")
 	public String restoreRegion (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.restoreRegion(params, admin_idx);
 		return page;
@@ -249,7 +254,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regRegion_sub.go")
 	public String regRegionSub (String region_idx, Model model, HttpSession session) {
 		page = "admin_regRegion_sub";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regRegion_sub.go", model, session);
 		model.addAttribute("region", regData_service.regRegion());
 		model.addAttribute("list", regData_service.regRegionSub(region_idx));
 		return page;
@@ -258,7 +263,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_updateRegion_sub.do")
 	public String regRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.regRegionSub(params, admin_idx);
 		return page;
@@ -267,7 +272,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_insertRegion_sub.do")
 	public String insertRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.insertRegionSub(params, admin_idx);
 		return page;
@@ -276,7 +281,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regRegion_subTrash.go")
 	public String regRegionSubTrash (String region_idx, Model model, HttpSession session) {
 		page = "admin_regRegion_subTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regRegion_subTrash.go", model, session);
 		model.addAttribute("region", regData_service.regRegion());
 		model.addAttribute("list", regData_service.regRegionSubTrash(region_idx));
 		return page;
@@ -285,7 +290,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreRegion_sub.do")
 	public String restoreRegionSub (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regRegion_sub.go?region_idx="+params.get("region_idx");
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.restoreRegionSub(params, admin_idx);
 		return page;
@@ -295,7 +300,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regReport.go")
 	public String regReport (Model model, HttpSession session) {
 		page = "admin_regReport";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regReport.go", model, session);
 		model.addAttribute("list", regData_service.regReport());
 		return page;
 	}
@@ -303,7 +308,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_updateReport.do")
 	public String regReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regReport.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.regReport(params, admin_idx);
 		return page;
@@ -312,7 +317,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_insertReport.do")
 	public String insertReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regReport.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.insertReport(params, admin_idx);
 		return page;
@@ -321,7 +326,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_regReportTrash.go")
 	public String regReportTrash (Model model, HttpSession session) {
 		page = "admin_regReportTrash";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_regReportTrash.go", model, session);
 		model.addAttribute("list", regData_service.regReportTrash());
 		return page;
 	}
@@ -329,7 +334,7 @@ public class RegDataController {
 	@RequestMapping (value = "/admin_restoreReport.do")
 	public String restoreReport (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_regReport.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		regData_service.restoreReport(params, admin_idx);
 		return page;

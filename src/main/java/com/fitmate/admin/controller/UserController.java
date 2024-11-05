@@ -25,12 +25,23 @@ public class UserController {
 			page = "admin_login";
 		}
 	}
+	public void checkPermit(String addr, Model model, HttpSession session) {
+		if (session.getAttribute("loginIdx") == null) {
+			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/admin_dashboard.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
+			page = "admin_login";
+		}
+	}
 
 	// 사용자 목록
 	@RequestMapping (value = "/admin_userList.go")
 	public String userList (Model model, HttpSession session) {
 		page = "admin_userList";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_userList.go", model, session);
 		return page;
 	}
 
@@ -46,7 +57,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_userDetail.go")
 	public String userDetail (String user_id, Model model, HttpSession session) {
 		page = "admin_userDetail";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_userDetail.go", model, session);
 		model.addAttribute("member", user_service.userDetail(user_id));
 		return page;
 	}
@@ -55,7 +66,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_crewList.go")
 	public String crewList (Model model, HttpSession session) {
 		page = "admin_crewList";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_crewList.go", model, session);
 		return page;
 	}
 
@@ -71,7 +82,7 @@ public class UserController {
 	@RequestMapping (value = "/admin_crewDetail.go")
 	public String crewDetail (String crew_idx, Model model, HttpSession session) {
 		page = "admin_crewDetail";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_crewDetail.go", model, session);
 		model.addAttribute("crew", user_service.crewDetail(crew_idx));
 		return page;
 	}

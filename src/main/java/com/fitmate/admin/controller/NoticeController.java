@@ -21,9 +21,14 @@ public class NoticeController {
 
 	// 세션 체크
 	String page = "";
-	public void checkPermit(Model model, HttpSession session) {
+	public void checkPermit(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginIdx") == null) {
 			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/admin_dashboard.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
 			page = "admin_login";
 		}
 	}
@@ -32,7 +37,7 @@ public class NoticeController {
 	@RequestMapping (value = "/admin_notice.go")
 	public String list (Model model, HttpSession session) {
 		page = "admin_notice";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_notice.go", model, session);
 		return page;
 	}
 
@@ -40,7 +45,7 @@ public class NoticeController {
 	@RequestMapping (value = "/admin_noticeWrite.do")
 	public String write (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_notice.go";
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
 		if (notice_service.write(params.get("notice_cont"), admin_idx)){
 			model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");

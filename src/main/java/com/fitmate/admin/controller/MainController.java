@@ -26,6 +26,17 @@ public class MainController {
 			page = "admin_login";
 		}
 	}
+	public void checkPermit(String addr, Model model, HttpSession session) {
+		if (session.getAttribute("loginIdx") == null) {
+			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/admin_dashboard.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
+			page = "admin_login";
+		}
+	}
 
 	// layout
 	@RequestMapping (value = "/admin_header.ajax")
@@ -48,12 +59,12 @@ public class MainController {
 	}
 
 	@RequestMapping (value = "/admin_login.do")
-	public String login(String admin_id, String pw, Model model, HttpSession session) {
+	public String login(String addr, String admin_id, String pw, Model model, HttpSession session) {
 		page = "admin_login";
 		switch (main_service.login(admin_id, pw)){
 			case "pass":
 				session.setAttribute("loginIdx", main_service.getidx(admin_id));
-				page = "redirect:/admin_dashboard.go";
+				page = addr;
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -80,7 +91,7 @@ public class MainController {
 	@RequestMapping (value = "/admin_dashboard.go")
 	public String dashboard(Model model, HttpSession session) {
 		page = "admin_dashboard";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_dashboard.go", model, session);
 		model.addAttribute("notice", main_service.dashboardList1());
 		model.addAttribute("report", main_service.dashboardList2());
 		return page;

@@ -20,9 +20,14 @@ public class ReportController {
 
 	// 세션 체크
 	String page = "";
-	public void checkPermit(Model model, HttpSession session) {
+	public void checkPermit(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginIdx") == null) {
 			model.addAttribute("msg", "관리자 로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/admin_dashboard.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
 			page = "admin_login";
 		}
 	}
@@ -31,7 +36,7 @@ public class ReportController {
 	@RequestMapping (value = "/admin_reportList.go")
 	public String reportList(Model model, HttpSession session) {
 		page = "admin_reportList";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_reportList.go", model, session);
 		return page;
 	}
 
@@ -47,7 +52,7 @@ public class ReportController {
 	@RequestMapping (value = "/admin_reportDetail.go")
 	public String reportDetail(String report_idx, Model model, HttpSession session) {
 		page = "admin_reportDetail";
-		checkPermit(model, session);
+		checkPermit("redirect:/admin_reportDetail.go", model, session);
 		model.addAttribute("info", report_service.detail(report_idx));
 		model.addAttribute("status", report_service.reportStatus());
 		model.addAttribute("progress", report_service.reportProgress(report_idx));
@@ -57,7 +62,7 @@ public class ReportController {
 	@RequestMapping (value = "/admin_reportDetail.do")
 	public String confirmReport(@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_reportDetail.go?report_idx="+params.get("report_idx");
-		checkPermit(model, session);
+		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		report_service.confirmReport(params, admin_idx);
 		return page;
