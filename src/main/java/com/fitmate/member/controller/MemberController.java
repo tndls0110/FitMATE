@@ -157,11 +157,33 @@ public class MemberController {
 	}
 
 	// 정보 수정하기
+	@RequestMapping (value = "/member_confirmpw.go")
+	public String confirmPW(Model model, HttpSession session) {
+		page = "member_confirmpw";
+		checkPermit(model, session);
+		return page;
+	}
+
+	@RequestMapping (value = "/member_confirmpw.do")
+	public String confirmPW(String pw, Model model, HttpSession session) {
+		page = "member_confirmpw";
+		String user_id = (String) session.getAttribute("loginId");
+		switch (member_service.login(user_id, pw)){
+			case "pass":
+				page = "redirect:/member_update.go";
+				break;
+			case "invalidPW":
+				model.addAttribute("state", "invalidPW");
+				model.addAttribute("pw", pw);
+				break;
+		}
+		return page;
+	}
+
 	@RequestMapping (value = "/member_update.go")
 	public String update(Model model, HttpSession session) {
 		page = "member_update";
 		checkPermit(model, session);
-		checkPermitCrew(model, session);
 		String user_id = (String) session.getAttribute("loginId");
 
 		// 프로필 불러오기

@@ -3,7 +3,7 @@
 <div class="header">
 	<c:if test="${sessionScope.loginIdx != null}">
 		<p>
-			<span class="admin_name"></span>님, 오늘도 열일하세요~ ^-^
+			<span class="admin_name"></span>님, 오늘도 행복한 하루 보내세요~ ^-^
 			<button onclick="location.href='admin_logout.do'" class="mainbtn minbtn">로그아웃</button>
 		</p>
 	</c:if>
