@@ -25,9 +25,9 @@ import java.util.Map;
 public class MemberController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired MemberService member_service;
-	String page = "";
 
 	// 세션 체크
+	String page = "";
 	public void checkPermit(Model model, HttpSession session) {
 		if (session.getAttribute("loginId") == null) {
 			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");

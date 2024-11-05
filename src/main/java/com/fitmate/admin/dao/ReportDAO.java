@@ -27,4 +27,5 @@ public interface ReportDAO {
     void blind(Map<String, String> params);
     List<String> getCnt(Map<String, String> params);
     void restrict(String report_idx, LocalDateTime clearDate);
+    void restrictNotify(String reported_id, String msg);
 }

@@ -152,4 +152,8 @@
         INSERT INTO restriction (user_id, cleared_date) VALUES (#{param1}, #{param2});
     </insert>
 
+    <insert id="restrictNotify">
+        INSERT INTO noti (notir_id, notis_cate, noti_content) VALUES (#{reported_id}, 1, #{msg});
+    </insert>
+
 </mapper>

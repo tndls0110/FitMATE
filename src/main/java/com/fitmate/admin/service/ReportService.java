@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,10 +59,15 @@ public class ReportService {
                 report_dao.blind(params);
             }
         }
-        if (report_dao.getCnt(params).size() % 3 == 0){
+        int getCnt = report_dao.getCnt(params).size();
+        if (getCnt % 3 == 0){
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime clearDate = now.plusDays(7);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            String formattedClearDate = clearDate.format(formatter);
             report_dao.restrict(params.get("reported_id"), clearDate);
+            String msg = params.get("reported_id")+"님은 "+formattedClearDate+" 까지 크루 기능을 이용하실 수 없습니다. (사유: 게시글 "+getCnt+"회 차단)";
+            report_dao.restrictNotify(params.get("reported_id"), msg);
         }
     }
 }
