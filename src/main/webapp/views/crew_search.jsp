@@ -44,13 +44,14 @@
    
    select#searchFilter{
       width: 20%;
+      height: 5.8%;
    }
    
    div.recruitArea{
       overflow-y: scroll;
       overflow-x: hidden;
       width: 90%;
-      height: 65%;
+      height: 73%;
       margin-top: 10%;
       margin-left: auto;
       margin-right: auto;
@@ -166,7 +167,7 @@
    }
    
    .contents{
-   	height:900px;
+   	height:1100px;
    }
    
    .bi.bi-arrow-repeat {
@@ -185,7 +186,17 @@
    	 	transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important; /* 전환 효과 추가 */
 	}
 
-
+	/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+	div.recruitArea::-webkit-scrollbar, div.approvalArea::-webkit-scrollbar {
+	    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+	    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+	}
+	
+	/* Firefox에서 스크롤바 숨기기 */
+	div.recruitArea, div.approvalArea {
+	    scrollbar-width: none;  /* 스크롤바를 숨김 */
+	    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+	}
    
 	
    

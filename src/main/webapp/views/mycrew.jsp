@@ -227,6 +227,19 @@ a.crew_create {
    	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* 추가된 그림자 효과 */
 	transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important; /* 전환 효과 추가 */
 }
+
+/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+div.recruitArea::-webkit-scrollbar, div.approvalArea::-webkit-scrollbar {
+    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+}
+
+/* Firefox에서 스크롤바 숨기기 */
+div.recruitArea, div.approvalArea {
+    scrollbar-width: none;  /* 스크롤바를 숨김 */
+    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+}
+
 </style>
 </head>
 
@@ -321,15 +334,13 @@ a.crew_create {
    
    // 신청중인 크루 목록 가져오기
    $('div.approvalArea').empty();
-   crewList(0, offsetApproval, limit);
+   crewList(0, offsetApproval);
    // 신청중인 크루 목록이 한개도 없으면 신청중인 크루가 없습니다.
-   if ($('div.approvalArea').text().trim() === '') {
-       $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
-   }
+   
    
    // 내 크루 목록 가져오기
    $('div.recruitArea').empty();
-   crewList(1, offsetRecruit, limit);
+   crewList(1, offsetRecruit);
 
    // 크루 목록 데이터 불러오기 함수 (info_chk 0: 신청중인 크루목록, 1: 내 크루목록)
    function crewList(info_chk, offset) {
@@ -347,6 +358,9 @@ a.crew_create {
         	
             // 새로 읽어온 값이 비어 있는 경우
             if (list == null || list == '') {
+            	if (cntApproval === 1) {
+            	       $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
+           	    }
             	
             	// 더이상 읽어올 데이터가 없는경우 트리거 메시지 변경.
             	$('#load-more-trigger-'+info_chk).html('더 이상 불러올 데이터가 없습니다.');
@@ -363,6 +377,7 @@ a.crew_create {
                         recruitAdd(item, info_chk); // Controller에서 받아온 크루원 모집게시글 추가
                         if (info_chk === 0) {
                         	cntApproval++; // 신청중인 크루 Count 증가
+                        	console.log('cntApproval : ' + cntApproval);
                         }else {
                         	cntRecruit++; // 내 크루 Count 증가
                         }

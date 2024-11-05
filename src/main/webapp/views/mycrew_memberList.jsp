@@ -146,7 +146,17 @@
         	width: 60px;
         	height: 60px;
         }
-        
+        /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+		.profile_list::-webkit-scrollbar{
+		    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+		    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+		}
+		
+		/* Firefox에서 스크롤바 숨기기 */
+		.profile_list{
+		    scrollbar-width: none;  /* 스크롤바를 숨김 */
+		    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+		}
     </style>
 </head>
 <body>
