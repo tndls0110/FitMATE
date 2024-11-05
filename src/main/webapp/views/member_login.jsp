@@ -17,6 +17,12 @@
 			<div class="contents narrow">
 				<h2 class="title">로그인</h2>
                 <form action="member_login.do" method="post">
+					<c:if test="${addr == null}">
+						<input type="hidden" name="addr" value="redirect:/schedule.go" />
+					</c:if>
+					<c:if test="${addr != null}">
+						<input type="hidden" name="addr" value="${addr}" />
+					</c:if>
                     <div class="list">
                         <h3 class="capt">아이디</h3>
                         <p><input type="text" class="full" name="user_id" value="${user_id}" /></p>

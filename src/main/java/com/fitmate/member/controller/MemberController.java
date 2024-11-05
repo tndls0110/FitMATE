@@ -34,6 +34,17 @@ public class MemberController {
 			page = "member_login";
 		}
 	}
+	public void checkPermit(String addr, Model model, HttpSession session) {
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/schedule.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
+			page = "member_login";
+		}
+	}
 
 	// 크루 이용 가능 여부 체크
 	public void checkPermitCrew(Model model, HttpSession session) {
@@ -61,12 +72,16 @@ public class MemberController {
 	}
 
 	@RequestMapping (value = "/member_login.do")
-	public String login(String user_id, String pw, Model model, HttpSession session) {
+	public String login(String addr, String user_id, String pw, Model model, HttpSession session) {
 		page = "member_login";
 		switch (member_service.login(user_id, pw)){
 			case "pass":
 				session.setAttribute("loginId", user_id);
-				page = "schedule";
+				if (addr.equals("") || addr == null) {
+					page = "redirect:/schedule.go";
+				} else {
+					page = addr;
+				}
 				break;
 			case "invalidID":
 				model.addAttribute("state", "invalidID");
@@ -150,7 +165,7 @@ public class MemberController {
 	@RequestMapping (value = "/member_profile.go")
 	public String profile(Model model, HttpSession session) {
 		page = "member_profile";
-		checkPermit(model, session);
+		checkPermit("redirect:/member_profile.go", model, session);
 		String user_id = (String) session.getAttribute("loginId");
 		model.addAttribute("list", member_service.profile(user_id));
 		return page;
@@ -160,7 +175,7 @@ public class MemberController {
 	@RequestMapping (value = "/member_confirmpw.go")
 	public String confirmPW(Model model, HttpSession session) {
 		page = "member_confirmpw";
-		checkPermit(model, session);
+		checkPermit("redirect:/member_confirmpw.go", model, session);
 		return page;
 	}
 
@@ -183,8 +198,8 @@ public class MemberController {
 	@RequestMapping (value = "/member_update.go")
 	public String update(Model model, HttpSession session) {
 		page = "member_update";
-		checkPermit(model, session);
 		String user_id = (String) session.getAttribute("loginId");
+		checkPermit("redirect:/member_update.go", model, session);
 
 		// 프로필 불러오기
 		MemberDTO profile = member_service.profile(user_id);
@@ -201,15 +216,12 @@ public class MemberController {
 	@RequestMapping (value = "member_deleteImg.ajax")
 	@ResponseBody
 	public void deleteImg(Model model, HttpSession session) {
-		checkPermit(model, session);
 		String user_id = (String) session.getAttribute("loginId");
 		member_service.deleteImg(user_id);
 	}
 
 	@RequestMapping (value = "/member_update.do")
 	public String update(MultipartFile[] profile, @RequestParam Map<String, String> params, Model model, HttpSession session) {
-		page = "member_update";
-		checkPermit(model, session);
 		page = "member_update";
 		if (member_service.update(profile, params)){
 			model.addAttribute("msg", "정보가 수정되었습니다.");
