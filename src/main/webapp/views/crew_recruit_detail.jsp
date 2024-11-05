@@ -17,13 +17,13 @@
         .recruit_left {
             width: 15%;
             aspect-ratio: 1;
-            border: 1px solid black;
+            border: 0 solid black;
             border-radius: 50%;
         }
 
         .bi bi-person-circle {
             aspect-ratio: 1;
-            border: 1px solid black;
+            border: 0 solid black;
             border-radius: 50%;
             font-size: 15%;
         }
