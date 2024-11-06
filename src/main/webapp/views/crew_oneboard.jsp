@@ -133,9 +133,19 @@
 	
 	// 크루리더 확인하는 js 변수 크루장이면 ${isCrewLeader} = true
 	// const isCrewLeader = ${isCrewLeader};
-	const isCrewLeader = true;
-	// 크루장이면 작성하기 폼 보여주기
 	
+	// 크루장이면 작성하기 폼 보여주기
+	  var crewId = $('#crew_id').val();
+     var loginId = '${sessionScope.loginId}';
+     var isCrewLeader = false;
+     if(loginId === $('#crew_id').val() ){
+    	 isCrewLeader = true;
+     }
+     else{
+    	 isCrewLeader = false;
+     }
+     
+     
 	
 	$(document).ready(function() {
 	    const crew_idx = $('#crew_idx').val(); // hidden input의 값 가져오기
@@ -229,7 +239,7 @@
 	                			deleteButton = '<button type="button" onclick="modal.showAlert(\'이글은 블라인드 된 글입니다\')" class="mainbtn full"><i class="bi bi-file-earmark-lock2"></i></button>'
 	                		}
 	                		else{
-	                		deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 신고하시겠습니까\', \'crew_report.go?board_idx='+ item.board_idx + '&board_id=' + item.board_id +'\')" class="mainbtn full"><i class="bi bi-exclamation-circle"></i></button>'
+	                		deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 신고하시겠습니까\', \'crew_report.go?board_idx='+ item.board_idx + '&board_id=' + item.board_id +'&crew_idx=' + crew_idx +'\')" class="mainbtn full"><i class="bi bi-exclamation-circle"></i></button>'
 	                	//	deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '&board_id=' + item.board_id +'\'"><i class="bi bi-geo-alt-fill"></i></button>';
 	                		}
 	                	}

@@ -25,4 +25,6 @@ public interface CrewScheduleDAO {
 
 	int crew_party_del(String plan_idx);
 
+	int crew_plan_cancel(String plan_idx, String user_id);
+
 }

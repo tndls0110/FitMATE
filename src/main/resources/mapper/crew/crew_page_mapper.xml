@@ -142,13 +142,14 @@ FROM
 JOIN 
     profile m ON cm.member_id = m.user_id
 WHERE 
-    cm.crew_idx = #{param1};
+    cm.crew_idx = #{param1} and cm.status = 1;
 </select>
 
 <select id="crew_photo_list" resultType="com.fitmate.crew.dto.CrewBoardDTO">
 SELECT 
     f.new_filename, 
-    cb.board_idx 
+    cb.board_idx,
+    cb.status
 FROM 
     crew_board cb 
 JOIN 

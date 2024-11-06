@@ -236,13 +236,14 @@ public class CrewPageService {
 		// 회원 정보 가져오기
 		String user_id =board_dto.getBoard_id();
 		member_dto.setUser_id(user_id);
-		
+		int status = board_dto.getStatus();
+		logger.info("스테이터스값 = "+status);
 		// 프로필 정보 와 회원 정보 합쳐서 가져오기
 		member_dto = crewpage_dao.crew_getprofile(member_dto);
 
 		
 		logger.info("멤버 프로필 정보 = "+member_dto.getProfile());
-		
+		model.addAttribute("status", status);
 		model.addAttribute("file", file_dto);
 		model.addAttribute("board", board_dto);
 		model.addAttribute("member", member_dto);
