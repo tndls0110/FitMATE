@@ -7,56 +7,56 @@
 
     <!-- 신고 목록 -->
     <select id="allCount" resultType="int">
-        SELECT CEIL(COUNT(report_idx) / #{param1}) FROM report
+        SELECT CEIL(COUNT(r.report_idx) / #{param1}) FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
         <where>
             <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
-                subject LIKE CONCAT('%', #{keyword}, '%')
+                b.subject LIKE CONCAT('%', #{param3}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reported_id')">
-                reported_id LIKE CONCAT('%', #{keyword}, '%')
+                r.reported_id LIKE CONCAT('%', #{param3}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reported_nick')">
-                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{keyword}, '%')
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{param3}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_id')">
-                reporter_id LIKE CONCAT('%', #{keyword}, '%')
+                r.reporter_id LIKE CONCAT('%', #{param3}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_nick')">
-                (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{keyword}, '%')
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{param3}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('board_idx')">
-                r.board_idx = #{keyword}
+                r.board_idx = #{param3}
             </if>
 
             <if test="sortType.equals('reported')">
-                report_prog = 1
+                r.report_prog = 1
             </if>
             <if test="sortType.equals('inProgress')">
-                report_prog = 2
+                r.report_prog = 2
             </if>
             <if test="sortType.equals('blind')">
-                report_prog = 3
+                r.report_prog = 3
             </if>
             <if test="sortType.equals('completed')">
-                report_prog = 4
+                r.report_prog = 4
             </if>
         </where>
     </select>
 
     <select id="countIdx" resultType="int">
-        SELECT COUNT(report_idx) FROM report
+        SELECT COUNT(r.report_idx) FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
         <where>
             <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
-                subject LIKE CONCAT('%', #{keyword}, '%')
+                b.subject LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reported_id')">
-                reported_id LIKE CONCAT('%', #{keyword}, '%')
+                r.reported_id LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reported_nick')">
                 (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_id')">
-                reporter_id LIKE CONCAT('%', #{keyword}, '%')
+                r.reporter_id LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_nick')">
                 (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{keyword}, '%')
@@ -66,16 +66,16 @@
             </if>
 
             <if test="sortType.equals('reported')">
-                report_prog = 1
+                r.report_prog = 1
             </if>
             <if test="sortType.equals('inProgress')">
-                report_prog = 2
+                r.report_prog = 2
             </if>
             <if test="sortType.equals('blind')">
-                report_prog = 3
+                r.report_prog = 3
             </if>
             <if test="sortType.equals('completed')">
-                report_prog = 4
+                r.report_prog = 4
             </if>
         </where>
     </select>
@@ -91,16 +91,16 @@
             FROM report r JOIN crew_board b ON r.board_idx = b.board_idx
             <where>
                 <if test="param4 != null and !param4.equals('') and param3.equals('subject')">
-                    subject LIKE CONCAT('%', #{param4}, '%')
+                    b.subject LIKE CONCAT('%', #{param4}, '%')
                 </if>
                 <if test="param4 != null and !param4.equals('') and param3.equals('reported_id')">
-                    reported_id LIKE CONCAT('%', #{param4}, '%')
+                    r.reported_id LIKE CONCAT('%', #{param4}, '%')
                 </if>
                 <if test="param4 != null and !param4.equals('') and param3.equals('reported_nick')">
                     (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{param4}, '%')
                 </if>
                 <if test="param4 != null and !param4.equals('') and param3.equals('reporter_id')">
-                    reporter_id LIKE CONCAT('%', #{param4}, '%')
+                    r.reporter_id LIKE CONCAT('%', #{param4}, '%')
                 </if>
                 <if test="param4 != null and !param4.equals('') and param3.equals('reporter_nick')">
                     (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{param4}, '%')
