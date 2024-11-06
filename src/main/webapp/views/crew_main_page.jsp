@@ -808,11 +808,11 @@ if(userId === crewId){
 	                        var postform;
 	                        // 버튼 체크
 	                        if(isCrewLeader){ // 크루장이면 삭제하기버튼
-	                        	postform = "/Fitmate/crew_plan_del.do";
+	                        	postform = "/Fitmate_war/crew_plan_del.do";
 	                        	 buttonHtml = '<button type="submit" class="btn_participate">삭제하기</button>';
 	                        	console.log(postform);
 	                        }else{ // 크루원이면 참가하기 버튼
-	                        	postform = "/Fitmate/crew_plan_join.do";
+	                        	postform = "/Fitmate_war/crew_plan_join.do";
 	                        	  // 참가자 목록이 있는 경우
 	                            let isParticipating = false;
 	                        	
