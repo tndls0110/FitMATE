@@ -43,10 +43,8 @@ public class NotiService {
     }
 
     public String checkUnreadAlarm(String id) {
-        logger.info("서비스에서 전달받은 id :{}",id);
         String result = "none";
         int exist = n_DAO.checkUnreadAlarm(id);
-        logger.info("알람 개수 :{}",exist);
         if(exist>0){
             result ="exist";
         }

@@ -15,12 +15,27 @@ import org.springframework.web.bind.annotation.*;
 
 import com.fitmate.mbti.service.MbtiService;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MbtiController {
 	@Autowired MbtiService m_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-
+	String page = "";
+	public void checkPermit(String addr, Model model, HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/schedule.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
+			page = "member_login";
+			logger.info("checkPermit2 / page address: "+page);
+		}
+	}
 
 	@RequestMapping (value = "/mbti")//push하기 전에 /mbti로 수정해두기
 	public String main() {
@@ -28,8 +43,10 @@ public class MbtiController {
 	}
 
 	@RequestMapping (value = "/mbtiQ.go")
-	public String mbtiQ() {
-		return "mbti_q";
+	public String mbtiQ(Model model, HttpSession session) {
+		page = "mbti_q";
+		checkPermit("redirect:/mbtiQ.go", model, session);
+		return page;
 	}
 
 	@GetMapping (value = "/mbtiIdx.ajax")
@@ -49,7 +66,6 @@ public class MbtiController {
 		logger.info("컨트롤러에서 전달 받은 idx : " + Qidx);
 
 		Map<String, Object> data = m_service.loadQuestion(Qidx);
-
 		return data;
 	}
 
@@ -57,7 +73,7 @@ public class MbtiController {
 	@ResponseBody
 	public Map<String, Object> loadOption(int Qidx){
 		logger.info("loadOption 컨트롤러 도착");
-		logger.info("loadOption컨트롤러에서 전달 받은 idx : " + Qidx);
+		logger.info("loadOption 컨트롤러에서 전달 받은 idx : " + Qidx);
 
 		Map<String, Object> data = m_service.loadOption(Qidx);
 
@@ -93,20 +109,24 @@ public class MbtiController {
 	};
 
 	@GetMapping (value = "/mbti_r.go") //결과 페이지에서 insert 시켜줘야하니까.. 그냥 결과 쪽에 다 넘겨서 결과 단에서 최댓값 계산하게 하기
-	public String mbtiR(@RequestParam Map<String, String> scores, Model model) {
+	public String mbtiR(@RequestParam Map<String, String> scores, Model model,HttpSession session) {
+		page = "mbti_r";
+		checkPermit("redirect:/mbtiQ.go", model, session);
 
-		//login id 임의 설정
-		logger.info("mbtiR 컨트롤러 도착");
-		logger.info("scores 받아온 값 : " + scores);
-		String login_id = "member01";
+		if(session.getAttribute("loginId") != null) {
+			//login id 임의 설정
+			logger.info("mbtiR 컨트롤러 도착");
+			logger.info("scores 받아온 값 : " + scores);
+			String login_id = "member01";
 
-		Map<String,Object> data = new HashMap<>();
-		data.put("login_id",login_id);
+			Map<String,Object> data = new HashMap<>();
+			data.put("login_id",login_id);
 
-		model.addAttribute("data",data);
+			model.addAttribute("data",data);
 
-		model.addAttribute("scores",scores);
-		return "mbti_r";
+			model.addAttribute("scores",scores);
+		}
+		return page;
 	};
 
 	@GetMapping (value = "/mbti_r_get.ajax")
@@ -179,6 +199,4 @@ public class MbtiController {
 		data.put("success",success);
 		return data;
 	}
-
-
 }

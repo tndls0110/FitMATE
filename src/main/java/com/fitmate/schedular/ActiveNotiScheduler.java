@@ -20,7 +20,7 @@ public class ActiveNotiScheduler {
 	@Scheduled (cron = "0 0/5 0 * * ?") // cron = "0 0 0 * * ?"
 	public void activeNoti() {
 		LocalDate thirty_days_ago = LocalDate.now().minusDays(30); //일 수를 구하고 싶다면 localDate
-		logger.info("thirty_days_ago:"+thirty_days_ago.toString());
+		//logger.info("thirty_days_ago:"+thirty_days_ago.toString());
 		int updated_rows = notiDAO.auto_delete(thirty_days_ago);
 	}
 
