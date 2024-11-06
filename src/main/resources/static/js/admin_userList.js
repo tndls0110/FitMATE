@@ -29,6 +29,23 @@ function sorterChanger() {
     }
 }
 
+let waitingInterval = setInterval(waitingAnimator, 150);
+
+function waitingAnimator() {
+    let waiting = document.getElementsByClassName('waiting')[0];
+    if (waiting.innerHTML == '<i class="bi bi-reception-0"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-1"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-1"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-2"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-2"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-3"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-3"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-4"></i>';
+    } else if (waiting.innerHTML == '<i class="bi bi-reception-4"></i>') {
+        waiting.innerHTML = '<i class="bi bi-reception-0"></i>';
+    }
+}
+
 pageShow(showPage);
 
 function pageShow(page) {
@@ -45,6 +62,8 @@ function pageShow(page) {
         dataType: 'json',
         success: function(data) {
             listPrint(data.list, data.totalIdx, data.currentPage, data.offset);
+            clearInterval(waitingInterval);
+            document.getElementsByClassName('waitingContainer')[0].style.display = 'none';
 
             $('#pagination').twbsPagination({
                 startPage: data.page,

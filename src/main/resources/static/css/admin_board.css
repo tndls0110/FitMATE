@@ -216,3 +216,12 @@ table tfoot td{
     color: #C52424;
     font-weight: 700;
 }
+
+
+
+/* waitingAnimator */
+.waitingContainer .waiting{
+    padding: 200px 0;
+    font-size: 36px;
+    border-bottom: 0;
+}

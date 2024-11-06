@@ -54,6 +54,9 @@
                     </tr>
                     </thead>
                     <tfoot>
+                    <tr class="waitingContainer">
+                        <td colspan="8" class="waiting"><i class="bi bi-reception-4"></i></td>
+                    </tr>
                     <tr>
                         <td colspan="8">
                             <nav aria-label="Page navigation">
