@@ -31,9 +31,22 @@
 <script>
 	window.onload = function (){
 		//setInterval로 알림이 있는 지 function 실행
-		check_unreadAlarm();
-		setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
+		check_if_login();
+	}
 
+	function check_if_login(){
+		$.ajax({
+			type : 'get',
+			url : 'check_if_login.ajax',
+			data :{},
+			dataType : 'JSON',
+			success : function (data){
+				if(data.exists == 'exist'){
+					console.log('exist?',data.exists);
+					setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
+				}
+			},error : function (e){}
+		})
 	}
 
 	function check_unreadAlarm(){
