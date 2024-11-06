@@ -428,5 +428,60 @@
             }
         });
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    /* 무한스크롤 IntersectionObserver 구현 */
+    /* var observer = new IntersectionObserver(loadMoreEntries, {
+ 	    root: null, // 기본 뷰포트를 기준으로 설정   
+ 	    rootMargin: '0px',
+ 	    threshold: 0.5
+ 	});
+    
+    // Intersection Observer 콜백 함수
+    function loadMoreEntries(entries, observer) {
+ 	    // 엔트리마다 체크
+ 	    entries.forEach(function(entry) {
+ 	        if (entry.isIntersecting && !isLoading) {
+ 	            isLoading = true; // 로딩 상태 설정
+ 	            offset += limit; // 다음 요청을 위한 offset 값 증가
+ 	            crewList(); // 데이터를 가져오는 함수 호출
+ 	        }
+ 	    });
+ 	}
+    
+ 	// '더보기' 트리거 요소 추가 함수
+ 	function addLoadMoreTrigger() {
+ 		// 요소가 6개이상 즉, 두번째 페이지부터 발동.
+ 		if(cnt > 6){
+ 			$('#load-more-trigger').remove(); 
+ 		    
+ 		    var targetElement = $('<div>', {
+ 		        id: 'load-more-trigger',
+ 		        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+ 		        css: {
+ 		            textAlign: 'center',
+ 		            width: '100%',
+ 		            padding: '20px',
+ 		            fontSize: '16px'
+ 		        }
+ 		    });
+ 		
+ 		    // recruitArea에 트리거 요소 추가
+ 		    $('.recruitArea').append(targetElement);
+ 		    
+ 		    // 새로운 트리거 요소를 observer로 관찰
+ 		    observer.observe(targetElement[0]); 
+ 		}
+ 	} */
+    
+    
+    
+    
 </script>
 </html>

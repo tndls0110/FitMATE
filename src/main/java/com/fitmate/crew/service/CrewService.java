@@ -191,15 +191,35 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 	
 	// 모집글 댓글조회
 	@Transactional
-	public List<CrewCommentDTO> recruitDetail(String board_idx_) {
+	public List<CrewCommentDTO> recruitDetail(String board_idx_, String limit_, String offset_) {
 		int board_idx = 0;
+		int limit = 0;
+		int offset = 0;
+		
 		
 		if(board_idx_ != null && !board_idx_.equals("")) {
 			board_idx = Integer.parseInt(board_idx_);
 		}
+		if(limit_ != null && !limit_.equals("")) {
+			limit = Integer.parseInt(limit_);
+		}
+		if(offset_ != null && !offset_.equals("")) {
+			offset = Integer.parseInt(offset_);
+		}
+		
+		
+		logger.info("limitasdfsdf : " + limit);
+		logger.info("offsetasdfasd : " + offset);
+		
 		
 		// 댓글, 대댓글 가져오기
-		List<CrewCommentDTO> commentDTO = crew_dao.comment(board_idx);
+		List<CrewCommentDTO> commentDTO = crew_dao.comment(board_idx, limit, offset);
+		
+		
+		 for (CrewCommentDTO crewCommentDTO : commentDTO) {
+		  logger.info("123정말로 가져올 데이터가 없나.. : " + crewCommentDTO); 
+		  }
+		 
 		
 		
 		return commentDTO;

@@ -248,7 +248,8 @@ LEFT JOIN profile P ON P.user_id = C.comment_id
 LEFT JOIN member M2 ON M2.user_id = RC.recomment_id 
 LEFT JOIN profile P2 ON P2.user_id = RC.recomment_id
 WHERE C.board_idx = #{board_idx}
-ORDER BY C.comment_idx;	
+ORDER BY C.comment_idx	
+LIMIT #{limit} OFFSET #{offset}
 </select> 
 
 <!-- 크루 입단여부 체크. -->

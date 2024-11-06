@@ -43,7 +43,7 @@ public interface CrewDAO {
 	// 모집게시글 상세보기
 	CrewSearchListDTO recruitDetail(int board_idx);
 	// 댓글, 대댓글 정보 가져오기
-	List<CrewCommentDTO> comment(int board_idx);	
+	List<CrewCommentDTO> comment(int board_idx, int limit, int offset);	
 	// 문의 댓글 작성하기
 	int askWrite(AskWriteDTO askWriteDTO);
 	// 답변 대댓글 작성하기

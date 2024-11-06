@@ -175,6 +175,8 @@ public class CrewMemberService {
 		
 		int crew_idx = Integer.parseInt(crew_idx_);
 		
+		
+		
 		// 파라미터들을 담아서 전달할 Map 생성
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -198,6 +200,7 @@ public class CrewMemberService {
 			}
 			map.put("orderBy", orderBy);
 		}
+		
 		
 		// 크루원 목록
 		List<CrewMemberProfileDTO> list = crewmember_dao.memberList(map);
