@@ -92,7 +92,7 @@ public class NotiController {
 	public Map<String, Object> unreadCount (HttpSession session) {
 
 		Object id = session.getAttribute("loginId");
-		logger.info("세션에서 받아온 id 값 :{}",id);
+		//logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String, Object> data = new HashMap<>();
 		if(id!=null) {
 			String id_string = id.toString();
