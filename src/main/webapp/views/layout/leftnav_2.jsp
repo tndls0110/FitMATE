@@ -41,7 +41,6 @@
 			dataType : 'JSON',
 			success : function (data){
 				if(data.exists == 'exist'){
-					console.log('exist?',data.exists);
 
 					setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
 				}
