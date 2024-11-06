@@ -12,6 +12,11 @@
     background-color: #007bff; /* 선택된 버튼의 배경색 */
     color: white; /* 선택된 버튼의 글자색 */
 }
+.mainbtn.full{
+	margin: 5px 0px;
+	
+}
+
 	</style>
 	
 	</head>
@@ -43,6 +48,7 @@
            			<input type="hidden" name="board_idx"  value="${board_idx}">
 		           	<!-- 피신고자 id -->		
 		           	<input type="hidden" name="reported_id"  value="${reported_id}">
+		           	<input type="hidden" name="url"  value="${url}">
            			
                     <!-- 경고 -->                     
                     <!-- 통과 -->
@@ -102,7 +108,7 @@ function drawList(report) {
     var content = '';
     report.forEach(function(item) { 
         // 각 신고 항목에 대해 버튼 생성
-        content += '<button type="button" onclick="selectReason(this)" class="mainbtn" value="' + item.reportr_idx + '">신고 사유: ' + item.reportr_con + '</button><br>';
+        content += '<button type="button" onclick="selectReason(this)" class="mainbtn full" value="' + item.reportr_idx + '">신고 사유: ' + item.reportr_con + '</button><br>';
     });
     $('#report').html(content); // 버튼을 #report 요소에 추가
 }
@@ -110,11 +116,13 @@ function drawList(report) {
 // 선택된 버튼 처리
 function selectReason(selectedButton) {
     // 모든 버튼의 상태를 초기화
-    $('.mainbtn').removeClass('selected'); // 선택된 클래스를 제거
+    $('.mainbtn full').removeClass('selected'); // 선택된 클래스를 제거
 
     // 선택된 버튼에 클래스 추가
     $(selectedButton).addClass('selected'); // 현재 선택된 버튼에 클래스 추가
-
+	
+    	
+    
     // 필요한 경우 추가 처리
     console.log('선택된 신고 사유:', $(selectedButton).text());
     var reportr_idx = selectedButton.value;

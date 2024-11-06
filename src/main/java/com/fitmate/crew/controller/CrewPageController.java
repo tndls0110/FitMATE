@@ -55,7 +55,8 @@ public class CrewPageController {
 		// 신고글이 댓글이면
 		if(params.get("comment_idx")!=null) {
 			String boardidx = params.get("board_idx");
-			url = "";
+			String crew_idx = params.get("crew_idx");
+			url = "redirect:/crew_recruit_detail.go?board_idx="+boardidx+"&crew_idx="+crew_idx;
 			model.addAttribute("board_type", 2);
 			model.addAttribute("board_idx", params.get("comment_idx"));
 			model.addAttribute("reported_id", params.get("comment_id"));
@@ -64,7 +65,7 @@ public class CrewPageController {
 		}
 		else { // 신고글이 게시글이면
 			String crewidx = params.get("crew_idx");
-			url = "/crew_main_page.go?crew_idx="+crewidx;
+			url = "redirect:/crew_main_page.go?crew_idx="+crewidx;
 			model.addAttribute("board_type", 1);
 			model.addAttribute("board_idx", params.get("board_idx"));
 			model.addAttribute("reported_id", params.get("board_id"));
@@ -91,13 +92,16 @@ public class CrewPageController {
 	@RequestMapping(value="/crew_report.do",method =RequestMethod.POST)
 	public String crew_report_do(@RequestParam Map<String,String> params,HttpSession session) {
 		
-		logger.info("params = {}", params);
+			logger.info("params = {}", params);
 		 String reportrIdxStr = params.get("reportr_idx");
+		 String url = params.get("url");
+		
+		 logger.info("신고후 url 주소 ="+url);
 		 logger.info("Received reportr_idx = {}", reportrIdxStr);
-		
+	
 		crewpage_service.crew_report_do(params);
-		
-		return "index123";
+		// index123 url로 바꿔주기
+		return url;
 	}
 	
 	/*
@@ -320,8 +324,13 @@ public class CrewPageController {
 		public String crew_photo(@RequestParam Map<String,String> params,Model model) {
 			
 			String crew_idx = params.get("crew_idx");
-			
+			CrewDTO crewdto = new CrewDTO();
+			crewdto = crewpage_service.crew_info(crew_idx);
+			String crew_name =	crewdto.getName();
+			String crew_id = crewdto.getCrew_id();
 			model.addAttribute("crew_idx", crew_idx);
+			model.addAttribute("crew_id", crew_id);
+			model.addAttribute("crew_name", crew_name);
 			
 			return "crew_photo_write";
 		}

@@ -156,7 +156,7 @@ public class CrewScheduleController {
 		
 		return response;
 	}
-	
+	// 크루 일정 삭제
 	@PostMapping(value="/crew_plan_del.do")
 	public String crew_plan_del(@RequestParam Map<String,String> params) {
 		logger.info("삭제 실행");
@@ -169,7 +169,7 @@ public class CrewScheduleController {
 		
 		return page;
 	}
-	
+	// 크루 일정 참가
 	@PostMapping(value="/crew_plan_join.do")
 	public String crew_plan_join(@RequestParam Map<String,String> params) {
 		logger.info("참가 실행");
@@ -181,5 +181,16 @@ public class CrewScheduleController {
 		crewschedule_service.crew_plan_join(plan_idx,user_id);
 		return page;
 	}
+	// 크루 일정 취소 
+	@PostMapping(value="crew_plan_cancel.ajax")
+	@ResponseBody
+	public int crew_plan_cancel(@RequestParam String plan_idx,String user_id) {
+		 logger.info("userid"+user_id);
+		 logger.info("plan_idx"+plan_idx);
+		 crewschedule_service.crew_plan_cancel(plan_idx,user_id);
+		 
+		 return 1;
+	 }
+	
 	
 }

@@ -344,8 +344,8 @@
 }
 
 .profile-img {
-    width: 10px; /* 이미지 크기 조정 */
-    height: 10px; /* 이미지 크기 조정 */
+    width: 15px; /* 이미지 크기 조정 */
+    height: 15px; /* 이미지 크기 조정 */
     border-radius: 50%; /* 동그란 형태 */
     object-fit: cover; /* 비율에 맞게 잘림 */
     border: 1px solid #ddd; /* 선택적으로 테두리 추가 */
@@ -360,7 +360,7 @@
 	.gallery {
             display: flex;
             flex-wrap: wrap;
-             justify-content: space-evenly; /* 왼쪽 정렬 */
+             justify-content: flex-start; /* 왼쪽 정렬 */
             margin: 0 auto;
             max-width: 800px;
         }
@@ -395,15 +395,19 @@
             <!-- 프로필 사진을 여기에 추가 -->
           
             <!-- 추가 프로필 사진 -->
-        </div>
+           
+        </div> 
 		
 		<input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}">
 		<input type="hidden" id="crew_id" name="crew_id" value="${crew_id}">
 		<input type="hidden" id="user_id" name="user_id" value="${sessionScope.loginId}">
 		<div class="list" style="margin:15px 0;"> <!-- 공지사항 시작 -->
-		 <p>
+		 <p style="position: relative;">
 		 <input type="text" class="full" name="crew_notice" value="" readonly/>
-		 <button class="writebtn mainbtn minbtn relative-button notice_btn" onclick="crew_notice_go()">공지 +</button>
+		 <button class="writebtn mainbtn minbtn relative-button notice_btn" onclick="crew_notice_go()" style="position: absolute;
+    top: 16px;
+    left: 828px;
+    width: 60px;">공지 +</button>
 		 </p>
 		</div> <!-- 공지사항 끝 -->
 		
@@ -414,7 +418,7 @@
 					<div class="title_calendar crew">
 						<p>크루 일정 보기</p>
 						<div id="date" style="font-size: 20px; margin: 20px 0 15px"></div>
-						<button class="writebtn mainbtn minbtn" onclick="crew_plan_write()">일정 작성</button>
+						<button class="writebtn mainbtn minbtn" onclick="crew_plan_write()" style="z-index: 10;">일정 작성</button>
 					</div>
 					<div id="calendar"></div>
 				</div>
@@ -423,7 +427,7 @@
 			<div id="schedule">
 				<div class="crew_schedule">
 					<div class="crew_schedule_title">크루 한줄게시글
-					<button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()">더보기</button>
+					<button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()" style="z-index: 10;">더보기</button>
 					</div>
 						
 					<div class="crew_schedule_content">
@@ -442,7 +446,15 @@
 		
 		<div class="list custom-photolist"> <!-- 사진 시작 -->
 		 
-		 <p><input style="margin-top: 10px;" type="text" class="full" name="photostart" value="사진게시글자리" readonly/></p>
+		 <p>
+		 <div style="position: relative;">
+		 <input style="margin-top: 10px;" type="text" class="full" name="photostart" value="사진게시글" readonly/>
+		  <button class="writebtn mainbtn minbtn relative-button notice_btn" onclick="crew_photo_go()" style="position: absolute;
+    top: 568px;
+    left: 803px;
+    width: 80px">사진 작성</button>
+		 </div>	
+		 </p>
 		<div class="list custom_photo"> <!-- 사진 넣는 공간 -->
 			<div class="gallery" id="gallery">
 			</div>
@@ -485,9 +497,15 @@
 // 세션아이디 구분하기
 var userId = document.getElementById('user_id').value;
 // 크루장 판단하기 
-const isCrewLeader = true;
+let isCrewLeader = false;
 var crewIdx = $('#crew_idx').val();
 var crewId =  $('#crew_id').val();
+if(userId === crewId){
+	isCrewLeader = true;
+}else{
+	isCrewLeader = false;
+}
+
 
 	document.addEventListener('DOMContentLoaded', function() {
 		let event_create = []; // 이벤트 배열 초기화
@@ -574,6 +592,8 @@ var crewId =  $('#crew_id').val();
 		                    '</tr>'
 		                );
 		            });
+		            
+		            
 		        },
 		        error: function(xhr, status, error) {
 		            console.error('AJAX 오류:', status, error);
@@ -607,18 +627,19 @@ var crewId =  $('#crew_id').val();
 		            // 받아온 데이터가 배열이라고 가정
 		            console.log(data);
 		            data.forEach(function(member) {
-		            	const imageUrl = member.image; // 프로필 이미지 URL
+		            	const imageUrl = member.profile; // 프로필 이미지 URL
 		                const profileUrl = 'mycrew_memberDetail.go?id=' + member.user_id + '&profileType=1&idx=' + crewIdx;
 		                console.log(member);
 		                // 각 게시글에 대한 행 추가
 		             $('#profileList').append(
 		                  '<span class="profile-icon" style="position: relative;">' +
 		                  '<a href="' + profileUrl + '">' + // 클릭 시 프로필 페이지로 이동
-		                  '<img src="' + imageUrl + '" class="profile-img" alt=" ">' +
+		                  '<img src="/photo/' + imageUrl + '" class="profile-img" alt=" ">' +
 		                  '</a>' +
 		                  '</span>'
 		               );
 		            });
+		            $('#profileList').append('<span class="profile-icon" onclick="crew_member_go()"><i class="bi bi-plus-circle"></i></span>');
 		        },
 		        error: function(xhr, status, error) {
 		            console.error('AJAX 오류:', status, error);
@@ -677,7 +698,14 @@ var crewId =  $('#crew_id').val();
 	            items.forEach(item => {
 	                if (item.board_idx) { // item에 url이 존재하는지 확인
 	                	console.log('랜더링이미지 함수실행');
-	                    const img = $('<img>').attr('src','/photo/'+item.new_filename); // img 요소 생성
+	                	console.log(item.status);
+	                	 let imgSrc = (item.status == 2) ? '/photo/basic.png' : '/photo/' + item.new_filename;
+	                     const img = $('<img>').attr('src', imgSrc); // 이미지 요소 생성
+	                     img.css({
+	                    	    'width': '260px',  // 최대 너비 300px
+	                    	    'height': '280px'  // 최대 높이 200px
+	                    	});
+	                
 	                    const redirectUrl = '/Fitmate/crew_photo_detail.go?board_idx=' + item.board_idx+'&crew_id='+crewId+'&crew_idx='+crewIdx;
 	                    img.on('click', function() {
 	                        window.location.href = redirectUrl; // 클릭 시 해당 URL로 이동
@@ -754,7 +782,7 @@ var crewId =  $('#crew_id').val();
 	    $('#scheduleModal').css('display', 'none'); // 모달 닫기
 	}
 	
-
+	// 일정클릭시 일정 상세보기
 	function get_crewplan(date) {
 	    $.ajax({
 	        url: 'crew_plan_detail.ajax', // API 엔드포인트
@@ -785,9 +813,30 @@ var crewId =  $('#crew_id').val();
 	                        	console.log(postform);
 	                        }else{ // 크루원이면 참가하기 버튼
 	                        	postform = "/Fitmate/crew_plan_join.do";
-	                        	 buttonHtml = '<button type="submit" class="btn_participate">참가하기</button>';
-	                        	 console.log(postform);
+	                        	  // 참가자 목록이 있는 경우
+	                            let isParticipating = false;
+	                        	
+	                        	// 참가자 목록 추가
+		                        if (participants && participants.length > 0) {
+								    participants.forEach(function(participant) {
+								        if (participant.party_id === userId) {
+								        	 isParticipating = true; // 참가 중인 경우
+								        	 console.log(isParticipating);
+		                                }
+								    });
+								} 
+		                        if(isParticipating){
+		                        	  buttonHtml = '<button type="button" class="btn_participate" onclick="cancelParticipation(' + crewScheduleDTO.plan_idx + ')">참가취소</button>';
+		                        	  console.log(isParticipating);
+		                        }
+		                        else {
+		                        	console.log(isParticipating);
+		                        	 buttonHtml = '<button type="submit" class="btn_participate">참가하기</button>';	 
+								}
+	                        	
+	                        	
 	                        }
+	                        
 	                        
 	                     	// crewScheduleDTO.plan_start가 '13:00:00' 형식이라고 가정
 	                        const timeString = crewScheduleDTO.plan_start; // '13:00:00'
@@ -845,6 +894,9 @@ var crewId =  $('#crew_id').val();
 	                        if (participants && participants.length > 0) {
 							    participants.forEach(function(participant) {
 							        $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append('<span>' + participant.party_id + '</span>' + '<span>' + participant.profile + '</span>');
+							        
+							        
+							    
 							    });
 							} else {
 							    $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append('<span>참가자가 없습니다.</span>');
@@ -912,6 +964,43 @@ var crewId =  $('#crew_id').val();
 
 	
 	
+	// 참가취소 함수 (예시)
+	function cancelParticipation(plan_idx) {
+	    if (confirm("정말로 참가를 취소하시겠습니까?")) {
+	        // AJAX로 참가취소 요청을 보내거나 폼 제출을 통해 처리
+	        // 예: $.ajax({ url: 'crew_plan_cancel.ajax', method: 'POST', data: { plan_idx: plan_idx } });
+		
+	    $.ajax({
+	    	 url: 'crew_plan_cancel.ajax',  // 서버의 참가 취소 처리 URL
+	            method: 'POST',
+	            data: {
+	                plan_idx: plan_idx,  // 계획 ID
+	                user_id: userId      // 사용자 ID
+	            },
+	            success: function(response) {
+	                // 서버로부터의 응답 처리
+	                console.log('리턴값'+response);
+	                if (response) {
+	                    alert("참가 취소가 완료되었습니다.");
+	                    // 취소 완료 후 UI 업데이트
+	                    // 예: 해당 일정을 UI에서 제거하거나, 버튼을 "참가하기"로 변경
+	                    // $('#plan_' + plan_idx).remove(); // 예시
+	                } else {
+	                    alert("참가 취소에 실패했습니다. 다시 시도해 주세요.");
+	                }
+	            },
+	            error: function(xhr, status, error) {
+	                console.error('참가 취소 요청 중 오류 발생:', error);
+	                alert("서버 오류로 참가 취소가 실패했습니다.");
+	            }
+	    });
+	    
+	    console.log('참가취소 요청: ' + plan_idx);
+	    console.log('참가취소 요청: ' + userId);
+	        // 실제 처리 코드 추가
+	    }
+	}
+	
 	
 	// 크루일정 작성하러 가기
 	function crew_plan_write(){
@@ -930,7 +1019,18 @@ var crewId =  $('#crew_id').val();
 		var crewIdx = $('#crew_idx').val();
 		location.href = "crew_page_notice.go?crew_idx=" +crewIdx+"&crew_id="+crewId;
 	}
-
+	
+	// 크루 사진게시글 작성하러 가기
+	function crew_photo_go(){
+		var crewIdx = $('#crew_idx').val();
+		location.href = "crew_photo_write.go?crew_idx=" +crewIdx+"&crew_id="+crewId;
+	}
+	
+	// 크루원 목록으로 가기
+	function crew_member_go(){
+		var crewIdx = $('#crew_idx').val();
+		location.href = "mycrew_memberList.go?idx=" +crewIdx;
+	}
 
 </script>
 </html>
