@@ -195,6 +195,9 @@
             console.log('value:{}',max[k]);
             saved_scores[key] = value;
             if(value>max[k]){ //만약 key에 저장된 값이 score.value보다 작으면 score.value 및 score.key를 저장
+                console.log('value',value);
+                console.log('key',);
+
                 delete max[k]; //이미 저장되어있던 값 지우기
                 max[key] = value; //만약 max보다 크면 score[k]에 저장 -> 정처기 공부했던 내용 적용..
             }
@@ -205,8 +208,8 @@
 
         //max 분리하기
         var key_result = Object.keys(max);
-        console.log('max 결과 key:'+keys);
-        for (var k of keys){
+        console.log('max 결과 key:'+key_result);
+        for (var k of key_result){
             console.log('key:{}',k);
             console.log('value:{}',max[k]);
 
