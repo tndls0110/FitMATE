@@ -52,7 +52,7 @@ public class ReportController {
 	@RequestMapping (value = "/admin_reportDetail.go")
 	public String reportDetail(String report_idx, Model model, HttpSession session) {
 		page = "admin_reportDetail";
-		checkPermit("redirect:/admin_reportDetail.go", model, session);
+		checkPermit("redirect:/admin_reportDetail.go?report_idx="+report_idx, model, session);
 		if (session.getAttribute("loginIdx") != null) {
 			model.addAttribute("info", report_service.detail(report_idx));
 			model.addAttribute("status", report_service.reportStatus());
@@ -64,7 +64,6 @@ public class ReportController {
 	@RequestMapping (value = "/admin_reportDetail.do")
 	public String confirmReport(@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_reportDetail.go?report_idx="+params.get("report_idx");
-		checkPermit(page, model, session);
 		int admin_idx = (int) session.getAttribute("loginIdx");
 		report_service.confirmReport(params, admin_idx);
 		return page;
