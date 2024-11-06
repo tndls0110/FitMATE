@@ -42,15 +42,12 @@
 			data :{},
 			dataType : 'JSON',
 			success : function (data){
-				console.log(data.exists);
 				if(data.exists == 'exist'){
 					$('.notify_new').css({'visibility' : 'visible'});
 				}else if(data.exists == 'none'){
 					$('.notify_new').css({'visibility' : 'hidden'});
 				}
-			},error : function (e){
-				console.log(e);
-			}
+			},error : function (e){}
 		})
 	}
 </script>

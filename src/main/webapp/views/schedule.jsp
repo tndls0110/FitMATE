@@ -49,6 +49,7 @@
 			padding-bottom: 41px;
 			text-align: center;
 			border-radius: 5px;
+			cursor: pointer;
 		}
 
 		#schedule {
@@ -156,7 +157,7 @@
 			word-wrap: break-word;
 		}
 
-		.prev_icon{
+	/*	.prev_icon{
 			margin: 0px -47px 25px 15px;
 			font-size: 32px;
 		}
@@ -168,7 +169,7 @@
 			display: flex;
 			max-width: 500px;
 			margin-right: 14px;
-		}
+		}*/
 
 		.crew_schedule_content {
 			padding: 10px;
@@ -247,6 +248,7 @@
 			display: flex;
 			overflow: hidden;
 			position: relative;
+			margin-left: 0px;
 		}
 
 		.idx{
@@ -317,7 +319,10 @@
 		.real_img{
 			min-height: 460px;
 			max-height: 460px;
+			min-width: 460px;
 		}
+
+
 
 	</style>
 	<script>
@@ -719,28 +724,42 @@
 				console.log('files:',files);
 
 				if(files.length > 0){
+
+				//files.length;에 따라 .journal_image_list의 길이 동적으로 조정해주기
+					//이미지의 min-width가져와서 * 개수한 것을 .journal_image_list의 길이로 넣어주기
+					var min_width = $('.real_image').css('min-width');
+					console.log('min_width',min_width);
 						content += '<div class = "journal_image_list">';
 
 
 					var index = 0;
+					var board_idx = 0;
+					//board_idx가 바뀔 때마다.. 인덱스 0으로 바꾸기
 					for(var file of files){
-						if(j_data['journal_idx'] == file.board_idx){
-							console.log('file:',file);
-							console.log('journal_idx:',j_data['journal_idx']);
-							console.log('file.board_idx:',file.board_idx);
+						console.log('수정 전:',board_idx);
+						if (board_idx != file.board_idx) {
+							board_idx = file.board_idx;
+							console.log('수정 후:',board_idx);
+							index = 0;
+						}
+						if (j_data['journal_idx'] == file.board_idx) {
+								console.log('file:', file);
+								console.log('journal_idx:', j_data['journal_idx']);
+								console.log('file.board_idx:', file.board_idx);
 
 								var ori_filename = file.ori_filename;
-							 	var new_filename = file.new_filename;
-							console.log(files.length);
-							if(files.length > 1){
+								var new_filename = file.new_filename;
+								console.log(files.length);
+								if (files.length > 1) {
 
-								 content +='<div class="img" index ='+index+'><i class="bi bi-arrow-left-circle-fill"></i><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/><i class="bi bi-arrow-right-circle-fill"></i></div>';
+									content += '<div class="img" index =' + index + '><i class="bi bi-arrow-left-circle-fill"></i><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/><i class="bi bi-arrow-right-circle-fill"></i></div>';
 
-							}else if(files.length == 1){
-								content +='<div class="img" index ='+index+'><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/></div>';
-							}
+								} else if (files.length == 1) {
+									content += '<div class="img" index =' + index + '><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/></div>';
+								}
 						}
 						index++; //인덱스 증가
+
 					}
 					content +='</div>';
 				}
@@ -758,16 +777,24 @@
 		console.log('클릭됨');
 
 		//부모 요소의 부모 요소를 가져옴
-		const grandparent = $(this).parent().parent();
+		const grandparent = $(this).closest('.journal_image_list');
 		const parent = $(this).parent();
 
 		console.log('parent:',parent);
-		console.log('grandparent:',grandparent);
-		console.log('grandparent:',grandparent);
-		for(var p of parent){
-			console.log("parent :",p);
-			p.animate({'right':'+=460'},'slow','swing');
-		}
+		console.log('grandparent:',grandparent[0]);
+		//현재 margin-left 값을 가져와서 - 503씩 하기
+
+		var journal_image_list = grandparent[0];
+		console.log('journal_image_list',journal_image_list);
+		var current_marginleft= $('.journal_image_list').css('margin-left');
+		console.log("current_marginleft",current_marginleft);
+		var marginValue = parseInt(current_marginleft, 10);
+		console.log('marginValue',marginValue);
+
+		var changed_marginleft = marginValue + 498;
+		console.log("changed_marginleft",changed_marginleft);
+
+		journal_image_list.style.marginLeft = changed_marginleft + "px";
 
 	});
 
@@ -776,16 +803,24 @@
 		console.log('클릭됨');
 
 		//부모 요소의 부모 요소를 가져옴
-		const grandparent = $(this).parent().parent();
+		const grandparent = $(this).closest('.journal_image_list');
 		const parent = $(this).parent();
 
 		console.log('parent:',parent);
-		console.log('grandparent:',grandparent);
-		console.log('grandparent:',grandparent);
-		for(var grand of grandparent){
-			console.log("grand :",grand);
-			grand.animate({'right':'+=460'},'slow','swing');
-		}
+		console.log('grandparent:',grandparent[0]);
+		//현재 margin-left 값을 가져와서 - 503씩 하기
+
+		var journal_image_list = grandparent[0];
+		console.log('journal_image_list',journal_image_list);
+		var current_marginleft= $('.journal_image_list').css('margin-left');
+		console.log("current_marginleft",current_marginleft);
+		var marginValue = parseInt(current_marginleft, 10);
+		console.log('marginValue',marginValue);
+
+		var changed_marginleft = marginValue - 498;
+		console.log("changed_marginleft",changed_marginleft);
+
+		journal_image_list.style.marginLeft = changed_marginleft + "px";
 
 
 	});

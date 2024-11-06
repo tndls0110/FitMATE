@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.Console;
 import java.util.*;
 
@@ -19,10 +20,30 @@ import java.util.*;
 public class ScheduleController {
 	@Autowired ScheduleService s_service;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
+
+	String page = "";
+
+	public void checkPermit(String addr, Model model, HttpSession session) {
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			if (addr.equals("") || addr == null) {
+				model.addAttribute("addr", "redirect:/schedule.go");
+			} else {
+				model.addAttribute("addr", addr);
+			}
+			page = "member_login";
+			logger.info("checkPermit2 / page address: "+page);
+		}
+	}
+
+
+
 	@RequestMapping (value = {"/" ,"/schedule.go"})
-	public String main() {
-		return "schedule";
+	public String main(Model model, HttpSession session) {
+		page = "schedule";
+		checkPermit("redirect:/schedule.go",model,session);
+		return page;
 	}
 
 	@GetMapping (value = "/get_totalevents.ajax")
@@ -45,8 +66,10 @@ public class ScheduleController {
 
 
 	@RequestMapping (value = "/schedule_write.go")
-	public String schedule_write() {
-		return "schedule_write";
+	public String schedule_write(Model model, HttpSession session) {
+		page = "schedule_write";
+		checkPermit("redirect:/schedule_write.go",model,session);
+		return page;
 	}
 
 	@PostMapping (value = "/schedule_write.do")
@@ -92,10 +115,16 @@ public class ScheduleController {
 	}
 
 	@GetMapping (value = "/update_journal.go")
-	public String update_journal(int idx, Model model){
+	public String update_journal(int idx, Model model,HttpSession session) {
 		logger.info("컨트롤러에 전달된 idx:{}",idx);
-		s_service.getJournal_detail(idx,model);
-		return "schedule_update";
+		page = "schedule_update";
+
+		if(session.getAttribute("loginId") != null) {
+			checkPermit("redirect:/update_journal.go",model,session);
+			s_service.getJournal_detail(idx,model);
+		}
+
+		return page;
 	}
 
 	@GetMapping (value = "delete_img.ajax")
