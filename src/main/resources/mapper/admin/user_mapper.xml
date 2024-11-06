@@ -10,16 +10,16 @@
         SELECT CEIL(COUNT(user_id) / #{param1}) FROM member
         <where>
             <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
-                user_id LIKE CONCAT('%', #{param4}, '%')
+                user_id LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
-                nick LIKE CONCAT('%', #{param4}, '%')
+                nick LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
-                name LIKE CONCAT('%', #{param4}, '%')
+                name LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-                email LIKE CONCAT('%', #{param4}, '%')
+                email LIKE CONCAT('%', #{keyword}, '%')
             </if>
         </where>
     </select>
@@ -28,16 +28,16 @@
         SELECT COUNT(user_id) FROM member
         <where>
             <if test="keyword != null and !keyword.equals('') and opt.equals('user_id')">
-                user_id LIKE CONCAT('%', #{param4}, '%')
+                user_id LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('nick')">
-                nick LIKE CONCAT('%', #{param4}, '%')
+                nick LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('name')">
-                name LIKE CONCAT('%', #{param4}, '%')
+                name LIKE CONCAT('%', #{keyword}, '%')
             </if>
             <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-                email LIKE CONCAT('%', #{param4}, '%')
+                email LIKE CONCAT('%', #{keyword}, '%')
             </if>
         </where>
     </select>

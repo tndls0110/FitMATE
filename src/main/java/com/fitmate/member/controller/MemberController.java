@@ -49,7 +49,7 @@ public class MemberController {
 	}
 
 	// 크루 이용 가능 여부 체크
-	public void checkPermitCrew(Model model, HttpSession session) {
+	public void checkPermitCrew(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginId") != null) {
 			String user_id = (String) session.getAttribute("loginId");
 			LocalDateTime cleared_date = member_service.getPermit(user_id);
@@ -63,7 +63,7 @@ public class MemberController {
 				}
 			}
 		} else {
-			checkPermit(model, session);
+			checkPermit(addr, model, session);
 		}
 	}
 
