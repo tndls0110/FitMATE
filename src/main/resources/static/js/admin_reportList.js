@@ -16,18 +16,23 @@ function sorterChanger() {
     switch (sortType){
         case '':
             sort.value = 'reported';
+            btn.innerHTML = '상태 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
             break;
         case 'reported':
             sort.value = 'inProgress';
+            btn.innerHTML = '신고 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
         case 'inProgress' :
             sort.value = 'blind';
+            btn.innerHTML = '처리중 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
         case 'blind':
             sort.value = 'completed';
+            btn.innerHTML = '블라인드 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
         case 'completed' :
             sort.value = '';
+            btn.innerHTML = '처리완료 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
     }
 }

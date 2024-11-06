@@ -53,9 +53,11 @@ public class ReportController {
 	public String reportDetail(String report_idx, Model model, HttpSession session) {
 		page = "admin_reportDetail";
 		checkPermit("redirect:/admin_reportDetail.go", model, session);
-		model.addAttribute("info", report_service.detail(report_idx));
-		model.addAttribute("status", report_service.reportStatus());
-		model.addAttribute("progress", report_service.reportProgress(report_idx));
+		if (session.getAttribute("loginIdx") != null) {
+			model.addAttribute("info", report_service.detail(report_idx));
+			model.addAttribute("status", report_service.reportStatus());
+			model.addAttribute("progress", report_service.reportProgress(report_idx));
+		}
 		return page;
 	}
 

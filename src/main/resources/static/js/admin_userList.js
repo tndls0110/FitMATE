@@ -6,42 +6,25 @@ let vPages = 10;
 const searchParams = new URLSearchParams(window.location.search);
 let searchType = searchParams.get('searchType');
 let keywords = searchParams.get('keywords');
-let sortType1 = searchParams.get('sortType1');
-let sortType2 = searchParams.get('sortType2');
+let sortType = searchParams.get('sortType');
 
-sorterChanger1();
-sorterChanger2();
+sorterChanger();
 
-function sorterChanger1() {
-    let sort = document.getElementsByName('sortType1')[0];
+function sorterChanger() {
+    let sort = document.getElementsByName('sortType')[0];
     let btn = document.getElementsByClassName('ankerbtn')[0];
-    switch (sortType1){
+    switch (sortType){
         case '':
             sort.value = 'desc';
             btn.innerHTML = '최근 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
-            break;
-        case 'asc':
-            sort.value = '';
-            btn.innerHTML = '최근 이용일시 <i class="bi bi-caret-up-fill" style="font-size: 14px;"></i>';
             break;
         case 'desc' :
             sort.value = 'asc';
             btn.innerHTML = '최근 이용일시 <i class="bi bi-caret-down-fill" style="font-size: 14px;"></i>';
             break;
-    }
-}
-
-function sorterChanger2() {
-    let sort = document.getElementsByName('sortType2')[0];
-    switch (sortType2){
-        case '':
-            sort.value = 'desc';
-            break;
         case 'asc':
-            sort.value = 'asc';
-            break;
-        case 'desc' :
             sort.value = '';
+            btn.innerHTML = '최근 이용일시 <i class="bi bi-caret-up-fill" style="font-size: 14px;"></i>';
             break;
     }
 }
@@ -57,8 +40,7 @@ function pageShow(page) {
             'cnt': cnt,
             'opt': searchType,
             'keyword': keywords,
-            'sortType1': sortType1,
-            'sortType2': sortType2
+            'sortType': sortType
         },
         dataType: 'json',
         success: function(data) {

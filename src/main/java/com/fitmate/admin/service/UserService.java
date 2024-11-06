@@ -20,7 +20,7 @@ public class UserService {
 	@Autowired UserDAO user_dao;
 
 	// 사용자 목록
-	public Map<String, Object> userList(int page, int cnt, String opt, String keyword, String sortType1, String sortType2) {
+	public Map<String, Object> userList(int page, int cnt, String opt, String keyword, String sortType) {
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
 		int totalPages = user_dao.userAllCount(cnt, opt, keyword);
@@ -31,7 +31,8 @@ public class UserService {
 		result.put("totalIdx", totalIdx);
 		result.put("currentPage", page);
 		result.put("offset", offset);
-		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword, sortType1, sortType2);
+		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword, sortType);
+		logger.info("service / sortType: "+sortType);
 		for (MemberDTO member : list) {
 			LocalDateTime cleared_date = member.getCleared_date();
 			LocalDateTime now = LocalDateTime.now();

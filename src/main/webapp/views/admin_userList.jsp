@@ -43,19 +43,14 @@
                         <th>게시글 수</th>
                         <form>
                             <th>
-                                <input type="hidden" name="sortType1" value="" />
+                                <input type="hidden" name="sortType" value="desc" />
                                 <button type="submit" onclick="pageShow(1)" class="ankerbtn">
                                     최근 이용일시 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
                                 </button>
                             </th>
                         </form>
                         <th>이용상태</th>
-                        <form>
-                            <th>
-                                <input type="hidden" name="sortType2" value="" />
-                                <button type="submit" onclick="pageShow(1)" class="ankerbtn">제재해제일</button>
-                            </th>
-                        </form>
+                        <th>제재해제일</th>
                     </tr>
                     </thead>
                     <tfoot>

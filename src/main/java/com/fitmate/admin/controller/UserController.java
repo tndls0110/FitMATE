@@ -47,10 +47,10 @@ public class UserController {
 
 	@RequestMapping (value = "/user_list.ajax")
 	@ResponseBody
-	public Map<String, Object> userList(String page, String cnt, String opt, String keyword, String sortType1, String sortType2) {
+	public Map<String, Object> userList(String page, String cnt, String opt, String keyword, String sortType) {
 		int pageInt = Integer.parseInt(page);
 		int cntInt = Integer.parseInt(cnt);
-		return user_service.userList(pageInt, cntInt, opt, keyword, sortType1, sortType2);
+		return user_service.userList(pageInt, cntInt, opt, keyword, sortType);
 	}
 
 	// 사용자 조회
@@ -58,7 +58,9 @@ public class UserController {
 	public String userDetail (String user_id, Model model, HttpSession session) {
 		page = "admin_userDetail";
 		checkPermit("redirect:/admin_userDetail.go", model, session);
-		model.addAttribute("member", user_service.userDetail(user_id));
+		if (session.getAttribute("loginIdx") != null) {
+			model.addAttribute("member", user_service.userDetail(user_id));
+		}
 		return page;
 	}
 
@@ -83,7 +85,9 @@ public class UserController {
 	public String crewDetail (String crew_idx, Model model, HttpSession session) {
 		page = "admin_crewDetail";
 		checkPermit("redirect:/admin_crewDetail.go", model, session);
-		model.addAttribute("crew", user_service.crewDetail(crew_idx));
+		if (session.getAttribute("loginIdx") != null) {
+			model.addAttribute("crew", user_service.crewDetail(crew_idx));
+		}
 		return page;
 	}
 

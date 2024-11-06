@@ -16,15 +16,15 @@ function sorterChanger() {
     switch (sortType){
         case '':
             sort.value = 'noticed';
-            btn.innerHTML = '게시여부 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
+            btn.innerHTML = '게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
             break;
         case 'noticed':
             sort.value = 'blind';
-            btn.innerHTML = '게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            btn.innerHTML = '게시함 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
         case 'blind' :
             sort.value = '';
-            btn.innerHTML = '게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>';
+            btn.innerHTML = '게시안함 <i class="bi bi-funnel" style="font-size: 14px;"></i>';
             break;
     }
 }

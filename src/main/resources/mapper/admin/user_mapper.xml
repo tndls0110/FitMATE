@@ -62,19 +62,13 @@
                     m.email LIKE CONCAT('%', #{param4}, '%')
                 </if>
             </where>
-            <if test="param6 != null and !param6.equals('') and param5.equals('asc')">
+            <if test="param5.equals('asc')">
                 ORDER BY (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id)
             </if>
-            <if test="param6 != null and !param6.equals('') and param5.equals('desc')">
+            <if test="param5.equals('desc')">
                 ORDER BY (SELECT MAX(date) FROM crew_board WHERE board_id = m.user_id) DESC
             </if>
-            <if test="param5 != null and !param5.equals('') and param6.equals('asc')">
-                ORDER BY (SELECT cleared_date FROM restriction WHERE user_id = m.user_id)
-            </if>
-            <if test="param5 != null and !param5.equals('') and param6.equals('desc')">
-                ORDER BY (SELECT cleared_date FROM restriction WHERE user_id = m.user_id) DESC
-            </if>
-            <if test="param5 == null or param5.equals('') or param6 == null or param6.equals('')">
+            <if test="param5 == null or param5.equals('')">
                 ORDER BY m.regdate DESC
             </if>
             LIMIT #{param2} OFFSET #{param1}

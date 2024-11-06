@@ -12,7 +12,7 @@ public interface UserDAO {
     // 사용자 목록
     int userAllCount(int cnt, String opt, String keyword);
     int userCountIdx(String opt, String keyword);
-    List<MemberDTO> userList(int offset, int limit, String opt, String keyword, String sortType1, String sortType2);
+    List<MemberDTO> userList(int offset, int limit, String opt, String keyword, String sortType);
 
     // 사용자 조회
     MemberDTO userDetail(String user_id);

@@ -29,13 +29,15 @@ public class MemberController {
 	// 세션 체크
 	String page = "";
 	public void checkPermit(Model model, HttpSession session) {
-		if (session.getAttribute("loginId") == null) {
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId == null) {
 			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
 			page = "member_login";
 		}
 	}
 	public void checkPermit(String addr, Model model, HttpSession session) {
-		if (session.getAttribute("loginId") == null) {
+		String loginId = (String) session.getAttribute("loginId");
+		if (loginId == null) {
 			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
 			if (addr.equals("") || addr == null) {
 				model.addAttribute("addr", "redirect:/schedule.go");
@@ -200,16 +202,14 @@ public class MemberController {
 		page = "member_update";
 		String user_id = (String) session.getAttribute("loginId");
 		checkPermit("redirect:/member_update.go", model, session);
-
-		// 프로필 불러오기
-		MemberDTO profile = member_service.profile(user_id);
-		model.addAttribute("list", profile);
-
-		// 지역 정보 불러오기
-		List<RegCountyDTO> list = member_service.getRegion();
-		model.addAttribute("region", list);
-		list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
-		model.addAttribute("region2", list);
+		if (user_id != null) {
+			MemberDTO profile = member_service.profile(user_id);
+			model.addAttribute("list", profile);
+			List<RegCountyDTO> list = member_service.getRegion();
+			model.addAttribute("region", list);
+			list = member_service.getRegion2(Integer.toString(profile.getRegion_idx()));
+			model.addAttribute("region2", list);
+		}
 		return page;
 	}
 
@@ -236,7 +236,7 @@ public class MemberController {
 	@RequestMapping (value = "/member_updatepw.go")
 	public String updatepw(Model model, HttpSession session) {
 		page = "member_updatepw";
-		checkPermit(model, session);
+		checkPermit("redirect:/member_updatepw.go", model, session);
 		return page;
 	}
 
@@ -256,7 +256,7 @@ public class MemberController {
 	@RequestMapping (value = "/member_updatepw.do")
 	public String updatepw(String pw, HttpSession session, Model model) {
 		page = "redirect:/member_update.go";
-		checkPermit(model, session);
+		checkPermit("redirect:/member_updatepw.go", model, session);
 		String user_id = (String) session.getAttribute("loginId");
 		member_service.updatepw(user_id, pw);
 		return page;

@@ -57,9 +57,9 @@
                             <th>작성일시</th>
                             <form>
                                 <th>
-                                    <input type="hidden" name="sortType" value="" />
+                                    <input type="hidden" name="sortType" value="noticed" />
                                     <button type="submit" onclick="pageShow(1)" class="ankerbtn">
-                                        게시여부 <i class="bi bi-funnel" style="font-size: 14px;"></i>
+                                        게시여부 <i class="bi bi-funnel-fill" style="font-size: 14px;"></i>
                                     </button>
                                 </th>
                             </form>

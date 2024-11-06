@@ -46,11 +46,13 @@ public class NoticeController {
 	public String write (@RequestParam Map<String, String> params, Model model, HttpSession session) {
 		page = "redirect:/admin_notice.go";
 		checkPermit(page, model, session);
-		int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
-		if (notice_service.write(params.get("notice_cont"), admin_idx)){
-			model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");
-		} else {
-			model.addAttribute("msg", "문제가 발생하여 공지사항을 작성하지 못했습니다. 공지사항을 다시 작성하세요.");
+		if (session.getAttribute("loginIdx") != null) {
+			int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
+			if (notice_service.write(params.get("notice_cont"), admin_idx)){
+				model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");
+			} else {
+				model.addAttribute("msg", "문제가 발생하여 공지사항을 작성하지 못했습니다. 공지사항을 다시 작성하세요.");
+			}
 		}
 		return page;
 	}
