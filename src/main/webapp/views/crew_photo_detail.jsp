@@ -237,18 +237,19 @@ textarea, hr{
 
 				<div class="recruit_right">
 					<h2 class="title">${member.nick}</h2>
-					<span class="text_area"><span> ${board.board_id} </span><span>
-							${member.profile}</span></span>
+					<span class="text_area">
+					<span> ${board.board_id} </span>
+					</span>
 				</div>
-				</br>
-				<div class="recruit_info">
 				
+				<div class="recruit_info">
+				<!-- 
 					<span><i class="bi bi-geo-alt-fill"></i></span> 
 					<span><i class="bi bi-people-fill"></i></span>
 					<span><i class="bi bi-fonts"></i></span> 
-					<!-- 옵션버튼 시작 -->
+					옵션버튼 시작 -->
 					
-					<span> <button type="button" class="mainbtn small" onclick="showReportModal()">옵션</button>
+					<span> <button type="button" class="mainbtn small" onclick="showReportModal()"  style="position: absolute; right: 10px; top: 10px; padding: 5px 5px;"><i class="bi bi-three-dots-vertical" style="font-size:23px"></i></button>
 					</span>	
                        <div id="reportModal" class="modal">
 						    <div class="modal-content">
@@ -288,6 +289,7 @@ textarea, hr{
 	 
      var board = "${board}"; // EL을 사용하여 모델 값 가져오기
      console.log(board); // 콘솔에 출력
+     console.log(board.stauts);
 
 	
      var member = "${member.nick}"; // EL을 사용하여 모델 값 가져오기
@@ -309,10 +311,10 @@ textarea, hr{
      
  
      // 사진게시글 블라인드 하기
-     if ("${board.status}" === "2") {
+     if ("${status}" === "2") {
 	        
 	        photosubject.value = '블라인드된 게시글 입니다';
-	        // 사진 블라인드 사진으로 바꿔주기 document.getElementById("contentInput").value = '기본이미지';
+	        document.getElementById("photo_file").src = '/photo/basic.png';
 	    	
 	    }
     

@@ -58,4 +58,8 @@ WHERE
 	insert into crew_party (plan_idx,party_id) values (#{param1},#{param2})
 </insert>
 
+<delete id="crew_plan_cancel">
+	delete from crew_party where plan_idx = #{param1} and party_id = #{param2}
+</delete>
+
 </mapper>

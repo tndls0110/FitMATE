@@ -230,4 +230,9 @@ public class CrewScheduleService {
 		return crewschedule_dao.crew_plan_join(plan_idx,user_id);
 	}
 
+	public void crew_plan_cancel(String plan_idx, String user_id) {
+		crewschedule_dao.crew_plan_cancel(plan_idx,user_id);
+		
+	}
+
 }
