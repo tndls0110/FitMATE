@@ -32,7 +32,6 @@ public class UserService {
 		result.put("currentPage", page);
 		result.put("offset", offset);
 		List<MemberDTO> list = user_dao.userList(offset, limit, opt, keyword, sortType);
-		logger.info("service / sortType: "+sortType);
 		for (MemberDTO member : list) {
 			LocalDateTime cleared_date = member.getCleared_date();
 			LocalDateTime now = LocalDateTime.now();

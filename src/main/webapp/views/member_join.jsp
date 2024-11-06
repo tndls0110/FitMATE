@@ -15,7 +15,7 @@
 				<h2 class="title">회원가입</h2>
 				<form action="member_join.do" method="post" enctype="multipart/form-data">
 					<div class="list">
-						<h3 class="capt">아이디 <span class="required">(필수)</span></h3>
+						<h3 class="capt">아이디 <span class="required">(필수)</span> *영문 대/소문자 및 숫자만 입력할 수 있습니다.</h3>
 						<p><input type="text" class="full" name="user_id" maxlength="20" /></p>
 						<h3 class="msg pass pass_id hide">사용할 수 있는 아이디입니다.</h3>
 						<h3 class="msg caution check_id hide">이미 사용중인 아이디입니다. 다른 아이디를 입력하세요.</h3>

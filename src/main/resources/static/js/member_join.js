@@ -1,3 +1,9 @@
+// 아이디는 영문만 입력 가능
+document.getElementsByName('user_id')[0].addEventListener('input', function (event) {
+    const input = event.target;
+    input.value = input.value.replace(/[^a-zA-Z0-9]/g, '');
+});
+
 // 아이디 중복 체크
 var check_id = false;
 $('input[name="user_id"]').keyup(function() {
