@@ -191,7 +191,6 @@ public class CrewMemberController {
 			
 			
 			model.addAttribute("profile", memberProfile);
-			logger.info("profileDTO CrewMemberProfileDTO: {}", memberProfile.toString());
 			
 			// profileType  0: 일반회원 프로필, 1: 크루회원 프로필
 			model.addAttribute("profileType", profileType_);

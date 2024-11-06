@@ -79,6 +79,7 @@ INNER JOIN (
 	INNER JOIN profile C ON C.user_id = CM.member_id
 	<where>
 	A.crew_idx = #{crew_idx} AND A.status = 1 
+	AND CM.status = 1
 	<!--    searchFilter(1='크루원닉네임 검색'/ 2='크루원ID 검색')    -->
 	<if test="searchFilter == 1 and searchKeyword != null and !searchKeyword.equals('')">
 		AND B.nick LIKE CONCAT('%', #{searchKeyword}, '%') 

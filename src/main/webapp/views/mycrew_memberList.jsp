@@ -190,6 +190,13 @@
 </body>
 <script src="resources/js/common.js"></script>
 <script>
+	window.addEventListener("pageshow", (event) => {
+	    if (event.persisted) {
+	        // 페이지가 캐시에서 로드된 경우 새로고침
+	        window.location.reload();
+	    }
+	});
+
     // 크루원 목록을 불러오기 위한 crew_idx
     var crew_idx = ${crew_idx};
     

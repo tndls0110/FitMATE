@@ -268,7 +268,7 @@
    var placeFilter = '';
    var mbtiFilter = '';
    
-   
+   var cntq = 0;
    // 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
    var cnt = 1;
    
@@ -395,16 +395,21 @@
       var info = '';
       var profile = ''; // 프로필 사진
       var leader_id = item.leader_id; // 크루장ID
+      var page = '';
       
-      // 기본값은 모집페이지이동 (크루원: 크루페이지, 일반회원or크루장: 모집페이지)
-      var page = 'crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx;       
       
       // 크루장이 아닌 크루원이라면 => 크루페이지로 이동!!
-      /* if(leader_id !== currentUserId && item.member_idx !== ''){
+      if(leader_id !== currentUserId && item.member_chk === 1){
     	  page = 'crew_main_page.go?crew_idx=' +item.crew_idx;
     	  
-      } */
-      
+      }else{// 기본값은 모집페이지이동 (크루원: 크루페이지, 일반회원or크루장: 모집페이지)
+    	  page = 'crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx;
+      }
+      cntq++;
+	  console.log('item.member_chk : ' + item.member_chk + 'cnt : ' + cntq);      
+	  console.log('currentUserId : ', currentUserId);      
+	  console.log('leader_id : ', leader_id);      
+	  console.log('Page!!!!!!!!!!!!!!! : ', page);      
       
       // 프로필
       profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 

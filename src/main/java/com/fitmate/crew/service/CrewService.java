@@ -95,7 +95,7 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 	}
 
 
-	public List<CrewSearchListDTO> crewList(Map<String, String> params) {
+	public List<CrewSearchListDTO> crewList(Map<String, String> params, String user_id) {
 		
 		// 1. 받아온 데이터가공.
 		String searchFilter_ = params.get("searchFilter");      // searchFilter [1='크루이름' / 2='크루장닉네임']
@@ -124,7 +124,7 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		
 		searchDTO.setLimit(limit);
 		searchDTO.setOffset(offset);
-		
+		searchDTO.setUser_id(user_id);
 		
 		return crew_dao.crewList(searchDTO);
 		

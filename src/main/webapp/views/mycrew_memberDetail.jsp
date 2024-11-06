@@ -299,6 +299,7 @@
                 // 요청 성공 시 처리
                 if(data.success === true) {
                     modal.showAlert('크루원이 추방되었습니다.');    
+                    history.back();
                 } else {
                     modal.showAlert('크루원 추방에 실패했습니다.');
                 }

@@ -203,11 +203,11 @@ public class CrewController {
 	// 크루 모집글 목록조회
 	@GetMapping(value = "/crew_search.ajax")
 	@ResponseBody 
-	public List<CrewSearchListDTO> crewSearchList( @RequestParam Map<String, String> params){
+	public List<CrewSearchListDTO> crewSearchList( @RequestParam Map<String, String> params, HttpSession session){
+		//세션ID가져오기
+		String user_id = (String) session.getAttribute("loginId");
 		
-		logger.info("params : " + params);
-		
-		List<CrewSearchListDTO> recruitList = crew_service.crewList(params);
+		List<CrewSearchListDTO> recruitList = crew_service.crewList(params, user_id);
 	 
 		return recruitList; 
 	}

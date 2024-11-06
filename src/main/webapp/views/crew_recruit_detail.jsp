@@ -285,7 +285,7 @@
     <% String board_idx = request.getParameter("board_idx"); %>
     
     <div class="container">
-        <c:import url="layout/leftnav_1.jsp"></c:import>
+        <c:import url="layout/leftnav_2.jsp"></c:import>
 
         <div class="contents narrow">
             <div class="recruit_header">
@@ -750,7 +750,7 @@
 	    var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
 	    $(modal_chk).css({
 	        top: coordinate.top - scrollTop, // 스크롤 위치 추가
-	        left: coordinate.left
+	        left: coordinate.left + 70
 	    });
 		
 	    console.log('modal_chk1: ' + $(modal_chk));
