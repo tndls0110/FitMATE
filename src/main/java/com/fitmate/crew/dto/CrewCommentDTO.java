@@ -27,7 +27,20 @@ public class CrewCommentDTO {
     private String recomment_nick;
     private String recomment_profile;
 	
+    
+    
+    
 	
+	@Override
+	public String toString() {
+		return "CrewCommentDTO [comment_idx=" + comment_idx + ", comment_id=" + comment_id + ", comment_content="
+				+ comment_content + ", comment_date=" + comment_date + ", comment_status=" + comment_status
+				+ ", comment_nick=" + comment_nick + ", comment_profile=" + comment_profile + ", recomment_idx="
+				+ recomment_idx + ", recomment_id=" + recomment_id + ", recomment_content=" + recomment_content
+				+ ", recomment_date=" + recomment_date + ", recomment_nick=" + recomment_nick + ", recomment_profile="
+				+ recomment_profile + "]";
+	}
+
 	public String getComment_date() {
         if (comment_date == null) {
             return "";

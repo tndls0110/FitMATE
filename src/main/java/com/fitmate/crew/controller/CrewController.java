@@ -48,8 +48,21 @@ public class CrewController {
 		}
 	}
 	
+	public void checkPermit(String addr, Model model, HttpSession session) {
+	      String loginId = (String) session.getAttribute("loginId");
+	      if (loginId == null) {
+	         model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+	         if (addr.equals("") || addr == null) {
+	            model.addAttribute("addr", "redirect:/schedule.go");
+	         } else {
+	            model.addAttribute("addr", addr);
+	         }
+	         page = "member_login";
+	      }
+	}
+	
 	// 크루 이용 가능 여부 체크
-	public void checkPermitCrew(Model model, HttpSession session) {
+	public void checkPermitCrew(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginId") != null) {
 			String user_id = (String) session.getAttribute("loginId");
 			LocalDateTime cleared_date = member_service.getPermit(user_id);
@@ -63,9 +76,14 @@ public class CrewController {
 				}
 			}
 		} else {
-			checkPermit(model, session);
+			checkPermit(addr, model, session);
+			
 		}
 	}
+	
+	
+	   
+	
 	
 	
 	
@@ -162,15 +180,23 @@ public class CrewController {
 	@RequestMapping(value = "/crew_search")
 	public String crewSearch(Model model, HttpSession session) {
 		page = "crew_search";
-		checkPermit(model, session);
 		
-		// 1-1. 필터 - 지역정보/MBTI정보 가져오기
-		List<Map> placeFilter = crew_service.placeFilter();
-		model.addAttribute("placeFilter", placeFilter);
-
-		List<Map> mbtiFilter = crew_service.mbtiFilter();
-		model.addAttribute("mbtiFilter", mbtiFilter);
-
+		
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}else {
+			String addr = page;
+			checkPermitCrew(addr, model, session);
+			
+			// 1-1. 필터 - 지역정보/MBTI정보 가져오기
+			List<Map> placeFilter = crew_service.placeFilter();
+			model.addAttribute("placeFilter", placeFilter);
+	
+			List<Map> mbtiFilter = crew_service.mbtiFilter();
+			model.addAttribute("mbtiFilter", mbtiFilter);
+		}
+		
 		return page;
 	}
 
@@ -191,12 +217,20 @@ public class CrewController {
 	public String recruitDetail(String board_idx, String crew_idx, HttpSession session, Model model) {
 		page = "crew_recruit_detail";
 				
-		checkPermit(model, session);
-		//세션ID가져오기
-		String user_id = (String) session.getAttribute("loginId");
 		
-		// 크루 모집글 정보 + 크루 가입여부 체크
-		crew_service.recruitDetail(board_idx, user_id, crew_idx, model);
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}else {
+			String addr = page;
+			checkPermitCrew(addr, model, session);
+		
+			//세션ID가져오기
+			String user_id = (String) session.getAttribute("loginId");
+			
+			// 크루 모집글 정보 + 크루 가입여부 체크
+			crew_service.recruitDetail(board_idx, user_id, crew_idx, model);
+		}
 		
 		return page;
 	}
@@ -204,9 +238,9 @@ public class CrewController {
 	// 크루 모집글 - 댓글,대댓글 가져오기
 	@GetMapping(value = "/crew_recruit_detail.ajax")
 	@ResponseBody 
-	public List<CrewCommentDTO> recruitDetail(String board_idx, HttpSession session){
+	public List<CrewCommentDTO> recruitDetail(String board_idx, String limit, String offset, HttpSession session){
 		
-		return crew_service.recruitDetail(board_idx); 
+		return crew_service.recruitDetail(board_idx, limit, offset); 
 	}
 	
 	// 크루 입단 신청
@@ -273,11 +307,15 @@ public class CrewController {
 		String crew_idx = params.get("crew_idx");
 		
 		page = "redirect:/crew_recruit_detail.go?board_idx=" + board_idx+ "&crew_idx=" + crew_idx;
-		checkPermit(model, session);
-		
-		// 댓글 또는 대댓글작성.
-		crew_service.commentWrite(params);
-		
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}else {
+			String addr = page;
+			checkPermitCrew(addr, model, session);
+			// 댓글 또는 대댓글작성.
+			crew_service.commentWrite(params);
+		}
 		return page;
 	}
 	
@@ -285,10 +323,14 @@ public class CrewController {
    @RequestMapping(value = "/mycrew")
    public String myCrew(Model model, HttpSession session) {
 	  page = "mycrew";
-	  checkPermit(model, session);
 	  
-	  logger.info("session : ", session); 
-	  logger.info("model : ", model); 
+	  if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+	  }else {
+		  String addr = page;
+		  checkPermitCrew(addr, model, session);
+	  }
       return page;
    }
    
@@ -296,11 +338,11 @@ public class CrewController {
    // 내 크루 목록조회
    @GetMapping(value = "/mycrew.ajax")
    @ResponseBody 
-   public List<CrewSearchListDTO> myCrewList(String info_chk, HttpSession session){
+   public List<CrewSearchListDTO> myCrewList(@RequestParam Map<String, String> params, HttpSession session){
 	 //세션ID가져오기
 	 String user_id = (String) session.getAttribute("loginId");
 	   
-      List<CrewSearchListDTO> recruitList = crew_service.mycrewList(info_chk, user_id);
+      List<CrewSearchListDTO> recruitList = crew_service.mycrewList(params, user_id);
       
       return recruitList; 
    }
@@ -325,11 +367,15 @@ public class CrewController {
 		   // 신고페이지에 넘겨줄 데이터
 		   int comment_idx = (int) info.get("comment_idx");  
 		   String comment_id = (String) info.get("comment_id");
-		  
+		   int board_idx = (int) info.get("board_idx");
+		   int crew_idx = (int) info.get("crew_idx");
+		   
 		   report_chk = "1";
 		   map.put("comment_idx", comment_idx); // 신고대상 댓글idx 
 		   map.put("comment_id", comment_id); // 신고대상 댓글id 
 		   map.put("board_type", "2"); // 댓글신고유형
+		   map.put("board_idx", board_idx); // 게시글 idx
+		   map.put("crew_idx", crew_idx); // 크루 idx
 		   
 	   }else {
 		   crew_service.comment_event(info);

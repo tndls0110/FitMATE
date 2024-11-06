@@ -147,6 +147,18 @@
         	height: 60px;
         }
         
+        /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+		.profile_list::-webkit-scrollbar{
+		    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+		    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+		}
+		
+		/* Firefox에서 스크롤바 숨기기 */
+		.profile_list{
+		    scrollbar-width: none;  /* 스크롤바를 숨김 */
+		    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+		}
+        
     </style>
 </head>
 <body>
@@ -159,10 +171,10 @@
 				   <p>
 				      <select name="searchFilter" id="searchFilter">
 				         <option value="" selected>검색기준</option>
-				         <option value="1">크루원닉네임</option>
-				         <option value="2">크루원아이디</option>
+				         <option value="1">신청자닉네임</option>
+				         <option value="2">신청자아이디</option>
 				      </select>
-				      <input type="text" class="searchKeyword" name="searchKeyword" placeholder="크루원 닉네임 / 아이디를 입력하세요." />
+				      <input type="text" class="searchKeyword" name="searchKeyword" placeholder="가입 신청자 닉네임 / 아이디를 입력하세요." />
 				      <button type="button" onclick="search()" class="mainbtn search"><i class="bi bi-search"></i></button>
 				   </p>
 				   <div class="list_abs">
@@ -346,7 +358,7 @@
                 });	
              	// 크루원이 한명도 없는경우 => 크루원이 없습니다.
                 if(memberCount === 1){
-         	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
+         	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루 가입신청자가 없습니다.</h2></div>');
          	    }
             },
             error: function(e) {
@@ -416,5 +428,60 @@
             }
         });
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    /* 무한스크롤 IntersectionObserver 구현 */
+    /* var observer = new IntersectionObserver(loadMoreEntries, {
+ 	    root: null, // 기본 뷰포트를 기준으로 설정   
+ 	    rootMargin: '0px',
+ 	    threshold: 0.5
+ 	});
+    
+    // Intersection Observer 콜백 함수
+    function loadMoreEntries(entries, observer) {
+ 	    // 엔트리마다 체크
+ 	    entries.forEach(function(entry) {
+ 	        if (entry.isIntersecting && !isLoading) {
+ 	            isLoading = true; // 로딩 상태 설정
+ 	            offset += limit; // 다음 요청을 위한 offset 값 증가
+ 	            crewList(); // 데이터를 가져오는 함수 호출
+ 	        }
+ 	    });
+ 	}
+    
+ 	// '더보기' 트리거 요소 추가 함수
+ 	function addLoadMoreTrigger() {
+ 		// 요소가 6개이상 즉, 두번째 페이지부터 발동.
+ 		if(cnt > 6){
+ 			$('#load-more-trigger').remove(); 
+ 		    
+ 		    var targetElement = $('<div>', {
+ 		        id: 'load-more-trigger',
+ 		        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+ 		        css: {
+ 		            textAlign: 'center',
+ 		            width: '100%',
+ 		            padding: '20px',
+ 		            fontSize: '16px'
+ 		        }
+ 		    });
+ 		
+ 		    // recruitArea에 트리거 요소 추가
+ 		    $('.recruitArea').append(targetElement);
+ 		    
+ 		    // 새로운 트리거 요소를 observer로 관찰
+ 		    observer.observe(targetElement[0]); 
+ 		}
+ 	} */
+    
+    
+    
+    
 </script>
 </html>

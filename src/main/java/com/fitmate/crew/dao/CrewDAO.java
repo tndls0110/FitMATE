@@ -43,7 +43,7 @@ public interface CrewDAO {
 	// 모집게시글 상세보기
 	CrewSearchListDTO recruitDetail(int board_idx);
 	// 댓글, 대댓글 정보 가져오기
-	List<CrewCommentDTO> comment(int board_idx);	
+	List<CrewCommentDTO> comment(int board_idx, int limit, int offset);	
 	// 문의 댓글 작성하기
 	int askWrite(AskWriteDTO askWriteDTO);
 	// 답변 대댓글 작성하기
@@ -64,9 +64,9 @@ public interface CrewDAO {
 	int leaveCrew(int join_idx);
 
 	// 가입신청중인 크루목록
-	List<CrewSearchListDTO> joincrewList(String userId);
+	List<CrewSearchListDTO> joincrewList(String user_id, int limit, int offset);
 	// 내가 속해있는 크루목록
-	List<CrewSearchListDTO> mycrewList(String userId);
+	List<CrewSearchListDTO> mycrewList(String user_id, int limit, int offset);
 	
 	// 크루 탈퇴하기
 	int memberExit(int member_idx);
@@ -79,6 +79,10 @@ public interface CrewDAO {
 	
 	// 크루 모집게시글 수정하기 정보 가져오기
 	CrewSearchListDTO crew_board_detail(String board_idx, String crew_idx);
+
+	
+
+	
 
 	
 }

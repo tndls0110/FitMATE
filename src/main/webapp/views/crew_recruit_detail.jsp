@@ -254,6 +254,31 @@
 		    z-index: 10;
         }
         
+        
+        .bi.bi-arrow-repeat {
+		    display: inline-block; /* 또는 block */
+		    animation: spin 1s infinite; /* 애니메이션 적용 */
+		}
+	   
+	   @keyframes spin {
+		    0% { transform: rotate(0deg); }
+		    100% { transform: rotate(360deg); }
+	   }
+        
+        
+        /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+		div.comment_area::-webkit-scrollbar{
+		    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+		    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+		}
+		
+		/* Firefox에서 스크롤바 숨기기 */
+		div.comment_area {
+		    scrollbar-width: none;  /* 스크롤바를 숨김 */
+		    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+		}
+		
+		
     </style>
 </head>
 <body>
@@ -300,7 +325,7 @@
                         <input type="text" name="comment_id" value="" id="currentUserId" hidden/>
                         <input type="text" name="content_chk" value="0" hidden/>
                         <p>
-                            <textarea class="full" name="content" placeholder="최대 1,000자까지 입력할 수 있습니다."></textarea>
+                            <textarea class="full" name="content" placeholder="최대 1,000자까지 입력할 수 있습니다." maxlength="1000"></textarea>
                         </p>
                         <button class="mainbtn">작성하기</button>
                     </form>
@@ -364,6 +389,15 @@
     // Header정보에 프로필사진 넣어주기
     $('.profile_detail_set.leader').append(header_profile);
             
+    
+ 	// 무한 스크롤 이벤트 작동 시 데이터를 가져올 offset을 초기화
+    var offset = 0;
+    // 한 번에 가져올 데이터 개수
+    const limit = 4; 
+    // 데이터 로딩 중 여부를 관리할 변수
+    var isLoading = false;
+    
+    
     // 댓글, 대댓글 불러오기.
     if (board_idx != '' && board_idx != null) {
     	detail(board_idx);                    
@@ -373,7 +407,7 @@
     
     var contentSelect = ''; // 댓글 또는 대댓글 textArea영역 selecter
     
-    var offset = ''; // 버튼의 좌표 값을 가져오기 위한 변수 (모달창을 버튼 옆에 위치시키기 위해 사용.)
+    var coordinate = ''; // 버튼의 좌표 값을 가져오기 위한 변수 (모달창을 버튼 옆에 위치시키기 위해 사용.)
  	// 댓글 수정/삭제/신고시 controller로 넘겨줄 데이터들을 담을 객체
     var info = {};
     
@@ -393,7 +427,8 @@
     // 문의자 프로필
     var comment_profile = '';
 
-	
+    
+    
     // 동적 html을 생성하기 위한 변수. (댓글 또는 대댓글 관련 요소들)
     var footer = '';
     
@@ -445,144 +480,31 @@
             type: 'GET',
             data: { 
             	'board_idx': board_idx,      // 댓글정보를 가져오기 위함.
+            	'offset': offset,
+            	'limit': limit
           	},
             dataType: 'JSON',
-            success: function(data) {
-                
-                // 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
-                $(data).each(function(idx, item){
-                	
-                	// 댓글작성자 프로필
-                	comment_profile = item.comment_profile ? '<img class="recruit_left" src="/photo/' + item.comment_profile + '" alt="프로필 이미지" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"/>' 
-                            : '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'; 
-                	
-                	// 삭제된 댓글이 아닌경우 
-                	if(item.comment_status != 2){
-                    	footer += '<div class="comment_box">'
-    				        + '<div class="comment">'
-    				        //일반회원 프로필 상세보기 이동.
-    				        + '<a class="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
-    				        + comment_profile
-    				        + '</a>'
-    				        + '<div class="recruit_right">'
-    				        + '<h2 class="title"></h2>'
-    				        + '<span class="text_area">'
-    				        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
-    				        + '<span>&nbsp;' + item.comment_date + '</span>'
-    				        + '</span>'
-    				        + '</div>';
-    				        
-                    	if(item.comment_status === 1){       // 정상게시 댓글인경우
-    				    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div>'; 
-    					}else if(item.comment_status === 3){ // 운영자가 제재한 경우
-    						footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div>';	
-    					}
+            success: function(list) {
+            	// 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. => 기존 데이터 그대로 유지 
+                if (list == null || list == '') {
+                 	// 더이상 읽어올 데이터가 없는경우 트리거 메시지 변경.
+                	$('#load-more-trigger').html('더 이상 불러올 데이터가 없습니다.');
+                } else {
+                    if (list && list.length > 0) {
+                    	// 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
+                        $(list).each(function(idx, item){
+                        	comment_add(item)
+                        });
+                        isLoading = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
+                        addLoadMoreTrigger(); // 추가된 요소 아래에 로딩 메시지 추가
+                    } else {
                     	
-                	}else{ // 대댓글이 있지만, 삭제된 댓글인경우
-                		if(item.recomment_idx !== 0){  
-                			footer += '<div class="comment_box">'
-        				        + '<div class="comment">'
-        				        //일반회원 프로필 상세보기 이동.
-        				        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
-        				        + comment_profile
-        				        + '</a>'
-        				        + '<div class="recruit_right">'
-        				        + '<h2 class="title"></h2>'
-        				        + '<span class="text_area">'
-        				        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
-        				        + '<span>&nbsp;' + item.comment_date + '</span>'
-        				        + '</span>'
-        				        + '</div>';
-                			
-    						footer += '<div class="comment_txt"><div id="comment_del" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;삭제된 문의글입니다.</i></div></div>';
-                		}
-                	}
-				        
-                		// 대댓글 가져오기
-    				    if (item.recomment_idx !== 0) {	
-                		
-    				    	// 현재유저가 크루장, 대댓글 작성자면 => 수정/삭제 버튼.
-    				        if(leader_chk === 1 && currentUserId === item.recomment_id){
-    				        	modal_chk = '.modal_edit_delete';                	
-    		                }
-    				    	
-    				        footer += '<div class="comment_box">'
-    				        	+ '<div id="crew_leader_min" class="leader_chk">'
-    	                		+ '<i class="bi bi-star-fill"></i>'
-    	                		+ '</div>'
-    				            + '<i class="bi bi-arrow-return-right absolute"></i>'
-    				            + '<div class="content_right">'
-    				            + '<div class="comment right">'
-    				            + '<a id="profile_detail_set leader_profile" href="mycrew_memberDetail.go?id=' +item.recomment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
-    				            + leader_profile
-    				            + '</a>'
-    				            + '<div class="recruit_right">'
-    				            + '<h2 class="title"></h2>'
-    				            + '<span class="text_area">'
-    				            + '<span>&nbsp;&nbsp;' + item.recomment_nick + '</span>'
-    				            + '<span style="color: #048187">(크루장)</span></br>'
-    				            + '<span>&nbsp;' + item.recomment_date + '</span>'
-    				            + '</span>'
-    				            + '</div>';
-    				            
-    				        // 대댓글 - 모달추가
-    				     	// 일반유저인 경우 대댓글에 수정/삭제 버튼이 보이지 않도록 처리.
-				            if (leader_chk === 1 && currentUserId === item.recomment_id) {
-				                footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
-						    		+ 'data-modal_chk="' + modal_chk + '" '  
-							        + 'data-content_chk="1" '
-							        + 'data-comment_idx="' + item.recomment_idx + '" '
-							        + 'data-comment_id="' + item.recomment_id + '" >'  
-							        + '<i class="bi bi-three-dots-vertical"></i>'
-							        + '</button>';
-				            } 
-    				     	
-					        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" disabled>' + item.recomment_content + '</textarea></div>'
-					            	+ '</div>'
-					            	+ '</div>'
-					            	+ '</div>';
-    				    	
-					            	
-					            	
-		            	// 대댓글이 존재하지 않고, 크루장인 경우 답변버튼        	
-    				    }else { 
-    				    	if (leader_chk === 1 && item.comment_status === 1) {
-    				            footer += '<button class="mainbtn minbtn" '
-    				                + 'data-comment-idx="' + item.comment_idx + '" '
-    				                + 'data-id="' + currentUserId + '" '
-    				                + 'onclick="reply(this)">답변하기</button>';
-    				        }
-    				    }
-				        
-    				 	// 정상적인 내 댓글인경우 대댓글 수정/삭제 모달.
-    				    if(item.comment_id === currentUserId && item.comment_status === 1){
-    				    	modal_chk = '.modal_edit_delete'; 
-    				    }else if(item.comment_id !== currentUserId && item.comment_status === 1){
-    				    	// 내가 쓴 댓글이 아니고, 크루장인경우 신고하기 모달. 
-    				    	if(leader_chk === 1){
-    				    		modal_chk = '.modal_report';					    		
-    				    	}
-    				    }
-                		
-    				 	// 정상댓글인경우 - 모달추가
-    				    if(item.comment_status === 1){
-    				    	footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
-    				    		+ 'data-modal_chk="' + modal_chk + '" '  
-    					        + 'data-content_chk="0" '
-    					        + 'data-comment_idx="' + item.comment_idx + '" '
-    					        + 'data-comment_id="' + item.comment_id + '" >'  
-    					        + '<i class="bi bi-three-dots-vertical"></i>'
-    					        + '</button>';
-    				    }
-                		
-    				    footer += '</div></div>'; // comment_box 끝
-    				    
-    				    modal_chk = '';
-                });
+                        // 더 이상 데이터가 없으면 관찰 중지
+                        observer.unobserve($('#load-more-trigger')[0]); // jQuery로 선택한 요소의 첫 번째 DOM 요소를 관찰 중지
+                        $('#load-more-trigger').remove(); // 트리거 요소 제거
+                    }
+                }
                 
- 				$('.comment_area').empty().append(footer);
- 				
- 			
             },
             error: function(e) {
                 console.log(e);
@@ -590,6 +512,142 @@
             }
         });
     }
+ 	
+ 	// 댓글 및 대댓글 작성 함수
+ 	function comment_add(item){
+ 	// 댓글작성자 프로필
+    	comment_profile = item.comment_profile ? '<img class="recruit_left" src="/photo/' + item.comment_profile + '" alt="프로필 이미지" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;"/>' 
+                : '<i class="bi bi-person-circle" style="font-size: 40px;"></i>'; 
+    	
+    	// 삭제된 댓글이 아닌경우 
+    	if(item.comment_status != 2){
+        	footer += '<div class="comment_box">'
+		        + '<div class="comment">'
+		        //일반회원 프로필 상세보기 이동.
+		        + '<a class="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
+		        + comment_profile
+		        + '</a>'
+		        + '<div class="recruit_right">'
+		        + '<h2 class="title"></h2>'
+		        + '<span class="text_area">'
+		        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
+		        + '<span>&nbsp;' + item.comment_date + '</span>'
+		        + '</span>'
+		        + '</div>';
+		        
+        	if(item.comment_status === 1){       // 정상게시 댓글인경우
+		    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div>'; 
+			}else if(item.comment_status === 3){ // 운영자가 제재한 경우
+				footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div>';	
+			}
+        	
+    	}else{ // 대댓글이 있지만, 삭제된 댓글인경우
+    		if(item.recomment_idx !== 0){  
+    			footer += '<div class="comment_box">'
+			        + '<div class="comment">'
+			        //일반회원 프로필 상세보기 이동.
+			        + '<a id="profile_detail_set" href="mycrew_memberDetail.go?id=' +item.comment_id+ '&profileType=0">' 
+			        + comment_profile
+			        + '</a>'
+			        + '<div class="recruit_right">'
+			        + '<h2 class="title"></h2>'
+			        + '<span class="text_area">'
+			        + '<span>&nbsp;&nbsp;' + item.comment_nick + '</span></br>'
+			        + '<span>&nbsp;' + item.comment_date + '</span>'
+			        + '</span>'
+			        + '</div>';
+    			
+				footer += '<div class="comment_txt"><div id="comment_del" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;삭제된 문의글입니다.</i></div></div>';
+    		}
+    	}
+	        
+    		// 대댓글 가져오기
+		    if (item.recomment_idx !== 0) {	
+    		
+		    	// 현재유저가 크루장, 대댓글 작성자면 => 수정/삭제 버튼.
+		        if(leader_chk === 1 && currentUserId === item.recomment_id){
+		        	modal_chk = '.modal_edit_delete';                	
+                }
+		    	
+		        footer += '<div class="comment_box">'
+		        	+ '<div id="crew_leader_min" class="leader_chk">'
+            		+ '<i class="bi bi-star-fill"></i>'
+            		+ '</div>'
+		            + '<i class="bi bi-arrow-return-right absolute"></i>'
+		            + '<div class="content_right">'
+		            + '<div class="comment right">'
+		            + '<a id="profile_detail_set leader_profile" href="mycrew_memberDetail.go?id=' +item.recomment_id+ '&profileType=0">' //일반회원 프로필 상세보기 이동.
+		            + leader_profile
+		            + '</a>'
+		            + '<div class="recruit_right">'
+		            + '<h2 class="title"></h2>'
+		            + '<span class="text_area">'
+		            + '<span>&nbsp;&nbsp;' + item.recomment_nick + '</span>'
+		            + '<span style="color: #048187">(크루장)</span></br>'
+		            + '<span>&nbsp;' + item.recomment_date + '</span>'
+		            + '</span>'
+		            + '</div>';
+		            
+		        // 대댓글 - 모달추가
+		     	// 일반유저인 경우 대댓글에 수정/삭제 버튼이 보이지 않도록 처리.
+	            if (leader_chk === 1 && currentUserId === item.recomment_id) {
+	                footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
+			    		+ 'data-modal_chk="' + modal_chk + '" '  
+				        + 'data-content_chk="1" '
+				        + 'data-comment_idx="' + item.recomment_idx + '" '
+				        + 'data-comment_id="' + item.recomment_id + '" >'  
+				        + '<i class="bi bi-three-dots-vertical"></i>'
+				        + '</button>';
+	            } 
+		     	
+		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" disabled>' + item.recomment_content + '</textarea></div>'
+		            	+ '</div>'
+		            	+ '</div>'
+		            	+ '</div>';
+		    	
+		            	
+            	
+        	// 대댓글이 존재하지 않고, 크루장인 경우 답변버튼        	
+		    }else { 
+		    	if (leader_chk === 1 && item.comment_status === 1) {
+		            footer += '<button class="mainbtn minbtn" '
+		                + 'data-comment-idx="' + item.comment_idx + '" '
+		                + 'data-id="' + currentUserId + '" '
+		                + 'onclick="reply(this)">답변하기</button>';
+		        }
+		    }
+	        
+		 	// 정상적인 내 댓글인경우 대댓글 수정/삭제 모달.
+		    if(item.comment_id === currentUserId && item.comment_status === 1){
+		    	modal_chk = '.modal_edit_delete'; 
+		    }else if(item.comment_id !== currentUserId && item.comment_status === 1){
+		    	// 내가 쓴 댓글이 아니고, 크루장인경우 신고하기 모달. 
+		    	if(leader_chk === 1){
+		    		modal_chk = '.modal_report';					    		
+		    	}
+		    }
+    		
+		 	// 정상댓글인경우 - 모달추가
+		    if(item.comment_status === 1){
+		    	footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
+		    		+ 'data-modal_chk="' + modal_chk + '" '  
+			        + 'data-content_chk="0" '
+			        + 'data-comment_idx="' + item.comment_idx + '" '
+			        + 'data-comment_id="' + item.comment_id + '" >'  
+			        + '<i class="bi bi-three-dots-vertical"></i>'
+			        + '</button>';
+		    }
+    		
+		    footer += '</div></div>'; // comment_box 끝
+		    
+		    modal_chk = '';
+		    
+		    $('.comment_area').append(footer);
+		    // footer 초기화.
+		    footer = '';
+ 	}
+ 	
+ 	
     
     // 크루 입단신청 함수
     function join_crew(crew_idx) {
@@ -662,7 +720,7 @@
             + '<div class="reply_right">'
             + '<h3 class="capt"><i class="bi bi-arrow-return-right"></i>&nbsp;답변하기</h3>'
             + '<p>'
-            + '<textarea name="content" class="recomment" placeholder="최대 1,000자까지 입력할 수 있습니다."></textarea>'
+            + '<textarea name="content" class="recomment" placeholder="최대 1,000자까지 입력할 수 있습니다." maxlength="1000"></textarea>'
             + '<input type="text" name="board_idx" value="' + board_idx + '" hidden/>'
             + '<input type="text" name="comment_idx" value="' + comment_idx + '" hidden/>'
             + '<input type="text" name="recomment_id" value="' +currentUserId+ '" hidden/>'
@@ -687,12 +745,12 @@
     /********************** 모달관련 함수 및 이벤트 *********************/
     
 	// 모달위치 값을 구하여 모달 띄우기 & 스크롤 비활성화
-	function showModal(modal_chk, offset, obj){
+	function showModal(modal_chk, coordinate, obj){
 		// 스크롤 위치를 고려하여 top 값 조정
 	    var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
 	    $(modal_chk).css({
-	        top: offset.top - scrollTop, // 스크롤 위치 추가
-	        left: offset.left
+	        top: coordinate.top - scrollTop, // 스크롤 위치 추가
+	        left: coordinate.left
 	    });
 		
 	    console.log('modal_chk1: ' + $(modal_chk));
@@ -742,6 +800,7 @@
 			'content_chk': $(obj).data('content_chk'),	
 			'comment_idx': $(obj).data('comment_idx'),
 			'comment_id': $(obj).data('comment_id'),
+			'crew_idx': crew_idx
 		}
 		
 		// 댓글 또는 대댓글 요소selecter
@@ -751,10 +810,10 @@
 		modal_chk = $(obj).data('modal_chk');
 		
 		// add버튼 위치좌표		
-		offset = $(obj).offset();
+		coordinate = $(obj).offset();
 		
 		// 모달창 띄우기. & 스크롤 비활성화
-        showModal(modal_chk, offset, obj);
+        showModal(modal_chk, coordinate, coordinate);
 	}
     
     // 수정 버튼 클릭 시 
@@ -809,15 +868,19 @@
 
 	// 취소 버튼 클릭 시 모달 닫기
 	$('.btn_cancel').click(function() {
-
+		
+		if (contentSelect.length) {  // 요소가 존재하는지 확인
 		// 댓글 또는 대댓글 textarea 비활성화
 		contentSelect.prop("disabled", true);
-
+			
 		contentSelect.css({
 			'opacity' : '0.5',
 			'background-color' : '#282b34',
 			'color' : '#e9ecef'
 		});
+		} else {
+		    console.log("Textarea 요소를 찾을 수 없습니다.");
+		}	
 
 		modal_close($(this).parents('.modal'));
 	});
@@ -853,6 +916,13 @@
 						value : data.comment_idx
 					// 댓글 idx
 					}).appendTo(form);
+					
+					$('<input>').attr({
+						type : 'hidden',
+						name : 'board_idx',
+						value : data.board_idx
+					// board idx
+					}).appendTo(form);
 
 					$('<input>').attr({
 						type : 'hidden',
@@ -867,6 +937,13 @@
 						value : data.board_type
 					// 댓글 신고 유형
 					}).appendTo(form);
+					
+					$('<input>').attr({
+						type : 'hidden',
+						name : 'board_type',
+						value : data.crew_idx
+					// 크루 idx
+					}).appendTo(form);
 
 					// 폼을 body에 추가하고 제출
 					form.appendTo('body');
@@ -878,5 +955,52 @@
 			}
 		});
 	}
+	
+	
+	
+	
+	   /* 무한스크롤 IntersectionObserver 구현 */
+	   var observer = new IntersectionObserver(loadMoreEntries, {
+		    root: null, // 기본 뷰포트를 기준으로 설정   
+		    rootMargin: '0px',
+		    threshold: 0.5
+		});
+	   
+	   // Intersection Observer 콜백 함수
+	   function loadMoreEntries(entries, observer) {
+		    // 엔트리마다 체크
+		    entries.forEach(function(entry) {
+		        if (entry.isIntersecting && !isLoading) {
+		            isLoading = true; // 로딩 상태 설정
+		            offset += limit; // 다음 요청을 위한 offset 값 증가
+		            detail(board_idx); // 데이터를 가져오는 함수 호출
+		        }
+		    });
+		}
+	   
+		// '더보기' 트리거 요소 추가 함수
+		function addLoadMoreTrigger() {
+			console.log('offset 체크체킹 :' + offset);
+			// offset이 0이 아닌 2번째 부터 Start
+				$('#load-more-trigger').remove(); 
+			    
+			    var targetElement = $('<div>', {
+			        id: 'load-more-trigger',
+			        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+			        css: {
+			            textAlign: 'center',
+			            width: '100%',
+			            padding: '20px',
+			            fontSize: '16px'
+			        }
+			    });
+			
+			    // comment_area에 트리거 요소 추가
+			    $('.comment_area').append(targetElement);
+			    
+			    // 새로운 트리거 요소를 observer로 관찰
+			    observer.observe(targetElement[0]); 
+		}
+	
 </script>
 </html>

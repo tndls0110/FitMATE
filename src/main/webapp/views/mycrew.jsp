@@ -18,6 +18,13 @@
 
 h2.capt {
 	margin: 1% 0;
+	position: relative;
+}
+.crewCreate{
+	display: inline-block;
+	position: absolute;
+	top: 0%;
+	right: 3%;
 }
 
 div.recruitArea, div.approvalArea {
@@ -121,11 +128,6 @@ div.right_top, div.right_bottom {
 	width: 100%;
 }
 
-i.bi.bi-plus-lg {
-	position: absolute;
-	top: 45%;
-	left: 38%;
-}
 
 a.crew_create {
 	display: block;
@@ -210,6 +212,33 @@ a.crew_create {
     right: 5%;
 }
 
+.bi.bi-arrow-repeat {
+    display: inline-block; /* 또는 block */
+    animation: spin 1s infinite; /* 애니메이션 적용 */
+}
+
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+ 
+.recruit:hover, .recruit_odd:hover {
+   	transform: translateY(-5px) scale(1.05) !important;
+   	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* 추가된 그림자 효과 */
+	transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important; /* 전환 효과 추가 */
+}
+
+/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+div.recruitArea::-webkit-scrollbar, div.approvalArea::-webkit-scrollbar {
+    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+}
+
+/* Firefox에서 스크롤바 숨기기 */
+div.recruitArea, div.approvalArea {
+    scrollbar-width: none;  /* 스크롤바를 숨김 */
+    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+}
 
 </style>
 </head>
@@ -222,7 +251,7 @@ a.crew_create {
 				<h2 class="capt">신청중인 크루</h2>
 				<div class="approvalArea scrollY"></div>
 
-				<h2 class="capt">내 크루</h2>
+				<h2 class="capt">내 크루<a href="crew_create.go" class="crewCreate"><i class="bi bi-plus-lg" style="font-size:20px">크루 생성하기</i></a></h2>
 				<div class="recruitArea scrollY"></div>
 			</div>
 		</div>
@@ -279,9 +308,20 @@ a.crew_create {
 <script>
    var currentUserId = '${sessionScope.loginId}';
    var leader_chk = 0; // 크루장여부 체크 (0: 크루원, 1: 크루장)
-   var cntApproval = 0; // 신청중인 크루 Count
-   var cntRecruit = 0; // 내 크루 Count
+   var cntApproval = 1; // 신청중인 크루 Count
+   var cntRecruit = 1; // 내 크루 Count
 
+   // 무한 스크롤 이벤트 작동 시 데이터를 가져올 offset을 초기화
+   // 신청중인 크루영역과 내크루 영역의 offset을 각각 관리.
+   var offsetApproval = 0;
+   var offsetRecruit = 0;
+   
+   // 한 번에 가져올 데이터 개수 (신청중영역, 내크루영역 공통)
+   const limit = 4; 
+   // 데이터 로딩 중 여부를 관리할 변수
+   var isLoadingApproval = false;
+   var isLoadingRecruit = false;
+   
    // 버튼 변수
    var leader_button = '';
    var member_button = '';
@@ -294,45 +334,83 @@ a.crew_create {
    
    // 신청중인 크루 목록 가져오기
    $('div.approvalArea').empty();
-   crewList(0);
+   crewList(0, offsetApproval);
+   // 신청중인 크루 목록이 한개도 없으면 신청중인 크루가 없습니다.
+   
    
    // 내 크루 목록 가져오기
    $('div.recruitArea').empty();
-   crewList(1);
+   crewList(1, offsetRecruit);
 
    // 크루 목록 데이터 불러오기 함수 (info_chk 0: 신청중인 크루목록, 1: 내 크루목록)
-   function crewList(info_chk) {
-      $.ajax({
-         url: 'mycrew.ajax',
-         type: 'GET',
-         data: { 
-        	 'info_chk': info_chk
-       	 }, 
-         dataType: 'JSON',
-         success: function(list) {
-            $(list).each(function(idx, item) { // 데이터 = item
-               recruitAdd(item, info_chk); // Controller에서 받아온 크루원 모집게시글 추가.
-            });
-            
-            // 신청중인 크루가 없을 경우 '신청중인 크루가 없습니다.'
-            if (info_chk === 0) {
-               if ($('div.approvalArea').text().trim() === '') {
-                  $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
-               }
+   function crewList(info_chk, offset) {
+
+    $.ajax({
+        url: 'mycrew.ajax',
+        type: 'GET',
+        data: { 
+            'info_chk': info_chk,
+            'offset': offset,
+            'limit': limit
+        }, 
+        dataType: 'JSON',
+        success: function(list) {
+        	
+            // 새로 읽어온 값이 비어 있는 경우
+            if (list == null || list == '') {
+            	if (cntApproval === 1) {
+            	       $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
+           	    }
+            	
+            	// 더이상 읽어올 데이터가 없는경우 트리거 메시지 변경.
+            	$('#load-more-trigger-'+info_chk).html('더 이상 불러올 데이터가 없습니다.');
+            	// 더 이상 데이터가 없으면 관찰 중지
+            	if (info_chk === 0) {
+            		observerApproval.unobserve($('#load-more-trigger-'+info_chk)[0]);
+            	}else{
+            		observerRecruit.unobserve($('#load-more-trigger-'+info_chk)[0]);
+            	}
+            	
             } else {
-               // 내 크루 영역 마지막에 크루 생성 영역 추가.
-               if (cntRecruit % 2 === 1) {
-                  $('div.recruitArea').append('<div class="recruit"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
-               } else {
-                  $('div.recruitArea').append('<div class="recruit_odd"><a href="crew_create.go" class="crew_create"><i class="bi bi-plus-lg">크루 생성하기</i></a></div>');
-               }	
-            } 
-         },
-         error: function(e) {
-            modal.showAlert('크루 목록가져오기 실패');
-         }
-      });
-   }
+                if (list && list.length > 0) {
+                    $.each(list, function(index, item) { // 데이터 = item
+                        recruitAdd(item, info_chk); // Controller에서 받아온 크루원 모집게시글 추가
+                        if (info_chk === 0) {
+                        	cntApproval++; // 신청중인 크루 Count 증가
+                        	console.log('cntApproval : ' + cntApproval);
+                        }else {
+                        	cntRecruit++; // 내 크루 Count 증가
+                        }
+                    });
+
+                    if (info_chk === 0) {
+                        isLoadingApproval = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
+                        addLoadMoreTrigger(0); 
+                    } else {
+                        isLoadingRecruit = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
+                        addLoadMoreTrigger(1); 
+                    }
+                } else {
+                	// 더 이상 데이터가 없으면 관찰 중지
+                	if (info_chk === 0) {
+                		observerApproval.unobserve($('#load-more-trigger-'+info_chk)[0]);
+                	}else{
+                		observerRecruit.unobserve($('#load-more-trigger-'+info_chk)[0]);
+                	}
+                	// 트리거 요소 제거
+                    $('#load-more-trigger'+info_chk).remove(); 
+                }
+            }
+        },
+        error: function(e) {
+            modal.showAlert('크루 목록 가져오기 실패');
+        }
+        
+    });
+    	
+     
+    
+	}
    
    function recruitAdd(item, info_chk) {
 	   
@@ -402,7 +480,6 @@ a.crew_create {
             $('div.approvalArea').append('<div class="recruit_odd">' + header + member_button + content + info + leader_button + '</div>');
          }
          
-         cntApproval++; // 신청중인 크루 Count 증가
          
       } else {
     	// 크루장이면 리더버튼 세팅 OR 크루원,신청자이면 멤버버튼 세팅
@@ -427,7 +504,7 @@ a.crew_create {
             $('div.recruitArea').append('<div class="recruit_odd">' + header + member_button + content + info + leader_button + '</div>');
          }
      	
-         cntRecruit++; // 내 크루 Count 증가
+         
       }
    	  
       // Append후 변수 초기화
@@ -447,13 +524,13 @@ a.crew_create {
 	
 	
  	// add버튼 위치좌표		
-	var offset = $(obj).offset();
+	var coordinate = $(obj).offset();
     
 	// 스크롤 위치를 고려하여 top 값 조정
     var scrollTop = $(window).scrollTop(); // 현재 스크롤 위치
     $(modal_chk).css({
-        top: offset.top - scrollTop, // 스크롤 위치 추가
-        left: offset.left
+        top: coordinate.top - scrollTop, // 스크롤 위치 추가
+        left: coordinate.left
     });
 	
  	// 모달 내 버튼에 데이터 설정
@@ -568,5 +645,86 @@ a.crew_create {
 		$('html, body, .scrollY').css('overflow', 'auto');
    });
    
+   
+   
+   /* 무한스크롤 IntersectionObserver 구현 */
+   // 신청중인 크루 영역에 대한 Intersection Observer
+	var observerApproval = new IntersectionObserver(function(entries) {
+	    loadMoreEntries(entries, isLoadingApproval, 0); // 0은 info_chk: 신청중인 크루
+	}, {
+	    root: null,
+	    rootMargin: '0px',
+	    threshold: 0.5
+	});
+	
+	// 내 크루 영역에 대한 Intersection Observer
+	var observerRecruit = new IntersectionObserver(function(entries) {
+	    loadMoreEntries(entries, isLoadingRecruit, 1); // 1은 info_chk: 내 크루
+	}, {
+	    root: null,
+	    rootMargin: '0px',
+	    threshold: 0.5
+	});
+	
+	// Intersection Observer 콜백 함수
+	function loadMoreEntries(entries, isLoading, info_chk) {
+	    entries.forEach(function(entry) {
+	        if (entry.isIntersecting && !isLoading) {
+	        	console.log('limit 상수 확인 : ' + limit);
+	            isLoading = true; 
+	            
+	         	// 다음 요청을 위한 offset 값 증가
+	            if(info_chk === 0){
+	            	offsetApproval += limit; 
+	            	crewList(info_chk, offsetApproval); // 데이터를 가져오는 함수 호출
+	            }else{
+	            	offsetRecruit += limit;
+	            	crewList(info_chk, offsetRecruit); // 데이터를 가져오는 함수 호출
+	            }
+	            
+	        }
+	    });
+	}
+   
+
+    // 관찰대상 세팅
+    addLoadMoreTrigger(0);
+    addLoadMoreTrigger(1);
+   
+ 	// '더보기' 트리거 요소 추가 함수
+	function addLoadMoreTrigger(info_chk) {
+	    let cnt = (info_chk === 0) ? cntApproval : cntRecruit; // 크루의 개수에 따라 다름
+	    // 요소가 4개 이상일 경우에만 발동
+	    if (cnt > 4) {
+	        // 기존 로드 모어 트리거 요소를 제거
+	        $('#load-more-trigger-'+info_chk).remove(); 
+	        
+	        // 새 트리거 요소 생성
+	        var targetElement = $('<div>', {
+	            id: 'load-more-trigger-' + info_chk, // 고유한 ID 부여
+	            html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+	            css: {
+	                textAlign: 'center',
+	                width: '100%',
+	                padding: '20px',
+	                fontSize: '16px'
+	            }
+	        });
+	
+	        // 해당 영역에 트리거 요소 추가
+	        // 새로운 트리거 요소를 observer로 관찰
+	        if (info_chk === 0) {
+	            $('.approvalArea').append(targetElement);
+	            observerApproval.observe(targetElement[0]);
+	        } else {
+	            $('.recruitArea').append(targetElement);
+	            observerRecruit.observe(targetElement[0]);
+	        }
+	        
+	    }
+	}
+
+ 	
+ 	
 </script>
 </html>

@@ -146,7 +146,17 @@
         	width: 60px;
         	height: 60px;
         }
-        
+        /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+		.profile_list::-webkit-scrollbar{
+		    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+		    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+		}
+		
+		/* Firefox에서 스크롤바 숨기기 */
+		.profile_list{
+		    scrollbar-width: none;  /* 스크롤바를 숨김 */
+		    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+		}
     </style>
 </head>
 <body>
@@ -292,56 +302,49 @@
                     console.log('leader_id12314 : ' + leader_id);
                     console.log('leader_chk_f : ' + leader_chk);
                     
-                    // 크루장이 아니라면... 권한이 없으므로 => mycrew페이지로 이동. 
-                    if (leader_chk !== 1) {
-                        modal.showAlert('크루장만 접속할 수 있는 페이지입니다.');
-                     	// 이전 페이지로 이동
-                        /* window.history.back(); */
-                    } else {
                     	
-                        // 맨 처음 title세팅
-                        if (index === 0) {
-                            $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
-                        }
-                        
-                        profile_info = '<div class="profile relative ' +id+ '">'
-                        				+ '<a class="profile_detail_set ' +id+ '" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
-                                        + '</a>'
-                                        + '<div class="width_50">' 
-                                            + '<div class="profile_right">'
-                                                + '<div>'
-                                                    + '<div class="text_area">'
-                                                        + '<h3 class="inlineBlock title">' + nick + '</h3>'
-                                                        + '<span class="width_50 txt_green leader_chk' + index + '">(크루장)</span>'
-                                                    + '</div>'
-                                                    + '<div class="text_area"><span class="txt_opacity">' + id + '</span></div>'
-                                                    + '<div id="crew_leader" class="leader_chk' + index + '"><i class="bi bi-star-fill"></i></div>'
+                    // 맨 처음 title세팅
+                    if (index === 0) {
+                        $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
+                    }
+                    
+                    profile_info = '<div class="profile relative ' +id+ '">'
+                    				+ '<a class="profile_detail_set ' +id+ '" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
+                                    + '</a>'
+                                    + '<div class="width_50">' 
+                                        + '<div class="profile_right">'
+                                            + '<div>'
+                                                + '<div class="text_area">'
+                                                    + '<h3 class="inlineBlock title">' + nick + '</h3>'
+                                                    + '<span class="width_50 txt_green leader_chk' + index + '">(크루장)</span>'
                                                 + '</div>'
+                                                + '<div class="text_area"><span class="txt_opacity">' + id + '</span></div>'
+                                                + '<div id="crew_leader" class="leader_chk' + index + '"><i class="bi bi-star-fill"></i></div>'
                                             + '</div>'
                                         + '</div>'
-                                        + '<div class="btn_set">'; // btn_set 추가
-                                        
+                                    + '</div>'
+                                    + '<div class="btn_set">'; // btn_set 추가
+                                    
 
-                        profile_info += '</div></div>';
-                        
-                        // 크루장인 경우
-                        if(leader_id === user_id){
-                        	$('.profile_list').prepend(profile_info);
-    	                    $('.leader_chk' + index).show(); // 크루장 표시
-                        }else{
-                        	$('.profile_list').append(profile_info);
-                        	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
-                        }
-                        
-                        console.log('profile 확인!!: ' + profile);  
-                        // 프로필  
-                        if (profile !== ''){
-                        	$('.profile_detail_set.' + id).html('<img src="/photo/' + profile + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">');
-                        	/* $('.profile_detail_set.' + id).css('background-image', 'url(/photo/' + profile + ')'); */
-                    	} else {
-                     		$('.profile_detail_set.' + id).html('<i class="bi bi-person-circle" style="font-size:60px"></i>');
-        				}
+                    profile_info += '</div></div>';
+                    
+                    // 크루장인 경우
+                    if(leader_id === user_id){
+                    	$('.profile_list').prepend(profile_info);
+	                    $('.leader_chk' + index).show(); // 크루장 표시
+                    }else{
+                    	$('.profile_list').append(profile_info);
+                    	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
                     }
+                    
+                    console.log('profile 확인!!: ' + profile);  
+                    // 프로필  
+                    if (profile !== ''){
+                    	$('.profile_detail_set.' + id).html('<img src="/photo/' + profile + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">');
+                    	/* $('.profile_detail_set.' + id).css('background-image', 'url(/photo/' + profile + ')'); */
+                	} else {
+                 		$('.profile_detail_set.' + id).html('<i class="bi bi-person-circle" style="font-size:60px"></i>');
+    				}
                 });
                 // 크루원이 한명도 없는경우 => 크루원이 없습니다.
                 if(memberCount === 1){
@@ -374,6 +377,7 @@
             $('#order_asc').show().html('닉네임<i class="bi bi-sort-down"></i>'); // 오름차순 버튼으로 변경
         }
     });
+    
     
 </script>
 </html>

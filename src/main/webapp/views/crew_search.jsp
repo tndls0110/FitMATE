@@ -44,13 +44,14 @@
    
    select#searchFilter{
       width: 20%;
+      height: 5.8%;
    }
    
    div.recruitArea{
       overflow-y: scroll;
       overflow-x: hidden;
       width: 90%;
-      height: 65%;
+      height: 73%;
       margin-top: 10%;
       margin-left: auto;
       margin-right: auto;
@@ -60,7 +61,7 @@
    }
    
    div.recruit{
-      width: 40%;
+      width: 45%;
       height: 200px;
       margin: 3% 1%;
       padding: 2% 2%;
@@ -70,16 +71,14 @@
       position: relative;
    }
    
-   div.recruit_odd{
-      width: 48%;
-      height: 200px;
-      margin: 3% 1%;
-      padding: 2% 2%;
-      background-color: #282b34;
-      /* align-content: left; */
-      position: relative; 
-      
-   }
+   div.recruit_odd {
+	    width: 46%;
+	    height: 200px;
+	    margin: 3% 3%;
+	    padding: 2% 2%;
+	    background-color: #282b34;
+	    position: relative;
+	}
    
    .recruit_left{
       display: inline-block;
@@ -168,7 +167,7 @@
    }
    
    .contents{
-   	height:900px;
+   	height:1100px;
    }
    
    .bi.bi-arrow-repeat {
@@ -180,16 +179,26 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 	}
-   
-	.recruit {
-	    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-	    transition: transform 0.2s; /* 호버 시 효과 */
+ 
+	.recruit:hover, .recruit_odd:hover {
+    	transform: translateY(-5px) scale(1.1) !important;
+    	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* 추가된 그림자 효과 */
+   	 	transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important; /* 전환 효과 추가 */
 	}
 
-	.recruit:hover{
-	    transform: translateY(-5px); /* 호버 시 상승 효과 */
-	    transform: scale(1.2); /* 마우스를 올렸을 때 크기 증가 */
-	}   
+	/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+	div.recruitArea::-webkit-scrollbar, div.approvalArea::-webkit-scrollbar {
+	    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+	    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+	}
+	
+	/* Firefox에서 스크롤바 숨기기 */
+	div.recruitArea, div.approvalArea {
+	    scrollbar-width: none;  /* 스크롤바를 숨김 */
+	    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+	}
+   
+	
    
 </style>
 </head>
@@ -266,7 +275,7 @@
    // 무한 스크롤 이벤트 작동 시 데이터를 가져올 offset을 초기화
    var offset = 0;
    // 한 번에 가져올 데이터 개수
-   const limit = 10; 
+   const limit = 6; 
    // 데이터 로딩 중 여부를 관리할 변수
    var isLoading = false;
    
@@ -276,6 +285,10 @@
    // 1. 필터를 선택한 경우(지역, MBTI)
    // 변경 이벤트 발생감시
    $('.filterSelect').on('change', function() {
+	  cnt = 1;
+	  $('.recruitArea').empty();
+	  offset = 0;
+	  
       // 어떤 필터인지 구분 (활동지역 or mbti)
       if ($(this).attr('name') == 'placeFilter') {
          placeFilter = $(this).val();
@@ -311,6 +324,10 @@
    
    // 2. 검색한 경우
    function search() {
+	   cnt = 1;
+	   $('.recruitArea').empty();
+	   offset = 0;
+	   
       // 검색기준을 선택하지 않은경우  경고창을 띄워줌.
       if ($('#searchFilter').val() == '') {
          modal.showAlert('검색기준을 선택하세요.');
@@ -345,7 +362,9 @@
         	 
             // 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. => 기존 데이터 그대로 유지 
             if (list == null || list == '') {
-                modal.showAlert('해당 조건으로 검색된 데이터가 없습니다.');
+                modal.showAlert('읽어올 데이터가 없습니다.');
+             	// 더이상 읽어올 데이터가 없는경우 트리거 메시지 변경.
+            	$('#load-more-trigger').html('더 이상 불러올 데이터가 없습니다.');
             } else {
                 if (list && list.length > 0) {
                     $.each(list, function(index, item) {
@@ -355,6 +374,7 @@
                     isLoading = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
                     addLoadMoreTrigger(); // 추가된 요소 아래에 로딩 메시지 추가
                 } else {
+                	
                     // 더 이상 데이터가 없으면 관찰 중지
                     observer.unobserve($('#load-more-trigger')[0]); // jQuery로 선택한 요소의 첫 번째 DOM 요소를 관찰 중지
                     $('#load-more-trigger').remove(); // 트리거 요소 제거
@@ -365,27 +385,6 @@
             console.log(e); // 에러가 보이지 않도록 추후 처리필요?
             modal.showAlert('크루 목록가져오기 실패');
          }
-         // Ajax 요청전 함수.
-         /* ,
-         beforeSend : function() {
-            //데이터가 로드 중임을 나타내는 flag.
-            _scrollchk = true;
-            //skeleton 그리는함수로 DOM에 추가.
-            // Sekeleton Screen
-            // 최종 콘텐츠가 제자리에 로드되기 전에 페이지 구조의 윤곽을 나타내는 연한배경, 선 및 텍스트로 구성됨.
-            document.getElementById('list').appendChild(skeleton.show());
-            //loading animation 보여주기. (스피너 로딩)
-            $(".loading").show();
-
-         }, */
-         // Ajax 요청후 함수. 
-         /* complete : function() {
-            //데이터가 로드 중임을 나타내는 flag.
-            _scrollchk = false;
-            //loading animation과 skeleton을 DOM에서 삭제. 태그의 hidden과 같다
-            $(".loading").hide();
-            skeleton.hide();
-         } */
       });
    }
    
@@ -407,7 +406,6 @@
       } */
       
       
-      // profile: 프로필사진 (프로필 사진이 없을경우 기본 프로필 적용.)
       // 프로필
       profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 
                                          : '<i class="bi bi-person-circle" style="font-size: 54.18px;"></i>'; // 프로필사진 설정
@@ -469,24 +467,27 @@
    
 	// '더보기' 트리거 요소 추가 함수
 	function addLoadMoreTrigger() {
-	    $('#load-more-trigger').remove(); 
-	    
-	    var targetElement = $('<div>', {
-	        id: 'load-more-trigger',
-	        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
-	        css: {
-	            textAlign: 'center',
-	            width: '100%',
-	            padding: '20px',
-	            fontSize: '16px'
-	        }
-	    });
-	
-	    // recruitArea에 트리거 요소 추가
-	    $('.recruitArea').append(targetElement);
-	    
-	    // 새로운 트리거 요소를 observer로 관찰
-	    observer.observe(targetElement[0]); 
+		// 요소가 6개이상 즉, 두번째 페이지부터 발동.
+		if(cnt > 6){
+			$('#load-more-trigger').remove(); 
+		    
+		    var targetElement = $('<div>', {
+		        id: 'load-more-trigger',
+		        html: '<i class="bi bi-arrow-repeat" style="font-size: 24px;"></i> 더 많은 데이터를 불러오는 중...',
+		        css: {
+		            textAlign: 'center',
+		            width: '100%',
+		            padding: '20px',
+		            fontSize: '16px'
+		        }
+		    });
+		
+		    // recruitArea에 트리거 요소 추가
+		    $('.recruitArea').append(targetElement);
+		    
+		    // 새로운 트리거 요소를 observer로 관찰
+		    observer.observe(targetElement[0]); 
+		}
 	}
 
    

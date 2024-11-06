@@ -42,8 +42,21 @@ public class CrewMemberController {
 		}
 	}
 	
+	public void checkPermit(String addr, Model model, HttpSession session) {
+	      String loginId = (String) session.getAttribute("loginId");
+	      if (loginId == null) {
+	         model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+	         if (addr.equals("") || addr == null) {
+	            model.addAttribute("addr", "redirect:/schedule.go");
+	         } else {
+	            model.addAttribute("addr", addr);
+	         }
+	         page = "member_login";
+	      }
+	}
+	
 	// 크루 이용 가능 여부 체크
-	public void checkPermitCrew(Model model, HttpSession session) {
+	public void checkPermitCrew(String addr, Model model, HttpSession session) {
 		if (session.getAttribute("loginId") != null) {
 			String user_id = (String) session.getAttribute("loginId");
 			LocalDateTime cleared_date = member_service.getPermit(user_id);
@@ -57,7 +70,8 @@ public class CrewMemberController {
 				}
 			}
 		} else {
-			checkPermit(model, session);
+			checkPermit(addr, model, session);
+			
 		}
 	}
 	
@@ -71,10 +85,16 @@ public class CrewMemberController {
 	@GetMapping(value = "/mycrew_joinList.go")
 	public String joinList(String idx, Model model, HttpSession session) {
 		page = "mycrew_joinList";
-		checkPermit(model, session);
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}else {
+			String addr = page;
+			checkPermitCrew(addr, model, session);
 		
-		int crew_idx = Integer.parseInt(idx); 
-		model.addAttribute("crew_idx", crew_idx);
+			int crew_idx = Integer.parseInt(idx); 
+			model.addAttribute("crew_idx", crew_idx);
+		}
 		
 		return page;
 	}
@@ -93,14 +113,20 @@ public class CrewMemberController {
 	@GetMapping(value = "/mycrew_memberList.go")
 	public String memberList(String idx, Model model, HttpSession session) {
 		page = "mycrew_memberList";
-		checkPermit(model, session);
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
+		}else {
+			String addr = page;
+			checkPermitCrew(addr, model, session);
 		
-		int crew_idx = 0;
-		
-		if (idx != null && !idx.isEmpty()) {
-			crew_idx = Integer.parseInt(idx);
-        }
-		model.addAttribute("crew_idx", crew_idx);
+			int crew_idx = 0;
+			
+			if (idx != null && !idx.isEmpty()) {
+				crew_idx = Integer.parseInt(idx);
+	        }
+			model.addAttribute("crew_idx", crew_idx);
+		}
 		
 		return page;
 	}
@@ -138,33 +164,38 @@ public class CrewMemberController {
 	@RequestMapping(value = "/mycrew_memberDetail.go")
 	public String memberDetail(String id, String profileType, String idx, Model model, HttpSession session) {
 		page = "mycrew_memberDetail";
-		checkPermit(model, session);
-		
-		//세션ID가져오기
-		String user_id = (String) session.getAttribute("loginId");
-		// 추후 해당 크루의 크루장인지 확인하여 아니라면.. 일반유저 프로필이 나오도록 한번더 처리.
-		
-		String profileType_; // 0:일반유저 프로필, 1: 크루원 프로필
-		CrewMemberProfileDTO memberProfile = null;		
-		
-		// 프로필 타입을 전달받지 못한경우 => profileType 기본값: 0(일반유저)
-		if(profileType == null || profileType.equals("0")) {
-			profileType_ = "0";
-			// 일반회원정보 찾기
-			memberProfile = crewmember_service.memberDetail(id);
+		if (session.getAttribute("loginId") == null) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			page = "member_login";
 		}else {
-			profileType_ = profileType;     // 프로필 타입 1: 크루원 프로필
-			// 크루원정보 찾기
-			memberProfile = crewmember_service.memberDetail(id, idx);
+			String addr = page;
+			checkPermitCrew(addr, model, session);
+			
+			//세션ID가져오기
+			String user_id = (String) session.getAttribute("loginId");
+			// 추후 해당 크루의 크루장인지 확인하여 아니라면.. 일반유저 프로필이 나오도록 한번더 처리.
+			
+			String profileType_; // 0:일반유저 프로필, 1: 크루원 프로필
+			CrewMemberProfileDTO memberProfile = null;		
+			
+			// 프로필 타입을 전달받지 못한경우 => profileType 기본값: 0(일반유저)
+			if(profileType == null || profileType.equals("0")) {
+				profileType_ = "0";
+				// 일반회원정보 찾기
+				memberProfile = crewmember_service.memberDetail(id);
+			}else {
+				profileType_ = profileType;     // 프로필 타입 1: 크루원 프로필
+				// 크루원정보 찾기
+				memberProfile = crewmember_service.memberDetail(id, idx);
+			}
+			
+			
+			model.addAttribute("profile", memberProfile);
+			logger.info("profileDTO CrewMemberProfileDTO: {}", memberProfile.toString());
+			
+			// profileType  0: 일반회원 프로필, 1: 크루회원 프로필
+			model.addAttribute("profileType", profileType_);
 		}
-		
-		
-		model.addAttribute("profile", memberProfile);
-		logger.info("profileDTO CrewMemberProfileDTO: {}", memberProfile.toString());
-		
-		// profileType  0: 일반회원 프로필, 1: 크루회원 프로필
-		model.addAttribute("profileType", profileType_);
-		
 		return page; 
 	}
 	
