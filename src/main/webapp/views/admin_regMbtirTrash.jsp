@@ -43,7 +43,7 @@
                 </c:if>
                 <c:forEach items="${list}" var="list">
                     <li>
-                        <form action="/admin_restoreMbtir.do?mbtir_idx=${list.mbtir_idx}" method="post">
+                        <form action="admin_restoreMbtir.do?mbtir_idx=${list.mbtir_idx}" method="post">
                             <div class="btn_flex narrow">
                                 <div class="width80p">
                                     <input type="text" name="mbtir_name" value="${list.mbtir_name}" maxlength="1000" class="full flex_left" readonly />
