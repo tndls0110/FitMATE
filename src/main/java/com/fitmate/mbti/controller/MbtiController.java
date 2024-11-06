@@ -170,9 +170,9 @@ public class MbtiController {
 
 	@PostMapping (value = "/save_result.ajax")
 	@ResponseBody
-	public Map<String,Object> saveResult(@RequestBody Map<String,Object> score) {
-		//String id는 그냥 session에서 받아다 써...;;;;;
-		String id = "member01";
+	public Map<String,Object> saveResult(@RequestBody Map<String,Object> score, HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		logger.info("save 컨트롤러에서 받아온 값 :{}",score);
 
 		Set <String> keys= score.keySet();
@@ -190,8 +190,9 @@ public class MbtiController {
 
 	@GetMapping (value = "/profile_mbti.ajax")
 	@ResponseBody
-	public Map<String,Object> profileMbti(@RequestParam Map<String, String> max) {
-		String id = "member01";
+	public Map<String,Object> profileMbti(@RequestParam Map<String, String> max,HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String,Object> data = new HashMap<>();
 		logger.info("profile_mbti 컨트롤러에서 받아온 값 :{}",max);
 		Boolean success = m_service.profileMbti(max,id);

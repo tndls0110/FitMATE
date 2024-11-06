@@ -46,10 +46,11 @@ public class NotiController {
 
 	@GetMapping (value = "/get_all_alarm.ajax")
 	@ResponseBody
-	public Map<String, Object> getAllAlarm (int idx) {
+	public Map<String, Object> getAllAlarm (int idx,HttpSession session) {
 		logger.info("idx:{}",idx);
 		Map<String, Object> data = new HashMap<String, Object>();
-		String id = "member01";
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 
 		data.put("id", n_Service.getAllAlarm(id,idx));
 		return data;
@@ -76,8 +77,10 @@ public class NotiController {
 
 	@GetMapping (value = "/check_unreadAlarm.ajax")
 	@ResponseBody
-	public Map<String, Object> checkUnreadAlarm () {
-		String id = "member01";
+	public Map<String, Object> checkUnreadAlarm (HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
+
 		Map<String, Object> data = new HashMap<>();
 		String exists = n_Service.checkUnreadAlarm(id);
 		data.put("exists", exists);
@@ -86,8 +89,9 @@ public class NotiController {
 
 	@GetMapping (value = "/unread_count.ajax")
 	@ResponseBody
-	public Map<String, Object> unreadCount () {
-		String id = "member01";
+	public Map<String, Object> unreadCount (HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String, Object> data = new HashMap<>();
 		int unread = n_Service.unread_count(id);
 		data.put("count",unread);

@@ -48,16 +48,18 @@ public class ScheduleController {
 
 	@GetMapping (value = "/get_totalevents.ajax")
 	@ResponseBody
-	public Map<String,Object> getEvents() {
-		String id = "member01";
+	public Map<String,Object> getEvents(HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String,Object> event_day =  s_service.getEvents(id);
 		return event_day;
 	}
 
 	@GetMapping (value = "/journal_get.ajax")
 	@ResponseBody
-	public Map<String,Object> getJournal(String date) {
-		String id = "member01";
+	public Map<String,Object> getJournal(String date, HttpSession session) {
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String,Object> journal = s_service.getJournal(date,id);
 			//글 idx 기반으로 file을 가져와야하는데.... 여기에서 글 idx
 
@@ -73,11 +75,13 @@ public class ScheduleController {
 	}
 
 	@PostMapping (value = "/schedule_write.do")
-	public String schedule_write(MultipartFile[] files, @RequestParam Map<String,String> content) {
+	public String schedule_write(MultipartFile[] files, @RequestParam Map<String,String> content,HttpSession session) {
 		logger.info("schedule_write 컨트롤러 도착");
 
 		//세션으로 나중에 바꾸기
-		String id = "member01";
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
+
 		logger.info("content:{}",content);
 		logger.info("files 길이 :{}",files.length);
 
@@ -89,9 +93,10 @@ public class ScheduleController {
 
 	@GetMapping (value = "/crewplan_get.ajax")
 	@ResponseBody
-	public Map<String,Object> crewplan_get(String date) {
+	public Map<String,Object> crewplan_get(String date,HttpSession session) {
 		logger.info("컨트롤러에서 전달받은 date :{}",date);
-		String id = "member01";
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String,Object> crew = new HashMap<>();
 
 		List<Map<String,Object>> crew_plans = s_service.crewplan_get(id,date);
@@ -138,8 +143,10 @@ public class ScheduleController {
 
 	@GetMapping (value = "individual_crew_plan_detail.ajax")
 	@ResponseBody
-	public Map<String,Object> crew_plan_detail(@RequestParam String date,String crew_idx){
-		String id = "member01";
+	public Map<String,Object> crew_plan_detail(@RequestParam String date,String crew_idx,HttpSession session){
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
+
 		// getCrewEvents
 		Map<String,Object> response = new HashMap<>();
 		logger.info("크루 플랜 디테일 아작스 실행");
@@ -197,9 +204,10 @@ public class ScheduleController {
 
 	@GetMapping (value = "update_content.ajax")
 	@ResponseBody
-	public Map<String,Object> update_content(@RequestParam Map<String,Object> param){
+	public Map<String,Object> update_content(@RequestParam Map<String,Object> param,HttpSession session){
 		logger.info("업데이트 해야하는 param :{}", param);
-		String id = "member01";
+		String id = session.getAttribute("loginId").toString();
+		logger.info("세션에서 받아온 id 값 :{}",id);
 		Map<String,Object> data = new HashMap<>();
 		data.put("content", s_service.update_content(param));
 		return data;
