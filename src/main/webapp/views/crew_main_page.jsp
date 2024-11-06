@@ -706,7 +706,7 @@ if(userId === crewId){
 	                    	    'height': '280px'  // 최대 높이 200px
 	                    	});
 	                
-	                    const redirectUrl = '/Fitmate/crew_photo_detail.go?board_idx=' + item.board_idx+'&crew_id='+crewId+'&crew_idx='+crewIdx;
+	                    const redirectUrl = '/Fitmate_war/crew_photo_detail.go?board_idx=' + item.board_idx+'&crew_id='+crewId+'&crew_idx='+crewIdx;
 	                    img.on('click', function() {
 	                        window.location.href = redirectUrl; // 클릭 시 해당 URL로 이동
 	                    });
