@@ -47,7 +47,7 @@ public class NoticeController {
 		page = "redirect:/admin_notice.go";
 		checkPermit(page, model, session);
 		if (session.getAttribute("loginIdx") != null) {
-			int admin_idx = Integer.parseInt((String) session.getAttribute("loginIdx"));
+			int admin_idx = (int) session.getAttribute("loginIdx");
 			if (notice_service.write(params.get("notice_cont"), admin_idx)){
 				model.addAttribute("msg", "공지사항을 작성했습니다. 내용을 확인하세요.");
 			} else {

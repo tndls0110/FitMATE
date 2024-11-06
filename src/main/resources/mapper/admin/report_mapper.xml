@@ -9,11 +9,23 @@
     <select id="allCount" resultType="int">
         SELECT CEIL(COUNT(report_idx) / #{param1}) FROM report
         <where>
-            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
-                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
+                subject LIKE CONCAT('%', #{keyword}, '%')
             </if>
-            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
-                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reported_id')">
+                reported_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reported_nick')">
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_id')">
+                reporter_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_nick')">
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('board_idx')">
+                r.board_idx = #{keyword}
             </if>
 
             <if test="sortType.equals('reported')">
@@ -34,11 +46,23 @@
     <select id="countIdx" resultType="int">
         SELECT COUNT(report_idx) FROM report
         <where>
-            <if test="keyword != null and !keyword.equals('') and opt.equals('notice_cont')">
-                notice_cont LIKE CONCAT('%', #{keyword}, '%')
+            <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
+                subject LIKE CONCAT('%', #{keyword}, '%')
             </if>
-            <if test="keyword != null and !keyword.equals('') and opt.equals('admin_name')">
-                (SELECT admin_name FROM admin a WHERE a.admin_idx = admin_idx) LIKE CONCAT('%', #{keyword}, '%')
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reported_id')">
+                reported_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reported_nick')">
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reported_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_id')">
+                reporter_id LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('reporter_nick')">
+                (SELECT m.nick FROM member m WHERE m.user_id = r.reporter_id) LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="keyword != null and !keyword.equals('') and opt.equals('board_idx')">
+                r.board_idx = #{keyword}
             </if>
 
             <if test="sortType.equals('reported')">
