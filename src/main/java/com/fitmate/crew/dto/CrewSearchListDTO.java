@@ -39,6 +39,10 @@ public class CrewSearchListDTO {
 	// 가입신청 idx
 	private int join_idx;
 	
+	// 이 크루의 크루원인지 체크 0: 일반멤버 1: 크루원 
+	private int member_chk;
+	
+	
 	
 	
 	@Override
@@ -51,6 +55,16 @@ public class CrewSearchListDTO {
 				+ ", join_idx=" + join_idx + "]";
 	}
 	
+	
+	
+	public int getMember_chk() {
+		return member_chk;
+	}
+
+	public void setMember_chk(int member_chk) {
+		this.member_chk = member_chk;
+	}
+
 	public int getMember_idx() {
 		return member_idx;
 	}

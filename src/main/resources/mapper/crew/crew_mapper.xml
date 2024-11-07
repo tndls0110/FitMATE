@@ -6,6 +6,8 @@
 <mapper namespace="com.fitmate.crew.dao.CrewDAO">
 <select id="placeFilter" resultType="map">
 	SELECT A.region_name, B.regions_idx, B.regions_name FROM region A INNER JOIN region_sub B ON A.region_idx = B.region_idx 
+	AND A.region_show = 1
+	AND B.regions_show = 1
 </select>
 
 <select id="mbtiFilter" resultType="map">
@@ -38,7 +40,12 @@ MB.nick AS leader_nick,
 <!--    크루장 프로필사진    -->
 P.profile AS leader_profile,
 <!--    크루장 mbti    -->
-M.mbtir_name AS leader_mbti 
+M.mbtir_name AS leader_mbti, 
+<!-- 현재 사용자가 크루의 멤버인지 여부 -->
+CASE 
+    WHEN CM.member_idx IS NOT NULL THEN 1 
+    ELSE 0 
+END AS member_chk
 FROM crew A 
 INNER JOIN member MB ON A.crew_id = MB.user_id 
 INNER JOIN profile P ON A.crew_id = P.user_id 
@@ -47,7 +54,11 @@ INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
 INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx 
 INNER JOIN region R ON R.region_idx = RS.region_idx 
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
-LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member WHERE status = 1 GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+<!-- 현재 사용자가 크루의 멤버인지 확인하는 LEFT JOIN -->
+LEFT JOIN crew_member CM ON CM.crew_idx = A.crew_idx 
+    AND CM.member_id = #{user_id} 
+    AND CM.status = 1
 <where>
 CB.category_idx =1
 AND
@@ -159,7 +170,8 @@ INNER JOIN region R ON R.region_idx = RS.region_idx
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
 LEFT JOIN ( 
     SELECT crew_idx, COUNT(member_idx) AS member_count 
-    FROM crew_member 
+    FROM crew_member CM
+    WHERE status = 1
     GROUP BY crew_idx 
 ) MC ON MC.crew_idx = C.crew_idx
 WHERE
@@ -215,7 +227,7 @@ INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
 INNER JOIN region_sub RS ON RS.regions_idx = C.regions_idx 
 INNER JOIN region R ON R.region_idx = RS.region_idx 
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
-LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member WHERE status = 1 GROUP BY crew_idx ) MC ON MC.crew_idx = C.crew_idx
 WHERE
 A.member_id = #{param1}  <!-- 현재 유저ID로 활동중인 크루목록 가져오기. -->
 AND
@@ -248,11 +260,11 @@ LEFT JOIN profile P ON P.user_id = C.comment_id
 LEFT JOIN member M2 ON M2.user_id = RC.recomment_id 
 LEFT JOIN profile P2 ON P2.user_id = RC.recomment_id
 WHERE C.board_idx = #{board_idx}
-ORDER BY C.comment_idx	
+ORDER BY C.date DESC	
 LIMIT #{limit} OFFSET #{offset}
 </select> 
 
-<!-- 크루 입단여부 체크. -->
+<!-- 크루 입단여부 체크. 입단신청/취소 등을 수행하기 위한 쿼리 -->
 <select id="crewApproval" resultType="com.fitmate.crew.dto.CrewApprovalDTO" parameterType="String">
 	SELECT 
 	CJ.*,
@@ -270,6 +282,7 @@ LIMIT #{limit} OFFSET #{offset}
 	ON CM.member_id = CJ.join_id
 	AND CM.crew_idx = CJ.crew_idx
 </select>
+
 
 <!-- 크루 입단신청 -->
 <insert id="joinCrew">
