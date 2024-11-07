@@ -25,7 +25,7 @@ $('input[name="nick"]').keyup(function() {
                 "nick": nick
             },
             success: function(data) {
-                 if (data.check_nick) {
+                if (data.check_nick) {
                     $('input[name="nick"]').removeClass('caution').addClass('pass');
                     $('.pass_nick').removeClass('hide');
                     $('.check_nick').addClass('hide');
@@ -58,6 +58,7 @@ function readFile(input){
             reader.readAsDataURL(file);
             reader.onload = function(e) {
                 $('.img_preview div').css('background-image', 'url("'+e.target.result+'")');
+                $('input[name="fileIsUpdated"]').val('true');
             }
         }
     }

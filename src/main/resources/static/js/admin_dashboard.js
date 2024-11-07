@@ -49,7 +49,7 @@ function getChartData() {
         dataType: 'json',
         success: function(data) {
             for (let i = 0; i < 5 ; i++) {
-                chartData.push([getChartDate(4-i), data.cnt[0+i], data.cnt[5+i], data.cnt[10+i], data.cnt[15+i]]);
+                chartData.push([getChartDate(4-i), data.cnt[0+i], data.cnt[5+i], data.cnt[10+i], data.cnt[15+i], data.cnt[20+i]]);
             }
             google.charts.load('current', {
                 'packages':['corechart']
@@ -72,6 +72,7 @@ function drawVisualization() {
     data = new google.visualization.DataTable();
     data.addColumn('string', '날짜');
     data.addColumn('number', '회원');
+    data.addColumn('number', '스케줄');
     data.addColumn('number', '게시글');
     data.addColumn('number', '크루');
     data.addColumn('number', '신고');
@@ -89,12 +90,21 @@ function drawVisualization() {
                 color: '#048187'
             },
             1: {
-                color: '#cecece'
+                color: '#d7d7d7'
             },
             2: {
-                color: '#aaa'
+                color: '#cecece'
             },
             3: {
+                color: '#aaa'
+            },
+            4: {
+                color: '#848484'
+            },
+            5: {
+                color: '#848484'
+            },
+            6: {
                 color: '#848484'
             }
         },

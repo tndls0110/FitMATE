@@ -30,10 +30,11 @@
 
     <!-- 대시보드 > 신고 목록 -->
     <select id="dashboardList2" resultType="com.fitmate.admin.dto.DashboardDTO">
-        SELECT r.report_idx, r.report_date, r.report_prog,
-            (SELECT reportr_con FROM report_reason WHERE reportr_idx = r.reportr_idx) AS 'reportr_con',
-            (SELECT subject FROM crew_board WHERE board_idx = r.board_idx) AS 'subject',
-            (SELECT report_state FROM report_progress WHERE report_prog = r.report_prog) AS 'report_state'
+        SELECT r.report_idx, r.report_date, r.report_prog, r.board_type,
+            (SELECT rs.reportr_con FROM report_reason rs WHERE rs.reportr_idx = r.reportr_idx) AS 'reportr_con',
+            (SELECT b.subject FROM crew_board b WHERE b.board_idx = r.board_idx) AS 'subject',
+            (SELECT rp.report_state FROM report_progress rp WHERE rp.report_prog = r.report_prog) AS 'report_state',
+            (SELECT content FROM comment WHERE comment_idx = r.board_idx) AS 'comment'
             FROM report r ORDER BY r.report_idx DESC LIMIT 10 OFFSET 0
     </select>
 
@@ -44,6 +45,11 @@
         UNION ALL SELECT COUNT(user_id) FROM member WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
         UNION ALL SELECT COUNT(user_id) FROM member WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
         UNION ALL SELECT COUNT(user_id) FROM member WHERE regdate >= CURDATE()
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND CURDATE()
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate >= CURDATE()
         UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 DAY) AND DATE_SUB(CURDATE(), INTERVAL 3 DAY)
         UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 3 DAY) AND DATE_SUB(CURDATE(), INTERVAL 2 DAY)
         UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE date BETWEEN DATE_SUB(CURDATE(), INTERVAL 2 DAY) AND DATE_SUB(CURDATE(), INTERVAL 1 DAY)
@@ -65,12 +71,16 @@
     <select id="getTableData" resultType="int">
         SELECT COUNT(user_id) FROM member WHERE regdate >= CURDATE()
         UNION ALL SELECT COUNT(user_id) FROM member WHERE regdate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate >= CURDATE()
+        UNION ALL SELECT COUNT(journal_idx) FROM schedule WHERE regdate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
         UNION ALL SELECT COUNT(crew_idx) FROM crew WHERE create_date >= CURDATE()
         UNION ALL SELECT COUNT(crew_idx) FROM crew WHERE create_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND crew_board.date >= CURDATE()
-        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND crew_board.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND crew_board.date >= CURDATE()
-        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND crew_board.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND date >= CURDATE()
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 2 AND date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND date >= CURDATE()
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 3 AND date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 4 AND date >= CURDATE()
+        UNION ALL SELECT COUNT(board_idx) FROM crew_board WHERE category_idx = 4 AND date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
         UNION ALL SELECT COUNT(report_idx) FROM report WHERE report_date >= CURDATE()
         UNION ALL SELECT COUNT(report_idx) FROM report WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
     </select>

@@ -47,24 +47,34 @@
                         <td><span class="cnt1">0</span>명</td>
                     </tr>
                     <tr>
+                        <td class="left">사용자 스케줄</td>
+                        <td><span class="cnt2">0</span>건</td>
+                        <td><span class="cnt3">0</span>건</td>
+                    </tr>
+                    <tr>
                         <td class="left">크루 수</td>
-                        <td><span class="cnt2">0</span>개</td>
-                        <td><span class="cnt3">0</span>개</td>
+                        <td><span class="cnt4">0</span>개</td>
+                        <td><span class="cnt5">0</span>개</td>
                     </tr>
                     <tr>
                         <td class="left">한 줄 게시글</td>
-                        <td><span class="cnt4">0</span>건</td>
-                        <td><span class="cnt5">0</span>건</td>
-                    </tr>
-                    <tr>
-                        <td class="left">사진 게시글</td>
                         <td><span class="cnt6">0</span>건</td>
                         <td><span class="cnt7">0</span>건</td>
                     </tr>
                     <tr>
+                        <td class="left">사진 게시글</td>
+                        <td><span class="cnt8">0</span>건</td>
+                        <td><span class="cnt9">0</span>건</td>
+                    </tr>
+                    <tr>
+                        <td class="left">크루 공지사항</td>
+                        <td><span class="cnt10">0</span>건</td>
+                        <td><span class="cnt11">0</span>건</td>
+                    </tr>
+                    <tr>
                         <td class="left">신고 회수</td>
-                        <td><span class="cnt8">0</span>회</td>
-                        <td><span class="cnt9">0</span>회</td>
+                        <td><span class="cnt12">0</span>회</td>
+                        <td><span class="cnt13">0</span>회</td>
                     </tr>
                     </tbody>
                 </table>
@@ -123,9 +133,16 @@
                     <tbody>
                     <c:forEach items="${report}" var="report">
                         <tr>
-                            <td class="left">
-                                <a href="admin_reportDetail.go?report_idx=${report.report_idx}">${report.subject}</a>
-                            </td>
+                            <c:if test="${report.board_type == 1}">
+                                <td class="left">
+                                    <a href="admin_reportDetail.go?report_idx=${report.report_idx}">${report.subject}</a>
+                                </td>
+                            </c:if>
+                            <c:if test="${report.board_type == 2}">
+                                <td class="left">
+                                    <a href="admin_reportDetail.go?report_idx=${report.report_idx}">${report.comment}</a>
+                                </td>
+                            </c:if>
                             <td class="left">${report.reportr_con}</td>
                             <td>${report.report_date}</td>
                             <td>

@@ -55,7 +55,9 @@
                     </tr>
                     <tr>
                         <th>신고 내용</th>
-                        <td>${info.reportr_con}</td>
+                        <td>
+                            ${info.reportr_con}
+                        </td>
                         <th>작성자 아이디(닉네임)</th>
                         <td>
                             <a href="admin_userDetail.go?user_id=${info.reported_id}" target="_blank">${info.reported_id} (${info.reported_nick})</a>
@@ -163,6 +165,11 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <ul class="noDesc">
+                <li>
+                    <button onclick="location.href='admin_reportList.go'" class="mainbtn">목록으로 돌아가기</button>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

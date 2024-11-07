@@ -7,6 +7,9 @@
 		<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="resources/css/member_profile.css">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<script>
+			var msg = '${msg}';
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -78,7 +81,4 @@
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script src="resources/js/common.js"></script>
-	<script>
-		var msg = '${msg}';
-	</script>
 </html>

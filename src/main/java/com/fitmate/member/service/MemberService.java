@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -107,36 +108,39 @@ public class MemberService {
 		if (member_dao.update1(params) == 1 && member_dao.update2(params) == 1){
 			String user_id = params.get("user_id");
 			MemberDTO dto = member_dao.getProfile(user_id);
-			// 삭제 혹은 파일 변경시 기존 파일 삭제
-			if (files.length > 0) {
-				if (member_dao.deleteImg(params.get("user_id")) == 1){
+
+			// 파일 변경시 기존 파일 삭제
+			if (params.get("fileIsUpdated").equals("true")){
+				if (files.length > 0) {
 					File file = new File("C:/upload/"+dto.getProfile());
 					if (file.exists()) {
 						file.delete();
 					}
 				}
-			}
 
-			// 새 파일 업로드
-			for (MultipartFile file : files) {
-				if (file.getOriginalFilename().lastIndexOf(".") < 0) {
-					if (member_dao.insertImg(params.get("user_id"), "") == 1){
-						result = true;
-					}
-					break;
-				} else {
-					try {
-						String ori_filename = file.getOriginalFilename();
-						String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
-						String new_filename = UUID.randomUUID().toString()+ext;
-						byte[] arr = file.getBytes();
-						Path path = Paths.get("C:/upload/"+new_filename);
-						Files.write(path, arr);
-						if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
+				// 새 파일 업로드
+				for (MultipartFile file : files) {
+					if (file.getOriginalFilename().lastIndexOf(".") < 0) {
+						if (member_dao.insertImg(params.get("user_id"), "") == 1){
 							result = true;
 						}
-					} catch (IOException e) {}
+						break;
+					} else {
+						try {
+							String ori_filename = file.getOriginalFilename();
+							String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
+							String new_filename = UUID.randomUUID().toString()+ext;
+							byte[] arr = file.getBytes();
+							Path path = Paths.get("C:/upload/"+new_filename);
+							Files.write(path, arr);
+							if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
+								result = true;
+							}
+						} catch (IOException e) {}
+					}
 				}
+			} else {
+				result = true;
 			}
 
 		}

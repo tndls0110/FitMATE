@@ -12,7 +12,7 @@
 
     <insert id="insertAlert">
         INSERT INTO noti (notis_idx, notis_cate, noti_content, notis_date)
-            VALUES (#{param}, 2,
+            VALUES (#{param}, 1,
                     (SELECT notice_cont FROM notice WHERE notice_idx = #{param}),
                     (SELECT notice_regdate FROM notice WHERE notice_idx = #{param}));
     </insert>

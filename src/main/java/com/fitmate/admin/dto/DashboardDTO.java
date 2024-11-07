@@ -10,6 +10,8 @@ public class DashboardDTO {
     private int notice_show;
     private int report_idx;
     private String subject;
+    private String comment;
+    private int board_type;
     private String reportr_con;
     private int report_prog;
     private String report_state;
@@ -50,6 +52,17 @@ public class DashboardDTO {
             con += "…";
         }
         return con;
+    }
+    public String getComment() {
+        String con = comment;
+        if (con.length() > 19) {
+            con = con.substring(0, 19);
+            con += "…";
+        }
+        return con;
+    }
+    public int getBoard_type() {
+        return board_type;
     }
     public String getReportr_con() {
         String con = reportr_con;
@@ -117,6 +130,10 @@ public class DashboardDTO {
     }
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+    public void setComment(String comment) { this.comment = comment; }
+    public void setBoard_type(int board_type) {
+        this.board_type = board_type;
     }
     public void setReport_prog(int report_prog) {
         this.report_prog = report_prog;

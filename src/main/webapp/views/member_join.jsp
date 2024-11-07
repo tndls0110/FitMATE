@@ -90,7 +90,7 @@
 					</div>
 				</form>
 				<div class="list">
-					<button onclick="/member_login.go" class="full subbtn">돌아가기</button>
+					<button onclick="location.href='member_login.go'" class="full subbtn">돌아가기</button>
 				</div>
 			</div>
 		</div>
