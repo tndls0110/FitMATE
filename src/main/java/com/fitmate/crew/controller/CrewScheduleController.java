@@ -56,6 +56,7 @@ public class CrewScheduleController {
 		else {
 			// 작성자가 크루장이 아니라면
 			page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
+			model.addAttribute("crew_msg", "크루장만 작성할 수 있습니다");
 		}
 		
 		

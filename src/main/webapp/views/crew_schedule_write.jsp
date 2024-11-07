@@ -38,7 +38,7 @@ input[type="time"]
     padding: 16px;
 }	
 
-.mainbtn {
+.mainbtn.custom {
     float: right; /* 버튼을 오른쪽으로 이동 */
     margin-top: 10px; /* 버튼과 체크박스 사이에 여백 추가 */
 }	
@@ -113,7 +113,7 @@ input[type="time"]
                     <!-- 통과 -->
                     <div class="list">
                         <h3 class="capt">모임 날짜 <span class="required">(오늘날짜부터)</span></h3>
-                        <p><input type="date" class="full pass" name="date" /></p>
+                        <p><input type="date" id = "date" class="full pass" name="date" value = ""/></p>
                         
                     </div>
                     <!-- //통과 -->
@@ -154,7 +154,7 @@ input[type="time"]
 				        </label>
 				    </div>
                     	
-						<button class="mainbtn" type="button" onclick="getCheckedDays()">확인</button>
+						<button class="mainbtn custom" type="button" onclick="getCheckedDays()">확인</button>
 						</br>
 						<p id="selectedDays">  </p>
 						
@@ -174,12 +174,12 @@ input[type="time"]
                            
                             <div class="width50p">
                              <h5 class="capt">운동 시작 시간</h5>
-                                <input class="narrow" type="time" id="start_time" name="start_time" required>
+                                <input class="narrow" type="time" id="start_time" name="start_time" value="" required>
                             </div>
                             
                             <div class="width50p">
                             <h5 class="capt">운동 종료 시간</h5>
-                                <input class="narrow" type="time" id="end_time" name="end_time" required>
+                                <input class="narrow" type="time" id="end_time" name="end_time" value="" required>
                             </div>
                         </div>
                     </div>
@@ -192,7 +192,7 @@ input[type="time"]
                         
                         <!-- flex-narrow 박스 설정 -->
                         	<!-- 너비 설정 -->
-                          <p> <textarea id="place" maxlength="1000" class="full pass" name="place" readonly/></textarea></p>
+                          <p> <textarea id="place" maxlength="1000"  class="full pass" name="place" value="" readonly/></textarea></p>
                      </div>     
                           <!-- 카카오 지도 시작 -->
                           
@@ -238,7 +238,7 @@ input[type="time"]
                
                     <!-- 제출 버튼 -->
                     <div class="list">
-                        <input type="submit" class="full mainbtn" value="작성하기" />
+                        <input type="button" id ="write" class="full mainbtn" value="작성하기" />
                     </div>
                     <!-- //제출 버튼 -->
                     
@@ -316,8 +316,9 @@ function displayMarker(place) {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
         infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
         infowindow.open(map, marker);
-        
-
+        place = true;
+        console.log(place);
+	
         
         // textarea에 값 설정
         textarea.value = place.place_name;
@@ -338,6 +339,58 @@ function displayMarker(place) {
 		<c:import url="layout/modal.jsp"></c:import>
 	</body>
 	<script>
+	
+	 var start_time = '';
+	  var end_time = '';
+	  var place = false;
+	  var date = '';
+		
+	  //날짜 바뀔 때마다
+	  document.getElementById('date').addEventListener('input',function(){
+	    date = this.value;
+	    console.log ("date : ", date);
+	  });
+
+	  //시작 시간
+	  document.getElementById('start_time').addEventListener('input',function() {
+	    start_time = this.value;
+	    console.log("시작 시간:", start_time);
+	  });
+
+	  //끝나는 시간
+	  document.getElementById('end_time').addEventListener('input',function(){
+	    end_time = this.value;
+	    console.log("끝난 시간:",end_time);
+	  });
+	  
+	  document.getElementById('place').addEventListener('input',function(){
+		    place = this.value;
+		    console.log("장소:",place);
+		  });
+	
+	
+	  $('#write').click(function(){
+		    console.log("시작 시간:", start_time);
+		    console.log("끝난 시간:",end_time);
+		    //조건 별 alert
+		    if(date == ""){
+		      alert('날짜를 선택해주세요!');
+		    }else if (start_time == ""){
+		      alert('시작 시간을 선택해주세요!');
+		    }else if (end_time == "") {
+		      alert('끝난 시간을 선택해주세요!');
+		    }else if (start_time > end_time) {
+		      alert('종료 시간은 시작 시간보다 빠를 수 없습니다');
+		    }else if (place == false){
+			      alert('장소를 선택해주세요!');
+			    }
+		    else{
+		      $('form').submit();
+		    }
+		  });
+	  
+	  
+	  
 	function getCheckedDays() {
 	    const checkboxes = document.querySelectorAll('input[name="day"]:checked');
 	    const checkedDays = [];
