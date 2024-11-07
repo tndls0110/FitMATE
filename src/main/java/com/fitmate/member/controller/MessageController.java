@@ -54,7 +54,7 @@ public class MessageController {
         }
         boolean permit = message_service.checkPermitChat(login_id, group_idx);
         if (!permit){
-            model.addAttribute("msg", "접근 권한이 없습니다.");
+            model.addAttribute("msg", "잘못된 접근입니다.");
         }
         return page;
     }
