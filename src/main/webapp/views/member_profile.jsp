@@ -59,7 +59,7 @@
 						<c:if test="${list.mbtir_name == null}">
 							<td class="nombti">
 								<p>헬스 mbti 검사 결과가 없습니다.</p>
-								<p><button class="subbtn minbtn">검사하기</button></p>
+								<p><button onclick="location.href='mbtiQ.go'" class="subbtn minbtn">검사하기</button></p>
 							</td>
 						</c:if>
 						<c:if test="${list.mbtir_name != null}">
