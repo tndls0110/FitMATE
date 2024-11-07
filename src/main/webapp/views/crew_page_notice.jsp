@@ -10,9 +10,10 @@
         table {
             width: 100%;
             border-collapse: collapse;
+         	background-color: #282b34;   
         }
         th, td {
-            border: 1px solid #000;
+            border: 0.5px dotted grey;
             text-align: center;
         }
         .col1 {
@@ -129,11 +130,7 @@
 		        </thead>
 		        <tbody class="show">
 		        <tr>
-		            <td>내용 1</td>
-		            <td>내용 2</td>
-		            <td>내용 3</td>
-		            <td>내용 4</td>
-		            <td><button class="mainbtn minbtn">작은 버튼</button></td>
+		              <td colspan="4">불러오는 중...</td>
 		        </tr>
 		        </tbody>
 		    </table>
@@ -236,14 +233,14 @@
 		                    displayDate = postDate.toLocaleDateString(); // 기본 포맷으로 날짜 표시
 		                }
 		                
-	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
+	                	let deleteButton = '<button type="button" class="textbtn"></button>';
 	                	 // sessionId == item.board_id
 	                	if (1) {
 	                	     //   deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_notice_del?board_idx=' + item.board_idx + '\'">삭제</button>';
-	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'공지사항을 정말로 삭제하시겠습니까\', \'crew_notice_del?board_idx=' + item.board_idx +'&crew_idx='+crewIdx +'\')" class="mainbtn small"><i class="bi bi-x-square"></i></button>'
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'공지사항을 정말로 삭제하시겠습니까\', \'crew_notice_del?board_idx=' + item.board_idx +'&crew_idx='+crewIdx +'\')" class="textbtn"><i class="bi bi-x-square"></i></button>'
 	                	 }
 	                	 else{
-	                		 deleteButton = '<button type="button" onclick="modal.showAlert(\'공지사항 입니다\')" class="mainbtn small"><i class="bi bi-file-earmark-person"></i></button>'
+	                		 deleteButton = '<button type="button" onclick="modal.showAlert(\'공지사항 입니다\')" class="textbtn"><i class="bi bi-file-earmark-person"></i></button>'
 	                	 }
 	                	
 	                    tbody.append('<tr><td>' + item.board_idx 

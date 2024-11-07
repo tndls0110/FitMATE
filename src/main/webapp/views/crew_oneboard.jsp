@@ -10,9 +10,10 @@
         table {
             width: 100%;
             border-collapse: collapse;
+         	background-color: #282b34;   
         }
         th, td {
-            border: 1px solid #000;
+            border: 0.5px dotted grey;
             text-align: center;
         }
         .col1 {
@@ -40,6 +41,7 @@
             font-weight: bold; /* 글자 수 강조 */
             margin-top: 5px; /* 위쪽 여백 */
         }
+        
        
     </style>
 	</head>
@@ -109,11 +111,7 @@
 		        </thead>
 		        <tbody class="show">
 		        <tr>
-		            <td>내용 1</td>
-		            <td>내용 2</td>
-		            <td>내용 3</td>
-		            <td>내용 4</td>
-		            <td><button class="mainbtn minbtn">작은 버튼</button></td>
+		        <td colspan="4">불러오는 중...</td>
 		        </tr>
 		        </tbody>
 		    </table>
@@ -220,26 +218,26 @@
 	                	// 내가 작성자이면
 	                	if (sessionId == item.board_id) {
 	                	       // deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_del?board_idx=' + item.board_idx + '\'">작성자</button>';
-	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\')" class="mainbtn full"><i class="bi bi-x-square"></i></button>'
+	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 삭제하시겠습니까\', \'crew_oneboard_del?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\')" class="textbtn"><i class="bi bi-x-square"></i></button>'
 	                	    }
 	                	// 크루장이면
 	                	else if(isCrewLeader){
 	                		// 숨겨진게시글이면
 	                		if(item.status == 2){
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx +'&crew_idx='+ crew_idx + '\'"><i class="bi bi-file-richtext"></i></button>';
+	                			deleteButton = '<button type="button" class="textbtn" onclick="location.href=\'crew_oneboard_unblind?board_idx=' + item.board_idx +'&crew_idx='+ crew_idx + '\'"><i class="bi bi-file-richtext"></i></button>';
 	                		}
 	              			// 숨겨진게시글이 아니라면
 	                		else{
-	                			deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\'"><i class="bi bi-file-earmark-lock2"></i></button>';
+	                			deleteButton = '<button type="button" class="textbtn" onclick="location.href=\'crew_oneboard_blind?board_idx=' + item.board_idx + '&crew_idx='+ crew_idx +'\'"><i class="bi bi-file-earmark-lock2"></i></button>';
 	                		}	                		
 	                	}
 	                	// 크루장이 아니고 작성자도 아니면
 	                	else{
 	                		if(item.status == 2){
-	                			deleteButton = '<button type="button" onclick="modal.showAlert(\'이글은 블라인드 된 글입니다\')" class="mainbtn full"><i class="bi bi-file-earmark-lock2"></i></button>'
+	                			deleteButton = '<button type="button" onclick="modal.showAlert(\'이글은 블라인드 된 글입니다\')" class="textbtn"><i class="bi bi-file-earmark-lock2"></i></button>'
 	                		}
 	                		else{
-	                		deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 신고하시겠습니까\', \'crew_report.go?board_idx='+ item.board_idx + '&board_id=' + item.board_id +'&crew_idx=' + crew_idx +'\')" class="mainbtn full"><i class="bi bi-exclamation-circle"></i></button>'
+	                		deleteButton = '<button type="button" onclick="modal.showConfirm(\'게시글을 정말로 신고하시겠습니까\', \'crew_report.go?board_idx='+ item.board_idx + '&board_id=' + item.board_id +'&crew_idx=' + crew_idx +'\')" class="textbtn"><i class="bi bi-exclamation-circle"></i></button>'
 	                	//	deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_report.go?board_idx=' + item.board_idx + '&board_id=' + item.board_id +'\'"><i class="bi bi-geo-alt-fill"></i></button>';
 	                		}
 	                	}

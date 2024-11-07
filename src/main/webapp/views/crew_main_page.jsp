@@ -186,7 +186,7 @@
 			color: lightgray;
 		}
 
-
+		
 		.fc .fc-event {
 			position: unset;
 		}
@@ -379,11 +379,30 @@
         	right: 0%;
         	width: 7%;
         }
+        
+        .fc-header-toolbar.fc-toolbar{
+        	z-index: 10;
+        }
 	</style>
 
 </head>
 
 <body>
+ <%-- JSP 페이지에서 crew_msg가 존재하면 모달 경고창 띄우기 --%>
+<% if(request.getAttribute("crew_msg") != null) { %>
+    <script type="text/javascript">
+        alert('<%= request.getAttribute("crew_msg") %>');
+        location.href = '<%= request.getAttribute("page") %>';  // 리다이렉트 경로
+    </script>
+<% } %>
+<!-- 모달 HTML -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+    
 <div class="container">
 	<c:import url="layout/leftnav_1.jsp"></c:import>
 	<!-- 운동일지는 nav1로, mbti만 nav5로 -->
@@ -1032,5 +1051,22 @@ if(userId === crewId){
 		location.href = "mycrew_memberList.go?idx=" +crewIdx;
 	}
 
+	 // 경고 메세지 모달창
+        function showModal(message) {
+            var modal = document.getElementById("modal");
+            var messageElement = document.getElementById("modal-message");
+            messageElement.innerText = message;
+            modal.style.display = "block"; // 모달 보이기
+        }
+
+        // 모달을 닫는 함수
+        function closeModal() {
+            var modal = document.getElementById("modal");
+            modal.style.display = "none"; // 모달 숨기기
+        }
+	
 </script>
+
+
+
 </html>
