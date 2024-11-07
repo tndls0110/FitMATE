@@ -120,7 +120,7 @@ INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
 INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx 
 INNER JOIN region R ON R.region_idx = RS.region_idx 
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
-LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx WHERE status = 1 GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
 <where>
 category_idx =1
 AND
