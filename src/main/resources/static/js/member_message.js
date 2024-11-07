@@ -2,20 +2,17 @@ var urlParams = new URLSearchParams(window.location.search);
 var group_idx = urlParams.get('group_idx');
 document.getElementsByName('group_idx')[0].value = group_idx;
 
-let refreshInterval = setInterval(showList, 1000);
+showList();
 
 function showList() {
     $.ajax({
         type: 'get',
-        url: 'member_message.ajax',
-        data: {
-            'groupIdx': group_idx
-        },
+        url: 'member_messageGroup.ajax',
+        data: {},
         dataType: 'json',
         success: function(data) {
             if (data.roomList.length > 0) {
                 printList(data.roomList);
-                printMessage(data.messageList);
             }
         },
         error: function(e) {}
@@ -36,6 +33,25 @@ function printList(list) {
         tags += '</ul>';
     }
     document.getElementsByClassName('message_list')[0].innerHTML = tags;
+}
+
+showMessage();
+
+function showMessage() {
+    $.ajax({
+        type: 'get',
+        url: 'member_messageList.ajax',
+        data: {
+            'groupIdx': group_idx
+        },
+        dataType: 'json',
+        success: function(data) {
+            if (data.messageList.length > 0) {
+                printMessage(data.messageList);
+            }
+        },
+        error: function(e) {}
+    });
 }
 
 function printMessage(list) {

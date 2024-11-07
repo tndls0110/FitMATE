@@ -37,17 +37,23 @@ public class MessageController {
     @RequestMapping (value = "/member_message.go")
     public String message (Model model, HttpSession session) {
         page = "member_message";
-        //checkPermit("redirect:/member_message.go", model, session);
+        checkPermit("redirect:/member_message.go", model, session);
         return page;
     }
 
-    @RequestMapping (value = "/member_message.ajax")
+    @RequestMapping (value = "/member_messageGroup.ajax")
     @ResponseBody
-    public Map<String, Object> message (String groupIdx, HttpSession session) {
+    public Map<String, Object> message (HttpSession session) {
         Map<String, Object> list = new HashMap<String, Object>();
-        //String user_id = (String) session.getAttribute("loginId");
-        String user_id = "member08";
+        String user_id = (String) session.getAttribute("loginId");
         list.put("roomList", message_service.roomList(user_id));
+        return list;
+    }
+
+    @RequestMapping (value = "/member_messageList.ajax")
+    @ResponseBody
+    public Map<String, Object> message (String groupIdx) {
+        Map<String, Object> list = new HashMap<String, Object>();
         if (!groupIdx.equals("") || groupIdx != null) {
             list.put("messageList", message_service.message(groupIdx));
         }
@@ -56,8 +62,7 @@ public class MessageController {
 
     @RequestMapping (value = "/member_message.do")
     public void message (@RequestParam Map<String, String> params, HttpSession session) {
-        //String user_id = (String) session.getAttribute("loginId");
-        String user_id = "member08";
+        String user_id = (String) session.getAttribute("loginId");
         message_service.sendMessage(params, user_id);
     }
 

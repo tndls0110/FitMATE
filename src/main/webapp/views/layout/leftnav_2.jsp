@@ -43,8 +43,7 @@
 			dataType : 'JSON',
 			success : function (data){
 				if(data.exists == 'exist'){
-					var notify = document.querySelector('.leftnav .hide');
-					notify.classList.remove('hide');
+					$('.leftnav .hide').removeClass('hide');
 				}
 			},error : function (e){}
 		})

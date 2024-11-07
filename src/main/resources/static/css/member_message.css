@@ -37,17 +37,20 @@
     overflow-y: scroll;
 }
 
-.message_container .message_contents .noDesc li{
+.message_container .message_contents .noDesc li div{
     width: fit-content;
-    padding: 8px;
+    padding: 10px;
+    font-size: 13px;
 }
 
 .message_container .message_contents .noDesc li .msg_left{
+    margin: 0 auto 0 0;
     background-color: #363940;
     border-radius: 0 5px 5px 5px;
 }
 
 .message_container .message_contents .noDesc li .msg_right{
+    margin: 0 0 0 auto;
     background-color: #363940;
     border-radius: 0 5px 5px 5px;
 }

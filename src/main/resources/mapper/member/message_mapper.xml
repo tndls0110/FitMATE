@@ -11,12 +11,11 @@
     </select>
 
     <select id="message" resultType="com.fitmate.member.dto.MessageDTO">
-        SELECT sender_id, receiver_id, msg_cont, sendtime, readcheck FROM message WHERE group_idx = #{group_idx}
+        SELECT sender_id, msg_cont, sendtime, readcheck FROM message WHERE group_idx = #{group_idx}
     </select>
 
     <insert id="sendMessage">
-        INSERT INTO message (sender_id, msg_cont, group_idx)
-            VALUES (#{user_id}, #{msg_cont}, #{group_idx})
+        INSERT INTO message (sender_id, msg_cont, group_idx) VALUES (#{user_id}, #{msg_cont}, #{group_idx})
     </insert>
 
 </mapper>
