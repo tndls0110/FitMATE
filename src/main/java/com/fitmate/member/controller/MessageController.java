@@ -45,10 +45,16 @@ public class MessageController {
     public String message (String group_idx, Model model, HttpSession session) {
         page = "member_message";
         checkPermit("redirect:/member_messageList.go?group_idx="+group_idx, model, session);
-        if (session.getAttribute("loginId") != null && group_idx !=null){
-            if (!message_service.checkPermitChat((String) session.getAttribute("loginId"), group_idx)){
-                model.addAttribute("msg", "접근 권한이 없습니다.");
-            }
+        String login_id = (String) session.getAttribute("loginId");
+        if (login_id == null) {
+            login_id = "";
+        }
+        if (group_idx == null) {
+            group_idx = "";
+        }
+        boolean permit = message_service.checkPermitChat(login_id, group_idx);
+        if (!permit){
+            model.addAttribute("msg", "접근 권한이 없습니다.");
         }
         return page;
     }

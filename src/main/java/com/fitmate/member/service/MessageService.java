@@ -17,9 +17,17 @@ public class MessageService {
 
     public boolean checkPermitChat(String login_id, String group_idx) {
         boolean result = false;
+        if (login_id == null) {
+            login_id = "";
+        }
+        if (group_idx == null) {
+            group_idx = "";
+        }
         MessageDTO dto = message_dao.checkPermitChat(login_id, group_idx);
-        if (dto.getMember1().equals(login_id) || dto.getMember2().equals(login_id)) {
-            result = true;
+        if (dto != null) {
+            if (dto.getMember1().equals(login_id) || dto.getMember2().equals(login_id)) {
+                result = true;
+            }
         }
         return result;
     }

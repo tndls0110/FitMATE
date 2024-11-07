@@ -68,8 +68,8 @@ function showMessage() {
 
 function printMessage(list) {
     let tags = '';
+    tags += '<ul class="noDesc">';
     for (let i = 0; i < list.length; i++) {
-        tags += '<ul class="noDesc">';
         tags += '<li>';
         if (list[i].sender_id == user){
             tags += '<div class="msg_right">'+list[i].msg_cont+'</div>';
@@ -79,8 +79,8 @@ function printMessage(list) {
             tags += '<p class="time_left">'+list[i].sendtime+'</p>';
         }
         tags += '</li>';
-        tags += '</ul>';
     }
+    tags += '</ul>';
     document.getElementsByClassName('message_contents')[0].innerHTML = tags;
 }
 
