@@ -241,7 +241,7 @@
 </head>
 <body>
 <div class="container">
-    <c:import url="layout/leftnav_1.jsp"></c:import>
+    <c:import url="layout/leftnav_6.jsp"></c:import>
     <!-- 운동일지는 nav1로, mbti만 nav5로 -->
     <div class="contents">
         <div class="Question_page">
