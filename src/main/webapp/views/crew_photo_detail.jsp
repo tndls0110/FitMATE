@@ -191,6 +191,10 @@ textarea, hr{
 	font-family: 'Noto Sans KR', sans-serif;
 	opacity: 0.5;
 }
+.photo_img{
+max-width: 405px;
+max-height: 320px;
+}
         
 		</style>
 	</head>
@@ -215,7 +219,7 @@ textarea, hr{
                     <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> 
                       <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> 
                     <div id="img_list" class="list">
-   							<img alt="${file.ori_filename}" id="photo_file" src="/photo/${file.new_filename}"><br/>
+   							<img alt="${file.ori_filename}" class="photo_img" id="photo_file" src="/photo/${file.new_filename}"><br/>
                     </div>  
              			
                     <!-- 버튼이 붙은 입력창 -->
@@ -334,9 +338,9 @@ textarea, hr{
     	     
     	     
     	     if(isCrewLeader){ // 크루장이라면
-    	    	 if (sessionId === "${board.board_id}") { // 내가 작성자라면
+    	    	 if (loginId === "${board.board_id}") { // 내가 작성자라면
     	    	      //  deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
-    	    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}';
+    	    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
     	    	        modalTitle.textContent = '삭제하기';
     	    	        modalContent.textContent = '정말로 삭제하시겠습니까';
     	    	        console.log(reportUrl);
@@ -349,7 +353,7 @@ textarea, hr{
                	        modalContent.textContent = '정말로 블라인드 해제 하시겠습니까';
                	        console.log(reportUrl);
            	        }
-    	    		 if("${board.status}" === "1"){ // 보여지는 글이라면 블라인드하기
+    	    		 else if("${board.status}" === "1"){ // 보여지는 글이라면 블라인드하기
     	    			 reportUrl = 'crew_photo_blind?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
            	            modalTitle.textContent = '블라인드하기';
                	        modalContent.textContent = '정말로 블라인드 하시겠습니까';
@@ -358,7 +362,7 @@ textarea, hr{
     	    	 }
     	     }
     	     else{ // 크루장이 아니라면
-    	    	 if (sessionId === "${board.board_id}") { // 내가 작성자라면
+    	    	 if (loginId === "${board.board_id}") { // 내가 작성자라면
    	    	      //  deleteButton = '<button type="button" onclick="showReportModal(\'crew_oneboard_del?board_idx=${board.board_idx}\')" class="mainbtn full">삭제하기</button>';
    	    	        reportUrl = 'crew_photo_del?board_idx=${board.board_idx}&crew_idx=' + crewIdx;
    	    	        modalTitle.textContent = '삭제하기';

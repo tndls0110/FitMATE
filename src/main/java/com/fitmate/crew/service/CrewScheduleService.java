@@ -207,7 +207,7 @@ public class CrewScheduleService {
 		// 알람 내용
 		String noti_content = name+" 크루의 일정 삭제";
 		// url 주소 == 크루페이지 기능이 완성되면 크루페이지 주소로 보내주기
-		String noti_url = "/crew_main_page.go?crew_idx="+crewidx;
+		String noti_url = "crew_main_page.go?crew_idx="+crewidx;
 		// 크루원 목록 가져오기
 		List<CrewScheduleMDTO> plan_member = crewschedule_dao.crew_plan_members(planidx);
 		// noti cate 1로 맞춰주기

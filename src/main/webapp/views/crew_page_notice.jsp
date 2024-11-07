@@ -235,7 +235,7 @@
 		                
 	                	let deleteButton = '<button type="button" class="textbtn"></button>';
 	                	 // sessionId == item.board_id
-	                	if (1) {
+	                	if (sessionId == item.board_id) {
 	                	     //   deleteButton = '<button type="button" class="mainbtn small" onclick="location.href=\'crew_notice_del?board_idx=' + item.board_idx + '\'">삭제</button>';
 	                	        deleteButton = '<button type="button" onclick="modal.showConfirm(\'공지사항을 정말로 삭제하시겠습니까\', \'crew_notice_del?board_idx=' + item.board_idx +'&crew_idx='+crewIdx +'\')" class="textbtn"><i class="bi bi-x-square"></i></button>'
 	                	 }

@@ -149,7 +149,7 @@ public class CrewPageController {
 	
 	// 신고하기 board_type 가져오는거 확인하기 == 게시글인경우 board_type=1, 댓글인경우 board_type=2
 	@RequestMapping(value="/crew_report.do",method =RequestMethod.POST)
-	public String crew_report_do(@RequestParam Map<String,String> params,HttpSession session) {
+	public String crew_report_do(@RequestParam Map<String,String> params,HttpSession session,Model model) {
 		
 			logger.info("params = {}", params);
 		 String reportrIdxStr = params.get("reportr_idx");
@@ -160,6 +160,7 @@ public class CrewPageController {
 	
 		crewpage_service.crew_report_do(params);
 		// index123 url로 바꿔주기
+	
 		return url;
 	}
 	
@@ -223,13 +224,14 @@ public class CrewPageController {
 	
 	// 공지사항 작성하기
 	@RequestMapping(value="/crew_page_notice.do",method =RequestMethod.POST)
-	public String crew_notice_write(@RequestParam String subject,@RequestParam String board_id,@RequestParam int crew_idx) {
+	public String crew_notice_write(@RequestParam String subject,@RequestParam String board_id,@RequestParam int crew_idx,Model model) {
 		// subject = 공지사항 내용이자 제목, board_id = 작성자, crew_idx = 크루 식별위한 변수 + board_idx 와 crew_idx 합쳐줄때(식별하기위해) 필요
 		
 		logger.info("입력값 {} ",subject);
 		
 		crewpage_service.crew_notice_write(subject,board_id,crew_idx);
 		String page = "redirect:/crew_page_notice.go?crew_idx="+crew_idx+"&crew_id="+board_id;
+		
 		
 		return page;
 	}

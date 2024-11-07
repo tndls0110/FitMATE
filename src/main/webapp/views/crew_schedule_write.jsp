@@ -221,8 +221,8 @@ input[type="time"]
                        
                         
                         	<!-- 너비 설정 -->
-                          <p> <textarea id="content" maxlength="1000" class="full pass" name="subject" /></textarea></p>
-                          <div class="character-count" id="charCount">0 / 1000자</div>
+                          <p> <textarea id="subject" maxlength="1000" class="full pass" name="subject" oninput="updateCharCount('subject', 'charCountSubject')" required/></textarea></p>
+                           <div class="character-count" id="charCountSubject">0 / 1000자</div>
                     </div>
                     
                     <div class="list">
@@ -232,8 +232,8 @@ input[type="time"]
                        
                         
                         	<!-- 너비 설정 -->
-                          <p> <textarea id="content" maxlength="1000" class="full pass" name="content" /></textarea></p>
-                          <div class="character-count" id="charCount">0 / 1000자</div>
+                          <p> <textarea id="content" maxlength="1000" class="full pass" name="content" oninput="updateCharCount('content', 'charCountContent')" required /></textarea></p>
+                          <div class="character-count" id="charCountContent">0 / 1000자</div>
                     </div>
                
                     <!-- 제출 버튼 -->
@@ -256,7 +256,7 @@ input[type="time"]
 // 카카오 api 스크립트 start
 // textarea 요소 선택
 const textarea = document.getElementById("place");
-
+var placeclick = false;
 
 
 
@@ -316,13 +316,11 @@ function displayMarker(place) {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
         infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
         infowindow.open(map, marker);
-        place = true;
-        console.log(place);
-	
-        
+
         // textarea에 값 설정
         textarea.value = place.place_name;
-        
+        placeclick = true;
+      
     });
 }
 
@@ -342,8 +340,9 @@ function displayMarker(place) {
 	
 	 var start_time = '';
 	  var end_time = '';
-	  var place = false;
+	 var subject = '';
 	  var date = '';
+	  var content = '';
 		
 	  //날짜 바뀔 때마다
 	  document.getElementById('date').addEventListener('input',function(){
@@ -363,10 +362,15 @@ function displayMarker(place) {
 	    console.log("끝난 시간:",end_time);
 	  });
 	  
-	  document.getElementById('place').addEventListener('input',function(){
-		    place = this.value;
-		    console.log("장소:",place);
+	  document.getElementById('subject').addEventListener('input',function(){
+		  subject = this.value;
+		    console.log("제목:",end_time);
 		  });
+	  document.getElementById('content').addEventListener('input',function(){
+		  content = this.value;
+		    console.log("내용:",end_time);
+		  });
+	 
 	
 	
 	  $('#write').click(function(){
@@ -381,8 +385,13 @@ function displayMarker(place) {
 		      alert('끝난 시간을 선택해주세요!');
 		    }else if (start_time > end_time) {
 		      alert('종료 시간은 시작 시간보다 빠를 수 없습니다');
-		    }else if (place == false){
-			      alert('장소를 선택해주세요!');
+		    }
+		    else if(placeclick == false){
+		    	 alert('장소를 선택하세요');
+		    	 console.log(placeclick);
+		    }
+		    else if (subject == "") {
+			      alert('제목을 입력해 주세요');
 			    }
 		    else{
 		      $('form').submit();
@@ -390,13 +399,36 @@ function displayMarker(place) {
 		  });
 	  
 	  
+	  // 페이지 로드 시 초기 글자수 업데이트
+      window.onload = function() {
+          updateCharCount('subject', 'charCountSubject');
+          updateCharCount('content', 'charCountContent');
+      };
+      // 글자수 카운트 함수
+      function updateCharCount(textareaId, charCountId) {
+          var content = document.getElementById(textareaId).value;  // textarea의 값
+          var charCount = content.length;  // 글자수
+          var maxLength = 1000;  // 최대 글자수
+          var remaining = maxLength - charCount;  // 남은 글자수
+
+          // 글자수 표시 업데이트
+          document.getElementById(charCountId).innerText = charCount + " / 1000자";
+
+          // 남은 글자수가 0 이하이면 입력을 막음
+          if (remaining < 0) {
+              // 최대 1000자까지만 입력되도록 자르기
+              document.getElementById(textareaId).value = content.substring(0, maxLength);
+          }
+      }
 	  
 	function getCheckedDays() {
 	    const checkboxes = document.querySelectorAll('input[name="day"]:checked');
 	    const checkedDays = [];
-	    
+	    const daysOfWeek = ["", "월", "화", "수", "목", "금", "토", "일"];
 	    checkboxes.forEach((checkbox) => {
-	        checkedDays.push(checkbox.value);
+	    	const dayIndex = parseInt(checkbox.value);
+	    			checkedDays.push(daysOfWeek[dayIndex]);
+
 	    });
 	    
 	    document.getElementById("selectedDays").innerText = "선택된 요일:"+ checkedDays.join(", ");

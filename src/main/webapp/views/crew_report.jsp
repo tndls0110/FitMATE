@@ -37,7 +37,7 @@
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
-                <form action="crew_report.do" method="POST">
+                <form  id="reportForm"  action="crew_report.do" method="POST">
                 	<!-- 신고자  !! 나중에 세션값 넣기  !! -->
            			<input type="hidden" name="reporter_id" value="${sessionScope.loginId}">
            			<!-- 신고 사유 idx -->
@@ -65,8 +65,8 @@
                
                     <!-- 제출 버튼 -->
                     <div class="list" >
-                        <button type="button" onclick="location.href='${url}'" class="mainbtn">취소하기</button>
-                        <button  class="mainbtn">신고하기</button>
+                        <button type="button" onclick="redirectToUrl()" class="mainbtn">취소하기</button>
+                        <button  class="mainbtn" onclick="confirmSubmit(event)">신고하기</button>
                     </div>
                     <!-- //제출 버튼 -->
                    
@@ -84,10 +84,21 @@
 	
 <script>
     var show = 1;
-
+    var newurl = '${url}';
+	newurl = newurl.replace('redirect:', '/Fitmate_war/');  // 여기서 URL 변수 정의
+	console.log(newurl);
+	
     // 초기 호출
     reportCall(show);
 
+    function redirectToUrl() {
+    	var newurl = '${url}';
+    	newurl = newurl.replace('redirect:/', '/Fitmate_war/');  // 여기서 URL 변수 정의
+    	console.log(newurl);
+    	location.href = newurl;  // location.href로 이동
+    }
+    
+    
     function reportCall(result) {
         $.ajax({
             type: 'GET',
@@ -132,6 +143,20 @@ function selectReason(selectedButton) {
     console.log('Reportr idx input value:', $('#reportr_idx_input').val());
 }
 
+function confirmSubmit(event) {
+    event.preventDefault(); // 폼 제출을 일시적으로 막음
+
+    // 신고 완료 메시지 확인 창
+    var confirmation = confirm("신고가 완료됩니다. 계속 진행하시겠습니까?");
+    
+    if (confirmation) {
+        // 사용자가 확인을 누르면 폼을 제출
+        document.getElementById('reportForm').submit();
+    } else {
+        // 취소하면 아무 작업도 하지 않음
+        return false;
+    }
+}
 
 
 </script>
