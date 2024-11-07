@@ -319,13 +319,16 @@
                 <div class="comment_ask" id="commentAskSection">
                     <h3 class="capt">
                         <i class="bi bi-chat-left-fill"></i>&nbsp;문의하기
+                        <div style=" display: inline; right: 0%; position: absolute;" class="character-count" id="charCount">0 / 1000자</div>
                     </h3>
-                    <form action="crew_recruit_detail.do?idx=<%=board_idx%>" method="post">
+                    <form action="crew_recruit_detail.do" method="post">
                         <input type="text" name="board_idx" value="<%=board_idx%>" hidden/>
                         <input type="text" name="comment_id" value="" id="currentUserId" hidden/>
                         <input type="text" name="content_chk" value="0" hidden/>
+                        <input type="text" name="crew_name" value="${recruitHead.crew_name}" hidden/>
+            			<input type="text" name="crew_idx" value="${recruitHead.crew_idx}" hidden/>
                         <p>
-                            <textarea class="full" name="content" placeholder="최대 1,000자까지 입력할 수 있습니다." maxlength="1000"></textarea>
+                            <textarea class="full" name="content" id="content" placeholder="최대 1,000자까지 입력할 수 있습니다." required oninput="updateCharCount()" maxlength="1000"></textarea>
                         </p>
                         <button class="mainbtn">작성하기</button>
                     </form>
@@ -374,6 +377,9 @@
     var currentUserId = '${sessionScope.loginId}'; 
     // 문의하기에 현재 유저ID넣어주기.
     $('#currentUserId').val(currentUserId);
+    
+    
+    
     // 크루 idx
     var crew_idx = ${recruitHead.crew_idx};
     
@@ -600,7 +606,7 @@
 				        + '</button>';
 	            } 
 		     	
-		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" disabled>' + item.recomment_content + '</textarea></div>'
+		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" oninput="updateCharCount()" disabled>' + item.recomment_content + '</textarea></div>'
 		            	+ '</div>'
 		            	+ '</div>'
 		            	+ '</div>';
@@ -713,10 +719,12 @@
     function reply(obj) {
     	// 문의댓글 정보가져오기.
         var comment_idx = $(obj).data('comment-idx');
-
+		
+    	console.log('crew_idx 체크체킹 : ' + crew_idx);
+    	/* ?board_idx=' + board_idx + '&crew_idx=' +crew_idx+ '" */
 		// 답변입력영역 생성.
         var reply_area = '<div class="comment_box reply_write">'
-            + '<form action="crew_recruit_detail.do?board_idx=' + board_idx + '&crew_idx=' +crew_idx+ '" method="post">'
+            + '<form action="crew_recruit_detail.do" method="post">'
             + '<div class="reply_right">'
             + '<h3 class="capt"><i class="bi bi-arrow-return-right"></i>&nbsp;답변하기</h3>'
             + '<p>'
@@ -725,6 +733,8 @@
             + '<input type="text" name="comment_idx" value="' + comment_idx + '" hidden/>'
             + '<input type="text" name="recomment_id" value="' +currentUserId+ '" hidden/>'
             + '<input type="text" name="content_chk" value="1" hidden/>'
+            + '<input type="text" name="crew_name" value="' +crew_name+ '" hidden/>'
+            + '<input type="text" name="crew_idx" value="' +crew_idx+ '" hidden/>'
             + '</p>'
             + '</div>'
             + '<button class="mainbtn reply_write">작성하기</button>'
@@ -956,6 +966,22 @@
 		});
 	}
 	
+	
+	 // 글자수 카운트 함수
+    function updateCharCount() {
+        var content = document.getElementById("content").value; // textarea의 값
+        var charCount = content.length; // 글자수
+        var maxLength = 1000; // 최대 글자수
+        var remaining = maxLength - charCount; // 남은 글자수
+        
+        // 글자수 표시 업데이트
+        document.getElementById("charCount").innerText = charCount + " / " + maxLength + "자";
+        
+        // 남은 글자수가 0 이하이면 입력을 막음
+        if (remaining < 0) {
+            document.getElementById("content").value = content.substring(0, maxLength); // 최대 1000자까지만 입력
+        }
+    }
 	
 	
 	

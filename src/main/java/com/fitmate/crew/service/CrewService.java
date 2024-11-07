@@ -269,9 +269,41 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 			success = crew_dao.replyWrite(replyWriteDTO);
 		}
 		
-		if(success == 0) {
+		
+		
+		// 댓글저장 성공시 => 크루장에게 알림전송
+		if(success > 0) {
+			String board_idx = params.get("board_idx");
+			String crew_idx = params.get("crew_idx");
+			
+			// 크루명
+			String name = params.get("crew_name");
+			
+			// 알람내용
+			String noti_content = "";
+			
+			// 크루장ID(수신자ID)
+			String notir_id = "";
+			
+			// 댓글일 때
+			if(params.get("content_chk").equals("0")) {
+				noti_content = "'" +name+ "' 크루에 문의댓글이 달렸습니다.";
+				notir_id = params.get("comment_id");
+			}else { // 대댓글일 때
+				noti_content = "'" +name+ "' 크루에 문의하신 건에 대해 답변이 완료됬습니다.";
+				notir_id = params.get("recomment_id");
+			}
+			
+			// url 주소 == 크루입단신청관리 주소로 보내주기
+			String noti_url = "crew_recruit_detail.go?board_idx=" + board_idx + "&crew_idx=" + crew_idx;
+			
+			// 알림 보내기
+			success = crew_dao.crew_alarmSend(notir_id, noti_content, noti_url);
+			
+		}else { 
 			logger.info("댓글저장에 실패했습니다.");
 		}
+		
 		
 	}
 
