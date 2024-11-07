@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="container">
-	<c:import url="layout/leftnav_3.jsp"></c:import>
+	<c:import url="layout/leftnav_7.jsp"></c:import>
 	<div class="contents dark">
 		<h2 class="title">메시지</h2>
 		<div class="message_container">
