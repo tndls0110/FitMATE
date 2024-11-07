@@ -306,11 +306,39 @@ div.recruitArea, div.approvalArea {
 
 <script src="resources/js/common.js"></script>
 <script>
+	window.addEventListener("pageshow", (event) => {
+	    if (event.persisted) {
+	        // 페이지가 캐시에서 로드된 경우 새로고침
+	        window.location.reload();
+	    }
+	});
+	
+	
+	// 현재 유저가 MBTI검사를 받았는지 여부. 0: 미검사
+	var mbtir_idx = ${mbtir_idx};
+	
+	// MBTI검사를 받아야 크루를 생성할 수 있도록 함.
+	$(document).ready(function() { // HTML문서가 완전히 로드된 후 실행되도록하여 오류 방지.
+	    $(".crewCreate").on("click", function(event) {
+	        event.preventDefault();  // 페이지 이동 방지
+	        if(mbtir_idx === 0){
+	        	modal.showConfirm('헬스MBTI 검사완료 후 크루를 생성할 수 있습니다.<br/> 내 프로필 수정 페이지로 이동하시겠습니까?', 'member_profile.go');
+				
+	        }else{
+		        window.location.href = "crew_create.go";
+	        }
+	        
+	    });
+	});
+	
    var currentUserId = '${sessionScope.loginId}';
    var leader_chk = 0; // 크루장여부 체크 (0: 크루원, 1: 크루장)
    var cntApproval = 1; // 신청중인 크루 Count
    var cntRecruit = 1; // 내 크루 Count
 
+   // 데이터가 아예없는경우 무한스크롤 이벤트를 작동하지 않도록 하기위함. 0: 꺼짐. 
+   var observe_set = 1;
+   
    // 무한 스크롤 이벤트 작동 시 데이터를 가져올 offset을 초기화
    // 신청중인 크루영역과 내크루 영역의 offset을 각각 관리.
    var offsetApproval = 0;
@@ -335,7 +363,6 @@ div.recruitArea, div.approvalArea {
    // 신청중인 크루 목록 가져오기
    $('div.approvalArea').empty();
    crewList(0, offsetApproval);
-   // 신청중인 크루 목록이 한개도 없으면 신청중인 크루가 없습니다.
    
    
    // 내 크루 목록 가져오기
@@ -358,8 +385,12 @@ div.recruitArea, div.approvalArea {
         	
             // 새로 읽어온 값이 비어 있는 경우
             if (list == null || list == '') {
-            	if (cntApproval === 1) {
+            	if (cntApproval === 1 && info_chk === 0) {
+            		   $('div.approvalArea').empty();
             	       $('div.approvalArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px">신청중인 크루가 없습니다.</i></div>');
+           	    }else if(cntRecruit === 1 && info_chk === 1){
+           	    	   $('div.recruitArea').empty();
+           	    	   $('div.recruitArea').append('<div id="no_approvalArea"><i class="bi bi-ban" style="font-size:30px; border:1px dot">현재 속해있는 크루가 없습니다.</i></div>');
            	    }
             	
             	// 더이상 읽어올 데이터가 없는경우 트리거 메시지 변경.
@@ -421,7 +452,6 @@ div.recruitArea, div.approvalArea {
 		   leader_chk = 0;
 	   }
 	   
-	   console.log('dqweItem:'+item.leader_nick);
 	  
 	  // 프로필
       var profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 

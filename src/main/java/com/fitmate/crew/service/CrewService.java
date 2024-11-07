@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +96,7 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		return crew_dao.mbtiFilter();
 	}
 
-
+	// 크루검색페이지에 뿌려줄 데이터
 	public List<CrewSearchListDTO> crewList(Map<String, String> params, String user_id) {
 		
 		// 1. 받아온 데이터가공.
@@ -130,6 +132,13 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		
 	}
 	
+	// 크루 생성전 MBTI검사를 받았는지 체크하는 로직.
+	public int mbtiChk(HttpSession session) {
+		String login_id = (String) session.getAttribute("loginId");
+		int mbtir_idx = crew_dao.mbtiChk(login_id);
+		
+		return mbtir_idx;
+	}
 	
 	// 내 크루 목록조회
 	public List<CrewSearchListDTO> mycrewList(Map<String, String> params, String user_id) {
@@ -362,6 +371,7 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 		return crew_dao.crew_board_detail(board_idx,crew_idx);
 		
 	}
+
 
 
 	

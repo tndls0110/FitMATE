@@ -218,6 +218,24 @@ public class CrewMemberController {
 		return map;
 	}
 	
+	// 크루장 위임하기
+	@PostMapping(value = "/crewLeaderChange.ajax")
+	@ResponseBody
+	public Map<String, Object> leaderChange(String crew_idx, String member_id, String member_nick, String crew_name){
+		boolean success = false;
+		
+		int row = crewmember_service.leaderChange(crew_idx, member_id, member_nick, crew_name); 
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if(row > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		
+		return map;
+	}
 	
 	
 }

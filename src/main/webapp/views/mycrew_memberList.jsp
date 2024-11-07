@@ -260,105 +260,98 @@
              	// 검색 필터 (1: 닉네임, 2: 아이디)
              	'searchFilter':searchFilter,
              	// 검색 키워드
-             	'searchKeyword':searchKeyword
+             	'searchKeyword':searchKeyword,
             },
             dataType: 'JSON',
             success: function(list) {
-            	
-                $('.profile_list').empty(); // 프로필 목록 비우기
-
-                console.log('list : ', list);
-                
-                $.each(list, function(index, data) {
-                	
-               		// 멤버수 체크하기. 
-                    memberCount += 1;
-                 	
-                 	// 크루명
-                    crew_name = data.crew_name;
-                    // 크루장 또는 크루원 닉네임
-                    nick = data.nick;
-                    // 크루장 또는 신청자 프로필
-                    profile = data.profile;
-                    // 크루원 ID
-                    user_id = data.user_id;
-	                // 크루장 id 
-                    leader_id = data.crew_id;
-                    
-                    console.log('data : ', data);
-                    console.log('leader_id : ', leader_id);
-                    console.log('user_id : ', user_id);
-                    
-                    // 크루장인지 여부체크 - 맨처음 한번만 체크.
-                    if (index === 0) {
-                        if (leader_id === currentUserId) {
-                            leader_chk = 1;    
-                        }            
-                    }
-                    
-                    // 크루장인 경우
-                    if(leader_id === user_id){
-                    	id = leader_id;	
-                    }else{
-                    	id = user_id;
-                    }
-                 	
-                 	
-                    console.log('id : ', id);
-                    console.log('user_id : ', user_id);
-                    console.log('leader_id12314 : ' + leader_id);
-                    console.log('leader_chk_f : ' + leader_chk);
-                    
-                    	
-                    // 맨 처음 title세팅
-                    if (index === 0) {
-                        $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
-                    }
-                    
-                    profile_info = '<div class="profile relative ' +id+ '">'
-                    				+ '<a class="profile_detail_set ' +id+ '" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
-                                    + '</a>'
-                                    + '<div class="width_50">' 
-                                        + '<div class="profile_right">'
-                                            + '<div>'
-                                                + '<div class="text_area">'
-                                                    + '<h3 class="inlineBlock title">' + nick + '</h3>'
-                                                    + '<span class="width_50 txt_green leader_chk' + index + '">(크루장)</span>'
-                                                + '</div>'
-                                                + '<div class="text_area"><span class="txt_opacity">' + id + '</span></div>'
-                                                + '<div id="crew_leader" class="leader_chk' + index + '"><i class="bi bi-star-fill"></i></div>'
-                                            + '</div>'
-                                        + '</div>'
-                                    + '</div>'
-                                    + '<div class="btn_set">'; // btn_set 추가
-                                    
-
-                    profile_info += '</div></div>';
-                    
-                    // 크루장인 경우
-                    if(leader_id === user_id){
-                    	$('.profile_list').prepend(profile_info);
+            	memberCount = 0;
+            	// 새로 읽어온 값이 비어 있는 경우 검색된 데이터가 없습니다. => 기존 데이터 그대로 유지 
+                if (list == null || list == '') {
+                    modal.showAlert('읽어올 데이터가 없습니다.');
+                }else{
+	               $('.profile_list').empty(); // 프로필 목록 비우기
+	               
+	               $.each(list, function(index, data) {
+	              		// 멤버수 체크하기. 
+	                   memberCount += 1;
+	                	
+	                	// 크루명
+	                   crew_name = data.crew_name;
+	                   // 크루장 또는 크루원 닉네임
+	                   nick = data.nick;
+	                   // 크루장 또는 신청자 프로필
+	                   profile = data.profile;
+	                   // 크루원 ID
+	                   user_id = data.user_id;
+	                   // 크루장 id 
+	                   leader_id = data.crew_id;
+	                   
+	                   // 크루장인지 여부체크 - 맨처음 한번만 체크.
+	                   if (index === 0) {
+	                       if (leader_id === currentUserId) {
+	                           leader_chk = 1;    
+	                       }            
+	                   }
+	                   
+	                   // 크루장인 경우
+	                   if(leader_id === user_id){
+	                   	id = leader_id;	
+	                   }else{
+	                   	id = user_id;
+	                   }
+	                	
+	                   	
+	                   // 맨 처음 title세팅
+	                   if (index === 0) {
+	                       $('.title.subject').html(crew_name + '<span>크루원 목록</span>');
+	                   }
+	                   
+	                   profile_info = '<div class="profile relative ' +id+ '">'
+	                   				+ '<a class="profile_detail_set ' +id+ '" href="mycrew_memberDetail.go?id=' +id+ '&profileType=1&idx=' +crew_idx+ '">' //일반회원 프로필 상세보기 이동.
+	                                   + '</a>'
+	                                   + '<div class="width_50">' 
+	                                       + '<div class="profile_right">'
+	                                           + '<div>'
+	                                               + '<div class="text_area">'
+	                                                   + '<h3 class="inlineBlock title">' + nick + '</h3>'
+	                                                   + '<span class="width_50 txt_green leader_chk' + index + '">(크루장)</span>'
+	                                               + '</div>'
+	                                               + '<div class="text_area"><span class="txt_opacity">' + id + '</span></div>'
+	                                               + '<div id="crew_leader" class="leader_chk' + index + '"><i class="bi bi-star-fill"></i></div>'
+	                                           + '</div>'
+	                                       + '</div>'
+	                                   + '</div>'
+	                                   + '<div class="btn_set">'; // btn_set 추가
+	                                   
+	
+	                   profile_info += '</div></div>';
+	                   
+	                   // 크루장인 경우
+	                   if(leader_id === user_id){
+	                   	$('.profile_list').prepend(profile_info);
 	                    $('.leader_chk' + index).show(); // 크루장 표시
-                    }else{
-                    	$('.profile_list').append(profile_info);
-                    	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
-                    }
-                    
-                    console.log('profile 확인!!: ' + profile);  
-                    // 프로필  
-                    if (profile !== ''){
-                    	$('.profile_detail_set.' + id).html('<img src="/photo/' + profile + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">');
-                    	/* $('.profile_detail_set.' + id).css('background-image', 'url(/photo/' + profile + ')'); */
-                	} else {
-                 		$('.profile_detail_set.' + id).html('<i class="bi bi-person-circle" style="font-size:60px"></i>');
-    				}
-                });
+	                   }else{
+	                   	$('.profile_list').append(profile_info);
+	                   	$('.leader_chk' + index).hide(); // 크루장 표시 숨김                    	
+	                   }
+	                   
+	                   console.log('profile 확인!!: ' + profile);  
+	                   // 프로필  
+	                   if (profile !== ''){
+	                   	$('.profile_detail_set.' + id).html('<img src="/photo/' + profile + '" alt="프로필 이미지" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">');
+	                   	/* $('.profile_detail_set.' + id).css('background-image', 'url(/photo/' + profile + ')'); */
+	               	} else {
+	                		$('.profile_detail_set.' + id).html('<i class="bi bi-person-circle" style="font-size:60px"></i>');
+	   				}
+	               });
+                }
                 // 크루원이 한명도 없는경우 => 크루원이 없습니다.
                 if(memberCount === 1){
          	        $('.profile_list').append('<div class="no_people"><div><i class="bi bi-person-x" style="font-size: 250px;"></i></div><h2>크루에 멤버가 없습니다.</h2></div>');
          	    }
             },
             error: function(e) {
+            	
                 console.log(e);
             }
         });	

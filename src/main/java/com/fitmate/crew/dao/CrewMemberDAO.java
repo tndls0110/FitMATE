@@ -35,4 +35,11 @@ public interface CrewMemberDAO {
 	// 일반회원 프로필 상세보기
 	CrewMemberProfileDTO userMemberDetail(String member_id);
 
+	// 크루테이블의 크루장 정보를 새로운 크루장정보로 변경
+	int updtLeader(int crew_idx, String member_id);
+	// 모집게시글 board_idx 가져오기
+	int selectBoard(int crew_idx);
+	// 모집게시글 작성자를 새로 바뀐 크루장정보로 변경
+	int updtRecruit(int board_idx, String member_id);
+
 }

@@ -168,6 +168,41 @@ public class CrewMemberService {
 		
 		return row;
 	}
+	
+	// 크루장 위임
+	@Transactional
+	public int leaderChange(String crew_idx_, String member_id, String member_nick, String crew_name) {
+		
+		int crew_idx = Integer.parseInt(crew_idx_);
+		
+		// 1. 크루테이블의 크루장 정보를 새로운 크루장정보로 변경
+		int row = crewmember_dao.updtLeader(crew_idx, member_id);
+		
+		// 2. 크루 모집게시글의 작성자를 바뀐 크루장정보로 변경
+		if(row > 0) {
+			// 모집게시글 board_idx 가져오기
+			int board_idx = crewmember_dao.selectBoard(crew_idx);
+			
+			row = crewmember_dao.updtRecruit(board_idx, member_id);
+		}
+		
+		// 크루장 위임에 성공하였다면 => 새로운 크루장에게 알림전송
+		if(row > 0) {
+			// 알림 수신자ID
+			String notir_id = member_id;
+			
+			// 알람내용
+			String noti_content = "'" +member_nick+ "'님에게 '" +crew_name+ "' 크루의 크루장이 위임되었습니다.";
+			
+			// url 크루페이지
+			String noti_url = "crew_main_page.go?crew_idx=" + crew_idx;
+			
+			// 알림 보내기
+			row = crew_dao.crew_alarmSend(notir_id, noti_content, noti_url);
+		}
+		
+		return row;
+	}
 
 	
 	// 크루원 목록 가져오기
@@ -208,6 +243,7 @@ public class CrewMemberService {
 		
 		return list; 
 	}
+	
 
 	
 }

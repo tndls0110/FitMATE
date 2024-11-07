@@ -330,6 +330,10 @@ public class CrewController {
 	  }else {
 		  String addr = page;
 		  checkPermitCrew(addr, model, session);
+		  
+		  // MBTI성향검사를 받았는지 확인 후 값 반환.
+		  int mbtir_idx = crew_service.mbtiChk(session);
+		  model.addAttribute("mbtir_idx", mbtir_idx);
 	  }
       return page;
    }
