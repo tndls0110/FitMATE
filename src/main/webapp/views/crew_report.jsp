@@ -8,12 +8,13 @@
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	
 	<style>
-	.mainbtn.selected {
-    background-color: #007bff; /* 선택된 버튼의 배경색 */
+	.mainbtn.full.selected {
+    background-color: #393940; /* 선택된 버튼의 배경색 */
     color: white; /* 선택된 버튼의 글자색 */
 }
 .mainbtn.full{
 	margin: 5px 0px;
+	background-color: #282b34;
 	
 }
 
@@ -64,7 +65,7 @@
                
                     <!-- 제출 버튼 -->
                     <div class="list" >
-                        <button type="button" onclick="location.href='http://localhost:8080/Fitmate/'" class="mainbtn">취소하기</button>
+                        <button type="button" onclick="location.href='${url}'" class="mainbtn">취소하기</button>
                         <button  class="mainbtn">신고하기</button>
                     </div>
                     <!-- //제출 버튼 -->
@@ -116,7 +117,7 @@ function drawList(report) {
 // 선택된 버튼 처리
 function selectReason(selectedButton) {
     // 모든 버튼의 상태를 초기화
-    $('.mainbtn full').removeClass('selected'); // 선택된 클래스를 제거
+    $('.full').removeClass('selected'); // 선택된 클래스를 제거
 
     // 선택된 버튼에 클래스 추가
     $(selectedButton).addClass('selected'); // 현재 선택된 버튼에 클래스 추가
