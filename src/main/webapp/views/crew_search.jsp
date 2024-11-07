@@ -258,6 +258,13 @@
 <c:import url="layout/modal.jsp"></c:import>
 <script src="resources/js/common.js"></script>
 <script>
+	window.addEventListener("pageshow", (event) => {
+	    if (event.persisted) {
+	        // 페이지가 캐시에서 로드된 경우 새로고침
+	        window.location.reload();
+	    }
+	});
+
 
    // 현재 유저ID 세팅
    var currentUserId = '${sessionScope.loginId}';
@@ -268,7 +275,6 @@
    var placeFilter = '';
    var mbtiFilter = '';
    
-   var cntq = 0;
    // 전체 게시글 개수 Count (홀수개이면 마지막 게시글 Left정렬) 
    var cnt = 1;
    
@@ -405,11 +411,6 @@
       }else{// 기본값은 모집페이지이동 (크루원: 크루페이지, 일반회원or크루장: 모집페이지)
     	  page = 'crew_recruit_detail.go?board_idx=' + item.board_idx + '&crew_idx=' +item.crew_idx;
       }
-      cntq++;
-	  console.log('item.member_chk : ' + item.member_chk + 'cnt : ' + cntq);      
-	  console.log('currentUserId : ', currentUserId);      
-	  console.log('leader_id : ', leader_id);      
-	  console.log('Page!!!!!!!!!!!!!!! : ', page);      
       
       // 프로필
       profile = item.leader_profile ? '<img class="recruit_left" src="/photo/' + item.leader_profile + '" alt="프로필 이미지" style="width: 54.18px; height: 54.18px; object-fit: cover; border-radius: 50%;"/>' 

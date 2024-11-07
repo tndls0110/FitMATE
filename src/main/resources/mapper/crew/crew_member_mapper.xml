@@ -44,7 +44,7 @@ INNER JOIN (
 			ORDER BY B.nick ${orderBy}
 		</when>
 		<otherwise>
-			ORDER BY A.date DESC
+			ORDER BY A.join_idx DESC
 		</otherwise>
 	</choose>
 </select>
@@ -93,7 +93,7 @@ INNER JOIN (
 			ORDER BY B.nick ${orderBy}
 		</when>
 		<otherwise>
-			ORDER BY B.nick ASC
+			ORDER BY CM.member_idx 
 		</otherwise>
 	</choose>
 </select>
@@ -103,13 +103,6 @@ INNER JOIN (
 <insert id="joinApproval" parameterType="map">
 	INSERT INTO crew_join(crew_idx, join_id, status) 
 	VALUES(#{crew_idx},#{join_id},#{status})
-	
-	<!-- UPDATE crew_join SET 
-		status = #{status},
-		date = #{date}
-		WHERE join_idx = #{join_idx}
-		AND status = 1
-		AND crew_idx = #{crew_idx} -->
 </insert>
 
 <insert id="crewMember" parameterType="map">
@@ -171,5 +164,30 @@ INNER JOIN (
 	UPDATE crew_member SET status = 0, leave_date = #{param2} 
 		WHERE member_idx = #{param1} <!-- param1: member_idx -->
 </update>
+
+
+	
+<!-- 크루장 위임하기 1 : 크루테이블 크루장정보 변경 -->
+<update id="updtLeader">
+<!-- param1: crew_idx, param2: member_id -->
+	UPDATE crew SET crew_id = #{param2} WHERE crew_idx = #{param1}
+	
+</update>
+
+
+<!-- 크루장 위임하기 2 : 모집게시글 작성자 변경 -->
+<select id="selectBoard" parameterType="int" resultType="int">
+	SELECT CB.board_idx FROM crew_board CB INNER JOIN crew_idx CI ON CB.board_idx = CI.board_idx 
+	WHERE CI.crew_idx = #{crew_idx}
+	AND CB.status = 1
+	AND CB.category_idx = 1
+</select>
+
+<update id="updtRecruit">
+<!-- param1: board_idx, param2: member_id -->
+	UPDATE crew_board SET board_id = #{param2} 
+	WHERE board_idx = #{param1}
+</update>
+
 
 </mapper>

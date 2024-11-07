@@ -79,6 +79,9 @@ public interface CrewDAO {
 	
 	// 크루 모집게시글 수정하기 정보 가져오기
 	CrewSearchListDTO crew_board_detail(String board_idx, String crew_idx);
+	
+	// 크루 생성링크로 이동하기 전 MBTI검사를 받았는지 여부를 체크하기 위함.
+	int mbtiChk(String login_id);
 
 	
 

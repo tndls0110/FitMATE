@@ -119,6 +119,10 @@
     </style>
 </head>
 <body>
+<%
+    String crewIdx = request.getParameter("idx");
+%>
+
 <div class="container">
 
     <c:import url="layout/leftnav_1.jsp"></c:import>
@@ -188,9 +192,12 @@
             </p>
         </div>
 
-        <div class="list crew_info">
-            <!-- 모달 (경고창, 확인창) -->
-            <button id="memberFire" class="mainbtn full red">추방하기</button>
+		<!-- 추방하기 버튼 공간 -->
+        <div class="list crew_info crewBtn1">
+        </div>
+        
+        <!-- 크루장 위임하기 버튼 공간 -->
+        <div class="list crew_info crewBtn2">
         </div>
         <!-- addr: 확인 버튼을 누르면 이동할 경로 -->
     </div>
@@ -233,6 +240,9 @@
 	// 크루명
 	var crew_name = '${profile.crew_name}';
 	
+	// 크루idx
+	var crew_idx = <%= crewIdx %>;
+	
 	// 멤버 닉네임
 	var member_nick = '${profile.nick}';
 
@@ -244,10 +254,12 @@
 
     var currentUserId = '${sessionScope.loginId}';
     
+    // 어떤 버튼을 클릭했는가? (0: 크루원 추방, 1: 크루장 위임)
+    var btn_chk = 0;
+    
+    
     // 크루회원 프로필인 경우
     if(profileType === '1'){
-    
-         
         
         var crew_id = '${profile.crew_id}';     // 가져온 크루장ID
         
@@ -258,14 +270,12 @@
             // 크루장 체크 => 0: 크루장X, 1: 크루장O    
             var leader_chk = 1;
             
-         	// 크루장이 자기자신의 정보를 보고 있는 경우에도 추방버튼 삭제
-            if(leader_chk === 1 && member_id === crew_id) {
-                $('#memberFire').remove();
+         	// 크루장이고, 자기자신이 아닌 다른 유저 인경우 추방 및 위임버튼 추가
+            if(leader_chk === 1 && member_id !== crew_id) {
+                $('.crewBtn1').append('<button id="memberFire" class="mainbtn full red">추방하기</button>');
+                $('.crewBtn2').append('<button id="leaderChange" class="subbtn full">크루장 위임하기</button>');
             }
             
-        } else {
-        	// 크루장이 아닌경우 추방하기 버튼 삭제
-        	$('#memberFire').remove();
         }
         
     } else {  // 일반회원 프로필인 경우 
@@ -273,11 +283,21 @@
         $('.crew_info').remove();
         // 타이틀 변경 크루원 프로필보기 => 일반유저 프로필보기
         $('h2.title').html('일반유저<span>프로필 보기</span>')
+     	
     }
     
-    /* 모달관련 이벤트 및 함수모음 */    
+    /* 모달관련 이벤트 및 함수모음 */
+    // 크루장 위임하기 버튼 클릭시 모달 보여주기
+    $('#leaderChange').on('click', function() {
+        $('.modal_body').html('<p>' + member_id + '님에게 크루장을 위임하시겠습니까?</p>');
+        btn_chk = 1;
+        $('#confirmationModal').fadeIn(); // 모달 표시
+    });
+    
+    
     // 크루원추방하기 버튼을 클릭시 모달 보여주기
     $('#memberFire').on('click', function() {
+    	btn_chk = 0;
         $('.modal_body').html('<p>' + member_id + '님을 크루에서 추방하시겠습니까?</p>');
         $('#confirmationModal').fadeIn(); // 모달 표시
     });
@@ -285,32 +305,71 @@
     // 예 버튼 클릭시
     // crew_member테이블의 status를 0(false)로 바꿔준다.
     $('#confirmYes').on('click', function() {
-        $.ajax({
-            url: 'crewMemberFire.ajax', // AJAX 요청을 보낼 URL
-            type: 'POST',
-            data: {
-                member_idx: member_idx,
-                member_nick: member_nick,
-                member_id: member_id,
-                crew_name: crew_name
-            },
-            success: function(data) {
-                console.log("성공여부 : " + data.success);
-                // 요청 성공 시 처리
-                if(data.success === true) {
-                    modal.showAlert('크루원이 추방되었습니다.');    
-                    history.back();
-                } else {
-                    modal.showAlert('크루원 추방에 실패했습니다.');
-                }
-                
-                $('#confirmationModal').fadeOut(); // 모달 숨김
-            },
-            error: function(e) {    
-                console.log(e);
-                $('#confirmationModal').fadeOut(); // 모달 숨김
-            }
-        });
+    	
+    	// 크루원 추방버튼을 눌렀을 때
+    	if(btn_chk === 0){
+	        $.ajax({
+	            url: 'crewMemberFire.ajax', // AJAX 요청을 보낼 URL
+	            type: 'POST',
+	            data: {
+	                member_idx: member_idx,
+	                member_nick: member_nick,
+	                member_id: member_id,
+	                crew_name: crew_name
+	            },
+	            success: function(data) {
+	                console.log("성공여부 : " + data.success);
+	                // 요청 성공 시 처리
+	                if(data.success === true) {
+	                    modal.showAlert('크루원이 추방되었습니다.');    
+	                    history.back();
+	                } else {
+	                    modal.showAlert('크루원 추방에 실패했습니다.');
+	                }
+	                
+	                $('#confirmationModal').fadeOut(); // 모달 숨김
+	            },
+	            error: function(e) {    
+	                console.log(e);
+	                $('#confirmationModal').fadeOut(); // 모달 숨김
+	            }
+	        });
+    	}else if(btn_chk === 1){ // 크루장 위임버튼을 눌렀을 때 
+    		$.ajax({
+	            url: 'crewLeaderChange.ajax', // AJAX 요청을 보낼 URL
+	            type: 'POST',
+	            data: {
+	            	// 크루idx
+	            	crew_idx : crew_idx,
+	            	// 위임자ID
+	            	member_id : member_id,
+	            	// 위임자 닉네임
+	            	member_nick: member_nick,
+	            	// 크루이름
+	            	crew_name: crew_name
+	            	
+	                // 1. UPDATE crew테이블의 크루장ID, 하위지역정보(profile테이블 regions_idx WHERE user_id = 위임자ID) WHERE 크루idx
+	                // 2. UPDATE (crew_idx테이블의 WHERE 크루idx) INNER JOIN crew_board테이블 WHERE category_idx = 1의 board_id(작성자ID) 
+	            },
+	            success: function(data) {
+	                console.log("성공여부 : " + data.success);
+	                // 요청 성공 시 처리
+	                if(data.success === true) {
+	                    modal.showAlert('크루장이 위임되었습니다.');    
+	                    history.back();
+	                } else {
+	                    modal.showAlert('크루장 위임에 실패했습니다.');
+	                }
+	                
+	                $('#confirmationModal').fadeOut(); // 모달 숨김
+	            },
+	            error: function(e) {    
+	                console.log(e);
+	                $('#confirmationModal').fadeOut(); // 모달 숨김
+	            }
+	        });
+    	}
+    	
     });
     
     // 아니요 버튼 클릭 시

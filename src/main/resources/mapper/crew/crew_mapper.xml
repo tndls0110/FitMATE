@@ -79,6 +79,7 @@ AND A.regions_idx = #{regions_idx}
 AND P.mbtir_idx = #{mbtiFilter}
 </if>
 </where>
+ORDER BY A.crew_idx DESC
 LIMIT #{limit} OFFSET #{offset}
 </select>
 	
@@ -112,7 +113,8 @@ P.profile AS leader_profile,
 <!--    크루장 mbti    -->
 M.mbtir_name AS leader_mbti,
 <!--   전체 게시글 수   -->
-BC.board_count FROM crew A
+BC.board_count 
+FROM crew A
 INNER JOIN member MB ON A.crew_id = MB.user_id 
 INNER JOIN profile P ON A.crew_id = P.user_id 
 INNER JOIN crew_idx I ON A.crew_idx = I.crew_idx 
@@ -120,12 +122,18 @@ INNER JOIN crew_board CB ON CB.board_idx = I.board_idx
 INNER JOIN region_sub RS ON RS.regions_idx = A.regions_idx 
 INNER JOIN region R ON R.region_idx = RS.region_idx 
 INNER JOIN mbti_r M ON M.mbtir_idx = P.mbtir_idx 
-LEFT JOIN ( SELECT crew_idx, COUNT(crew_idx) AS board_count FROM crew_idx GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
+LEFT JOIN ( 
+	SELECT crew_idx, COUNT(crew_idx) AS board_count 
+	FROM crew_idx 
+	WHERE board_idx IN (SELECT board_idx FROM crew_board WHERE status = 1)  
+ 	GROUP BY crew_idx ) BC ON BC.crew_idx = A.crew_idx
+LEFT JOIN ( SELECT crew_idx, COUNT(member_idx) AS member_count FROM crew_member WHERE status = 1 GROUP BY crew_idx ) MC ON MC.crew_idx = A.crew_idx
 <where>
 category_idx =1
 AND
 CB.status = 1
 <if test="board_idx != 0"> AND CB.board_idx = #{board_idx} </if>
+ORDER BY A.crew_idx DESC
 </where>
 </select>
 
@@ -186,6 +194,7 @@ AND A.date = (         <!-- status상관없이 가장 최근 날짜의 신청만
         WHERE join_id = #{param1} 
         AND crew_idx = C.crew_idx
     )  
+ORDER BY A.join_idx DESC
 LIMIT #{param2} OFFSET #{param3}
 </select>
 
@@ -234,7 +243,15 @@ AND
 A.status = 1           <!-- 정상적으로 활동허가를 받은 크루목록만 가져오기 -->
 AND
 CB.category_idx =1     <!-- 모집 게시글인 것만 가져오기 -->
+ORDER BY A.member_idx DESC
 LIMIT #{param2} OFFSET #{param3}
+</select>
+
+<!-- 크루생성 페이지로 이동전 MBTI검사를 받았는지를 체크하기 위함. -->
+<select id="mbtiChk" parameterType="String" resultType="int">
+	SELECT IFNULL(mbtir_idx, 0) 
+	FROM profile 
+	WHERE user_id = #{login_id}
 </select>
 
 <!-- 댓글, 대댓글 한번에 가져오기 -->
