@@ -35,7 +35,7 @@
         body{
             margin: 0;
             padding: 0;
-            background-color: #282b34;
+
             font-size: 14px;
             color: #e9ecef;
         }
@@ -86,8 +86,8 @@
         }
 
         .crew_alarm,.admin_alarm{
-            width: 400px;
-            height: 111px;
+            max-width: 385px;
+            min-height: 111px;
             background-color: #282b34;
             margin-bottom: 19px;
             padding: 5px 10px 10px 9px;
@@ -128,15 +128,10 @@
         }
 
         .notis_date{
-            margin-left: 17px;
-            opacity: 50%;
-            font-weight: 400;
+            margin: 23px 10px 0px 0px;
+            float: right;
         }
-        .alarm_content,.alarm_content_clickable{
-            word-break: keep-all;
-            width: 278px;
-            margin: -53px 10px 10px 108px;
-        }
+
         .bi-bell::before,.bi-person {
             content: "\f18a";
             font-size: 33px;
@@ -169,8 +164,8 @@
         }
 
         .delete{
-            position: relative;
-            left: 40px;
+            margin: 3px 10px -21px 237px;
+            position: absolute;
             font-size: 21px;
         }
 
@@ -197,9 +192,13 @@
         }
         .alarm_text{
             height: 59px;
+            margin: 60px 10px 9px 96px;
+            word-break: break-word;
+
         }
         .show_detail{
-            margin: -37px 24px 22px 309px;
+            width: 121px;
+            margin: 4px 10px 10px 308px;
             opacity: 50%;
             cursor: pointer;
             /*position이 설정되어 있으면 부모 요소의 overflow= hidden이 안 적용됨*/
@@ -213,9 +212,9 @@
             margin-bottom: 19px;
             padding: 5px 10px 10px 9px;
             opacity: 50%;
-            width: 400px;
-            height: 111px;
             background-color: #282b34;
+            max-width: 385px;
+            min-height: 111px;
         }
 
 
@@ -229,6 +228,20 @@
 
         .bi-x{
             cursor: pointer;
+        }
+
+        .container1{
+            float: left;
+        }
+
+        .container2{
+            float : right;
+            width: 266px;
+        }
+        .alarm_title{
+            float: left;
+            font-weight: bold;
+            margin: 25px 0px 0px 0px;
         }
 
     </style>
@@ -257,43 +270,6 @@
         <div id="count_unread_alarm"><div class="show_unread_alarm"></div></div>
         <div id = alarm_box>
 
-           <%-- <div class="admin_alarm">
-                <div class ="read">●</div>
-                <div class="alarm_description">
-                    <div class = "cate">
-                        <div class="round">
-                            <i class="bi bi-bell"></i>
-                        </div>
-                    </div>
-                    <div class = "top">
-                        <div class="alarm_title">관리자 알림</div> <div class ="notis_date">2024-10-15</div><div class="delete"><i class="bi bi-x"></i></div>
-                    </div>
-                </div>
-
-                <div class = "alarm_content">
-                    안내드립니다. 금일 오전에 실시한 서버 점검이 종료되었습니다.
-                </div>
-
-            </div>
-            <div class="crew_alarm">
-                <div class ="read">●</div>
-                <div class="alarm_description">
-                    <div class = "cate">
-                        <div class="round">
-                            <i class="bi bi-person"></i>
-                        </div>
-                    </div>
-                    <div class = "top">
-                        <div class="alarm_title">크루 알림</div> <div class ="notis_date">2024-10-15</div><div class="delete"><i class="bi bi-x"></i></div>
-                    </div>
-                </div>
-
-                <div class = "alarm_content">
-                    <a href = "">
-                    크루에 새로운 일정이 생성되었습니다.
-                    </a>
-                </div>
-            </div>--%>
         </div>
     </div>
     <c:import url="layout/modal.jsp"></c:import>
@@ -366,31 +342,42 @@
                         //아래 코드는 수정하기...
                         if(read == 0){
                             if(noti.notis_cate == 2){
-                               if(url == 'none'){
-                                   content += '<div class="crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알림</div>';
-                               }else{
-                                   content += '<div class="crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알림</div>';
+                               if(url == 'none') {
+                                   //content += '<div class="crew_alarm" alarm_idx ="' + idx + '" read =' + read + '><div class="read" alarm_idx ="' + idx + '" read =' + read + '>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알림</div>';
+                                   content += '<div class="crew_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-person"></i></div></div><div class="container2"><p class="alarm_title">크루 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail"></div></div>';
+
+                               } else {
+                                   //content += '<div class="crew_alarm" alarm_idx ="' + idx+'" read ='+read+'><div class="read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알림</div>';
+
+                                   content += '<div class="crew_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-person"></i></div></div><div class="container2"><p class="alarm_title">크루 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div>';
+
+
                                }
                             }else if(noti.notis_cate == 1){
-                                if(url == 'none') {
+                                content += '<div class="admin_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-bell"></i></div></div><div class="container2"><p class="alarm_title">관리자 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail" style = "visibility: hidden;"></div></div>';
+
+                                /* if(url == 'none') {
                                     content += '<div class="admin_alarm" alarm_idx ="' + idx + '" read ='+read+'><div class ="read" alarm_idx ="' + idx + '" read ='+read+'>●</div> <div class="alarm_description"><div class = "cate"><div class="round"><i class="bi bi-bell"></i></div></div><div class = "top"><div class="alarm_title">관리자 알림</div> <div class ="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class = "alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알림</div>'
                                 }else{
                                     content += '<div class="admin_alarm" alarm_idx ="' + idx + '" read ='+read+'><div class ="read" alarm_idx ="' + idx + '" read ='+read+'>●</div> <div class="alarm_description"><div class = "cate"><div class="round"><i class="bi bi-bell"></i></div></div><div class = "top"><div class="alarm_title">관리자 알림</div> <div class ="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class = "alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')"> +더보기</div></div><div class = "already_read_sign">읽은 알림</div>'
-                                }
+                                }*/
                             }
                         }else if(read == 1){
                             if(noti.notis_cate == 2){
                                 if(url == 'none'){
-                                    content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알람</div>';
+                                    // content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알람</div>';
+                                    content += '<div class="already_read_crew_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" style = "visibility: hidden" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-person"></i></div></div><div class="container2"><p class="alarm_title">크루 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail"></div></div>';
                                 }else{
-                                    content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알람</div>';
+                                    content += '<div class="already_read_crew_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" style = "visibility: hidden" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-person"></i></div></div><div class="container2"><p class="alarm_title">크루 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div>';
+                                    //content += '<div class="already_read_crew_alarm" alarm_idx ="'+idx+'" read ='+read+'><div class="already_read" alarm_idx ="'+idx+'" read ='+read+'>●</div><div class="alarm_description"><div class="cate"><div class="round"><i class="bi bi-person"></i></div></div><div class="top"><div class="alarm_title">크루 알림</div><div class="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class="alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')">+더보기</div></div><div class = "already_read_sign">읽은 알람</div>';
                                 }
                             }else if(noti.notis_cate == 1){
-                                if(url == 'none') {
-                                    content += '<div class="already_read_admin_alarm" alarm_idx ="' + idx + '" read ='+read+'><div class ="already_read" alarm_idx ="' + idx + '" read ='+read+'>●</div> <div class="alarm_description"><div class = "cate"><div class="round"><i class="bi bi-bell"></i></div></div><div class = "top"><div class="alarm_title">관리자 알림</div> <div class ="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class = "alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알람</div>'
+                                content += '<div class="already_read_admin_alarm" alarm_idx="' + idx + '" read="' + read + '"><div class="container1"><div class="read" style = "visibility: hidden" alarm_idx="' + idx + '" read="' + read + '">●</div><div class="round"><i class="bi bi-bell"></i></div></div><div class="container2"><p class="alarm_title">관리자 알림</p><p class="notis_date">' + formattedDate + '</p><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div><div class="alarm_text">' + noti.noti_content + '</div><div class="show_detail" style = "visibility: hidden;" onclick="url(\'' + url + '\',' + idx + ')"> +더보기</div></div>';
+                                /* if(url == 'none') {
+                                    //content += '<div class="already_read_admin_alarm" alarm_idx ="' + idx + '" read ='+read+'><div class ="already_read" alarm_idx ="' + idx + '" read ='+read+'>●</div> <div class="alarm_description"><div class = "cate"><div class="round"><i class="bi bi-bell"></i></div></div><div class = "top"><div class="alarm_title">관리자 알림</div> <div class ="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class = "alarm_content_clickable" onclick="url(\'' + url + '\',' + idx + ')"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail"></div></div><div class = "already_read_sign">읽은 알람</div>'
                                 }else{
                                     content += '<div class="already_read_admin_alarm" alarm_idx ="' + idx + '" read ='+read+'><div class ="already_read" alarm_idx ="' + idx + '" read ='+read+'>●</div> <div class="alarm_description"><div class = "cate"><div class="round"><i class="bi bi-bell"></i></div></div><div class = "top"><div class="alarm_title">관리자 알림</div> <div class ="notis_date">' + formattedDate + '</div><div class="delete" onclick="delete_alarm(' + idx + ')"><i class="bi bi-x"></i></div></div></div><div class = "alarm_content"><div class="alarm_text">' + noti.noti_content + '</div></div><div class="show_detail" onclick="url(\'' + url + '\',' + idx + ')"> +더보기</div></div><div class = "already_read_sign">읽은 알람</div>'
-                                }
+                                }*/
                             }
                         }
                 }
