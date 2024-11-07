@@ -252,7 +252,8 @@
     display: flex; /* 중앙 정렬을 위한 flexbox */
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
-     
+     position: fixed;
+    right: 750px;
     left: 300; /* 왼쪽에서 0 거리 */
    
     z-index: 998; 
@@ -344,8 +345,8 @@
 }
 
 .profile-img {
-    width: 15px; /* 이미지 크기 조정 */
-    height: 15px; /* 이미지 크기 조정 */
+    width: 20px; /* 이미지 크기 조정 */
+    height: 20px; /* 이미지 크기 조정 */
     border-radius: 50%; /* 동그란 형태 */
     object-fit: cover; /* 비율에 맞게 잘림 */
     border: 1px solid #ddd; /* 선택적으로 테두리 추가 */
@@ -367,6 +368,8 @@
         .gallery-item {
             width: 33%;
             margin: 0px;
+            max-width: 405px;
+    		max-height: 320px;
         }
 		 #loading {
             text-align: center;
@@ -388,20 +391,11 @@
 </head>
 
 <body>
- <%-- JSP 페이지에서 crew_msg가 존재하면 모달 경고창 띄우기 --%>
-<% if(request.getAttribute("crew_msg") != null) { %>
-    <script type="text/javascript">
-        alert('<%= request.getAttribute("crew_msg") %>');
-        location.href = '<%= request.getAttribute("page") %>';  // 리다이렉트 경로
-    </script>
-<% } %>
-<!-- 모달 HTML -->
-    <div id="modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p id="modal-message"></p>
-        </div>
-    </div>
+ 
+
+	
+	  
+	
     
 <div class="container">
 	<c:import url="layout/leftnav_1.jsp"></c:import>
@@ -658,7 +652,7 @@ if(userId === crewId){
 		                  '</span>'
 		               );
 		            });
-		            $('#profileList').append('<span class="profile-icon" onclick="crew_member_go()"><i class="bi bi-plus-circle"></i></span>');
+		            $('#profileList').append('<span class="profile-icon" onclick="crew_member_go()"><i class="bi bi-person-plus" style="font-size: 20px;"></i></span>');
 		        },
 		        error: function(xhr, status, error) {
 		            console.error('AJAX 오류:', status, error);
@@ -826,7 +820,7 @@ if(userId === crewId){
 	                        var buttonHtml;
 	                        var postform;
 	                        // 버튼 체크
-	                        if(isCrewLeader){ // 크루장이면 삭제하기버튼
+	                        if(isCrewLeader){ // 크루장이면 삭제하기버튼 _war
 	                        	postform = "/Fitmate_war/crew_plan_del.do";
 	                        	 buttonHtml = '<button type="submit" class="btn_participate">삭제하기</button>';
 	                        	console.log(postform);
@@ -909,12 +903,25 @@ if(userId === crewId){
                             	
                             );
 	          
-	                        // 참가자 목록 추가
+	                        // 참가자 목록 추가  const imageUrl = member.profile; // 프로필 이미지 URL
 	                        if (participants && participants.length > 0) {
+	                        	 
 							    participants.forEach(function(participant) {
-							        $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append('<span>' + participant.party_id + '</span>' + '<span>' + participant.profile + '</span>');
-							        
-							        
+							    	const profileUrl = 'mycrew_memberDetail.go?id=' + participant.party_id + '&profileType=1&idx=' + crewIdx;
+							        /*
+							    	$('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append(
+							        		'<span>' + participant.party_id + '</span>' + '<span>' + participant.profile + '</span>'
+							        		);
+							    	*/
+							    	$('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append(
+							    			'<span class="profile-icon" style="position: relative;">' +
+							                  '<a href="' + profileUrl + '">' + // 클릭 시 프로필 페이지로 이동
+							                  '<img src="/photo/' + participant.profile + '" class="profile-img" alt=" ">' +
+							                  '</a>' +
+							                  '</span>'		
+							    	);
+							    	 
+					               
 							    
 							    });
 							} else {
@@ -1050,20 +1057,16 @@ if(userId === crewId){
 		var crewIdx = $('#crew_idx').val();
 		location.href = "mycrew_memberList.go?idx=" +crewIdx;
 	}
-
-	 // 경고 메세지 모달창
-        function showModal(message) {
-            var modal = document.getElementById("modal");
-            var messageElement = document.getElementById("modal-message");
-            messageElement.innerText = message;
-            modal.style.display = "block"; // 모달 보이기
+	
+	// 컨트롤러에서 받은 메세지 띄우기
+	window.onload = function(){
+	var crew_msg = "${crew_msg}";
+	 console.log(crew_msg);
+        // msg 값이 있으면 alert 띄우기
+        if (crew_msg) {
+            alert(crew_msg);
         }
-
-        // 모달을 닫는 함수
-        function closeModal() {
-            var modal = document.getElementById("modal");
-            modal.style.display = "none"; // 모달 숨기기
-        }
+    }
 	
 </script>
 
