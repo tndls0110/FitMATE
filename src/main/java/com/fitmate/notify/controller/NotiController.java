@@ -78,12 +78,15 @@ public class NotiController {
 	@GetMapping (value = "/check_unreadAlarm.ajax")
 	@ResponseBody
 	public Map<String, Object> checkUnreadAlarm (HttpSession session) {
-		String id = session.getAttribute("loginId").toString();
-		logger.info("세션에서 받아온 id 값 :{}",id);
+		Object id = session.getAttribute("loginId");
+		//logger.info("세션에서 받아온 id 값 :{}",id);
 
 		Map<String, Object> data = new HashMap<>();
-		String exists = n_Service.checkUnreadAlarm(id);
-		data.put("exists", exists);
+		if (id != null) {
+			String id_string = id.toString();
+			String exists = n_Service.checkUnreadAlarm(id_string);
+			data.put("exists", exists);
+		}
 		return data;
 	}
 
@@ -98,19 +101,6 @@ public class NotiController {
 			String id_string = id.toString();
 			int unread = n_Service.unread_count(id_string);
 			data.put("count",unread);
-		}
-		return data;
-	}
-
-	@GetMapping (value = "/check_if_login.ajax")
-	@ResponseBody
-	public Map<String, Object> checkIfLogin (HttpSession session) {
-		Object id = session.getAttribute("loginId");
-		Map<String, Object> data = new HashMap<>();
-		if(id != null) {
-			data.put("exists", "exist");
-		}else if(id == null) {
-			data.put("exists", "none");
 		}
 		return data;
 	}

@@ -22,7 +22,7 @@
 		</li>
 		<li>
 			<a href="alarm.go"><i class="bi bi-person-walking"></i></a>
-			<div class="notify_new"></div>
+			<div class="hide notify_new"></div>
 		</li>
 	</ul>
 </div>
@@ -30,23 +30,10 @@
 <script>
 	window.onload = function (){
 		//setInterval로 알림이 있는 지 function 실행
-		check_if_login();
+		check_unreadAlarm();
+		setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
 	}
 
-	function check_if_login(){
-		$.ajax({
-			type : 'get',
-			url : 'check_if_login.ajax',
-			data :{},
-			dataType : 'JSON',
-			success : function (data){
-				if(data.exists == 'exist'){
-
-					setInterval(check_unreadAlarm,6000); //6초마다 알림 확인..
-				}
-			},error : function (e){}
-		})
-	}
 
 	function check_unreadAlarm(){
 		$.ajax({
@@ -56,9 +43,8 @@
 			dataType : 'JSON',
 			success : function (data){
 				if(data.exists == 'exist'){
-					$('.notify_new').css({'visibility' : 'visible'});
-				}else if(data.exists == 'none'){
-					$('.notify_new').css({'visibility' : 'hidden'});
+					var notify = document.querySelector('.hide');
+					notify.classList.remove('hide');
 				}
 			},error : function (e){}
 		})
