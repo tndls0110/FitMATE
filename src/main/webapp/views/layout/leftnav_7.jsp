@@ -11,13 +11,13 @@
 		<li>
 			<a href="schedule.go">운동 일지</a>
 		</li>
-		<li class="active">
+		<li>
 			<a href="crew_search">크루 검색</a>
 		</li>
 		<li>
 			<a href="mycrew">내 크루</a>
 		</li>
-		<li>
+		<li class="active">
 			<a href="member_message.go">메시지</a>
 		</li>
 		<li>
@@ -30,6 +30,7 @@
 	</ul>
 </div>
 <script src="resources/js/member_leftnav.js"></script>
+
 <script>
 	window.onload = function (){
 		//setInterval로 알림이 있는 지 function 실행
@@ -46,7 +47,8 @@
 			dataType : 'JSON',
 			success : function (data){
 				if(data.exists == 'exist'){
-					$('.leftnav .hide').removeClass('hide');
+					var notify = document.querySelector('.leftnav .hide');
+					notify.classList.remove('hide');
 				}
 			},error : function (e){}
 		})

@@ -1,9 +1,9 @@
 var urlParams = new URLSearchParams(window.location.search);
 var group_idx = urlParams.get('group_idx');
 
-// if (group_idx != null || group_idx != '') {
-//     document.getElementsByName('group_idx')[0].value = group_idx;
-// }
+if (group_idx != null || group_idx != '') {
+    document.getElementsByName('group_idx')[0].value = group_idx;
+}
 
 showList();
 
@@ -52,7 +52,7 @@ function showMessage() {
         type: 'get',
         url: 'member_messageList.ajax',
         data: {
-            'groupIdx': group_idx
+            'group_idx': group_idx
         },
         dataType: 'json',
         success: function(data) {
