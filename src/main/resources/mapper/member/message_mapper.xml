@@ -6,12 +6,16 @@
 <mapper namespace="com.fitmate.member.dao.MessageDAO">
 
     <!-- 유저 로그인 -->
+    <select id="checkPermitChat" resultType="com.fitmate.member.dto.MessageDTO">
+        SELECT member1, member2 FROM message_list WHERE group_idx = #{group_idx}
+    </select>
+
     <select id="roomList" resultType="com.fitmate.member.dto.MessageDTO">
         SELECT group_idx, member1, member2 FROM message_list WHERE member1 = #{user_id} OR member2 = #{user_id}
     </select>
 
     <select id="message" resultType="com.fitmate.member.dto.MessageDTO">
-        SELECT sender_id, msg_cont, sendtime, readcheck FROM message WHERE group_idx = #{group_idx}
+        SELECT sender_id, msg_cont, sendtime FROM message WHERE group_idx = #{group_idx}
     </select>
 
     <insert id="sendMessage">

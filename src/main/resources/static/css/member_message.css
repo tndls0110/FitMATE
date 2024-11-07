@@ -24,6 +24,11 @@
     overflow-y: scroll;
 }
 
+.message_container .message_list .textbtn{
+    font-weight: 400;
+    text-decoration: none;
+}
+
 .message_container .message_contents_container{
     width: 70%;
 }
@@ -46,20 +51,27 @@
 .message_container .message_contents .noDesc li .msg_left{
     margin: 0 auto 0 0;
     background-color: #363940;
-    border-radius: 0 5px 5px 5px;
+    border-radius: 0 15px 15px 15px;
 }
 
 .message_container .message_contents .noDesc li .msg_right{
     margin: 0 0 0 auto;
-    background-color: #363940;
-    border-radius: 0 5px 5px 5px;
+    background-color: #e9ecef;
+    color: #363940;
+    border-radius: 15px 0 15px 15px;
 }
 
-.message_container .message_contents .noDesc li.right_wrapper{
-    background-color: #048187;
-    color: #e9ecef;
-    font-weight: 600;
-    border-radius: 0 5px 5px 5px;
+.message_container .message_contents .noDesc li .time_left{
+    margin: 0 0 0 3px;
+    color: #848484;
+    font-size: 10px;
+}
+
+.message_container .message_contents .noDesc li .time_right{
+    margin: 0 3px 0 0;
+    color: #848484;
+    font-size: 10px;
+    text-align: right;
 }
 
 .message_container .btn_flex.narrow{

@@ -41,6 +41,20 @@ public class MessageController {
         return page;
     }
 
+    @RequestMapping (value = "/member_messageList.go")
+    public String message (String group_idx, Model model, HttpSession session) {
+        page = "member_messageList";
+        checkPermit("redirect:/member_messageList.go?group_idx="+group_idx, model, session);
+        if (session.getAttribute("loginId") != null && group_idx !=null){
+            logger.info(group_idx);
+            if (!message_service.checkPermitChat((String) session.getAttribute("loginId"), group_idx)){
+                model.addAttribute("msg", "접근 권한이 없습니다.");
+                page = "member_message";
+            }
+        }
+        return page;
+    }
+
     @RequestMapping (value = "/member_messageGroup.ajax")
     @ResponseBody
     public Map<String, Object> message (HttpSession session) {
@@ -54,16 +68,22 @@ public class MessageController {
     @ResponseBody
     public Map<String, Object> message (String groupIdx) {
         Map<String, Object> list = new HashMap<String, Object>();
-        if (!groupIdx.equals("") || groupIdx != null) {
-            list.put("messageList", message_service.message(groupIdx));
-        }
+        list.put("messageList", message_service.message(groupIdx));
         return list;
     }
 
-    @RequestMapping (value = "/member_message.do")
-    public void message (@RequestParam Map<String, String> params, HttpSession session) {
-        String user_id = (String) session.getAttribute("loginId");
-        message_service.sendMessage(params, user_id);
+    @RequestMapping (value = "/member_sendMessage.ajax")
+    @ResponseBody
+    public Map<String, Object> sendMessage (String group_idx, String msg_cont, HttpSession session) {
+        Map<String, Object> list = new HashMap<String, Object>();
+        if (session.getAttribute("loginId") == null){
+            list.put("msg", "로그인하세요.");
+        } else {
+            String user_id = (String) session.getAttribute("loginId");
+            message_service.sendMessage(group_idx, msg_cont, user_id);
+            list.put("msg", "메시지를 전송했습니다.");
+        }
+        return list;
     }
 
 }
