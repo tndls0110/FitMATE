@@ -6,9 +6,8 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="resources/css/calendar.css" />
+	<link rel="stylesheet" type="text/css" href="resources/css/calendar.css"/>
 	<link rel="stylesheet" type="text/css" href="resources/css/common.css" />
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<style>
 		hr {
@@ -286,7 +285,7 @@
 			margin-top: 10px;
 		}
 
-		.modal_container{
+		contents.modal_container{
 			margin: -43px 0px 0px 222px;
 		}
 		#calendar{
@@ -325,14 +324,6 @@
 
 
 	</style>
-	<script>
-		var msg = '${msg}';
-		if (msg != ''){
-			modal.showAlert(msg);
-		}
-
-	</script>
-
 </head>
 
 <body>
@@ -345,7 +336,6 @@
 
 
 				<div class="contents">
-
 					<!-- 달력 -->
 					<div class="calendar">
 						<div class="title_calendar">
@@ -355,11 +345,7 @@
 						</div>
 						<div id="calendar"></div>
 					</div>
-
-
 					<div class="journal_write_button" onclick="write_go()">일지 작성하기</div>
-
-
 				</div>
 
 
@@ -367,8 +353,6 @@
 				<div id="schedule">
 					<div class="crew_schedule_title">크루 일정</div>
 					<div class="crew_schedule">
-
-
 
 					</div>
 					<hr/>
@@ -388,7 +372,7 @@
 						<h3 class="title">일정 상세 보기</h3>
 						<button class="btn_close" onclick="closeModal()">닫기</button>
 					</div>
-					<div class="modal_body" id="modalBody">
+					<div class="modal_body0" id="modalBody">
 						<!-- 선택한 날짜를 기준으로 크루 플랜 값 가져오기 제목,시간,장소,내용,참가인원 -->
 					</div>
 				</div>
@@ -406,6 +390,11 @@
 
 
 <script>
+	var msg = '${msg}';
+	if (msg != ''){
+		modal.showAlert(msg);
+	}
+
 	const isCrewLeader = true;
 
 	document.addEventListener('DOMContentLoaded', function() {
@@ -1012,4 +1001,5 @@
 
 
 </script>
+
 </html>

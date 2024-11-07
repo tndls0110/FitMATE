@@ -14,7 +14,7 @@
 		<li>
 			<a href="crew_search">크루 검색</a>
 		</li>
-		<li class="active">
+		<li>
 			<a href="mycrew">내 크루</a>
 		</li>
 		<li>
