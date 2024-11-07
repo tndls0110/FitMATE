@@ -42,7 +42,12 @@
     padding: 8px;
 }
 
-.message_container .message_contents .noDesc li.left{
+.message_container .message_contents .noDesc li .msg_left{
+    background-color: #363940;
+    border-radius: 0 5px 5px 5px;
+}
+
+.message_container .message_contents .noDesc li .msg_right{
     background-color: #363940;
     border-radius: 0 5px 5px 5px;
 }

@@ -22,6 +22,7 @@
 					<div class="message_contents_container">
 						<div class="message_contents"></div>
 						<form action="member_message.do" method="post">
+							<input type="hidden" name="group_idx" value="" />
 							<div class="btn_flex narrow">
 								<div class="width80p">
 									<input type="text" name="msg_cont" class="full flex_left" maxlength="1000" />

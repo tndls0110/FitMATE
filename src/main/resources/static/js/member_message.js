@@ -1,7 +1,8 @@
 var urlParams = new URLSearchParams(window.location.search);
 var group_idx = urlParams.get('group_idx');
+document.getElementsByName('group_idx')[0].value = group_idx;
 
-let refreshInterval = setInterval(showList, 100);
+let refreshInterval = setInterval(showList, 1000);
 
 function showList() {
     $.ajax({
@@ -41,7 +42,7 @@ function printMessage(list) {
     let tags = '';
     for (let i = 0; i < list.length; i++) {
         tags += '<ul class="noDesc">';
-        tags += '<li>'+list[i].sender_id+' / '+list[i].msg_cont+' / '+list[i].sendtime+'</li>';
+        tags += '<li><div class="msg_left">'+list[i].sender_id+' / '+list[i].msg_cont+' / '+list[i].sendtime+'</div></li>';
         tags += '</ul>';
     }
     document.getElementsByClassName('message_contents')[0].innerHTML = tags;

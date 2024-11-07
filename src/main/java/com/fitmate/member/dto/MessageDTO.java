@@ -12,7 +12,6 @@ public class MessageDTO {
 
     public int message_idx;
     public String sender_id;
-    public String receiver_id;
     public String msg_cont;
     public LocalDateTime sendtime;
     public int readcheck;
@@ -37,9 +36,6 @@ public class MessageDTO {
     }
     public String getSender_id() {
         return sender_id;
-    }
-    public String getReceiver_id() {
-        return receiver_id;
     }
     public String getMsg_cont() {
         return msg_cont;
@@ -71,9 +67,6 @@ public class MessageDTO {
     }
     public void setSender_id(String sender_id) {
         this.sender_id = sender_id;
-    }
-    public void setReceiver_id(String receiver_id) {
-        this.receiver_id = receiver_id;
     }
     public void setMsg_cont(String msg_cont) {
         this.msg_cont = msg_cont;
