@@ -42,7 +42,7 @@
                         	<!-- 너비는 width10p ~ width90p 범위 내에서 적용 가능 -->
                         	<!-- 단위: 10p (예: width20p, width80p 가능) -->
                             <div class="width50p">
-                                <select class="narrow" name="region1" id="parentRegion" onchange="onOptionChange(event)">
+                                <select class="narrow" name="region1" id="parentRegion" onchange="onOptionChange(event)" required>
 									<c:forEach items="${region}" var="region">
 										<option value="${region.region_idx}"
 										 <c:if test="${region.region_idx == region_idx}">selected</c:if>>${region.region_name}</option>
@@ -50,7 +50,7 @@
 								</select>
                             </div>
                             <div class="width50p">
-                                  <select class="narrow" name="regions_idx" id="childRegion">
+                                  <select class="narrow" name="regions_idx" id="childRegion" required>
 									<c:forEach items="${region2}" var="region">
 										<option value="${region.regions_idx}"
 										<c:if test="${region.regions_idx == regions_idx}">selected</c:if>>${region.regions_name}</option>
@@ -66,7 +66,7 @@
                         <h3 class="capt">모임취지</h3>  
                         <!-- flex-narrow 박스 설정 -->
                         	<!-- 너비 설정 -->
-                          <p> <textarea id="content" maxlength="1000" class="full pass" name="content" />${subject}</textarea></p>
+                          <p> <textarea id="content" maxlength="1000" class="full pass" name="content" required oninput="updateCharCount()"/>${subject}</textarea></p>
                           <div class="character-count" id="charCount">0 / 1000자</div>
                     </div>
                
@@ -143,7 +143,25 @@
 	    if (selectedRegionIdx) {
 	        onOptionChange({ target: { value: selectedRegionIdx } });  // 부모 지역 값이 있을 경우 자식 지역을 초기화
 	    }
+	    // 페이지 로드 시 기존 textarea의 글자수 업데이트
+        updateCharCount();
 	});
+	
+	// 글자수 카운트 함수
+    function updateCharCount() {
+        var content = document.getElementById("content").value; // textarea의 값
+        var charCount = content.length; // 글자수
+        var maxLength = 1000; // 최대 글자수
+        var remaining = maxLength - charCount; // 남은 글자수
+        
+        // 글자수 표시 업데이트
+        document.getElementById("charCount").innerText = charCount + " / " + maxLength + "자";
+        
+        // 남은 글자수가 0 이하이면 입력을 막음
+        if (remaining < 0) {
+            document.getElementById("content").value = content.substring(0, maxLength); // 최대 1000자까지만 입력
+        }
+    }
 	
 	</script>
 	

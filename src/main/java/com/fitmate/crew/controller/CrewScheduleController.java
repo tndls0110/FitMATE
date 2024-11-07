@@ -41,27 +41,29 @@ public class CrewScheduleController {
 		// 받을 파라미터값 = 크루장id,크루idx,
 		String crew_idx = params.get("crew_idx");
 		String crew_id = params.get("crew_id");
-		String loginId = session.getAttribute("loginId").toString();
-		logger.info("로그인아이디"+loginId);
-		logger.info("크루장id"+crew_id);
-		logger.info("크루idx"+crew_idx);
-		if(crew_id.equals(loginId)&&loginId != null) {
+		if(session.getAttribute("loginId") != null) {
 			
-			// 작성자가 크루 작성자면
-			page =	"crew_schedule_write";
-			// 전달 받은 파라미터값 crew_schedule_write 에 뿌려주기
-			model.addAttribute("crew_id", crew_id);
-			model.addAttribute("crew_idx", crew_idx);
+			String loginId = session.getAttribute("loginId").toString();
+			logger.info("로그인아이디"+loginId);
+			logger.info("크루장id"+crew_id);
+			logger.info("크루idx"+crew_idx);
+			if(crew_id.equals(loginId)&&loginId != null) {
+				
+				// 작성자가 크루 작성자면
+				page =	"crew_schedule_write";
+				// 전달 받은 파라미터값 crew_schedule_write 에 뿌려주기
+				model.addAttribute("crew_id", crew_id);
+				model.addAttribute("crew_idx", crew_idx);
+			}
+			else {
+				// 작성자가 크루장이 아니라면
+				page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
+				model.addAttribute("crew_msg", "크루장만 작성할 수 있습니다");
+			}
 		}
-		else {
-			// 작성자가 크루장이 아니라면
-			page = "redirect:/crew_main_page.go?crew_idx="+crew_idx;
-			model.addAttribute("crew_msg", "크루장만 작성할 수 있습니다");
-		}
-		
 		
 			return page;
-		}
+	}
 	// 크루 일정 작성하기
 	@PostMapping(value="/crew_schedule_write.do")
 	public String crew_schedule_write(@RequestParam(value = "day", required = false) String[] days,
