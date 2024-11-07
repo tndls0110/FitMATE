@@ -619,10 +619,22 @@
 				var crew_idx = crew_key['crew_idx'];
 				console.log('crew_idx:',crew_idx);
 
+
+				console.log('crew_plan_place 길이 :', crew_plan_place.length);
+				var crew_plan_place_name = "";
+				if(crew_plan_place.length > 4){
+					crew_plan_place_name = crew_plan_place.substring(0,3);
+				}else if(crew_plan_place.length == 0){
+					crew_plan_place_name = '장소 미정';
+				}else{
+					crew_plan_place_name = crew_plan_place;
+				}
+				console.log('crew_plan_place 수정된 이름:',crew_plan_place_name);
+
 				console.log('crew_name:{}',crew_name);
 				content += '<div class="crew_schedule_content"> <div id = "top"> <div class="crew_schedule_time">';
 				content += crew_plan_start + '-'+ crew_plan_end+'</div><div class = "crew_place"><div class = "place_icon"><i class="bi bi-geo-alt-fill"></i></div><div class = "crew_place_name">';
-				content += crew_plan_place+'</div></div></div><div class="crew_schedule_content_detail" onclick="openModal('+ date+','+crew_idx+')"> <div class="circle">●</div><div class="crew_name">';
+				content += '<abbr title ="'+ crew_plan_place+'">'+crew_plan_place_name+'</abbr></div></div></div><div class="crew_schedule_content_detail" onclick="openModal('+ date+','+crew_idx+')"> <div class="circle">●</div><div class="crew_name">';
 				content += crew_name +'</div><div class="crew_schedule_text">';
 				content += crew_plan_subject + '</div></div></div></div>';
 
@@ -748,7 +760,6 @@
 								}
 						}
 						index++; //인덱스 증가
-
 					}
 					content +='</div>';
 				}
@@ -919,11 +930,11 @@
 							var postform;
 							// 버튼 체크
 							if(isCrewLeader){ // 크루장이면 삭제하기버튼
-								postform = "/Fitmate/crew_plan_del.do";
+								postform = "/Fitmate_war/crew_plan_del.do";
 								buttonHtml = '<button type="submit" class="btn_participate">삭제하기</button>';
 								console.log(postform);
 							}else{ // 크루원이면 참가하기 버튼
-								postform = "/Fitmate/crew_plan_join.do";
+								postform = "/Fitmate_war/crew_plan_join.do";
 								buttonHtml = '<button type="submit" class="btn_participate">참가하기</button>';
 								console.log(postform);
 							}

@@ -19,4 +19,5 @@ public interface NotiDAO {
 
     int checkUnreadAlarm(String id);
 
+    List<NotiDAO> getadminAlarm(int idx);
 }
