@@ -5,11 +5,15 @@
 
 <mapper namespace="com.fitmate.notify.dao.NotiDAO">
     <select id="getAllAlarm" resultType="com.fitmate.notify.dto.NotiDTO">
-        SELECT * FROM noti WHERE notir_id = #{id} ORDER BY notis_date DESC
+        SELECT * FROM noti WHERE notir_id = 'member01' OR notir_id is null ORDER BY notis_date DESC;
     </select>
 
     <select id="getspecificAlarm" resultType="com.fitmate.notify.dto.NotiDTO">
         SELECT * FROM noti WHERE notir_id = #{id} AND notis_cate = #{idx} ORDER BY notis_date DESC
+    </select>
+
+    <select id="getadminAlarm" resultType="com.fitmate.notify.dto.NotiDTO">
+        SELECT * FROM noti WHERE notir_id is null AND notis_cate = #{idx} ORDER BY notis_date DESC
     </select>
 
     <update id="read_change">
@@ -21,11 +25,11 @@
     </delete>
 
     <delete id="auto_delete">
-        DELETE FROM noti where notis_date = #{thirtyDaysAgo};
+        DELETE FROM noti where notis_date = #{thirtyDaysAgo}
     </delete>
 
     <select id="checkUnreadAlarm" resultType="int">
-        SELECT count(*) FROM noti n2 where notir_id = #{id} AND notis_check = 0;
+        SELECT count(*) FROM noti n2 where notir_id = #{id} AND notis_check = 0
     </select>
 
 
