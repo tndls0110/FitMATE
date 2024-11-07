@@ -19,7 +19,11 @@ public class NotiService {
         if(idx == 0){
             list = n_DAO.getAllAlarm(id);
         }else{
-            list = n_DAO.getspecificAlarm(id,idx);
+            if(idx == 1){
+                list = n_DAO.getadminAlarm(idx);
+            }else if(idx == 2){
+                list = n_DAO.getspecificAlarm(id,idx);
+            }
         }
     return list;
     }

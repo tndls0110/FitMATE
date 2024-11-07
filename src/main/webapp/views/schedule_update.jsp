@@ -521,6 +521,7 @@
     });
     console.log('param:',param);
     update_content(param);
+    location.href = "schedule.go";
   }
 
 
@@ -656,7 +657,6 @@ function file_update(f,journal_idx){
       contentType:false, //얘네는 다 false처리
       success : function (data){
         console.log(data.success);
-        location.href = "schedule.go";
 
       },error : function(e){
         console.log(e);
