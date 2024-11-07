@@ -354,8 +354,6 @@
 					<div class="crew_schedule_title">크루 일정</div>
 					<div class="crew_schedule">
 
-
-
 					</div>
 					<hr/>
 					<div id = "journal_total">
