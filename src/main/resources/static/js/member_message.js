@@ -1,9 +1,16 @@
 var urlParams = new URLSearchParams(window.location.search);
 var group_idx = urlParams.get('group_idx');
 
-if (group_idx != null || group_idx != '') {
-    document.getElementsByName('group_idx')[0].value = group_idx;
-    let MessageInterval = setInterval(showMessage, 1000);
+setGroup();
+
+function setGroup() {
+    if (group_idx == null || group_idx == 'null') {
+        document.getElementsByClassName('waitingContainer')[0].style.display = 'none';
+     } else {
+        document.getElementsByClassName('selectContainer')[0].style.display = 'none';
+        document.getElementsByName('group_idx')[0].value = group_idx;
+        let MessageInterval = setInterval(showMessage, 1000);
+    }
 }
 
 showList();

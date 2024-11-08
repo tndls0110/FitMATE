@@ -42,14 +42,27 @@
     overflow-y: scroll;
 }
 
-.message_container .message_contents .waitingContainer{
+.message_container .message_contents .waitingContainer,
+.message_container .message_contents .selectContainer{
     width: 100%;
 }
 
 .message_container .message_contents .waitingContainer .waiting{
     width: 36px;
-    margin: 280px auto 0;
+    margin: 260px auto 0;
     color: #e9ecef;
+    font-size: 36px;
+}
+
+.message_container .message_contents .selectContainer .select{
+    width: auto;
+    margin: 230px auto 0;
+    text-align: center;
+    color: #e9ecef;
+    font-size: 14px;
+}
+
+.message_container .message_contents .selectContainer .select i{
     font-size: 36px;
 }
 

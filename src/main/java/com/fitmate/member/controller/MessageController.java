@@ -46,14 +46,12 @@ public class MessageController {
         page = "member_message";
         checkPermit("redirect:/member_messageList.go?group_idx="+group_idx, model, session);
         String login_id = (String) session.getAttribute("loginId");
-        if (login_id == null) {
-            login_id = "";
-        }
-        if (group_idx == null) {
-            group_idx = "";
-        }
         boolean permit = message_service.checkPermitChat(login_id, group_idx);
-        if (!permit){
+        if (login_id == null || login_id.isEmpty()) {
+            model.addAttribute("msg", "로그인하세요.");
+        } else if (group_idx == null || group_idx.isEmpty() || group_idx.equals("null")) {
+            // 메시지 그룹을 선택하도록 유도함
+        } else if (!permit) {
             model.addAttribute("msg", "잘못된 접근입니다.");
         }
         return page;
@@ -84,12 +82,12 @@ public class MessageController {
     @ResponseBody
     public Map<String, Object> sendMessage (String group_idx, String msg_cont, HttpSession session) {
         Map<String, Object> list = new HashMap<String, Object>();
-        if (session.getAttribute("loginId") == null){
+        String user_id = (String) session.getAttribute("loginId");
+        if (user_id == null || user_id.isEmpty()){
             list.put("msg", "로그인하세요.");
         } else if (!message_service.checkPermitChat((String) session.getAttribute("loginId"), group_idx)){
             list.put("msg", "접근 권한이 없습니다.");
         } else {
-            String user_id = (String) session.getAttribute("loginId");
             message_service.sendMessage(group_idx, msg_cont, user_id);
         }
         return list;

@@ -21,6 +21,12 @@
 			<div class="message_list"></div>
 			<div class="message_contents_container">
 				<div class="message_contents">
+					<div class="selectContainer">
+						<div class="select">
+							<i class="bi bi-person-exclamation"></i>
+							<p>메시지 그룹을 선택하세요.</p>
+						</div>
+					</div>
 					<div class="waitingContainer">
 						<div class="waiting"><i class="bi bi-reception-4"></i></div>
 					</div>
