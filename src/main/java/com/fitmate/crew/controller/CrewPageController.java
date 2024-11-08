@@ -212,6 +212,7 @@ public class CrewPageController {
 					
 				model.addAttribute("crew_idx", crewidx);
 				model.addAttribute("crew_id", crewid);
+				model.addAttribute("crewname", crewname);
 				
 				String addr = page;
 				checkPermitCrew(addr, model, session);
@@ -320,6 +321,7 @@ public class CrewPageController {
 					
 				model.addAttribute("crew_idx", crewidx);
 				model.addAttribute("crew_id", crewid);
+				model.addAttribute("crewname", crewname);
 				
 				
 			//	model.addAttribute("crew_idx", crew_idx); // 전달받은 크루idx 다음 페이지에 넘겨주기
@@ -433,7 +435,7 @@ public class CrewPageController {
 			String crew_id = crewdto.getCrew_id();
 			model.addAttribute("crew_idx", crew_idx);
 			model.addAttribute("crew_id", crew_id);
-			model.addAttribute("crew_name", crew_name);
+			model.addAttribute("crewname", crew_name);
 			
 			return page;
 		}
@@ -463,11 +465,16 @@ public class CrewPageController {
 		         model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
 		         page = "member_login";
 		      }else {
+		    	  
+		    	  CrewDTO crewdto = new CrewDTO();
+					crewdto = crewpage_service.crew_info(crew_idx);
+				String crewname =	crewdto.getName();
 		    	  crewpage_service.crew_photo_detail(board_idx, model);
 					
 					model.addAttribute("board_idx",board_idx);
 					model.addAttribute("crew_id",crew_id);
 					model.addAttribute("crew_idx",crew_idx);
+					model.addAttribute("crewname",crewname);
 					
 		         String addr = page;
 		         checkPermitCrew(addr, model, session);
