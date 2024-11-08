@@ -28,7 +28,7 @@
 							<input type="text" name="msg_cont" onkeypress="pressEnter(event)" class="full flex_left" maxlength="1000" />
 						</div>
 						<div class="width20p">
-							<input type="button" value="send" onclick="messageSend()" class="mainbtn full flex_right" />
+							<input type="button" value="보내기" onclick="sendMessage()" class="mainbtn full flex_right" />
 						</div>
 					</div>
 				</form>

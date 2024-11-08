@@ -12,5 +12,8 @@ public interface MessageDAO {
     List<MessageDTO> roomList(String user_id);
     List<MessageDTO> message(String group_idx);
     void sendMessage(String group_idx, String msg_cont, String user_id);
+    int findMessageGroupCnt(String member1, String member2);
+    int createMessageGroup(MessageDTO dto);
+    int findMessageGroup(String member1, String member2);
 
 }

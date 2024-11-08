@@ -3,6 +3,7 @@ var group_idx = urlParams.get('group_idx');
 
 if (group_idx != null || group_idx != '') {
     document.getElementsByName('group_idx')[0].value = group_idx;
+    let MessageInterval = setInterval(showMessage, 500);
 }
 
 showList();
@@ -43,13 +44,9 @@ function printList(list) {
     document.getElementsByClassName('message_list')[0].innerHTML = tags;
 }
 
-if (document.getElementsByClassName('message_contents')[0]){
-    let MessageInterval = setInterval(showMessage, 1000);
-}
-
 function showMessage() {
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: 'member_messageList.ajax',
         data: {
             'group_idx': group_idx
@@ -86,11 +83,11 @@ function printMessage(list) {
 
 function pressEnter(event) {
     if (event.key === 'Enter') {
-        messageSend();
+        sendMessage();
     }
 }
 
-function messageSend() {
+function sendMessage() {
     let msgCont = document.getElementsByName('msg_cont')[0].value;
     if (msgCont == '' || msgCont == null){
         modal.showAlert('메시지를 입력하세요.')
@@ -104,7 +101,7 @@ function messageSend() {
             },
             dataType: 'json',
             success: function(data) {
-                msgCont = '';
+                document.getElementsByName('msg_cont')[0].value = '';
             },
             error: function(e) {}
         });

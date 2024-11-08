@@ -22,4 +22,17 @@
         INSERT INTO message (sender_id, msg_cont, group_idx) VALUES (#{user_id}, #{msg_cont}, #{group_idx})
     </insert>
 
+    <select id="findMessageGroupCnt" resultType="int">
+        SELECT COUNT(group_idx) FROM message_list WHERE (member1 = #{member1} AND member2 = #{member2}) OR (member2 = #{member1} AND member1 = #{member2})
+    </select>
+    
+    <insert id="createMessageGroup" parameterType="com.fitmate.member.dto.MessageDTO"
+        useGeneratedKeys="true" keyColumn="group_idx" keyProperty="group_idx">
+        INSERT INTO message_list SET member1 = #{member1}, group_name1 = #{member2}, member2 = #{member2}, group_name2 = #{member1}
+    </insert>
+
+    <select id="findMessageGroup" resultType="int">
+        SELECT group_idx FROM message_list WHERE (member1 = #{member1} AND member2 = #{member2}) OR (member2 = #{member1} AND member1 = #{member2})
+    </select>
+
 </mapper>

@@ -95,4 +95,13 @@ public class MessageController {
         return list;
     }
 
+    @RequestMapping (value = "/member_findMessageGroup.ajax")
+    @ResponseBody
+    public Map<String, Object> findMessageGroup (String member2, HttpSession session) {
+        Map<String, Object> list = new HashMap<String, Object>();
+        String member1 = (String) session.getAttribute("loginId");
+        list.put("messageGroup", message_service.findMessageGroup(member1, member2));
+        return list;
+    }
+
 }

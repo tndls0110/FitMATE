@@ -192,6 +192,15 @@
             </p>
         </div>
 
+        <!-- 메시지 발송 버튼 -->
+        <button onclick="findMessageGroup('${profile.user_id}')" class="mainbtn full sendMessageBtn">메시지 보내기</button>
+        <script>
+            var loginId = '${sessionScope.loginId}';
+            var receiver = '${profile.user_id}';
+        </script>
+        <script src="resources/js/member_sendMessage.js"></script>
+        <!-- //메시지 발송 버튼 -->
+
 		<!-- 추방하기 버튼 공간 -->
         <div class="list crew_info crewBtn1">
         </div>
