@@ -15,7 +15,7 @@
     </select>
 
     <select id="message" resultType="com.fitmate.member.dto.MessageDTO">
-        SELECT sender_id, msg_cont, sendtime FROM message WHERE group_idx = #{group_idx}
+        SELECT sender_id, msg_cont, sendtime FROM message WHERE group_idx = #{group_idx} LIMIT 30
     </select>
 
     <insert id="sendMessage">
