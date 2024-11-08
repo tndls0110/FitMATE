@@ -20,15 +20,21 @@
 		<div class="message_container">
 			<div class="message_list"></div>
 			<div class="message_contents_container">
-				<div class="message_contents"></div>
+				<div class="message_contents">
+					<div class="waitingContainer">
+						<div class="waiting"><i class="bi bi-reception-4"></i></div>
+					</div>
+				</div>
 				<form>
 					<input type="hidden" name="group_idx" value="" />
 					<div class="btn_flex narrow">
-						<div class="width80p">
-							<input type="text" name="msg_cont" onkeypress="pressEnter(event)" class="full flex_left" maxlength="1000" />
+						<div class="width90p">
+							<input type="text" name="msg_cont" class="full flex_left" maxlength="1000" />
 						</div>
-						<div class="width20p">
-							<input type="button" value="보내기" onclick="sendMessage()" class="mainbtn full flex_right" />
+						<div class="width10p">
+							<button onclick="sendMessage()" class="mainbtn full flex_right">
+								<i class="bi bi-chat-dots-fill"></i>
+							</button>
 						</div>
 					</div>
 				</form>

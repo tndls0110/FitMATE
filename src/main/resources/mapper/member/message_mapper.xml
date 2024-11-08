@@ -11,7 +11,10 @@
     </select>
 
     <select id="roomList" resultType="com.fitmate.member.dto.MessageDTO">
-        SELECT group_idx, member1, member2 FROM message_list WHERE member1 = #{user_id} OR member2 = #{user_id}
+        SELECT m.group_idx, m.member1, m.member2,
+            (SELECT nick FROM member WHERE user_id = m.member1) AS 'member1_nick',
+            (SELECT nick FROM member WHERE user_id = m.member2) AS 'member2_nick'
+            FROM message_list m WHERE member1 = #{user_id} OR member2 = #{user_id}
     </select>
 
     <select id="message" resultType="com.fitmate.member.dto.MessageDTO">

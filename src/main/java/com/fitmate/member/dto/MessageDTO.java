@@ -1,6 +1,7 @@
 package com.fitmate.member.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MessageDTO {
 
@@ -15,6 +16,9 @@ public class MessageDTO {
     public String msg_cont;
     public LocalDateTime sendtime;
     public int readcheck;
+
+    public String member1_nick;
+    public String member2_nick;
 
     public int getGroup_idx() {
         return group_idx;
@@ -40,11 +44,22 @@ public class MessageDTO {
     public String getMsg_cont() {
         return msg_cont;
     }
-    public LocalDateTime getSendtime() {
-        return sendtime;
+    public String getSendtime() {
+        if (sendtime == null) {
+            return "";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
+            return sendtime.format(formatter);
+        }
     }
     public int getReadcheck() {
         return readcheck;
+    }
+    public String getMember1_nick() {
+        return member1_nick;
+    }
+    public String getMember2_nick() {
+        return member2_nick;
     }
 
     public void setGroup_idx(int group_idx) {
@@ -77,5 +92,10 @@ public class MessageDTO {
     public void setReadcheck(int readcheck) {
         this.readcheck = readcheck;
     }
-
+    public void setMember1_nick(String member1_nick) {
+        this.member1_nick = member1_nick;
+    }
+    public void setMember2_nick(String member2_nick) {
+        this.member2_nick = member2_nick;
+    }
 }
