@@ -386,6 +386,19 @@
         .fc-header-toolbar.fc-toolbar{
         	z-index: 10;
         }
+        
+        /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+.contents.crew_contents::-webkit-scrollbar{
+    width: 0;  /* 수직 스크롤바의 너비를 0으로 설정 */
+    height: 0; /* 수평 스크롤바의 높이를 0으로 설정 */
+}
+
+/* Firefox에서 스크롤바 숨기기 */
+.contents.crew_contents {
+    scrollbar-width: none;  /* 스크롤바를 숨김 */
+    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
+}
+        
 	</style>
 
 </head>
@@ -437,7 +450,11 @@
 				</div>
 			</div>
 
-			<div id="schedule">
+			<div id="schedule" style="
+			    position: relative;
+			    top: 103px;
+			    left: 7px;
+			">
 				<div class="crew_schedule">
 					<div class="crew_schedule_title">크루 한줄게시글
 					<button class="writebtn mainbtn minbtn relative-button" onclick="crew_oneboard_go()" style="z-index: 10;">더보기</button>

@@ -83,6 +83,8 @@ public interface CrewDAO {
 	// 크루 생성링크로 이동하기 전 MBTI검사를 받았는지 여부를 체크하기 위함.
 	int mbtiChk(String login_id);
 
+	int crew_namecheck(String crewName);
+
 	
 
 	
