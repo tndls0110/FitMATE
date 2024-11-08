@@ -431,7 +431,7 @@
 					<div class="title_calendar crew">
 						<p>크루 일정 보기</p>
 						<div id="date" style="font-size: 20px; margin: 20px 0 15px"></div>
-						<button class="writebtn mainbtn minbtn" onclick="crew_plan_write()" style="z-index: 10;">일정 작성</button>
+						<button class="writebtn mainbtn minbtn" onclick="crew_plan_write()" style="z-index: 10; display: none;"  id="scheduleWriteBtn">일정 작성</button>
 					</div>
 					<div id="calendar"></div>
 				</div>
@@ -519,8 +519,22 @@ if(userId === crewId){
 	isCrewLeader = false;
 }
 
+// 크루장만 일정작성버튼 보이게
+function checkCrewLeaderStatus() {
+    if (isCrewLeader) {
+        // 크루장이면 버튼을 보이게 함
+        $('#scheduleWriteBtn').show();
+    } else {
+        // 크루장이 아니면 버튼을 숨김
+        $('#scheduleWriteBtn').hide();
+    }
+}
+
 
 	document.addEventListener('DOMContentLoaded', function() {
+		
+		checkCrewLeaderStatus();
+		
 		let event_create = []; // 이벤트 배열 초기화
 		// 1. 캘린더 - 이벤트 날짜 가져오기 (개인 일정)
 		$.ajax({
@@ -718,7 +732,7 @@ if(userId === crewId){
 	                    	    'width': '260px',  // 최대 너비 300px
 	                    	    'height': '280px'  // 최대 높이 200px
 	                    	});
-	                
+	                	//  !!! 절대경로 !!! 
 	                    const redirectUrl = '/Fitmate_war/crew_photo_detail.go?board_idx=' + item.board_idx+'&crew_id='+crewId+'&crew_idx='+crewIdx;
 	                    img.on('click', function() {
 	                        window.location.href = redirectUrl; // 클릭 시 해당 URL로 이동
@@ -795,14 +809,14 @@ if(userId === crewId){
 	    $('#scheduleModal').css('display', 'none'); // 모달 닫기
 	}
 	
-	// 일정클릭시 일정 상세보기
+	// 일정 클릭 시 일정 상세보기
 	function get_crewplan(date) {
 	    $.ajax({
 	        url: 'crew_plan_detail.ajax', // API 엔드포인트
 	        method: 'GET',
 	        data: { 
 	            date: date,
-	            crew_idx: $('#crew_idx').val()	// 컨트롤러에 건내줄 crew_idx 값
+	            crew_idx: $('#crew_idx').val()  // 컨트롤러에 건내줄 crew_idx 값
 	        },
 	        success: function(response) {
 	            // 기존 내용 초기화
@@ -817,120 +831,116 @@ if(userId === crewId){
 	                    crewPlanDetails.forEach(function(detail) {
 	                        const crewScheduleDTO = detail.crewPlan; // 크루 일정 DTO
 	                        const participants = detail.participants; // 참가자 목록
-	                        var buttonHtml;
-	                        var postform;
+	                        var buttonHtml = '';
+	                        var postform = '';
+
 	                        // 버튼 체크
-	                        if(isCrewLeader){ // 크루장이면 삭제하기버튼 _war
-	                        	postform = "/Fitmate_war/crew_plan_del.do";
-	                        	 buttonHtml = '<button type="submit" class="btn_participate">삭제하기</button>';
-	                        	console.log(postform);
-	                        }else{ // 크루원이면 참가하기 버튼
-	                        	postform = "/Fitmate_war/crew_plan_join.do";
-	                        	  // 참가자 목록이 있는 경우
+	                        if (isCrewLeader) { // 크루장이면 삭제하기 버튼 추가
+	                        	//  !!! 절대경로 !!! 
+	                            postform = "/Fitmate_war/crew_plan_del.do";  // 삭제 폼
+	                            buttonHtml = '<button type="button" class="btn_participate deleteButton">삭제하기</button>';
+
+	                            // 크루장이 일정에 참가하지 않으면 참가하기 버튼 추가
 	                            let isParticipating = false;
-	                        	
-	                        	// 참가자 목록 추가
-		                        if (participants && participants.length > 0) {
-								    participants.forEach(function(participant) {
-								        if (participant.party_id === userId) {
-								        	 isParticipating = true; // 참가 중인 경우
-								        	 console.log(isParticipating);
-		                                }
-								    });
-								} 
-		                        if(isParticipating){
-		                        	  buttonHtml = '<button type="button" class="btn_participate" onclick="cancelParticipation(' + crewScheduleDTO.plan_idx + ')">참가취소</button>';
-		                        	  console.log(isParticipating);
-		                        }
-		                        else {
-		                        	console.log(isParticipating);
-		                        	 buttonHtml = '<button type="submit" class="btn_participate">참가하기</button>';	 
-								}
-	                        	
-	                        	
+	                            participants.forEach(function(participant) {
+	                                if (participant.party_id === userId) {
+	                                    isParticipating = true; // 이미 참가 중인 경우
+	                                }
+	                            });
+
+	                            if (!isParticipating) {
+	                                buttonHtml += '<button type="button" class="btn_participate joinButton">참가하기</button>';
+	                            } else {
+	                                buttonHtml += '<button type="button" class="btn_participate cancelParticipationButton" onclick="cancelParticipation(' + crewScheduleDTO.plan_idx + ')">참가취소</button>';
+	                            }
+	                        } else { // 크루원이면 참가하기 버튼
+	                        	//  !!! 절대경로 !!! 
+	                            postform = "/Fitmate_war/crew_plan_join.do";  // 참가하기 폼
+
+	                            let isParticipating = false;
+	                            participants.forEach(function(participant) {
+	                                if (participant.party_id === userId) {
+	                                    isParticipating = true;
+	                                }
+	                            });
+
+	                            if (isParticipating) {
+	                                buttonHtml = '<button type="button" class="btn_participate cancelParticipationButton" onclick="cancelParticipation(' + crewScheduleDTO.plan_idx + ')">참가취소</button>';
+	                            } else {
+	                                buttonHtml = '<button type="submit" class="btn_participate joinButton">참가하기</button>';
+	                            }
 	                        }
-	                        
-	                        
-	                     	// crewScheduleDTO.plan_start가 '13:00:00' 형식이라고 가정
+
+	                        // 시간 포맷 처리
 	                        const timeString = crewScheduleDTO.plan_start; // '13:00:00'
-							console.log(timeString);
-	                        // ':'를 기준으로 분리
 	                        const timeParts = timeString.split(':');
+	                        const formattedTime = timeParts[0] + ':' + timeParts[1];
 
-	                        // 시와 분만 가져오기
-	                        const hours = timeParts[0];
-	                        const minutes = timeParts[1];
-
-	                        // 원하는 형식으로 출력
-	                        const formattedTime = hours + ':'  + minutes;
-	                        
-	                     	// 종료시간이 '15:00:00' 형식이라고 가정
 	                        const endTimeString = crewScheduleDTO.plan_end; // '15:00:00'
-
-	                        // ':'를 기준으로 분리
 	                        const endTimeParts = endTimeString.split(':');
+	                        const formattedEndTime = endTimeParts[0] + ':' + endTimeParts[1];
 
-	                        // 시와 분만 가져오기
-	                        const endHours = endTimeParts[0];
-	                        const endMinutes = endTimeParts[1];
-
-	                        // 원하는 형식으로 출력
-	                        const formattedEndTime = endHours + ':'  + endMinutes;
 	                        var crew_idx = $('#crew_idx').val(); // crew_idx의 값
 	                        var user_id = $('#user_id').val(); // user_id의 값
+
 	                        // 크루 일정 정보 출력
-                            $('#modalBody').append(
-                            		
-                            		'<div class="schedule-item" data-id="' + crewScheduleDTO.plan_idx + '">' +
-                            	    '<form action="' + postform + '" method="POST">' + 
-                            	        '<input type="hidden" id="user_id" name="user_id" value="'+user_id+'">' +
-                            	        '<input type="hidden" id="crew_idx" name="crew_idx" value="'+crew_idx+'">'+
-                            	        '<input type="hidden" name="plan_idx" value="' + crewScheduleDTO.plan_idx + '">' + 
-                            	        '<h3 class="title">제목 : ' + (crewScheduleDTO.plan_subject || '제목 없음') + '</h3>' +
-                            	        '<p><span><i class="bi bi-calendar-check"></i></span><span style="padding-left: 8px;">' + (crewScheduleDTO.plan_date) + '</span></p>' +
-                            	        '<p><span><i class="bi bi-clock"></i></span> ' + (formattedTime || '정보 없음') + 
-                            	        '<strong> ~</strong> ' + (formattedEndTime || '정보 없음') +
-                            	        '<span style="padding-left: 100px;"><i class="bi bi-geo-alt"></i></span>' + 
-                            	        '<span style="margin-left: 5px;">' + (crewScheduleDTO.plan_place || '정보 없음') + '</span></p>' +
-                            	        '<p><strong>내용:</strong></p>' + 
-                            	        '<p>' + (crewScheduleDTO.plan_content || '내용 없음') + '</p>' +
-                            	        '<p></p>' +
-                            	        '<p class="participants-list"><i class="bi bi-person-check"></i></p>' +
-                            	        buttonHtml +
-                            	    '</form>' +
-                            	    '<hr>' +
-                            	    '</div>'
-                            	
-                            );
-	          
-	                        // 참가자 목록 추가  const imageUrl = member.profile; // 프로필 이미지 URL
+	                        $('#modalBody').append(
+	                            '<div class="schedule-item" data-id="' + crewScheduleDTO.plan_idx + '">' +
+	                            '<form class="crewForm" action="' + postform + '" method="POST">' + 
+	                                '<input type="hidden" name="user_id" value="'+user_id+'">' +
+	                                '<input type="hidden" name="crew_idx" value="'+crew_idx+'">'+
+	                                '<input type="hidden" name="plan_idx" value="' + crewScheduleDTO.plan_idx + '">' + 
+	                                '<h3 class="title">제목 : ' + (crewScheduleDTO.plan_subject || '제목 없음') + '</h3>' +
+	                                '<p><span><i class="bi bi-calendar-check"></i></span><span style="padding-left: 8px;">' + (crewScheduleDTO.plan_date) + '</span></p>' +
+	                                '<p><span><i class="bi bi-clock"></i></span> ' + (formattedTime || '정보 없음') + 
+	                                '<strong> ~</strong> ' + (formattedEndTime || '정보 없음') +
+	                                '<span style="padding-left: 100px;"><i class="bi bi-geo-alt"></i></span>' + 
+	                                '<span style="margin-left: 5px;">' + (crewScheduleDTO.plan_place || '정보 없음') + '</span></p>' +
+	                                '<p><strong>내용:</strong></p>' + 
+	                                '<p>' + (crewScheduleDTO.plan_content || '내용 없음') + '</p>' +
+	                                '<p></p>' +
+	                                '<p class="participants-list"><i class="bi bi-person-check"></i></p>' +
+	                                buttonHtml +
+	                            '</form>' +
+	                            '<hr>' +
+	                            '</div>'
+	                        );
+
+	                        // 참가자 목록 추가
 	                        if (participants && participants.length > 0) {
-	                        	 
-							    participants.forEach(function(participant) {
-							    	const profileUrl = 'mycrew_memberDetail.go?id=' + participant.party_id + '&profileType=1&idx=' + crewIdx;
-							        /*
-							    	$('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append(
-							        		'<span>' + participant.party_id + '</span>' + '<span>' + participant.profile + '</span>'
-							        		);
-							    	*/
-							    	$('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append(
-							    			'<span class="profile-icon" style="position: relative;">' +
-							                  '<a href="' + profileUrl + '">' + // 클릭 시 프로필 페이지로 이동
-							                  '<img src="/photo/' + participant.profile + '" class="profile-img" alt=" ">' +
-							                  '</a>' +
-							                  '</span>'		
-							    	);
-							    	 
-					               
-							    
-							    });
-							} else {
-							    $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append('<span>참가자가 없습니다.</span>');
-							}
+	                            participants.forEach(function(participant) {
+	                                const profileUrl = 'mycrew_memberDetail.go?id=' + participant.party_id + '&profileType=1&idx=' + crewIdx;
+	                                $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append(
+	                                    '<span class="profile-icon" style="position: relative;">' +
+	                                        '<a href="' + profileUrl + '">' + 
+	                                        '<img src="/photo/' + participant.profile + '" class="profile-img" alt=" ">' +
+	                                        '</a>' +
+	                                    '</span>'
+	                                );
+	                            });
+	                        } else {
+	                            $('.schedule-item[data-id="' + crewScheduleDTO.plan_idx + '"] .participants-list').append('<span>참가자가 없습니다.</span>');
+	                        }
+
+	                        // 버튼 이벤트 위임 처리
+	                        $(document).on('click', '.deleteButton', function() {
+	                            var $form = $(this).closest('form');
+	                        	//  !!! 절대경로 !!! 
+	                            $form.attr('action', '/Fitmate_war/crew_plan_del.do');
+	                            $form.submit();
+	                        });
+
+	                        $(document).on('click', '.joinButton', function() {
+	                            var $form = $(this).closest('form');
+	                        	//  !!! 절대경로 !!! 
+	                            $form.attr('action', '/Fitmate_war/crew_plan_join.do');
+	                            $form.submit();
+	                        });
+
 	                    });
 	                }
 	            } else {
-	                $('#modalBody').append('<p>'+response.message+'</p>');
+	                $('#modalBody').append('<p>' + response.message + '</p>');
 	            }
 	        },
 	        error: function(xhr, status, error) {
@@ -938,7 +948,7 @@ if(userId === crewId){
 	            $('#modalBody').append('<p>일정을 가져오는 데 문제가 발생했습니다.</p>');
 	        }
 	    });
-	} // function get_crewplan(date)
+	}
 	
 	
 	

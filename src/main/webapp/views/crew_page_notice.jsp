@@ -20,13 +20,13 @@
             width: 5%;
         }
         .col2 {
-            width: 65%;
+            width: 66%;
         }
         .col3, .col4 {
-            width: 10%;
+            width: 12%;
         }
         .col15 {
-            width: 10%;
+            width: 5%;
         }
         .small {
     padding: 5px 10px;  /* 상하, 좌우 여백 */
@@ -59,7 +59,10 @@
 			<div class="contents">
 	
 				<!-- 제목 -->
-				<h2 class="title">크루이름<span>크루 공지 화면입니다.</span></h2>
+				<h2 class="title">
+				<a href="crew_main_page.go?crew_idx=${crew_idx}" class="crew-name-link">
+				    ${crewname}
+				  </a><span>크루 공지 화면입니다.</span></h2>
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
@@ -246,7 +249,7 @@
 	                    tbody.append('<tr><td>' + item.board_idx 
 	                    		+ '</td><td>' + item.subject
 	                    		+ '</td><td>' +item.board_id
-	                    		+ '</td><td>' +displayDate
+	                    		+ '<i class="bi bi-star"></i></td><td>' +displayDate
 	                    		+ '</td><td>' + deleteButton + '</td></tr>'
                     	);
 	                    

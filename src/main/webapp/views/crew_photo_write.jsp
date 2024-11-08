@@ -22,7 +22,9 @@
         <c:import url="layout/leftnav_1.jsp"></c:import>
 
         <div class="contents narrow">
-            <h2 class="title">크루이름<span>크루사진게시글 작성 화면입니다.</span></h2>
+            <h2 class="title"><a href="crew_main_page.go?crew_idx=${crew_idx}" class="crew-name-link">
+				    ${crewname}
+				  </a><span>크루사진게시글 작성</span></h2>
 
             <!-- 폼 -->
             <form action="crew_photo_write.do" method="post" enctype="multipart/form-data" id="photoForm">

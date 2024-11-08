@@ -20,13 +20,13 @@
             width: 5%;
         }
         .col2 {
-            width: 65%;
+            width: 66%;
         }
         .col3, .col4 {
-            width: 10%;
+            width: 12%;
         }
         .col15 {
-            width: 10%;
+            width: 5%;
         }
         .small {
     padding: 5px 10px;  /* 상하, 좌우 여백 */
@@ -56,7 +56,9 @@
 			<div class="contents">
 				
 				<!-- 제목 -->
-				<h2 class="title">크루이름<span>한줄 게시글 화면입니다.</span></h2>
+				<h2 class="title"><a href="crew_main_page.go?crew_idx=${crew_idx}" class="crew-name-link">
+				    ${crewname}
+				  </a><span>한줄 게시글 화면입니다.</span></h2>
 				<!-- //제목 -->
 			
 				<!-- 폼 -->
@@ -214,6 +216,11 @@
 		                    displayDate = postDate.toLocaleDateString(); // 기본 포맷으로 날짜 표시
 		                }
 	                	
+		                if (crewId == item.board_id) {
+		                    // 작성자도 크루장인 경우
+		                    item.nick += ' <i class="bi bi-star"></i>';  // 크루장 표시 아이콘
+		                }
+		                
 	                	let deleteButton = '<button type="button" class="mainbtn small"></button>';
 	                	// 내가 작성자이면
 	                	if (sessionId == item.board_id) {

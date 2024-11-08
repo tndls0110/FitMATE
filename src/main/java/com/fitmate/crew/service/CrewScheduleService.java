@@ -2,6 +2,7 @@ package com.fitmate.crew.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,18 +53,27 @@ public class CrewScheduleService {
 
 		 // 오늘 날짜 가져오기
 		 LocalDate today = LocalDate.now();
-		
+		 LocalDateTime now = LocalDateTime.now();
 		 // 오늘 날짜의 요일 가져오기
 	     DayOfWeek dayOfWeek = localDate.getDayOfWeek();
 	     
 	     // 이번달 마지막 날짜
 	     LocalDate lastDayOfMonth = localDate.withDayOfMonth(localDate.lengthOfMonth());
-	     
+	     LocalDateTime selectedDateTime = LocalDateTime.parse(date + "T" + start_time);
 	     // 오늘부터 이번 달 마지막 날까지의 날짜 리스트 만들기
 	     List<LocalDate> datesInMonth = new ArrayList<>();
-	       for (LocalDate daydate = localDate; !daydate.isAfter(lastDayOfMonth); daydate = daydate.plusDays(1)) {
+	     // 선택 날짜가 지금 시간 이후라면 오늘 날짜도 추가하기	
+	     if(selectedDateTime.isAfter(now)) {
+	     		datesInMonth.add(today);
+	     	}
+	     	
+	       for (LocalDate daydate = localDate.plusDays(1); !daydate.isAfter(lastDayOfMonth); daydate = daydate.plusDays(1)) {
 	           datesInMonth.add(daydate);
 	       }
+	       
+	        for (LocalDate date1 : datesInMonth) {
+	            logger.info("날짜 : "+date1);
+	        }
 		
 	     int lastday = lastDayOfMonth.getDayOfMonth();
 	     int startday = localDate.getDayOfMonth();
@@ -93,7 +103,7 @@ public class CrewScheduleService {
 
 			// 오늘부터 이번달 마지막 날까지 반복시키기
 			 for (LocalDate date1 : datesInMonth) {
-				 //	logger.info("날짜는 = ",date1);
+				 	logger.info("날짜는 = ",date1);
 		            for(int j=0; j<arr.length; j++) {
 						if(arr[j]==date1.getDayOfWeek().getValue()) {
 							plan_dto.setCrew_idx(crewidx);
