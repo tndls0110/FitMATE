@@ -405,6 +405,21 @@ public int crew_create(String crew_id, String name, int regions_idx, String cont
 	}
 
 
+	public int crew_namecheck(String crewName) {
+		int suc = 0;
+		int iscrew_name = crew_dao.crew_namecheck(crewName);
+		logger.info("중복된 크루가 있는지 = "+iscrew_name);
+		if(iscrew_name==0) {
+			suc = 0; // 사용가능 크루명
+		}
+		else {
+			suc = 1; // 사용불가능 크루명
+		}
+		return suc;
+		
+	}
+
+
 
 	
 	
