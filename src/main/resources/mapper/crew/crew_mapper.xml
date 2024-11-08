@@ -362,7 +362,7 @@ DELETE FROM recomment WHERE recomment_idx = #{comment_idx}
 SELECT rs.regions_name, rs.regions_idx
 FROM region_sub rs
 JOIN region r ON rs.region_idx = r.region_idx
-WHERE rs.region_idx = #{param1};
+WHERE rs.regions_show = 1 and rs.region_idx = #{param1};
 </select>
 
 
@@ -385,6 +385,10 @@ WHERE cb.board_idx = #{param1}
 LIMIT 1
 </select>
 
+<select id="crew_namecheck" resultType="int">
+	SELECT COUNT(*) from crew where name = #{param1}
+</select>
+
 
 <insert id="crew_create" useGeneratedKeys="true" keyColumn="crew_idx" keyProperty="crew_idx" parameterType="com.fitmate.crew.dto.CrewDTO">
 insert into crew (crew_id,name,regions_idx) value (#{crew_id},#{name},#{regions_idx})
@@ -396,7 +400,7 @@ insert into crew_board (board_id,subject,category_idx) value(#{board_id},#{conte
 insert into crew_idx (board_idx,crew_idx) value (#{board_idx},#{crew_idx});
 </insert>
 <insert id="crew_leaderjoin">
-insert into crew_member (crew_idx,member_id) value (#{crew_idx},#{member_id});
+insert into crew_member (crew_idx,member_id,join_date) value (#{crew_idx},#{member_id},now());
 </insert>
 <update id="crew_create_rewrite">
 update crew_board set subject = #{param1} where board_idx = #{param2} and category_idx = 1

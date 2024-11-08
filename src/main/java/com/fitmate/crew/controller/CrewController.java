@@ -92,12 +92,21 @@ public class CrewController {
 	@RequestMapping(value="/crew_create.go")
 	public String crew_create(Model model, HttpSession session) {
 		
-		List<RegCountyDTO> list = member_service.getRegion();
-		model.addAttribute("region", list);
-		list = member_service.getRegion2("1");
-		model.addAttribute("region2", list);
-		
-		return "crew_create";
+		page = "crew_create";
+		  
+		  if (session.getAttribute("loginId") == null) {
+				model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+				page = "member_login";
+		  }else {
+			  String addr = page;
+			  checkPermitCrew(addr, model, session);
+			  List<RegCountyDTO> list = member_service.getRegion();
+				model.addAttribute("region", list);
+				list = member_service.getRegion2("1");
+				model.addAttribute("region2", list);
+			 }
+	
+		return page;
 	}
 	
 	@RequestMapping (value = "crew_regions.ajax")
@@ -114,35 +123,47 @@ public class CrewController {
 	}
 	
 	@RequestMapping(value="/crew_create_rewrite.go")
-	public String crew_create_rewrite(@RequestParam String idx,@RequestParam String board_idx,Model model) {
+	public String crew_create_rewrite(@RequestParam String idx,@RequestParam String board_idx,Model model,HttpSession session) {
 		
-		logger.info("crew_idx = "+idx+"board_idx = "+board_idx);
+		page = "crew_create_rewrite";
+		  
+		  if (session.getAttribute("loginId") == null) {
+				model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+				page = "member_login";
+		  }else {
+			  String addr = page;
+			  checkPermitCrew(addr, model, session);
+				logger.info("crew_idx = "+idx+"board_idx = "+board_idx);
+				
+				
+				String crew_idx = idx;
+				CrewSearchListDTO crewboard = new CrewSearchListDTO();
+				
+				crewboard = crew_service.crew_board_detail(board_idx,crew_idx);
+				String crew_name = crewboard.getCrew_name();
+				String region_idx = crewboard.getRegion_name();
+				String regions_idx = crewboard.getRegions_name();
+				String subject = crewboard.getSubject();
+				String crew_id = crewboard.getLeader_id();
+				
+				
+				List<RegCountyDTO> list = member_service.getRegion();
+				logger.info("crew_idx"+crew_idx+"board_idx"+board_idx+"crew_name"+crew_name+"region_idx"+region_idx+"regions_idx"+regions_idx);
+				model.addAttribute("region", list);
+				model.addAttribute("crew_idx", crew_idx);
+				model.addAttribute("board_idx", board_idx);
+				model.addAttribute("crew_name", crew_name);
+				model.addAttribute("region_idx", region_idx);
+				model.addAttribute("regions_idx", regions_idx);
+				model.addAttribute("subject", subject);
+				model.addAttribute("crew_id", crew_id);
+			 	  }
 		
 		
-		String crew_idx = idx;
-		CrewSearchListDTO crewboard = new CrewSearchListDTO();
-		
-		crewboard = crew_service.crew_board_detail(board_idx,crew_idx);
-		String crew_name = crewboard.getCrew_name();
-		String region_idx = crewboard.getRegion_name();
-		String regions_idx = crewboard.getRegions_name();
-		String subject = crewboard.getSubject();
-		String crew_id = crewboard.getLeader_id();
+
 		
 		
-		List<RegCountyDTO> list = member_service.getRegion();
-		logger.info("crew_idx"+crew_idx+"board_idx"+board_idx+"crew_name"+crew_name+"region_idx"+region_idx+"regions_idx"+regions_idx);
-		model.addAttribute("region", list);
-		model.addAttribute("crew_idx", crew_idx);
-		model.addAttribute("board_idx", board_idx);
-		model.addAttribute("crew_name", crew_name);
-		model.addAttribute("region_idx", region_idx);
-		model.addAttribute("regions_idx", regions_idx);
-		model.addAttribute("subject", subject);
-		model.addAttribute("crew_id", crew_id);
-		
-		
-		return "crew_create_rewrite";
+		return page;
 	}
 	
 	@PostMapping(value="/crew_create.do")
@@ -161,6 +182,27 @@ public class CrewController {
 		return page;
 	}
 	
+	
+	// 크루명 체크
+	@GetMapping(value="/crew_namecheck.ajax")
+	@ResponseBody
+	public int crew_namecheck(@RequestParam String crewName,Model model) {
+		int success = 0;
+		logger.info("전달받은 이름값"+crewName);
+		int suc = crew_service.crew_namecheck(crewName);
+		if(suc > 0 && !crewName.equals("")) { // crewName이 빈칸이거나 suc 가 1 이면 (중복값이있으면)
+			success = 0;
+			model.addAttribute("status", "fail");
+			logger.info("중복아이디");
+		}
+		else {
+			success = 1;
+			logger.info("사용가능아이디");
+			model.addAttribute("status", "success");
+		}
+	
+		return success;
+	}
 	
 	
 	

@@ -111,30 +111,30 @@
         	console.log('공백')
             return;
         }
-		/*
+		
         // Ajax 요청
         $.ajax({
             url: 'crew_namecheck.ajax',  // 서버에서 처리할 URL (닉네임 중복 체크)
             method: 'GET',
             data: { crewName: crewName },
             success: function(response) {
-                if (response.status === 'success') {
-                    if (response.isAvailable) {
-                        $('#nameMessage').text('사용할 수 있는 크루명입니다.').css('color', 'green');
-                        $('#submitBtn').prop('disabled', false);  // 크루명 사용 가능하면 제출 버튼 활성화
-                    } else {
-                        $('#nameMessage').text('이미 사용 중인 크루명입니다.').css('color', 'red');
-                        $('#submitBtn').prop('disabled', true);  // 이미 사용 중이면 제출 버튼 비활성화
-                    }
+            	console.log('아작스 받은값',response);
+            	if (response === 1) {  // 사용 가능한 크루명
+                    $('#nameMessage').text('사용할 수 있는 크루명입니다.').css('color', 'green').show();
+                    $('#submitBtn').prop('disabled', false);  // 크루명 사용 가능하면 제출 버튼 활성화
+                } else if (response === 0) {  // 이미 사용 중인 크루명
+                    $('#nameMessage').text('이미 사용 중인 크루명입니다.').css('color', 'red').show();
+                    $('#submitBtn').prop('disabled', true);  // 이미 사용 중이면 제출 버튼 비활성화
                 } else {
-                    $('#nameMessage').text('오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red');
+                    $('#nameMessage').text('오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red').show();
+                    $('#submitBtn').prop('disabled', true);  // 오류 시 버튼 비활성화
                 }
             },
             error: function(xhr, status, error) {
                 console.error(error);
-                $('#nameMessage').text('서버 오류가 발생했습니다.').css('color', 'red');
+                $('#nameMessage').text('서버 오류가 발생했습니다.').css('color', 'red').show();
             }
-        }); // ajax */
+        }); // ajax 
     });
 
 }); // 크루명 체크
