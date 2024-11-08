@@ -165,6 +165,7 @@
 
         div.comment_txt {
             margin: 5% 0;
+    		position: relative;
         }
 
         div.comment.right {
@@ -278,6 +279,20 @@
 		    scrollbar-color: transparent transparent;  /* 스크롤바 색상도 투명하게 설정 */
 		}
 		
+		.character-count.textCheck1{
+			position: absolute;
+			top: -32%;
+			right: 0%;
+		}
+		
+		
+		.character-count.textCheck2{
+		    position: absolute;
+		    bottom: -12%;
+		    left: 0%;
+		    /* visibility: hidden; */
+		}
+		
 		
     </style>
 </head>
@@ -319,13 +334,16 @@
                 <div class="comment_ask" id="commentAskSection">
                     <h3 class="capt">
                         <i class="bi bi-chat-left-fill"></i>&nbsp;문의하기
+                        <div style=" display: inline; right: 0%; position: absolute;" class="character-count" id="charCount">0 / 1000자</div>
                     </h3>
-                    <form action="crew_recruit_detail.do?idx=<%=board_idx%>" method="post">
+                    <form action="crew_recruit_detail.do" method="post">
                         <input type="text" name="board_idx" value="<%=board_idx%>" hidden/>
                         <input type="text" name="comment_id" value="" id="currentUserId" hidden/>
                         <input type="text" name="content_chk" value="0" hidden/>
+                        <input type="text" name="crew_name" value="${recruitHead.crew_name}" hidden/>
+            			<input type="text" name="crew_idx" value="${recruitHead.crew_idx}" hidden/>
                         <p>
-                            <textarea class="full" name="content" placeholder="최대 1,000자까지 입력할 수 있습니다." maxlength="1000"></textarea>
+                            <textarea class="full" name="content" id="content" placeholder="최대 1,000자까지 입력할 수 있습니다." required oninput="updateCharCount()" maxlength="1000"></textarea>
                         </p>
                         <button class="mainbtn">작성하기</button>
                     </form>
@@ -374,6 +392,9 @@
     var currentUserId = '${sessionScope.loginId}'; 
     // 문의하기에 현재 유저ID넣어주기.
     $('#currentUserId').val(currentUserId);
+    
+    
+    
     // 크루 idx
     var crew_idx = ${recruitHead.crew_idx};
     
@@ -397,15 +418,24 @@
     // 데이터 로딩 중 여부를 관리할 변수
     var isLoading = false;
     
+    var askCount = 0; // 댓글이 한개도 없는지 체크하기 위함.
     
     // 댓글, 대댓글 불러오기.
     if (board_idx != '' && board_idx != null) {
-    	detail(board_idx);                    
+    	detail(board_idx);           
+    	/* if(askCount === 0){
+    		footer = '<div>'
+    		+ '<i class="bi bi-card-text">&nbsp;&nbsp; 문의 댓글이 한개도 없습니다.</i>'
+    		+ '</div>';
+    		
+    		$('.comment_area').append(footer);
+    	} */
     } 
 
-    
-    
     var contentSelect = ''; // 댓글 또는 대댓글 textArea영역 selecter
+    var countSelect = ''; // 글자수 count영역 selecter
+    
+    var firstCount = 0; // 수정버튼 클릭시 기존 textArea영역의 글자수 초기값 세팅을 위한 변수.
     
     var coordinate = ''; // 버튼의 좌표 값을 가져오기 위한 변수 (모달창을 버튼 옆에 위치시키기 위해 사용.)
  	// 댓글 수정/삭제/신고시 controller로 넘겨줄 데이터들을 담을 객체
@@ -494,6 +524,8 @@
                     	// 댓글 및 대댓글 정보를 DB에서 가져와서 뿌려줌.
                         $(list).each(function(idx, item){
                         	comment_add(item)
+                        	askCount++;
+                        	console.log('askCount : ' + askCount);
                         });
                         isLoading = false; // 데이터 로딩 완료 시 다시 로딩 가능하도록 설정
                         addLoadMoreTrigger(); // 추가된 요소 아래에 로딩 메시지 추가
@@ -536,7 +568,8 @@
 		        + '</div>';
 		        
         	if(item.comment_status === 1){       // 정상게시 댓글인경우
-		    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" disabled>' + item.comment_content + '</textarea></div>'; 
+		    	footer += '<div class="comment_txt"><textarea id="0_' +item.comment_idx+ '" name="content" oninput="updateCharCount(\'0_' + item.comment_idx + '\')" disabled>' + item.comment_content + '</textarea>'
+	            		+ '<div class="character-count textCheck1" id="charCount_0_' +item.comment_idx+ '" hidden>0 / 1000자</div></div>';
 			}else if(item.comment_status === 3){ // 운영자가 제재한 경우
 				footer += '<div class="comment_txt"><div id="comment_blind" disabled><i class="bi bi-file-earmark-x-fill">&nbsp;&nbsp;운영자에게 제재된 문의글입니다.</i></div></div>';	
 			}
@@ -594,13 +627,14 @@
 	                footer += '<button type="button" class="add_button" onclick="my_modal(this)" '
 			    		+ 'data-modal_chk="' + modal_chk + '" '  
 				        + 'data-content_chk="1" '
-				        + 'data-comment_idx="' + item.recomment_idx + '" '
-				        + 'data-comment_id="' + item.recomment_id + '" >'  
+				        + 'data-comment_idx="' + item.comment_idx + '" '
+				        + 'data-comment_id="' + item.comment_id + '" '  
+				        + 'data-recomment_idx="' + item.recomment_idx + '" >'  
 				        + '<i class="bi bi-three-dots-vertical"></i>'
 				        + '</button>';
 	            } 
-		     	
-		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" disabled>' + item.recomment_content + '</textarea></div>'
+		        footer += '<div class="comment_txt"><textarea id="1_' +item.comment_idx+ '" name="content" maxlength="1000" oninput="updateCharCount(\'1_' + item.comment_idx + '\')" disabled>' + item.recomment_content + '</textarea>'
+	            		+ '<div class="character-count textCheck1" id="charCount_1_' +item.comment_idx+ '" hidden>0 / 1000자</div></div>'
 		            	+ '</div>'
 		            	+ '</div>'
 		            	+ '</div>';
@@ -713,18 +747,21 @@
     function reply(obj) {
     	// 문의댓글 정보가져오기.
         var comment_idx = $(obj).data('comment-idx');
-
+		
 		// 답변입력영역 생성.
         var reply_area = '<div class="comment_box reply_write">'
-            + '<form action="crew_recruit_detail.do?board_idx=' + board_idx + '&crew_idx=' +crew_idx+ '" method="post">'
+            + '<form action="crew_recruit_detail.do" method="post">'
             + '<div class="reply_right">'
             + '<h3 class="capt"><i class="bi bi-arrow-return-right"></i>&nbsp;답변하기</h3>'
             + '<p>'
-            + '<textarea name="content" class="recomment" placeholder="최대 1,000자까지 입력할 수 있습니다." maxlength="1000"></textarea>'
+            + '<textarea id="1_' + comment_idx + '" name="content" class="recomment" placeholder="최대 1,000자까지 입력할 수 있습니다." oninput="updateCharCount(\'1_' + comment_idx + '\')" maxlength="1000"></textarea>'
+            + '<div class="character-count textCheck2" id="charCount_1_' +comment_idx+ '">0 / 1000자</div>'
             + '<input type="text" name="board_idx" value="' + board_idx + '" hidden/>'
             + '<input type="text" name="comment_idx" value="' + comment_idx + '" hidden/>'
             + '<input type="text" name="recomment_id" value="' +currentUserId+ '" hidden/>'
             + '<input type="text" name="content_chk" value="1" hidden/>'
+            + '<input type="text" name="crew_name" value="' +crew_name+ '" hidden/>'
+            + '<input type="text" name="crew_idx" value="' +crew_idx+ '" hidden/>'
             + '</p>'
             + '</div>'
             + '<button class="mainbtn reply_write">작성하기</button>'
@@ -793,24 +830,38 @@
    		$('.modal_edit_delete .btn_save').prop('hidden', true);
    		$('.modal_edit_delete .btn_update').prop('hidden', false);
    		$('.modal_edit_delete .btn_delete').prop('hidden', false);
-		
+
+   		
 		// controller로 보내줄 데이터들을 담을 자바스크립트 객체생성.
 		info = {
 			'board_idx': board_idx,	
 			'content_chk': $(obj).data('content_chk'),	
 			'comment_idx': $(obj).data('comment_idx'),
+			'recomment_idx': $(obj).data('recomment_idx'),
 			'comment_id': $(obj).data('comment_id'),
 			'crew_idx': crew_idx
 		}
 		
 		// 댓글 또는 대댓글 요소selecter
 		contentSelect = $('#' + info.content_chk + '_' + info.comment_idx);
+		console.log('contentSelect 체킹: ', contentSelect);
+		
+		// 글자수 카운트 요소 selecter
+		countSelect = $('#charCount_' +info.content_chk+ '_' + info.comment_idx);
+		
+		// 글자수 초기 값 세팅을 위한 변수
+		firstCount = info.content_chk+ '_' + info.comment_idx;
 		
 		// 댓글 모달요소(신고 or 수정/삭제)받아오기.
 		modal_chk = $(obj).data('modal_chk');
 		
 		// add버튼 위치좌표		
 		coordinate = $(obj).offset();
+		
+		// 대댓글 수정인경우
+		if(info.recomment_idx !== '' && info.content_chk === 1){
+			info.comment_idx = info.recomment_idx;
+		}
 		
 		// 모달창 띄우기. & 스크롤 비활성화
         showModal(modal_chk, coordinate, coordinate);
@@ -819,6 +870,10 @@
     // 수정 버튼 클릭 시 
 	$('.btn_update').click(function() {
 
+		// 글자수 초기 값 세팅
+		updateCharCount(firstCount);
+		
+		countSelect.prop("hidden", false);
 		contentSelect.prop("disabled", false);
 
 		contentSelect.css({
@@ -836,7 +891,7 @@
 
 	// 저장하기 버튼 클릭 시
 	$('.btn_save').click(function() {
-
+		
 		info.content = contentSelect.val();
 
 		info.event = 'update';
@@ -883,6 +938,7 @@
 		}	
 
 		modal_close($(this).parents('.modal'));
+		countSelect.prop("hidden", true);
 	});
 
 	// Ajax - 모달 Event
@@ -956,6 +1012,35 @@
 		});
 	}
 	
+	 // 글자수 카운트 함수
+    function updateCharCount(idx) {
+		 
+        var content = document.getElementById("content").value; // textarea의 값
+        var charCount = content.length; // 글자수
+        var maxLength = 1000; // 최대 글자수
+        var remaining = maxLength - charCount; // 남은 글자수
+
+        // 답변 대댓글인 경우.
+        if(idx !== '' || idx !== null){
+        	content = document.getElementById(idx).value; // textarea의 값
+        	charCount = content.length; // 글자수
+            remaining = maxLength - charCount; // 남은 글자수
+            document.getElementById("charCount_" + idx).innerText = charCount + " / " + maxLength + "자";
+         	// 남은 글자수가 0 이하이면 입력을 막음
+            if (remaining < 0) {
+                document.getElementById(idx).value = content.substring(0, maxLength); // 최대 1000자까지만 입력
+            }
+        }else{ // 문의 댓글인 경우
+        	// 글자수 표시 업데이트
+            document.getElementById("charCount").innerText = charCount + " / " + maxLength + "자";
+         	// 남은 글자수가 0 이하이면 입력을 막음
+            if (remaining < 0) {
+                document.getElementById("content").value = content.substring(0, maxLength); // 최대 1000자까지만 입력
+            }
+        }
+        
+        
+    }
 	
 	
 	
