@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface MessageDAO {
-
     MessageDTO checkPermitChat(String login_id, String group_idx);
     List<MessageDTO> roomList(String user_id);
     List<MessageDTO> message(String group_idx);
@@ -15,5 +14,4 @@ public interface MessageDAO {
     int findMessageGroupCnt(String member1, String member2);
     int createMessageGroup(MessageDTO dto);
     int findMessageGroup(String member1, String member2);
-
 }

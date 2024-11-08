@@ -10,7 +10,7 @@ showList();
 
 function showList() {
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: 'member_messageGroup.ajax',
         data: {},
         dataType: 'json',

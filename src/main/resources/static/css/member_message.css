@@ -79,7 +79,7 @@
     height: 50px;
     overflow: hidden;
     position: relative;
-    top: -1px;
+    top: -2px;
 }
 
 .message_container .btn_flex.narrow input[type="text"]{
