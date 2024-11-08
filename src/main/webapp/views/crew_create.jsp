@@ -35,8 +35,8 @@
                     <!-- 통과 -->
                     <div class="list">
                         <h3 class="capt">크루명 <span class="required">(필수)</span></h3>
-                        <p><input type="text" class="full pass" name="name" required/></p>
-                        <h3 class="msg pass">사용할 수 있는 크루명입니다.</h3>
+                        <p><input type="text" class="full pass" name="name" id="crewName" required/></p>
+                         <h3 class="msg pass" id="nameMessage" style="display: none;">사용할 수 있는 크루명입니다.</h3>
                     </div>
                     <!-- //통과 -->
                     
@@ -82,7 +82,7 @@
                
                     <!-- 제출 버튼 -->
                     <div class="list">
-                        <input type="submit" class="full mainbtn" value="크루 생성" />
+                        <input type="submit" class="full mainbtn" value="크루 생성" id="submitBtn" disabled/>
                     </div>
                     <!-- //제출 버튼 -->
                     
@@ -99,6 +99,45 @@
 	</body>
 	
 	<script>
+	
+	
+	// 크루명 중복체크
+	$(document).ready(function() {
+    // 크루명 입력란에 focusout (밖을 클릭할 때) 이벤트 추가
+    $('#crewName').on('focusout', function() {
+        var crewName = $(this).val().trim();
+        console.log(crewName);
+        if (crewName === "") {
+        	console.log('공백')
+            return;
+        }
+		/*
+        // Ajax 요청
+        $.ajax({
+            url: 'crew_namecheck.ajax',  // 서버에서 처리할 URL (닉네임 중복 체크)
+            method: 'GET',
+            data: { crewName: crewName },
+            success: function(response) {
+                if (response.status === 'success') {
+                    if (response.isAvailable) {
+                        $('#nameMessage').text('사용할 수 있는 크루명입니다.').css('color', 'green');
+                        $('#submitBtn').prop('disabled', false);  // 크루명 사용 가능하면 제출 버튼 활성화
+                    } else {
+                        $('#nameMessage').text('이미 사용 중인 크루명입니다.').css('color', 'red');
+                        $('#submitBtn').prop('disabled', true);  // 이미 사용 중이면 제출 버튼 비활성화
+                    }
+                } else {
+                    $('#nameMessage').text('오류가 발생했습니다. 다시 시도해주세요.').css('color', 'red');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                $('#nameMessage').text('서버 오류가 발생했습니다.').css('color', 'red');
+            }
+        }); // ajax */
+    });
+
+}); // 크루명 체크
 	
 	function onOptionChange(event) {
 	    // 선택된 지역 idx 값 추출

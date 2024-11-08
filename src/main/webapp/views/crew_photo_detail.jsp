@@ -209,7 +209,9 @@ max-height: 320px;
 				<!-- 크루 생성자 id  value에 로그인 세션값 넣어주기 -->
 				
 				<!-- 제목 -->
-				<h2 class="title">크루이름<span>사진게시글</span></h2>
+				<h2 class="title"><a href="crew_main_page.go?crew_idx=${crew_idx}" class="crew-name-link">
+				    ${crewname}
+				  </a><span>사진게시글</span></h2>
 					
 					<input type="hidden" id="sessionId" value="${sessionScope.loginId}">
                 	<!-- 작성자 id 넣기 -->
