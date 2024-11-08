@@ -293,26 +293,28 @@
 		}
 
 		.img{
-			margin: -69px 24px 24px -4px;
+			margin: 1px 24px 24px 0px;
 			position: relative;
 		}
 
 		.bi-arrow-left-circle-fill{
 			font-size: 40px;
-			position: relative;
-			top: 238px;
-			color: lightgray;
+			color: #57585b;
 			cursor: pointer;
-			left: 10px;
+			bottom: 204px;
+			right: 24px;
+			position: absolute;
+			opacity: 91%;
 		}
 
 		.bi-arrow-right-circle-fill{
 			font-size: 40px;
-			position: relative;
-			color: lightgray;
+			color: #57585b;
 			cursor: pointer;
-			bottom: 285px;
-			right: 82px;
+			bottom: 204px;
+			right: 24px;
+			position: absolute;
+			opacity: 91%;
 		}
 
 		.real_img{
@@ -359,7 +361,7 @@
 					<div id = "journal_total">
 
 
-				</div>
+					</div>
 
 				</div>
 			</div>
@@ -668,6 +670,7 @@
 	}
 
 	let initialize = 0;
+	let file_object = [];
 	function draw_journal(journal){
 
 		var keySet = Object.keys(journal.content);
@@ -700,7 +703,7 @@
 				console.log("idx:",journal_idx);
 
 				content += '<form action="update_journal.go" method="get">';
-				content += '<input type="hidden" name="idx" value="' + journal_idx + '">';
+				content += '<div class = "journal_all" idx =' + journal_idx +'><input type="hidden" name="idx" value="' + journal_idx + '">';
 				content += '<div class="model_body" modal_idx="' + journal_idx + '"><div class="update" type="button" onclick="update_journal(this)"><i class="bi bi-pencil-square"></i>수정하기</div><div class="delete" onclick="delete_journal(' + j_data['journal_idx'] + ', \'' + j_data['user_id'] + '\')"><i class="bi bi-trash"></i>삭제하기</div></div><div class="idx">' + j_data['journal_idx'] + '</div><div class="journal_content"><div class="journal_datetime"><div class="journal_date">';
 				content += j_data['date'] + '</div><div class="journal_time">';
 				content += e_time + '</div>';
@@ -728,53 +731,44 @@
 
 				//files.length;에 따라 .journal_image_list의 길이 동적으로 조정해주기
 					//이미지의 min-width가져와서 * 개수한 것을 .journal_image_list의 길이로 넣어주기
-					var min_width = $('.real_image').css('min-width');
-					console.log('min_width',min_width);
+					/*var min_width = $('.real_image').css('min-width');
+					console.log('min_width',min_width);*/
 						content += '<div class = "journal_image_list">';
 
+					let exact_file = files.filter(file => file.board_idx === j_data['journal_idx']);
+					console.log('exact_file :',exact_file);
 
-					var index = 0;
-					var board_idx = 0;
-					//board_idx가 바뀔 때마다.. 인덱스 0으로 바꾸기
-					for(var file of files){
-						console.log('수정 전:',board_idx);
-						if (board_idx != file.board_idx) {
-							board_idx = file.board_idx;
-							console.log('수정 후:',board_idx);
-							index = 0;
+					if (j_data['journal_idx'] == exact_file[0].board_idx) {
+						if (exact_file.length == 1) {
+							console.log("첫번째 file 찾기", exact_file[0]);
+							//첫번째 index로 무조건 넣기?
+							console.log('JSON.stringify(exact_file):',JSON.stringify(exact_file));
+							for (var exact of exact_file){
+								file_object.push(exact);
+							}
+							console.log('file_object:',file_object);
+							content += '<div class="img" index=' + j_data['journal_idx'] + '><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, ' + j_data['journal_idx'] + ')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: hidden" onclick="next_img(0, \'' + j_data['journal_idx'] + '\')"></i></div>';
+
+						} else if (exact_file.length > 1) {
+							console.log('file_object:',file_object);
+							content += '<div class="img" index=' + j_data['journal_idx'] + '><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, ' + j_data['journal_idx'] + ')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img(0, \'' + j_data['journal_idx'] + '\')"></i></div>';
 						}
-						if (j_data['journal_idx'] == file.board_idx) {
-								console.log('file:', file);
-								console.log('journal_idx:', j_data['journal_idx']);
-								console.log('file.board_idx:', file.board_idx);
-
-								var ori_filename = file.ori_filename;
-								var new_filename = file.new_filename;
-								console.log(files.length);
-								if (files.length > 1) {
-
-									content += '<div class="img" index =' + index + '><i class="bi bi-arrow-left-circle-fill"></i><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/><i class="bi bi-arrow-right-circle-fill"></i></div>';
-
-								} else if (files.length == 1) {
-									content += '<div class="img" index =' + index + '><img width="460px" class="real_img" alt="' + ori_filename + '" src="/photo/' + new_filename + '"/></div>';
-								}
-						}
-						index++; //인덱스 증가
 					}
-					content +='</div>';
 				}
-				content +=	'</div></div></div>';
+
+				content +=	'</div></div></div></div>';
 
 				$('.journal').css({'margin':'18px 2px 530px 0px'});
 			}
+			$('#journal_total').html(content);
 		}
 		console.log('content: ', content);
-		$('#journal_total').html(content);
 	}
 
 	//document에 이벤트를 걸기
-	$(document).on('click','.bi-arrow-left-circle-fill',function(){
+	/*$(document).on('click','.bi-arrow-left-circle-fill',function(){
 		console.log('클릭됨');
+		//현재
 
 		//부모 요소의 부모 요소를 가져옴
 		const grandparent = $(this).closest('.journal_image_list');
@@ -796,13 +790,11 @@
 
 		journal_image_list.style.marginLeft = changed_marginleft + "px";
 
-	});
-
-
-	$(document).on('click','.bi-arrow-right-circle-fill',function(){
+	});*/
+	/*$(document).on('click','.bi-arrow-right-circle-fill',function(){
 		console.log('클릭됨');
 
-		//부모 요소의 부모 요소를 가져옴
+		/!*!//부모 요소의 부모 요소를 가져옴
 		const grandparent = $(this).closest('.journal_image_list');
 		const parent = $(this).parent();
 
@@ -820,12 +812,41 @@
 		var changed_marginleft = marginValue - 498;
 		console.log("changed_marginleft",changed_marginleft);
 
-		journal_image_list.style.marginLeft = changed_marginleft + "px";
+		journal_image_list.style.marginLeft = changed_marginleft + "px";*!/
 
 
-	});
+	});*/
+
+	function prev_img(index){
+		//현재의 index를 가져옴
+		console.log('받아온 index 값 :', index);
+		console.log('받아온 file_array 값 :', file_array);
+	}
 
 
+	function next_img(i,index){
+		//현재의 index를 가져옴
+		console.log('받아온 i 값 :', i);
+		console.log('받아온 index 값 :', index);
+
+		console.log("exact_file:",file_object);
+		if(i < exact_file.length-1){
+			i++;
+			console.log('현재 파일의 다음 파일 값 :',exact_file[i]);
+			//index 값을 가진 이미지 없애기
+			var present_img = document.querySelector('.img[index ='+index+']');
+			console.log('현재 이미지:',present_img);
+
+
+
+			//content +='<div class="img" index = 0><i class="bi bi-arrow-left-circle-fill" style = "visibility: hidden" onclick = prev_img(0)></i><img width="460px" class="real_img" alt="' + files[0].ori_filename + '" src="/photo/' + files[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style = "visibility: hidden" onclick = next_img(0)"></i></div></div>'
+
+
+
+
+
+		}
+	}
 
 	function openModal2(journal_idx){
 		console.log("보이는지",initialize);
@@ -849,17 +870,21 @@
 
 	function delete_journal(idx,user_id){
 		//클릭한 글의 idx를 가져와서 해당 게시물 정보를 불러오고... 삭제
-		const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
-
-		//만약 값이 있으면 remove
-		console.log("img:",img);
-
-		if(img){
-			img.remove();
-		}
-		var i = idx;
+		// const img = document.querySelector(`.image[data-file-idx="`+file_idx+`"]`);
+		//
+		// //만약 값이 있으면 remove
+		// console.log("img:",img);
+		//
+		// if(img){
+		// 	img.remove();
+		// }
+		//var i = idx;
 		//뭐가 문제인지 보기..
-		$('.journal[value="' + idx + '"]').remove();
+		//$('.journal[value="' + idx + '"]').remove();
+		$('.journal_all[idx="' + idx + '"]').remove();
+
+
+
 		$.ajax({
 			type : 'GET',
 			url : 'delete_journal.ajax',
@@ -867,7 +892,6 @@
 			dataType : 'JSON',
 			success : function(data){
 				console.log('success :', data.success);
-
 			}, error(e){
 				console.log(e);
 			}
