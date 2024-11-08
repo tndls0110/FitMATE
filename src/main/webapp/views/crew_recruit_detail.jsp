@@ -606,7 +606,7 @@
 				        + '</button>';
 	            } 
 		     	
-		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" oninput="updateCharCount()" disabled>' + item.recomment_content + '</textarea></div>'
+		        footer += '<div class="comment_txt"><textarea id="1_' +item.recomment_idx+ '" name="content" maxlength="1000" disabled>' + item.recomment_content + '</textarea></div>'
 		            	+ '</div>'
 		            	+ '</div>'
 		            	+ '</div>';
