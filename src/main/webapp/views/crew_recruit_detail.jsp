@@ -423,13 +423,6 @@
     // 댓글, 대댓글 불러오기.
     if (board_idx != '' && board_idx != null) {
     	detail(board_idx);           
-    	/* if(askCount === 0){
-    		footer = '<div>'
-    		+ '<i class="bi bi-card-text">&nbsp;&nbsp; 문의 댓글이 한개도 없습니다.</i>'
-    		+ '</div>';
-    		
-    		$('.comment_area').append(footer);
-    	} */
     } 
 
     var contentSelect = ''; // 댓글 또는 대댓글 textArea영역 selecter
@@ -537,6 +530,14 @@
                     }
                 }
                 
+                 if(askCount === 0){
+	        		footer = '<div>'
+	        		+ '<i class="bi bi-card-text">&nbsp;&nbsp; 문의 댓글이 한개도 없습니다.</i>'
+	        		+ '</div>';
+	        		
+	        		$('.comment_area').append(footer);
+        		} 
+            	
             },
             error: function(e) {
                 console.log(e);
