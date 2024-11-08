@@ -1,16 +1,17 @@
 var urlParams = new URLSearchParams(window.location.search);
 var group_idx = urlParams.get('group_idx');
 
-const socket = new WebSocket('ws://192.168.70.121/Fitmate_war/ws');
-socket.onopen = function () {
-    console.log('Connection opened');
-}
-socket.onmessage = function (event) {            const message = JSON.parse(event.data);
-    const chat = document.getElementsByClassName('message_contents')[0];
-    const messageElement = document.getElementsByClassName('message_lists')[0];
-    messageElement.textContent = `${message.sender}: ${message.content}`;
-    chat.appendChild(messageElement);
-    chat.scrollTop = chat.scrollHeight;
+setGroup();
+
+function setGroup() {
+    if (group_idx == null || group_idx == 'null' || group_idx == '') {
+        document.getElementsByClassName('waitingContainer')[0].style.display = 'none';
+    } else {
+        document.getElementsByClassName('selectContainer')[0].style.display = 'none';
+        document.getElementsByName('group_idx')[0].value = group_idx;
+        let MessageInterval = setInterval(showMessage, 1000);
+        //showMessage();
+    }
 }
 
 showList();
@@ -32,8 +33,8 @@ function showList() {
 
 function printList(list) {
     let tags = '';
-    tags += '<ul class="noDesc">';
     for (let i = 0; i < list.length; i++) {
+        tags += '<ul class="noDesc">';
         tags += '<li>';
         if (group_idx == list[i].group_idx){
             tags += '<button onclick="location.href=\'member_messageList.go?group_idx='+list[i].group_idx+'\'" class="subbtn full">';
@@ -46,21 +47,9 @@ function printList(list) {
             tags += list[i].member1+' ('+list[i].member1_nick+')';
         }
         tags += '</button></li>';
+        tags += '</ul>';
     }
-    tags += '</ul>';
     document.getElementsByClassName('message_list')[0].innerHTML = tags;
-}
-
-setGroup();
-
-function setGroup() {
-    if (group_idx == null || group_idx == 'null') {
-        document.getElementsByClassName('waitingContainer')[0].style.display = 'none';
-    } else {
-        document.getElementsByClassName('selectContainer')[0].style.display = 'none';
-        document.getElementsByName('group_idx')[0].value = group_idx;
-        showMessage();
-    }
 }
 
 let waitingInterval = setInterval(waitingAnimator, 150);
@@ -89,9 +78,7 @@ function showMessage() {
         },
         dataType: 'json',
         success: function(data) {
-            if (data.messageList.length > 0) {
-                printMessage(data.messageList);
-            }
+            printMessage(data.messageList);
             clearInterval(waitingInterval);
             document.getElementsByClassName('waitingContainer')[0].style.display = 'none';
         },
@@ -103,7 +90,7 @@ function showMessage() {
 
 function printMessage(list) {
     let tags = '';
-    tags += '<ul class="noDesc message_lists">';
+    tags += '<ul class="noDesc">';
     for (let i = 0; i < list.length; i++) {
         tags += '<li>';
         if (list[i].sender_id == user){
