@@ -56,7 +56,7 @@
 			height: 680px;
 			overflow-y: scroll;
 			overflow-x: hidden;
-			margin: -925px  -414px 9px 0px;
+			margin: -823px -414px 9px 0px;
 			float : right;
 		}
 
@@ -302,7 +302,7 @@
 			color: #57585b;
 			cursor: pointer;
 			bottom: 204px;
-			right: 24px;
+			right: 411px;
 			position: absolute;
 			opacity: 91%;
 		}
@@ -747,15 +747,14 @@
 								file_object.push(exact);
 							}
 							console.log('file_object:',file_object);
-							content += '<div class="img" index=' + j_data['journal_idx'] + '><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, ' + j_data['journal_idx'] + ')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: hidden" onclick="next_img(0, \'' + j_data['journal_idx'] + '\')"></i></div>';
+							content += '<div class="img" index="' + j_data['journal_idx'] + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, \'' + j_data['journal_idx'] + '\', \'' + encodeURIComponent(JSON.stringify(exact_file)) + '\')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img(0, \'' + j_data['journal_idx'] + '\', \'' + encodeURIComponent(JSON.stringify(exact_file)) + '\')"></i></div>';
 
 						} else if (exact_file.length > 1) {
 							console.log('file_object:',file_object);
-							content += '<div class="img" index=' + j_data['journal_idx'] + '><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, ' + j_data['journal_idx'] + ')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img(0, \'' + j_data['journal_idx'] + '\')"></i></div>';
+							content += '<div class="img" index="' + j_data['journal_idx'] + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img(0, \'' + j_data['journal_idx'] + '\', \'' + encodeURIComponent(JSON.stringify(exact_file)) + '\')"></i><img width="460px" class="real_img" alt="' + exact_file[0].ori_filename + '" src="/photo/' + exact_file[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img(0, \'' + j_data['journal_idx'] + '\', \'' + encodeURIComponent(JSON.stringify(exact_file)) + '\')"></i></div>';
 						}
 					}
 				}
-
 				content +=	'</div></div></div></div>';
 
 				$('.journal').css({'margin':'18px 2px 530px 0px'});
@@ -817,34 +816,64 @@
 
 	});*/
 
-	function prev_img(index){
+	function prev_img(i,index,file){
 		//현재의 index를 가져옴
 		console.log('받아온 index 값 :', index);
-		console.log('받아온 file_array 값 :', file_array);
-	}
 
-
-	function next_img(i,index){
 		//현재의 index를 가져옴
 		console.log('받아온 i 값 :', i);
 		console.log('받아온 index 값 :', index);
+		const decodedArray = JSON.parse(decodeURIComponent(file));
+		console.log("전달 받은 file 디코딩 + parse 완료:",decodedArray);
+		if(i < decodedArray.length){
+			console.log('file 개수:',decodedArray.length);
 
-		console.log("exact_file:",file_object);
-		if(i < exact_file.length-1){
+
+			console.log('i:',i);
 			i++;
-			console.log('현재 파일의 다음 파일 값 :',exact_file[i]);
+			console.log('현재 파일의 다음 파일 값 :',decodedArray[i]);
+
+
 			//index 값을 가진 이미지 없애기
-			var present_img = document.querySelector('.img[index ='+index+']');
+			var present_img = document.querySelector('.img[index ="'+index+'"]');
 			console.log('현재 이미지:',present_img);
 
+			img_content = '<div class="img" index="' + index + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: visible" onclick="prev_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i><img width="460px" class="real_img" alt="' + decodedArray[i].ori_filename + '" src="/photo/' + decodedArray[i].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i></div>';
+
+			present_img.innerHTML = img_content;
+
+		}else if(i == 1){
+			img_content = '<div class="img" index="' + index + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: hidden" onclick="prev_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i><img width="460px" class="real_img" alt="' + decodedArray[i].ori_filename + '" src="/photo/' + decodedArray[i].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i></div>';
+		}
+
+	}
 
 
-			//content +='<div class="img" index = 0><i class="bi bi-arrow-left-circle-fill" style = "visibility: hidden" onclick = prev_img(0)></i><img width="460px" class="real_img" alt="' + files[0].ori_filename + '" src="/photo/' + files[0].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style = "visibility: hidden" onclick = next_img(0)"></i></div></div>'
+	function next_img(i,index,file){
+		//현재의 index를 가져옴
+		console.log('받아온 i 값 :', i);
+		console.log('받아온 index 값 :', index);
+		const decodedArray = JSON.parse(decodeURIComponent(file));
+		console.log("전달 받은 file 디코딩 + parse 완료:",decodedArray);
+		if(i < decodedArray.length){
+			console.log('file 개수:',decodedArray.length);
 
 
+			console.log('i:',i);
+			i++;
+			console.log('현재 파일의 다음 파일 값 :',decodedArray[i]);
 
 
+			//index 값을 가진 이미지 없애기
+			var present_img = document.querySelector('.img[index ="'+index+'"]');
+			console.log('현재 이미지:',present_img);
 
+			img_content = '<div class="img" index="' + index + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: visible" onclick="prev_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i><img width="460px" class="real_img" alt="' + decodedArray[i].ori_filename + '" src="/photo/' + decodedArray[i].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: visible" onclick="next_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i></div>';
+
+			present_img.innerHTML = img_content;
+
+		}else if(i == decodedArray.length){
+			img_content = '<div class="img" index="' + index + '"><i class="bi bi-arrow-left-circle-fill" style="visibility: visible" onclick="prev_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i><img width="460px" class="real_img" alt="' + decodedArray[i].ori_filename + '" src="/photo/' + decodedArray[i].new_filename + '"/><i class="bi bi-arrow-right-circle-fill" style="visibility: hidden" onclick="next_img('+i+', \'' + index + '\', \'' + encodeURIComponent(decodedArray) + '\')"></i></div>';
 		}
 	}
 
