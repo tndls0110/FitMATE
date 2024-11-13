@@ -7,6 +7,7 @@ import com.fitmate.schedule.dto.ScheduleFileDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import java.util.*;
 public class ScheduleService {
 	@Autowired ScheduleDAO s_dao;
 	Logger logger = LoggerFactory.getLogger(getClass());
+    @Value("${spring.servlet.multipart.location}") String fileLocation;
 
 	public Map<String,Object> getEvents(String id) {
 		Map<String,Object> event_day = new HashMap<>();
@@ -129,7 +131,7 @@ public class ScheduleService {
                     byte[] arr = file.getBytes(); //바이트 추출
 
 					//저장할 paths
-					Path path = Paths.get("C:/upload/"+new_filename); //저장하려는 파일명 알아내기
+					Path path = Paths.get(fileLocation+new_filename); //저장하려는 파일명 알아내기
 
 					//파일에 적기(Files)
 					Files.write(path,arr);//저장할 경로 , byte
@@ -178,7 +180,7 @@ public class ScheduleService {
 						//파일 DTO 분리
 						for (ScheduleFileDTO fileDTO : file) {
 							//1. 삭제하고 싶은 위치 지정 => 새로운 이름 기반
-							File files = new File("C:/upload/"+ fileDTO.getNew_filename());
+							File files = new File(fileLocation+ fileDTO.getNew_filename());
 							//2. 만약 파일이 있으면 file 삭제 => DB는 이미 on deleteCascade로 삭제된 상태
 							if(files.exists()){
 								boolean success = files.delete();//파일 삭제
@@ -254,7 +256,7 @@ public class ScheduleService {
 			byte[]arr = file.getBytes();
 
 			//2. 저장할 path 저장
-			Path path = Paths.get("C:/upload/"+new_filename);
+			Path path = Paths.get(fileLocation+new_filename);
 
 			//3. File 저장
 			Files.write(path,arr);

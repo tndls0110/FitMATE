@@ -18,6 +18,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,7 @@ import com.fitmate.member.dto.MemberDTO;
 @Service
 public class CrewPageService {
 	Logger logger = LoggerFactory.getLogger(getClass());
+    @Value("${spring.servlet.multipart.location}") String fileLocation;
 	
 	@Autowired CrewPageDAO crewpage_dao;
 	
@@ -206,7 +208,7 @@ public class CrewPageService {
 		            String ext = ori_filename.substring(ori_filename.lastIndexOf("."));				
 					logger.info(ext);
 					String new_filename = UUID.randomUUID()+ext;
-					Path path = Paths.get("C:/upload/"+new_filename);
+					Path path = Paths.get(fileLocation+new_filename);
 					logger.info("ori이름,new이름 = "+ori_filename+new_filename);
 					
 					byte[] arr = file.getBytes();

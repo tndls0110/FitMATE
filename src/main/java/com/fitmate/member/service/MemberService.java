@@ -6,6 +6,7 @@ import com.fitmate.member.dto.MemberDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +24,7 @@ import java.util.UUID;
 public class MemberService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired MemberDAO member_dao;
+    @Value("${spring.servlet.multipart.location}") String fileLocation;
 
 	// 유저 로그인
 	public String login(String user_id, String pw) {
@@ -78,7 +79,7 @@ public class MemberService {
 						String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
 						String new_filename = UUID.randomUUID().toString()+ext;
 						byte[] arr = file.getBytes();
-						Path path = Paths.get("C:/upload/"+new_filename);
+						Path path = Paths.get(fileLocation+new_filename);
 						Files.write(path, arr);
 						if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
 							result = true;
@@ -112,7 +113,7 @@ public class MemberService {
 			// 파일 변경시 기존 파일 삭제
 			if (params.get("fileIsUpdated").equals("true")){
 				if (files.length > 0) {
-					File file = new File("C:/upload/"+dto.getProfile());
+					File file = new File(fileLocation+dto.getProfile());
 					if (file.exists()) {
 						file.delete();
 					}
@@ -131,7 +132,7 @@ public class MemberService {
 							String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
 							String new_filename = UUID.randomUUID().toString()+ext;
 							byte[] arr = file.getBytes();
-							Path path = Paths.get("C:/upload/"+new_filename);
+							Path path = Paths.get(fileLocation+new_filename);
 							Files.write(path, arr);
 							if (member_dao.insertImg(params.get("user_id"), new_filename) == 1){
 								result = true;
@@ -152,7 +153,7 @@ public class MemberService {
 	public void deleteImg(String user_id) {
 		MemberDTO dto = member_dao.getProfile(user_id);
 		if (member_dao.deleteImg(user_id) == 1){
-			File file = new File("C:/upload/"+dto.getProfile());
+			File file = new File(fileLocation+dto.getProfile());
 			if (file.exists()) {
 				file.delete();
 			}

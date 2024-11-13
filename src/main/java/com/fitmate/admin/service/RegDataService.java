@@ -7,6 +7,7 @@ import com.fitmate.admin.dto.RegReportDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class RegDataService {
 	Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired RegDataDAO regData_dao;
+    @Value("${spring.servlet.multipart.location}") String fileLocation;
 
     // 헬스 MBTI 질문 관리
     public List<RegMBTIDTO> regMbtiQuestion() {
@@ -164,7 +166,7 @@ public class RegDataService {
                         String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
                         String new_filename = UUID.randomUUID().toString()+ext;
                         byte[] arr = file.getBytes();
-                        Path path = Paths.get("C:/upload/"+new_filename);
+                        Path path = Paths.get(fileLocation+new_filename);
                         Files.write(path, arr);
                         regData_dao.insertImg(String.valueOf(mbtir_idx), new_filename);
                     } catch (IOException e) {}
@@ -184,7 +186,7 @@ public class RegDataService {
                     // 삭제 혹은 파일 변경시 기존 파일 삭제
                     if (files.length > 0) {
                         if (regData_dao.deleteImg(params.get("mbtir_idx")) == 1){
-                            File file = new File("C:/upload/"+dto.getMbtir_img());
+                            File file = new File(fileLocation+dto.getMbtir_img());
                             if (file.exists()) {
                                 file.delete();
                             }
@@ -202,7 +204,7 @@ public class RegDataService {
                                 String ext = ori_filename.substring(ori_filename.lastIndexOf("."));
                                 String new_filename = UUID.randomUUID().toString()+ext;
                                 byte[] arr = file.getBytes();
-                                Path path = Paths.get("C:/upload/"+new_filename);
+                                Path path = Paths.get(fileLocation+new_filename);
                                 Files.write(path, arr);
                                 regData_dao.insertImg(params.get("mbtir_idx"), new_filename);
                             } catch (IOException e) {}
