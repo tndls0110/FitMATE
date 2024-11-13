@@ -221,7 +221,7 @@ max-height: 320px;
                     <input type="hidden" id="crew_idx" name="crew_idx" value="${crew_idx}"> 
                       <input type="hidden" id="crew_id" name="crew_id" value="${crew_id}"> 
                     <div id="img_list" class="list">
-   							<img alt="${file.ori_filename}" class="photo_img" id="photo_file" src="/photo/${file.new_filename}"><br/>
+   							<img alt="${file.ori_filename}" class="photo_img" id="photo_file" src="photo/${file.new_filename}"><br/>
                     </div>  
              			
                     <!-- 버튼이 붙은 입력창 -->
